@@ -15,7 +15,20 @@ dependencies:
 
   cupertino_icons: ^1.0.5
   table_calendar_sandamil: 1.0.0
-  get: 4.6.5
+  get: ^4.6.5 # for state management and context less stuff
+
+  logger: ^1.2.2 # log events in clear way insted of (print)
+
+  flutter_screenutil: 5.6.1
+
+  hive: ^2.2.3 # local database (SQFlite replacement)
+  hive_flutter: ^1.1.0 # make it easy to use hive (no need for path provider)
+  shared_preferences: ^2.0.18 # shared preferences persistence key value store
+
+
+
+
+
 
 dev_dependencies:
   flutter_test:
