@@ -7,6 +7,7 @@ import 'app/data/local/my_shared_pref.dart';
 import 'app/routes/app_pages.dart';
 import 'config/theme/my_theme.dart';
 import 'config/translations/localization_service.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 
 
@@ -20,7 +21,8 @@ Future<void> main() async {
   await MySharedPref.init();
 
 
-  runApp(
+  initializeDateFormatting()
+      .then((_) => runApp(
     ScreenUtilInit(
       // todo add your (Xd / Figma) artboard size
       designSize: const Size(375, 812),
@@ -52,5 +54,5 @@ Future<void> main() async {
         );
       },
     ),
-  );
+  ));
 }
