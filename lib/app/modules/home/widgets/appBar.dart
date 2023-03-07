@@ -1,6 +1,9 @@
 import 'package:calendario2/config/theme/my_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+
+import '../../menu/views/menu_view.dart';
 
 class HomeAppBar extends StatelessWidget {
   @override
@@ -27,6 +30,9 @@ class HomeAppBar extends StatelessWidget {
                 // key: keyButton6,
               ),
               onTap: () {
+                Get.to(const MenuView(),
+                    duration: const Duration(milliseconds: 100),
+                    transition: Transition.leftToRight);
                 // Navigator.push(
                 //     context,
                 //     MaterialPageRoute(
@@ -96,5 +102,3 @@ class HomeAppBar extends StatelessWidget {
     );
   }
 }
-
-
