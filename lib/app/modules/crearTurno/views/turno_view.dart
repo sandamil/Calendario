@@ -6,9 +6,10 @@ import '../../../../config/theme/my_fonts.dart';
 import '../../../../config/util/hexColor.dart';
 import '../../home/views/home_view.dart';
 import '../controllers/crear_turno_controller.dart';
+import 'add_turno_view.dart';
 
-class CrearTurnoView extends GetView<CrearTurnoController> {
-  const CrearTurnoView({Key? key}) : super(key: key);
+class TurnoView extends GetView<CrearTurnoController> {
+  const TurnoView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -110,12 +111,7 @@ class CrearTurnoView extends GetView<CrearTurnoController> {
                                 .titleLarge!
                                 .color),
                         onPressed: () async {
-                          // await TurnoDbProvider.instance
-                          //     .deleteTypeId(controller.turnoType[index].id!);
-                          // await fetcheventsType();
-                          // setState(
-                          //   () {},
-                          // );
+                          controller.deleteEventsType(index);
                         },
                       ),
                     ],
@@ -129,7 +125,7 @@ class CrearTurnoView extends GetView<CrearTurnoController> {
       floatingActionButton: FloatingActionButton.extended(
         heroTag: "botonAddTurno",
         onPressed: () {
-          // Navigator.push(context, FadeRoute(page: CrearTurno()));
+          Get.to(() => AddTurnoView());
         },
         icon: const Icon(Icons.add),
         label: const Text('Añadir'),

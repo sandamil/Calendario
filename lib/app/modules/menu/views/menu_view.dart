@@ -1,5 +1,4 @@
-import 'package:calendario2/app/modules/CrearTurno/views/crear_turno_view.dart';
-import 'package:calendario2/app/modules/crearTurno/views/turnos_view.dart';
+import 'package:calendario2/app/modules/CrearTurno/views/turno_view.dart';
 import 'package:calendario2/app/modules/home/views/home_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -177,7 +176,7 @@ class MenuView extends GetView<MenuAppController> {
                   ],
                 ),
                 onPressed: () {
-                  Get.to(() => CrearTurnoView());
+                  Get.to(() => TurnoView());
 
                 },
                 //splashColor: AAThemeData.buttonColor,
