@@ -6,6 +6,7 @@ class AjustesController extends GetxController {
   final count = 0.obs;
   @override
   void onInit() {
+    print('AjustesController');
     super.onInit();
   }
 

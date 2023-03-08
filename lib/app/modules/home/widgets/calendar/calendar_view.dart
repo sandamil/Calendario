@@ -153,8 +153,8 @@ class CalendarPage extends StatelessWidget {
                                         width: 2)
                                     : null,
                                 borderRadius: BorderRadius.circular(15)),
-                            width: 100,
-                            height: 100,
+                            // width: 100,
+                            // height: 100,
                           )
                         : Container(
                             decoration: BoxDecoration(
@@ -168,8 +168,8 @@ class CalendarPage extends StatelessWidget {
                                 //         width: 4)
                                 //     : null,
                                 borderRadius: BorderRadius.circular(15)),
-                            width: 100,
-                            height: 100,
+                            // width: 100,
+                            // height: 100,
                           ),
                   ),
                 ],

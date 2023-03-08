@@ -1,9 +1,12 @@
+import 'package:calendario2/app/modules/CrearTurno/views/crear_turno_view.dart';
+import 'package:calendario2/app/modules/crearTurno/views/turnos_view.dart';
 import 'package:calendario2/app/modules/home/views/home_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
 
+import '../../../../config/theme/my_fonts.dart';
 import '../controllers/menu_controller.dart';
 
 class MenuView extends GetView<MenuAppController> {
@@ -11,31 +14,35 @@ class MenuView extends GetView<MenuAppController> {
 
   @override
   Widget build(BuildContext context) {
+    var theme = Theme.of(context);
+
     double _qaButtonHeight = 200.h;
     double _qaButtonWidth = 120.w;
 
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        centerTitle: false,
         leading: IconButton(
           icon: const Icon(
             Icons.home,
-            size: 30.0,
+            // size: 30.0,
           ),
-          color: Theme.of(context).textTheme.titleLarge!.color,
-          tooltip: "Color",
+          color: theme.primaryColor,
           onPressed: () {
             Get.to(const HomeView(),
                 duration: const Duration(milliseconds: 100),
                 transition: Transition.rightToLeft);
           },
         ),
-        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
-        elevation: 0.0,
         title: Text(
           'Menu',
           style: TextStyle(
-              fontSize: 30.0,
-              color: Theme.of(context).textTheme.titleLarge!.color),
+            fontSize: MyFonts.headline3TextSize,
+            color: theme.primaryColor,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ),
       body: Padding(
@@ -170,7 +177,8 @@ class MenuView extends GetView<MenuAppController> {
                   ],
                 ),
                 onPressed: () {
-                  Navigator.pushNamed(context, "/TurnoTypeList");
+                  Get.to(() => CrearTurnoView());
+
                 },
                 //splashColor: AAThemeData.buttonColor,
               ),

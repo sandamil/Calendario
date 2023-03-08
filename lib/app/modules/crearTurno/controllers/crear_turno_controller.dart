@@ -1,11 +1,15 @@
 import 'package:get/get.dart';
 
+import '../../../data/local/calendarDatabase.dart';
+import '../../../data/model/turnoType.dart';
+
 class CrearTurnoController extends GetxController {
   //TODO: Implement CrearTurnoController
+  RxList<TurnoType> turnoType = <TurnoType>[].obs;
 
-  final count = 0.obs;
   @override
   void onInit() {
+    fetchEventsType();
     super.onInit();
   }
 
@@ -19,5 +23,9 @@ class CrearTurnoController extends GetxController {
     super.onClose();
   }
 
-  void increment() => count.value++;
+
+  Future<List<TurnoType>> fetchEventsType() async {
+    turnoType.value = await TurnoDbProvider.instance.getTypeModels();
+    return turnoType;
+  }
 }
