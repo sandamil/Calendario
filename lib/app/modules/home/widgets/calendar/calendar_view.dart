@@ -68,7 +68,10 @@ class CalendarPage extends StatelessWidget {
         // key: keyButton8,
         headerVisible: true,
         builders: CalendarBuilders(
-            todayDayBuilder: (context, date, events, marks) => Container(
+
+          ///todayBuilder////////////////////////////////////////////////////
+
+        todayDayBuilder: (context, date, events, marks) => Container(
                 margin: const EdgeInsets.all(4.0),
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
@@ -123,11 +126,11 @@ class CalendarPage extends StatelessWidget {
               return Stack(
                 children: <Widget>[
                   Container(
-                    padding: EdgeInsets.only(left: 4),
+                    padding: EdgeInsets.only(left: 6.w,top: 6.h),
                     child: Text(
                       '${date.day}',
                       style: TextStyle().copyWith(
-                          fontSize: 7.sp, fontWeight: FontWeight.bold),
+                          fontSize: 16.sp, fontWeight: FontWeight.w900),
                     ),
                   ),
                   GestureDetector(
@@ -158,12 +161,12 @@ class CalendarPage extends StatelessWidget {
                                 color: Theme.of(context)
                                     .highlightColor
                                     .withAlpha(300),
-                                border: event != null
-                                    ? Border.all(
-                                        color:
-                                            Theme.of(context).primaryColorDark,
-                                        width: 4)
-                                    : null,
+                                // border: event != null
+                                //     ? Border.all(
+                                //         color:
+                                //             Theme.of(context).primaryColorDark,
+                                //         width: 4)
+                                //     : null,
                                 borderRadius: BorderRadius.circular(15)),
                             width: 100,
                             height: 100,
