@@ -1,5 +1,4 @@
 import 'package:calendario2/app/modules/home/widgets/calendar/calendar_view.dart';
-import 'package:calendario2/config/translations/strings_enum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -8,7 +7,6 @@ import '../../../../config/theme/my_fonts.dart';
 import '../../../../config/theme/my_theme.dart';
 import '../../menu/views/menu_view.dart';
 import '../controllers/home_controller.dart';
-import '../widgets/appBar.dart';
 
 class HomeView extends GetView<HomeController> {
   const HomeView({Key? key}) : super(key: key);
@@ -30,7 +28,7 @@ class HomeView extends GetView<HomeController> {
                 color: theme.primaryColor,
               ),
               onPressed: () {
-                Get.to(const MenuView(),
+                Get.to(() => const MenuView(),
                     duration: const Duration(milliseconds: 100),
                     transition: Transition.leftToRight);
               },
@@ -68,7 +66,7 @@ class HomeView extends GetView<HomeController> {
       ), // This trailing comma makes auto-formatting nicer for build methods.
       body: GetBuilder<HomeController>(
         builder: (_) {
-          return CalendarPage();
+          return const CalendarPage();
         },
       ),
     );
