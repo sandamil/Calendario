@@ -1,8 +1,10 @@
+import 'package:calendario2/app/modules/home/widgets/calendar/calendar_logic.dart';
 import 'package:calendario2/app/modules/home/widgets/calendar/calendar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
+import 'package:table_calendar_sandamil/table_calendar_sandamil.dart';
 import '../../../../config/theme/my_fonts.dart';
 import '../../../../config/theme/my_theme.dart';
 import '../../menu/views/menu_view.dart';
@@ -11,9 +13,12 @@ import '../controllers/home_controller.dart';
 class HomeView extends GetView<HomeController> {
   const HomeView({Key? key}) : super(key: key);
 
+
+
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
+    CalendarLogic calendarController = CalendarLogic();
 
     return Scaffold(
       appBar: AppBar(
@@ -52,7 +57,7 @@ class HomeView extends GetView<HomeController> {
             ),
             tooltip: 'Open shopping cart',
             onPressed: () {
-              // handle the press
+              calendarController.fetchCuadrante();
             },
           ),
         ],

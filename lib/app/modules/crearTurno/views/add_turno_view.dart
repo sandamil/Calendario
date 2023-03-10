@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
+import 'package:logger/logger.dart';
 
 import '../../CrearTurno/views/turno_view.dart';
 import '../controllers/crear_turno_controller.dart';
+import 'widgets/input_field.dart';
 
 class AddTurnoView extends GetView<CrearTurnoController> {
   const AddTurnoView({Key? key}) : super(key: key);
@@ -12,6 +14,7 @@ class AddTurnoView extends GetView<CrearTurnoController> {
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
+    var logger = Logger();
 
     return Obx(() {
       return Scaffold(
@@ -20,27 +23,20 @@ class AddTurnoView extends GetView<CrearTurnoController> {
             icon: const Icon(
               Icons.arrow_back_ios,
             ),
-            color: Theme
-                .of(context)
-                .textTheme
-                .titleLarge!
-                .color,
+            // color: Theme.of(context).textTheme.titleLarge!.color,
             tooltip: "Color",
             onPressed: () {
               Get.to(() => const TurnoView());
             },
           ),
           elevation: 0.0,
-          backgroundColor: controller.drawerColor.value,
+          backgroundColor: controller.turnoColor.value,
           title: Text(
             'Crear Turno',
             style: TextStyle(
-                fontSize: 25.sp,
-                color: Theme
-                    .of(context)
-                    .textTheme
-                    .titleLarge
-                    ?.color),
+              fontSize: 25.sp,
+              // color: Theme.of(context).textTheme.titleLarge?.color
+            ),
           ),
         ),
         body: SingleChildScrollView(
@@ -58,15 +54,15 @@ class AddTurnoView extends GetView<CrearTurnoController> {
                       width: 40.w,
                       child: TextField(
                         maxLength: 3,
-                        controller: controller.titlecontroller.value,
-                        onChanged: controller.setAb,
+                        controller: controller.titleValueController,
+                        onChanged: (value) => controller.setTitle(value),
                         decoration: const InputDecoration(
                           hintText:
-                          'Letras que muestra el dia marcado en el calendario',
+                              'Letras que muestra el dia marcado en el calendario',
                           labelText: 'Abreviatura',
                           border: OutlineInputBorder(
                               borderRadius:
-                              BorderRadius.all(Radius.circular(15))),
+                                  BorderRadius.all(Radius.circular(15))),
                         ),
                       ),
                     ),
@@ -76,11 +72,11 @@ class AddTurnoView extends GetView<CrearTurnoController> {
                       children: <Widget>[
                         Container(
                             decoration: BoxDecoration(
-                                border:
-                                Border.all(color: controller.drawerColor.value,
+                                border: Border.all(
+                                    color: controller.turnoColor.value,
                                     width: 2),
-                                color: controller.drawerColor.value.withAlpha(
-                                    600),
+                                color:
+                                    controller.turnoColor.value.withAlpha(600),
                                 borderRadius: BorderRadius.circular(15)),
                             child: SizedBox(
                               width: 70,
@@ -93,8 +89,7 @@ class AddTurnoView extends GetView<CrearTurnoController> {
                                       '15',
                                       style: TextStyle(
                                         fontSize: 18,
-                                        color: Theme
-                                            .of(context)
+                                        color: Theme.of(context)
                                             .textTheme
                                             .titleLarge!
                                             .color,
@@ -104,11 +99,10 @@ class AddTurnoView extends GetView<CrearTurnoController> {
                                   Container(
                                     padding: const EdgeInsets.all(2),
                                     child: Text(
-                                      controller.titlecontroller.value.text
-                                          .toUpperCase(),
+                                      controller.title.value.toUpperCase(),
                                       style: TextStyle(
                                           fontSize: 17,
-                                          color: controller.drawerColor.value,
+                                          color: controller.turnoColor.value,
                                           fontWeight: FontWeight.w700),
                                     ),
                                   ),
@@ -119,10 +113,7 @@ class AddTurnoView extends GetView<CrearTurnoController> {
                           padding: const EdgeInsets.only(top: 5.0),
                           child: Text(
                             "VISTA PREVIA",
-                            style: Theme
-                                .of(context)
-                                .primaryTextTheme
-                                .caption,
+                            style: Theme.of(context).primaryTextTheme.caption,
                           ),
                         )
                       ],
@@ -134,7 +125,8 @@ class AddTurnoView extends GetView<CrearTurnoController> {
                   height: 30,
                 ),
                 TextField(
-                  controller: controller.descriptioncontroller,
+                  controller: controller.descriptionValueController,
+                  onChanged: (value) => controller.setDescription(value),
                   decoration: const InputDecoration(
                     hintText: 'Nombre del tipo de turno o dia creado',
                     labelText: 'Título',
@@ -151,58 +143,46 @@ class AddTurnoView extends GetView<CrearTurnoController> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
                     SizedBox(
-                      width: (MediaQuery
-                          .of(context)
-                          .size
-                          .width) / 2.2,
-                      child: TextField(
-                        controller: controller.startcontroller,
-                        decoration: InputDecoration(
-                          border: const OutlineInputBorder(
-                              borderRadius:
-                              BorderRadius.all(Radius.circular(15))),
-                          suffixIcon: IconButton(
-                            icon: const Icon(Icons.access_time),
-                            onPressed: () {
-                              // dp.DatePicker.showTimePicker(context,
-                              //     onConfirm: (time) {
-                              //   setState(() {
-                              //     _startcontroller!.text = format.format(time);
-                              //   });
-                              // },
-                              //     // locale: LocaleType.es
-                              // );
-                            },
-                          ),
+                      width: (MediaQuery.of(context).size.width) / 2.2,
+                      child: InputField(
+                        label: 'Inicio',
+                        hintText: controller.startDate.value,
+                        widget: IconButton(
+                          onPressed: () async {
+                            var pickedTime = await showTimePicker(
+                              context: context,
+                              initialTime: TimeOfDay.now(),
+                              helpText: 'Selecciona hora de inicio',
+                              cancelText: 'Cancelar',
+                              confirmText: 'Ok',
+                            );
+                            controller.startDate(
+                              pickedTime?.format(context) ??
+                                  TimeOfDay.now().format(context),
+                            );
+                          },
+                          icon: const Icon(Icons.access_time_rounded),
                         ),
-                        readOnly: true,
                       ),
                     ),
                     SizedBox(
-                      width: (MediaQuery
-                          .of(context)
-                          .size
-                          .width) / 2.2,
-                      child: TextField(
-                        controller: controller.endcontroller,
-                        decoration: InputDecoration(
-                          border: const OutlineInputBorder(
-                              borderRadius:
-                              BorderRadius.all(Radius.circular(15))),
-                          suffixIcon: IconButton(
-                            icon: const Icon(Icons.access_time),
-                            onPressed: () {
-                              // dp.DatePicker.showTimePicker(
-                              //   context,
-                              //   onConfirm: (time) {
-                              //     setState(() {
-                              //       _endcontroller!.text = format.format(time);
-                              //     });
-                              //   },
-                              //   // locale: LocaleType.es,
-                              // );
-                            },
-                          ),
+                      width: (MediaQuery.of(context).size.width) / 2.2,
+                      child: InputField(
+                        label: 'Fin',
+                        hintText: controller.endDate.value,
+                        widget: IconButton(
+                          onPressed: () async {
+                            var _pickedTime = await showTimePicker(
+                              context: context,
+                              initialTime: TimeOfDay.now(),
+                              helpText: 'Selecciona hora de fin',
+                              cancelText: 'Cancelar',
+                              confirmText: 'Ok',
+                            );
+
+                            controller.endDate(_pickedTime!.format(context));
+                          },
+                          icon: const Icon(Icons.access_time_rounded),
                         ),
                       ),
                     ),
@@ -218,8 +198,8 @@ class AddTurnoView extends GetView<CrearTurnoController> {
                   },
                   child: Material(
                     type: MaterialType.circle,
-                    color: controller.drawerColor.value,
-                    child: SizedBox(
+                    color: controller.turnoColor.value,
+                    child: const SizedBox(
                       height: 100,
                       width: 100,
                     ),
@@ -233,11 +213,13 @@ class AddTurnoView extends GetView<CrearTurnoController> {
                   child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(15.0),
+                          borderRadius: BorderRadius.circular(15.0),
                         ), // foreground (text) color
                       ),
                       child: const Text('Añadir'),
                       onPressed: () {
+                        logger.w("Warning log");
+
                         controller.addTurno();
                         Get.back(closeOverlays: true);
                       }),

@@ -1,9 +1,11 @@
+import 'package:calendario2/app/modules/CrearCuadrante/views/crear_cuadrante_view.dart';
 import 'package:calendario2/app/modules/CrearTurno/views/turno_view.dart';
 import 'package:calendario2/app/modules/home/views/home_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
+import 'package:logger/logger.dart';
 
 import '../../../../config/theme/my_fonts.dart';
 import '../controllers/menu_controller.dart';
@@ -14,6 +16,7 @@ class MenuView extends GetView<MenuAppController> {
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
+    var logger = Logger();
 
     double _qaButtonHeight = 200.h;
     double _qaButtonWidth = 120.w;
@@ -30,9 +33,10 @@ class MenuView extends GetView<MenuAppController> {
           ),
           color: theme.primaryColor,
           onPressed: () {
-            Get.to(const HomeView(),
+            Get.to(() => const HomeView(),
                 duration: const Duration(milliseconds: 100),
                 transition: Transition.rightToLeft);
+
           },
         ),
         title: Text(
@@ -133,7 +137,7 @@ class MenuView extends GetView<MenuAppController> {
                   ],
                 ),
                 onPressed: () {
-                  Navigator.pushNamed(context, "/creaCuadrante");
+                  Get.to(() => CrearCuadranteView());
                 },
                 //splashColor: AAThemeData.buttonColor,
               ),
@@ -176,8 +180,7 @@ class MenuView extends GetView<MenuAppController> {
                   ],
                 ),
                 onPressed: () {
-                  Get.to(() => TurnoView());
-
+                  Get.to(() => const TurnoView());
                 },
                 //splashColor: AAThemeData.buttonColor,
               ),

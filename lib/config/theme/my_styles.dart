@@ -15,6 +15,18 @@ class MyStyles {
             : DarkThemeColors.iconColor,
       );
 
+  static TextButtonThemeData getTextButtonTheme({required bool isLightTheme}) =>
+      TextButtonThemeData(
+          style: ButtonStyle(
+        // backgroundColor: MaterialStateColor.resolveWith((states) => Colors.black),
+        foregroundColor: MaterialStateColor.resolveWith((states) => isLightTheme
+            ? LightThemeColors.primaryColor
+            : DarkThemeColors.primaryColor),
+        overlayColor: MaterialStateColor.resolveWith((states) => isLightTheme
+            ? LightThemeColors.primaryColor50
+            : DarkThemeColors.primaryColor50),
+      ));
+
   ///app bar theme
   static AppBarTheme getAppBarTheme({required bool isLightTheme}) =>
       AppBarTheme(
@@ -35,8 +47,8 @@ class MyStyles {
 
   ///text theme
   static TextTheme getTextTheme({required bool isLightTheme}) => TextTheme(
-        labelLarge: MyFonts.buttonTextStyle
-            .copyWith(fontSize: MyFonts.buttonTextSize),
+        labelLarge:
+            MyFonts.buttonTextStyle.copyWith(fontSize: MyFonts.buttonTextSize),
         bodyLarge: (MyFonts.bodyTextStyle).copyWith(
             fontWeight: FontWeight.bold,
             fontSize: MyFonts.body1TextSize,
@@ -161,8 +173,8 @@ class MyStyles {
             ),
           ),
           elevation: MaterialStateProperty.all(0),
-          padding:
-              MaterialStateProperty.all<EdgeInsetsGeometry>(EdgeInsets.symmetric(vertical: 8.h)),
+          padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+              EdgeInsets.symmetric(vertical: 8.h)),
           textStyle: getElevatedButtonTextStyle(isLightTheme),
           backgroundColor: MaterialStateProperty.resolveWith<Color>(
             (Set<MaterialState> states) {

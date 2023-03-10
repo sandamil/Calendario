@@ -1,3 +1,4 @@
+import 'package:calendario2/config/util/hexColor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -6,6 +7,7 @@ class DarkThemeColors
 {
   //dark swatch
   static const Color primaryColor = Colors.orange;
+  static const Color primaryColor50 = const Color(0x80FF9800);
   static Color accentColor = Colors.blueAccent;
 
   //Appbar

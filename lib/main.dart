@@ -11,15 +11,18 @@ import 'package:intl/date_symbol_data_local.dart';
 
 
 
-
 Future<void> main() async {
+  print('=====================================================');
+  print('=====================================================');
+  print('                     INICIO                          ');
+  print('=====================================================');
+  print('=====================================================');
   // wait for bindings
   WidgetsFlutterBinding.ensureInitialized();
 
 
   // init shared preference
   await MySharedPref.init();
-
 
   initializeDateFormatting()
       .then((_) => runApp(

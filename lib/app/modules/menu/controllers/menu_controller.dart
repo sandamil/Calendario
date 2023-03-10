@@ -1,9 +1,11 @@
 import 'package:get/get.dart';
+import 'package:logger/logger.dart';
+
 
 class MenuAppController extends GetxController {
   //TODO: Implement MenuController
 
-  final count = 0.obs;
+
   @override
   void onInit() {
     super.onInit();
@@ -19,5 +21,4 @@ class MenuAppController extends GetxController {
     super.onClose();
   }
 
-  void increment() => count.value++;
 }

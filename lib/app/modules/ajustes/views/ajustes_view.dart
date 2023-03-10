@@ -13,9 +13,9 @@ class AjustesView extends GetView<AjustesController> {
         title: const Text('AjustesView'),
         centerTitle: true,
       ),
-      body: const Center(
+      body:  Center(
         child: Text(
-          'AjustesView is working',
+          controller.count.toString(),
           style: TextStyle(fontSize: 20),
         ),
       ),

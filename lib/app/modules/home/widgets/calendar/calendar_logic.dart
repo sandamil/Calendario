@@ -12,6 +12,9 @@ class CalendarLogic extends GetxController  with GetSingleTickerProviderStateMix
   RxMap<DateTime, List> visibleEvents = <DateTime, List<dynamic>>{}.obs;
   RxMap<DateTime, List<Cuadrante>> cuadranteMap = Map<DateTime, List<Cuadrante>>().obs;
 
+  RxList<Cuadrante> cuadrante = <Cuadrante>[].obs;
+
+
   late List selectedEvents;
   late List selectedTurnos;
 
@@ -62,6 +65,21 @@ class CalendarLogic extends GetxController  with GetSingleTickerProviderStateMix
     return turno;
   }
 
-
+  Future<Map<DateTime, List<Cuadrante>>> fetchCuadrante() async {
+    cuadrante.value = await TurnoDbProvider.instance.getItemModels();
+    for (Cuadrante turno in cuadrante) {
+      print(turno.dateTime);
+    }
+    cuadranteMap.clear();
+    for (var turno in cuadrante) {
+      cuadranteMap.putIfAbsent(turno.dateTime!, () => <Cuadrante>[]);
+      List<Cuadrante>? turnoData = cuadranteMap[turno.dateTime];
+      turnoData!.add(turno);
+      cuadranteMap.update(turno.dateTime!, (data) {
+        return turnoData;
+      });
+    }
+    return cuadranteMap;
+  }
 
 }

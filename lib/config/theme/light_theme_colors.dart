@@ -6,6 +6,7 @@ class LightThemeColors
 {
   //dark swatch
   static const Color primaryColor = Colors.orange;
+  static const Color primaryColor50 = const Color(0x80FF9800);
   static Color accentColor = Colors.blueAccent;
 
   //APPBAR

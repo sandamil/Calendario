@@ -1,47 +1,63 @@
+import 'package:calendario2/config/util/convert_time.dart';
 import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:logger/logger.dart';
 
 import '../../../data/local/calendarDatabase.dart';
 import '../../../data/model/turnoType.dart';
 
 class CrearTurnoController extends GetxController {
+  var logger = Logger();
+
   RxList<TurnoType> turnoType = <TurnoType>[].obs;
 
-  final startcontroller = TextEditingController();
-  final endcontroller = TextEditingController();
-  Rx<TextEditingController> titlecontroller = TextEditingController().obs;
-  final descriptioncontroller = TextEditingController();
+  RxString title = "".obs;
 
-  DateFormat format = DateFormat.Hm();
+  get getTitle => title.value;
+  void setTitle(String titleString) => title.value = titleString;
+  var titleValueController = TextEditingController();
 
-  // Color? tempMainColor;
-  // Color? mainColor = Colors.orangeAccent;
-  Rx<Color> drawerColor = Rx<Color>(Colors.orangeAccent);
+  late RxString startDate;
+  late RxString endDate;
+
+  RxString description = "".obs;
+  get getDescription => description.value;
+  void setDescription(String descriptionString) =>
+      description.value = descriptionString;
+  var descriptionValueController = TextEditingController();
+
+  var selectedTime = TimeOfDay.now().obs;
+
+  Rx<Color> turnoColor = Rx<Color>(Colors.orangeAccent);
 
   @override
   void onInit() {
     fetchEventsType();
+    startDate = DateTime.now().formatDate.obs;
+    endDate = DateTime.now().add(const Duration(hours: 1)).formatDate.obs;
+    titleValueController = TextEditingController();
+    descriptionValueController = TextEditingController();
+    logger.i(turnoType.value.length);
+
     super.onInit();
   }
 
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
-  }
+  // @override
+  // void onReady() {
+  //   super.onReady();
+  // }
+  //
+  // @override
+  // void onClose() {
+  //   super.onClose();
+  // }
 
   Future<List<TurnoType>> fetchEventsType() async {
     turnoType.value = await TurnoDbProvider.instance.getTypeModels();
-    print(turnoType.length);
-
     return turnoType;
   }
 
@@ -53,26 +69,24 @@ class CrearTurnoController extends GetxController {
 
   addTurno() async {
     TurnoType eventType = TurnoType(
-      title: titlecontroller.value.text,
-      description: descriptioncontroller.text,
-      startHour: startcontroller.text,
-      endHour: endcontroller.text,
-      color: drawerColor.value.value.toRadixString(16),
+      title: title.value,
+      description: description.value,
+      startHour: startDate.value,
+      endHour: endDate.value,
+      color: turnoColor.value.value.toRadixString(16),
     );
     await TurnoDbProvider.instance.addTypeModel(eventType);
     fetchEventsType();
   }
 
-  void setAb(String value) => titlecontroller.value = titlecontroller.value;
-
   updateDrawerColor(Color newColor) {
-    drawerColor.value = newColor;
+    turnoColor.value = newColor;
     update();
   }
 
   Future<bool> colorPickerDialog(BuildContext context) async {
     return ColorPicker(
-      color: drawerColor.value,
+      color: turnoColor.value,
       onColorChanged: (Color color) {
         updateDrawerColor(color);
       },
@@ -110,6 +124,10 @@ class CrearTurnoController extends GetxController {
           const BoxConstraints(minHeight: 480, minWidth: 300, maxWidth: 320),
     );
   }
+
+
+
+
 
   // void openDialog() async {
   //   Get.defaultDialog(
@@ -195,4 +213,4 @@ class CrearTurnoController extends GetxController {
   // }
 }
 
-typedef colorCallback = void Function(Color);
+// typedef colorCallback = void Function(Color);
