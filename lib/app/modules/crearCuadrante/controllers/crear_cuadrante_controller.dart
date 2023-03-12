@@ -18,9 +18,8 @@ class CrearCuadranteController extends GetxController {
   RxList<TurnoType> list = <TurnoType>[].obs;
   RxList<TurnoType> turnoType = <TurnoType>[].obs;
 
-  bool tuVal = false;
-  bool isSwitched = false;
-  bool bol = false;
+  var isSwitched = false.obs;
+
 
   @override
   void onInit() {
@@ -90,6 +89,27 @@ class CrearCuadranteController extends GetxController {
   Future<List<TurnoType>> fetchTurnosType() async {
     turnoType.value = await TurnoDbProvider.instance.getTypeModels();
     return turnoType;
+  }
+
+  void addYear() async {
+    if (isSwitched.value == false) {
+      await endDate.value!
+          .add(const Duration(days: 365))
+          .subtract(const Duration(hours: 2))
+          .toIso8601String()
+          .substring(0, 10);
+   endDate.refresh();
+
+      print('isswitched true');
+      print(endDate.value);
+    } else {
+      await endDate.value == DateTime.now();
+      endDate.refresh();
+
+      print('isswitched false');
+      print(endDate.value);
+    }
+
   }
 
   alertDialog(BuildContext context) {

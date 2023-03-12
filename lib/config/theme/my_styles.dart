@@ -15,6 +15,14 @@ class MyStyles {
             : DarkThemeColors.iconColor,
       );
 
+
+  static FloatingActionButtonThemeData getFloatingActionButtonTheme({required bool isLightTheme}) =>
+      FloatingActionButtonThemeData(
+        backgroundColor: isLightTheme
+            ? LightThemeColors.floatingActionButtonColor
+            : DarkThemeColors.floatingActionButtonColor,
+      );
+
   static TextButtonThemeData getTextButtonTheme({required bool isLightTheme}) =>
       TextButtonThemeData(
           style: ButtonStyle(

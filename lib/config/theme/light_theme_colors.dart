@@ -20,10 +20,12 @@ class LightThemeColors
 
   //ICONS
   static const Color appBarIconsColor = Colors.white;
-  static const Color iconColor = Colors.black;
+  static const Color iconColor = primaryColor;
 
   //BUTTON
   static const Color buttonColor = primaryColor;
+  static const Color floatingActionButtonColor = primaryColor;
+
   static const Color buttonTextColor = Colors.white;
   static const Color buttonDisabledColor = Colors.grey;
   static const Color buttonDisabledTextColor = Colors.black;

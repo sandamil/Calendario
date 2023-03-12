@@ -14,7 +14,12 @@ dependencies:
     sdk: flutter
 
   cupertino_icons: ^1.0.5
-  table_calendar_sandamil: 1.0.0
+
+#  table_calendar_sandamil: 1.0.0
+  table_calendar: ^3.0.9
+
+
+
   get: ^4.6.5 # for state management and context less stuff
 
   logger: ^1.2.2 # log events in clear way insted of (print)

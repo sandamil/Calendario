@@ -62,6 +62,8 @@ class MyTheme {
       // textButton theme
       textButtonTheme: MyStyles.getTextButtonTheme(isLightTheme: isLight),
 
+      floatingActionButtonTheme: MyStyles.getFloatingActionButtonTheme(isLightTheme: isLight),
+
 
 
       // timePicker theme

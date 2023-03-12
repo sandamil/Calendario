@@ -44,38 +44,31 @@ class CrearCuadranteView extends GetView<CrearCuadranteController> {
             ),
             actions: <Widget>[
               IconButton(
-                color: Theme.of(context).bottomAppBarColor,
                 onPressed: controller.submit()
                     ? () async {
-                  print(controller.inicialDate.value!
-                      .toString());
+                        print(controller.inicialDate.value!.toString());
 
-                  //Todo await para que se cargue mientras se pasa
+                        //Todo await para que se cargue mientras se pasa
 
+                        Navigator.of(context).pushReplacementNamed('/home');
 
-
-                  Navigator.of(context).pushReplacementNamed('/home');
-
-                  await controller.Rotation(
+                        await controller.Rotation(
                             DateTime.parse(controller.inicialDate.value!
                                 .toString()
-                                .replaceFirst('00:00:00.0000000', '12:00:00.000Z')),
+                                .substring(0,10)),
                             DateTime.parse(controller.endDate.value!
                                 .toString()
-                                .replaceFirst(
-                                    '00:00:00.000000', '12:00:00.000Z')));
-
-
-                }
+                                .substring(0,10)));
+                      }
                     : () => controller.alertDialog(context),
                 icon: controller.submit()
                     ? Icon(
                         Icons.done,
-                        color: Theme.of(context).textTheme.titleLarge!.color,
+                        color: Colors.green,
                       )
                     : Icon(
                         Icons.done_outline,
-                        color: Theme.of(context).textTheme.titleLarge!.color,
+                        color: Theme.of(context).iconTheme.color,
                       ),
                 // key: keyButton5,
               )
@@ -84,17 +77,19 @@ class CrearCuadranteView extends GetView<CrearCuadranteController> {
           body: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              const SizedBox(
-                height: 15,
+              SizedBox(
+                height: 1.h,
               ),
               Column(
+
                 children: <Widget>[
                   Container(
-                    width: 280.w,
+                    // width: 280.w,
                     padding: const EdgeInsets.all(1.0),
                     child: Column(
                       children: <Widget>[
                         Row(
+                          mainAxisAlignment:  MainAxisAlignment.end,
                           children: <Widget>[
                             Container(
                                 child: Text(
@@ -113,37 +108,43 @@ class CrearCuadranteView extends GetView<CrearCuadranteController> {
                               },
                             ),
                           ],
-                        ),
-                        Row(
-                          children: <Widget>[
-                            Text(
-                              "Repetir cuadrante en todo el calendario",
-                              style: TextStyle(
-                                fontSize: 12.sp,
-                              ),
-                            ),
-                            Switch(
-                              // key: keyButton3,
-                              value: controller.isSwitched,
-                              onChanged: (value) {
-                                if (controller.isSwitched = value) {
-                                  controller.bol = false;
-                                  //   controller.endDate.value!.toString() = DateTime.now()
-                                  //       .add(const Duration(days: 365))
-                                  //       .subtract(const Duration(hours: 2))
-                                  //       .toIso8601String()
-                                  //       .substring(0, 10);
-                                  // } else {
-                                  //   controller.endcontroller.clear();
-                                  //   controller.bol = true;
-                                }
-                              },
 
-                              activeTrackColor: Colors.lightGreenAccent,
-                              activeColor: Colors.green,
-                            ),
-                          ],
                         ),
+                        // Row(
+                        //   children: <Widget>[
+                        //     Text(
+                        //       "Repetir cuadrante en todo el calendario",
+                        //       style: TextStyle(
+                        //         fontSize: 12.sp,
+                        //       ),
+                        //     ),
+                        //     Switch(
+                        //         value: controller.isSwitched.value,
+                        //         onChanged: (value) {
+                        //           controller.addYear();
+                        //           controller.isSwitched.value = value;
+                        //         },
+                        //       // key: keyButton3,
+                        //       // value: controller.bol,
+                        //       // onChanged: (value) {
+                        //       //   if (controller.isSwitched = value) {
+                        //       //     controller.bol = false;
+                        //       //     print(controller.bol);
+                        //       //     controller.endDate.value!
+                        //       //           .add(const Duration(days: 365))
+                        //       //           .subtract(const Duration(hours: 2))
+                        //       //           .toIso8601String()
+                        //       //           .substring(0, 10);
+                        //       //     } else {
+                        //       //       controller.bol = true;
+                        //       //   }
+                        //       // },
+                        //
+                        //       activeTrackColor: Colors.lightGreenAccent,
+                        //       activeColor: Colors.green,
+                        //     ),
+                        //   ],
+                        // ),
                       ],
                     ),
                   ),
@@ -200,8 +201,8 @@ class CrearCuadranteView extends GetView<CrearCuadranteController> {
                   ),
                 ],
               ),
-              const SizedBox(
-                height: 20,
+              SizedBox(
+                height: 1.h,
               ),
               Container(
                 padding: const EdgeInsets.all(8.0),

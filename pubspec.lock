@@ -445,14 +445,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.1"
-  table_calendar_sandamil:
+  table_calendar:
     dependency: "direct main"
     description:
-      name: table_calendar_sandamil
-      sha256: c9fc7859be70733ec3aa39559bc8c7957dd74a218644b0e01021af9e28202e93
+      name: table_calendar
+      sha256: "1e3521a3e6d3fc7f645a58b135ab663d458ab12504f1ea7f9b4b81d47086c478"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.0"
+    version: "3.0.9"
   term_glyph:
     dependency: transitive
     description:

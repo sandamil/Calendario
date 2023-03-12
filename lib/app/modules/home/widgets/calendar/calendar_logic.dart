@@ -1,31 +1,58 @@
+import 'dart:collection';
+import 'package:intl/intl.dart';
+
 import 'package:get/get.dart';
-import 'package:table_calendar_sandamil/table_calendar_sandamil.dart';
+import 'package:table_calendar/table_calendar.dart';
+// import 'package:table_calendar_sandamil/table_calendar_sandamil.dart';
 
 import '../../../../data/local/calendarDatabase.dart';
 import '../../../../data/model/turnoCalendar.dart';
 import '../../../../data/model/turnoType.dart';
 
 class CalendarLogic extends GetxController  with GetSingleTickerProviderStateMixin {
-  final CalendarController calendarController = CalendarController();
+  // final CalendarController calendarController = CalendarController();
 
   RxMap<DateTime, List<dynamic>> events = <DateTime, List<dynamic>>{}.obs;
-  RxMap<DateTime, List> visibleEvents = <DateTime, List<dynamic>>{}.obs;
+  RxMap<DateTime, List<Cuadrante>> visibleEvents = Map<DateTime, List<Cuadrante>>().obs;
   RxMap<DateTime, List<Cuadrante>> cuadranteMap = Map<DateTime, List<Cuadrante>>().obs;
 
   RxList<Cuadrante> cuadrante = <Cuadrante>[].obs;
 
+  DateTime focusedDay = DateTime.now();
 
   late List selectedEvents;
-  late List selectedTurnos;
+  RxList<dynamic> selectedTurnos = <dynamic>[].obs;
+
+  DateTime selectedDay= DateTime.now();
 
   RxList<TurnoType> turno = <TurnoType>[].obs;
 
+   RxString turnoDay = ''.obs;
+
+  var turnito;
 
 
-  void onInit() {
-    if (events == null) {
-      events = RxMap();
-    }
+
+  int getHashCode(DateTime key) {
+    return key.day * 1000000 + key.month * 10000 + key.year;
+  }
+
+  void onInit() async {
+    await fetchCuadrante();
+
+
+    fetchTurno();
+    events.value = LinkedHashMap<DateTime, List>(
+      equals: isSameDay,
+      hashCode: getHashCode,
+    )..addAll(cuadranteMap);
+
+    selectedTurnos.value = cuadranteMap.value[selectedDay] ?? [];
+    // _selectedTurnos = cuadranteMap[DateTime(
+    //     _selectedDay.year, _selectedDay.month, _selectedDay.day)] ??
+    //     [];
+
+
     super.onInit();
   }
 
@@ -41,24 +68,34 @@ class CalendarLogic extends GetxController  with GetSingleTickerProviderStateMix
   }
 
 
-  void onVisibleDaysChanged(
-      DateTime first, DateTime last, CalendarFormat format) {
-      visibleEvents.value = Map.fromEntries(
-        cuadranteMap.entries.where(
-              (entry) =>
-          entry.key.isAfter(first.subtract(const Duration(days: 1))) &&
-              entry.key.isBefore(last.add(const Duration(days: 1))),
-        ),
-      );
 
+
+
+  List<Cuadrante> getEventForDay(DateTime day) {
+    final events = LinkedHashMap<DateTime, List<Cuadrante>>(
+      equals: isSameDay,
+      hashCode: getHashCode,
+    )..addAll(cuadranteMap);
+    return events[day] ?? [];
   }
 
-  void onDaySelected(DateTime day, List events, List marks, List holidays) {
-    print('CALLBACK: _onDaySelected');
-      selectedEvents = marks;
-      selectedTurnos = events;
-    update();
-  }
+
+
+
+  // void onVisibleDaysChanged(DateTime first, DateTime last, CalendarFormat format) {
+  //   print('CALLBACK: onVisibleDaysChanged');
+  //
+  //
+  // }
+
+  // void onDaySelected(DateTime day, List events, List marks, List holidays) {
+  //   print('CALLBACK: _onDaySelected');
+  //     selectedEvents = marks;
+  //     selectedTurnos.value = events;
+  //   update();
+  // }
+
+
 
   Future<List<TurnoType>> fetchTurno() async {
     turno.value = await TurnoDbProvider.instance.getTypeModels();
@@ -70,16 +107,18 @@ class CalendarLogic extends GetxController  with GetSingleTickerProviderStateMix
     for (Cuadrante turno in cuadrante) {
       print(turno.dateTime);
     }
-    cuadranteMap.clear();
+    cuadranteMap.value.clear();
     for (var turno in cuadrante) {
-      cuadranteMap.putIfAbsent(turno.dateTime!, () => <Cuadrante>[]);
-      List<Cuadrante>? turnoData = cuadranteMap[turno.dateTime];
+      cuadranteMap.value.putIfAbsent(turno.dateTime!, () => <Cuadrante>[]);
+      List<Cuadrante>? turnoData = cuadranteMap.value[turno.dateTime];
       turnoData!.add(turno);
-      cuadranteMap.update(turno.dateTime!, (data) {
+      cuadranteMap.value.update(turno.dateTime!, (data) {
         return turnoData;
       });
     }
-    return cuadranteMap;
+    return cuadranteMap.value;
   }
+
+
 
 }
