@@ -1,8 +1,8 @@
+import 'package:calendario2/app/modules/home/controllers/calendar_controller.dart';
 import 'package:get/get.dart';
 
 import '../../CrearTurno/controllers/crear_turno_controller.dart';
 import '../controllers/home_controller.dart';
-import '../widgets/calendar/calendar_logic.dart';
 
 class HomeBinding extends Bindings {
   @override
@@ -10,7 +10,9 @@ class HomeBinding extends Bindings {
     Get.lazyPut<HomeController>(
       () => HomeController(),
     );
-    Get.lazyPut(() => CalendarLogic());
+    Get.lazyPut<CalendarController>(
+      () => CalendarController(),
+    );
     Get.lazyPut(() => CrearTurnoController());
   }
 }

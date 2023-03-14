@@ -1,4 +1,6 @@
 import 'package:calendario2/app/modules/CrearTurno/views/widgets/input_field.dart';
+import 'package:calendario2/app/modules/crearCuadrante/widgets/beautifulAlertDialog.dart';
+import 'package:calendario2/app/modules/home/controllers/home_controller.dart';
 import 'package:calendario2/config/theme/my_fonts.dart';
 import 'package:calendario2/config/util/hexColor.dart';
 import 'package:flutter/material.dart';
@@ -17,8 +19,9 @@ class CrearCuadranteView extends GetView<CrearCuadranteController> {
     Get.put(CrearCuadranteController());
     var theme = Theme.of(context);
 
-    return Obx(() {
-      return Scaffold(
+    return Obx(
+      () {
+        return Scaffold(
           appBar: AppBar(
             leading: IconButton(
               icon: Icon(
@@ -46,23 +49,14 @@ class CrearCuadranteView extends GetView<CrearCuadranteController> {
               IconButton(
                 onPressed: controller.submit()
                     ? () async {
-                        print(controller.inicialDate.value!.toString());
+                        //Todo carcgar primera pagina de calendario
 
-                        //Todo await para que se cargue mientras se pasa
-
-                        Navigator.of(context).pushReplacementNamed('/home');
-
-                        await controller.Rotation(
-                            DateTime.parse(controller.inicialDate.value!
-                                .toString()
-                                .substring(0,10)),
-                            DateTime.parse(controller.endDate.value!
-                                .toString()
-                                .substring(0,10)));
+                        showAlertLoadingDialog(context);
+                        await controller.cuadranteLoad();
                       }
-                    : () => controller.alertDialog(context),
+                    : () => alertDialog(context),
                 icon: controller.submit()
-                    ? Icon(
+                    ? const Icon(
                         Icons.done,
                         color: Colors.green,
                       )
@@ -81,7 +75,6 @@ class CrearCuadranteView extends GetView<CrearCuadranteController> {
                 height: 1.h,
               ),
               Column(
-
                 children: <Widget>[
                   Container(
                     // width: 280.w,
@@ -89,7 +82,7 @@ class CrearCuadranteView extends GetView<CrearCuadranteController> {
                     child: Column(
                       children: <Widget>[
                         Row(
-                          mainAxisAlignment:  MainAxisAlignment.end,
+                          mainAxisAlignment: MainAxisAlignment.end,
                           children: <Widget>[
                             Container(
                                 child: Text(
@@ -108,7 +101,6 @@ class CrearCuadranteView extends GetView<CrearCuadranteController> {
                               },
                             ),
                           ],
-
                         ),
                         // Row(
                         //   children: <Widget>[
@@ -271,7 +263,52 @@ class CrearCuadranteView extends GetView<CrearCuadranteController> {
             },
             child: const Icon(Icons.add),
             // key: keyButton4,
-          ));
+          ),
+        );
+      },
+    );
+  }
+
+  alertDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return BeautifulAlertDialog();
+      },
+    );
+  }
+
+  showAlertLoadingDialog(BuildContext context) {
+    Widget okButton = Obx(() {
+      return TextButton(
+        child: controller.cuadranteLoading.value
+            ? const SizedBox(
+                height: 25,
+                width: 25,
+                child: CircularProgressIndicator(),
+              )
+            : Text('Calendario'),
+        onPressed: () async {
+
+          Get.offAllNamed('/home');
+
+        },
+      );
     });
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("Espera a que cargue el cuadrante"),
+      content: Text(
+          "Cuando se haya cargado el cuadrante el boton se habilitara para llevarte a la pagina de calendario"),
+      actions: [
+        okButton,
+      ],
+    );
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 }

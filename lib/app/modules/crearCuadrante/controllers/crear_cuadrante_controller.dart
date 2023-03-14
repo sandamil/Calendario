@@ -20,6 +20,7 @@ class CrearCuadranteController extends GetxController {
 
   var isSwitched = false.obs;
 
+  RxBool cuadranteLoading = true.obs;
 
   @override
   void onInit() {
@@ -54,6 +55,18 @@ class CrearCuadranteController extends GetxController {
             0;
   }
 
+  Future cuadranteLoad() async {
+    print(cuadranteLoading.value);
+    print('Future cuadranteLoad()=======================1================ ${cuadranteLoading.value}');
+    await Rotation(
+        DateTime.parse(inicialDate.value!.toString().substring(0, 10)),
+        DateTime.parse(endDate.value!.toString().substring(0, 10)));
+    cuadranteLoading.value = false;
+    print('Future cuadranteLoad()=======================2================  ${cuadranteLoading.value}');
+
+
+  }
+
   Rotation(DateTime start, DateTime end) async {
     DateTime date;
     var x = 0;
@@ -74,14 +87,6 @@ class CrearCuadranteController extends GetxController {
           title: list[x].title,
         ),
       );
-
-      print('Cuadrante');
-      print(list[x].color);
-      print(list[x].description);
-      print(list[x].endHour);
-      print(list[x].startHour);
-      print(list[x].title);
-
       x = x + 1;
     }
   }
@@ -98,7 +103,7 @@ class CrearCuadranteController extends GetxController {
           .subtract(const Duration(hours: 2))
           .toIso8601String()
           .substring(0, 10);
-   endDate.refresh();
+      endDate.refresh();
 
       print('isswitched true');
       print(endDate.value);
@@ -109,17 +114,9 @@ class CrearCuadranteController extends GetxController {
       print('isswitched false');
       print(endDate.value);
     }
-
   }
 
-  alertDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return BeautifulAlertDialog();
-      },
-    );
-  }
+
 
   Future<void> showPopUp(BuildContext context) {
     return showDialog<void>(

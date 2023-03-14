@@ -105,3 +105,15 @@ class MyTheme {
   /// check if the theme is light or dark
   bool get getThemeIsLight => MySharedPref.getThemeIsLight();
 }
+
+
+const Color primaryColor = Color(0xFF53214d);
+
+const Map<String, Color> dayColors = {
+  '': Colors.black,
+  'day': Colors.black,
+  'today': primaryColor,
+  'selected': Colors.white,
+  'weekend': Colors.red,
+  'outside': Colors.grey,
+};

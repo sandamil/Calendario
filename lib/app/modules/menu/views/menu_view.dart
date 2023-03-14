@@ -137,7 +137,7 @@ class MenuView extends GetView<MenuAppController> {
                   ],
                 ),
                 onPressed: () {
-                  Get.to(() => CrearCuadranteView());
+                  Get.offAll(() => CrearCuadranteView());
                 },
                 //splashColor: AAThemeData.buttonColor,
               ),
