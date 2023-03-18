@@ -2,26 +2,33 @@ import 'dart:collection';
 
 import 'package:calendario2/app/data/local/calendarDatabase.dart';
 import 'package:calendario2/app/data/model/turnoCalendar.dart';
+import 'package:calendario2/app/data/model/turnoType.dart';
+import 'package:calendario2/app/modules/home/widgets/calendar/widget/cuadrante_calendar_day.dart';
+import 'package:calendario2/config/util/hexColor.dart';
 import 'package:flutter/foundation.dart';
-import 'package:get/get_rx/src/rx_types/rx_types.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:logger/logger.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+import '../widgets/calendar/widget/customAlertDialogDaySelected.dart';
+
 class CalendarController extends GetxController {
+  var logguer = Logger();
   Rx<CalendarFormat> _calendarFormat = CalendarFormat.month.obs;
   Rx<CalendarFormat> get calendarFormat => _calendarFormat;
 
   Rx<DateTime> _selectedDay = DateTime.now().obs;
-  Rx<DateTime> _focusedDay = DateTime.now().obs;
+  DateTime _focusedDay = DateTime.now();
 
   Rx<DateTime> get selectedDay => _selectedDay;
-  Rx<DateTime> get focusedDay => _focusedDay;
+  DateTime get focusedDay => _focusedDay;
 
   setFocusedDay(DateTime day) => _focusedDay;
 
   RxList<Cuadrante> selectedEvents = <Cuadrante>[].obs;
   // get selectedEvents => _selectedEvents;
-
 
   ///============================
 //============================= Todo Rendimiento de app con obs =============================
@@ -35,6 +42,8 @@ class CalendarController extends GetxController {
 
   RxList<Cuadrante> cuadrante = <Cuadrante>[].obs;
 
+  List<TurnoType> turno = [];
+
   RxBool isReady = false.obs;
 
   void onInit() async {
@@ -45,10 +54,19 @@ class CalendarController extends GetxController {
   onDaySelected(DateTime selectedDate, DateTime focusedDate) {
     if (!isSameDay(selectedDate, _selectedDay.value)) {
       _selectedDay.value = selectedDate;
-      _focusedDay.value = focusedDate;
+      _focusedDay = focusedDate;
       update();
     }
     selectedEvents.value = getEventForDay(selectedDay.value);
+    update();
+    Get.dialog( CustomAlertDilogDaySelected());
+  }
+
+
+
+  onPageChanged(focusedDay) {
+    _focusedDay = focusedDay;
+    update();
   }
 
   onFormatChanged(CalendarFormat format) {
@@ -87,4 +105,117 @@ class CalendarController extends GetxController {
 
     return cuadranteMap.value;
   }
+
+  Future<List<TurnoType>> fetchTurno() async {
+    turno = await TurnoDbProvider.instance.getTypeModels();
+    return turno;
+  }
+
+  Future<void> showPopUp(BuildContext context, DateTime dateTime) {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: true, // user must tap button!
+      builder: (BuildContext context) {
+        return ClipRRect(
+          borderRadius: BorderRadius.circular(30),
+          child: AlertDialog(
+            title: Text('Cambia Tipo de día'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                SingleChildScrollView(
+                  child: Wrap(
+                    alignment: WrapAlignment.spaceAround,
+                    runSpacing: 10,
+                    children: <Widget>[
+                      ...turno.map((m) {
+                        return ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12.0),
+                            ),
+                            backgroundColor: HexColor(m.color!),
+                          ),
+                          child: Container(
+                            alignment: Alignment.center,
+                            height: 10.h,
+                            width: 16.w,
+                            child: Text(
+                              m.description!,
+                              style: TextStyle(
+                                  fontSize: 12.sp,
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme.of(context)
+                                      .primaryTextTheme
+                                      .titleLarge!
+                                      .backgroundColor),
+                            ),
+                          ),
+                          onPressed: () async {
+                            logguer.i('onpressed');
+                            await TurnoDbProvider.instance.addItemModel(
+                              Cuadrante(
+                                dateTime: dateTime,
+                                color: m.color,
+                                description: m.description,
+                                endHour: m.endHour,
+                                startHour: m.startHour,
+                                title: m.title,
+                              ),
+                            );
+                            await fetchCuadrante();
+                            logguer.i(selectedEvents.value.length);
+
+                            selectedEvents.value =
+                                  cuadranteMap[_selectedDay] ?? [];
+                            
+                            logguer.i(selectedEvents.value.length);
+
+
+                            update();
+                            Navigator.of(context).pop();
+                          },
+                        );
+                      }),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 10.h),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20.0)),
+                    padding:
+                    EdgeInsets.symmetric(horizontal: 15.0, vertical: 5),
+                    backgroundColor: Theme.of(context).primaryColor,
+                    textStyle: const TextStyle(
+                      color: Colors.white,
+                    ),
+                    elevation: 5.0,
+                  ),
+                  child: Text(
+                    "Añade Nota",
+                    style: TextStyle(
+                        fontSize: 16, color: Theme.of(context).hintColor),
+                    textAlign: TextAlign.center,
+                    textScaleFactor: 1.2,
+                  ),
+                  onPressed: () {
+                    // Navigator.push(
+                    //     context,
+                    //     MaterialPageRoute(
+                    //       builder: (context) =>
+                    //           // AddTaskPage(__selectedDay, _events),
+                    //     )
+                    // );
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
 }

@@ -44,14 +44,7 @@ class HomeView extends GetView<HomeController> {
               );
             },
           ),
-          title: Text(
-            "Calendario",
-            style: TextStyle(
-              fontSize: MyFonts.headline3TextSize,
-              color: theme.primaryColor,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          title: SelectedDayWidget(),
           actions: [
             IconButton(
               color: theme.primaryColor,
@@ -76,8 +69,7 @@ class HomeView extends GetView<HomeController> {
         body: Column(
           children: [
             CalendarWidget(),
-            SelectedDayWidget(),
-            Container(height: 200,child: CuadranteCalendarDay()),
+
           ],
         )
     );

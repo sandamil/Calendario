@@ -7,6 +7,7 @@ import 'my_fonts.dart';
 import 'light_theme_colors.dart';
 
 class MyStyles {
+
   ///icons theme
   static IconThemeData getIconTheme({required bool isLightTheme}) =>
       IconThemeData(
