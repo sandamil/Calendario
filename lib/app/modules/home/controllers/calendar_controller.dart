@@ -52,17 +52,25 @@ class CalendarController extends GetxController {
   }
 
   onDaySelected(DateTime selectedDate, DateTime focusedDate) {
+    print('onDaySelected1selectedDate' '${selectedDate}');
+    print('onDaySelected1selectedDate' '${focusedDate}');
+    print('onDaySelected1selectedDate' '${_selectedDay.value}');
     if (!isSameDay(selectedDate, _selectedDay.value)) {
       _selectedDay.value = selectedDate;
       _focusedDay = focusedDate;
-      update();
+
+
+      print('onDaySelected2selectedDate' '${selectedDate}');
+      print('onDaySelected2selectedDate' '${focusedDate}');
+      print('onDaySelected2selectedDate' '${_selectedDay.value}');
     }
     selectedEvents.value = getEventForDay(selectedDay.value);
     update();
-    Get.dialog( CustomAlertDilogDaySelected());
+    print('onDaySelected3selectedDate' '${selectedDate}');
+    print('onDaySelected3selectedDate' '${focusedDate}');
+    print('onDaySelected3selectedDate' '${_selectedDay.value}');
+    Get.dialog(CustomAlertDilogDaySelected( selectedDate: selectedDate));
   }
-
-
 
   onPageChanged(focusedDay) {
     _focusedDay = focusedDay;
@@ -111,7 +119,9 @@ class CalendarController extends GetxController {
     return turno;
   }
 
-  Future<void> showPopUp(BuildContext context, DateTime dateTime) {
+  Future<void> showPopUp(BuildContext context, selectedDate) {
+
+    print('showPopUp   selectedDate ====' '${selectedDate}');
     return showDialog<void>(
       context: context,
       barrierDismissible: true, // user must tap button!
@@ -152,10 +162,11 @@ class CalendarController extends GetxController {
                             ),
                           ),
                           onPressed: () async {
+                            print('showPopUp onPressed   selectedDate ====' '${selectedDate}');
                             logguer.i('onpressed');
                             await TurnoDbProvider.instance.addItemModel(
                               Cuadrante(
-                                dateTime: dateTime,
+                                dateTime: selectedDate,
                                 color: m.color,
                                 description: m.description,
                                 endHour: m.endHour,
@@ -164,17 +175,14 @@ class CalendarController extends GetxController {
                               ),
                             );
                             await fetchCuadrante();
-                            logguer.i(selectedEvents.value.length);
 
                             selectedEvents.value =
-                                  cuadranteMap[_selectedDay] ?? [];
-                            
-                            logguer.i(selectedEvents.value.length);
+                                cuadranteMap[_selectedDay] ?? [];
+
 
 
                             update();
-                            Navigator.of(context).pop();
-                          },
+                            Get.offAllNamed('/home');                          },
                         );
                       }),
                     ],
@@ -186,7 +194,7 @@ class CalendarController extends GetxController {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20.0)),
                     padding:
-                    EdgeInsets.symmetric(horizontal: 15.0, vertical: 5),
+                        EdgeInsets.symmetric(horizontal: 15.0, vertical: 5),
                     backgroundColor: Theme.of(context).primaryColor,
                     textStyle: const TextStyle(
                       color: Colors.white,
@@ -194,13 +202,14 @@ class CalendarController extends GetxController {
                     elevation: 5.0,
                   ),
                   child: Text(
-                    "Añade Nota",
+                    "Calendario",
                     style: TextStyle(
                         fontSize: 16, color: Theme.of(context).hintColor),
                     textAlign: TextAlign.center,
                     textScaleFactor: 1.2,
                   ),
                   onPressed: () {
+                    Get.offAllNamed('/home');
                     // Navigator.push(
                     //     context,
                     //     MaterialPageRoute(
@@ -217,5 +226,4 @@ class CalendarController extends GetxController {
       },
     );
   }
-
 }
