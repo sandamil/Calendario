@@ -12,6 +12,7 @@ import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+import '../widgets/calendar/widget/customAlertDialogAddTurno.dart';
 import '../widgets/calendar/widget/customAlertDialogDaySelected.dart';
 
 class CalendarController extends GetxController {
@@ -119,10 +120,14 @@ class CalendarController extends GetxController {
     return turno;
   }
 
-  Future<void> showPopUp(BuildContext context, selectedDate) {
 
+  showPopUp(context, selectedDate) => showDialog(
+      context: context,
+      builder: (context) => CustomAlertDialogTurno(selectedDate: selectedDate));
+
+showPopUp(BuildContext context, selectedDate) {
     print('showPopUp   selectedDate ====' '${selectedDate}');
-    return showDialog<void>(
+    return showDialog(
       context: context,
       barrierDismissible: true, // user must tap button!
       builder: (BuildContext context) {
