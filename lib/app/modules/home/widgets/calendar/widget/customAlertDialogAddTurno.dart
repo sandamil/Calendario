@@ -1,27 +1,25 @@
 import 'package:calendario2/app/data/local/calendarDatabase.dart';
 import 'package:calendario2/app/data/model/turnoCalendar.dart';
 import 'package:calendario2/app/modules/home/controllers/calendar_controller.dart';
-import 'package:calendario2/config/theme/my_colors.dart';
-import 'package:calendario2/config/theme/my_theme.dart';
 import 'package:calendario2/config/util/hexColor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 
-import 'cuadrante_calendar_day.dart';
 
 class CustomAlertDialogTurno extends StatelessWidget {
 
   CustomAlertDialogTurno({
     super.key,
-    required this.dateTime,
-    // required this.dayType
+    required this.selectedDate,
+    required this.turno
   });
 
-  final DateTime dateTime;
+  final DateTime selectedDate;
 
-  // final String dayType;
+  final List turno;
+
   CalendarController calendarController = CalendarController();
   //
   @override
@@ -42,50 +40,60 @@ class CustomAlertDialogTurno extends StatelessWidget {
                 runSpacing: 10,
                 children: <Widget>[
                   ...turno.map((m) {
-                    return ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.0),
-                        ),
-                        backgroundColor: HexColor(m.color!),
-                      ),
-                      child: Container(
-                        alignment: Alignment.center,
-                        height: 10.h,
-                        width: 16.w,
-                        child: Text(
-                          m.description!,
-                          style: TextStyle(
-                              fontSize: 12.sp,
-                              fontWeight: FontWeight.bold,
-                              color: Theme.of(context)
-                                  .primaryTextTheme
-                                  .titleLarge!
-                                  .backgroundColor),
-                        ),
-                      ),
-                      onPressed: () async {
-                        print('showPopUp onPressed   selectedDate ====' '${selectedDate}');
-                        logguer.i('onpressed');
-                        await TurnoDbProvider.instance.addItemModel(
-                          Cuadrante(
-                            dateTime: selectedDate,
-                            color: m.color,
-                            description: m.description,
-                            endHour: m.endHour,
-                            startHour: m.startHour,
-                            title: m.title,
+                    return Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 2.w),
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.r),
                           ),
-                        );
-                        await fetchCuadrante();
+                          backgroundColor: HexColor(m.color!),
+                        ),
+                        child: Container(
+                          alignment: Alignment.center,
+                          height: 20.h,
+                          width: 75.w,
+                          child: Text(
+                            m.description!,
+                            style: TextStyle(
+                                fontSize: 12.sp,
+                                fontWeight: FontWeight.bold,
+                                color: Theme.of(context)
+                                    .primaryTextTheme
+                                    .titleLarge!
+                                    .backgroundColor),
+                          ),
+                        ),
+                        onPressed: () async {
+                          print('showPopUp onPressed   selectedDate ====' '${selectedDate}');
+                          logguer.i(' 666666666    onpressed');
+                          await TurnoDbProvider.instance.addItemModel(
+                            Cuadrante(
+                              dateTime: selectedDate,
+                              color: m.color,
+                              description: m.description,
+                              endHour: m.endHour,
+                              startHour: m.startHour,
+                              title: m.title,
+                            ),
+                          );
+                          await calendarController.fetchCuadrante();
+                          logguer.i('77777777 nnonpressed');
+                          //
+                          // calendarController.selectedEvents.value =
+                          //     calendarController.cuadranteMap[calendarController.selectedDay] ?? [];
+                          //
+                          // logguer.i('888888888   onpressed');
+                          //
+                          //
+                          // calendarController.update();
+                          logguer.i('99999999onpressed');
 
-                        selectedEvents.value =
-                            cuadranteMap[_selectedDay] ?? [];
+                          Get.offAllNamed('/home');
 
-
-
-                        update();
-                        Get.offAllNamed('/home');                          },
+                          logguer.i('---------------onpressed');
+                        },
+                      ),
                     );
                   }),
                 ],

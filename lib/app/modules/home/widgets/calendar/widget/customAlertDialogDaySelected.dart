@@ -10,15 +10,19 @@ import 'cuadrante_calendar_day.dart';
 class CustomAlertDilogDaySelected extends StatelessWidget {
    CustomAlertDilogDaySelected({
     super.key, required this.selectedDate,
-    // required this.date, required this.dayType
+     required this.turno
+     // required this.dayType
   });
 
   final DateTime selectedDate;
-  // final String dayType;
+   final List turno;
+
   CalendarController calendarController = CalendarController();
 
   @override
   Widget build(BuildContext context) {
+
+    print(turno.length);
     return Align(
       alignment: Alignment.center,
       child: Padding(
@@ -42,7 +46,7 @@ class CustomAlertDilogDaySelected extends StatelessWidget {
                   Row(
                     children: [
                       Expanded(
-                        child: turnoBtn(selectedDate),
+                        child: turnoBtn(context, selectedDate),
                       ),
                       const SizedBox(width: 10),
                       Expanded(
@@ -66,11 +70,14 @@ class CustomAlertDilogDaySelected extends StatelessWidget {
     );
   }
 
-  Widget turnoBtn(selectedDate) {
+  Widget turnoBtn(context, selectedDate) {
     return ElevatedButton(
       onPressed: () async {
         await calendarController.fetchTurno();
-        calendarController.showPopUp(Get.context!, selectedDate);
+        Navigator.pop(context);
+
+        calendarController.showPopUp(Get.context!, selectedDate, turno);
+
       },
       child: const Text("+ Turno"),
     );

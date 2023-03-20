@@ -17,95 +17,84 @@ class CuadranteCalendarDay extends StatelessWidget {
         builder: (c) {
           return c.selectedEvents.value.isEmpty
               ? Container()
-              : Container(
-            height: 150,
-                child: Column(
-            mainAxisSize: MainAxisSize.min,
-
-            children: [
-                    SingleChildScrollView(
-                      child: Wrap(
-                        alignment: WrapAlignment.spaceAround,
-                        runSpacing: 10,
-                        children: <Widget>[
-                          ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: c.selectedEvents.value.length,
-                              itemBuilder: (context, index) {
-                                return Container(
-                                  height: 30,
-                                  padding:
-                                      EdgeInsets.symmetric(vertical: 2.h, horizontal: 2.w),
-                                  decoration: BoxDecoration(
-                                    color: HexColor(c.selectedEvents.value[index].color!),
-                                    border: Border.all(width: 0.8),
-                                    borderRadius: BorderRadius.circular(5.r),
-                                    // boxShadow: const <BoxShadow>[
-                                    //   BoxShadow(
-                                    //       color: Colors.black45,
-                                    //       offset: Offset(0, 1),
-                                    //       blurRadius: 3),
-                                    // ],
-                                  ),
-                                  margin:
-                                      EdgeInsets.symmetric(horizontal: 2.w, vertical: 4.h),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
-                                      FittedBox(
-                                        child: Text(
-                                          '${c.selectedEvents.value[index].dateTime.toString().substring(8, 10)}-${c.selectedEvents.value[index].dateTime.toString().substring(5, 7)}-${c.selectedEvents.value[index].dateTime.toString().substring(0, 4)}',
-                                          style: TextStyle(
-                                              fontSize: 14.sp,
-                                              color: Theme.of(context)
-                                                  .primaryTextTheme
-                                                  .titleLarge!
-                                                  .color),
-                                        ),
+              : Wrap(
+                alignment: WrapAlignment.start,
+                runSpacing: 10,
+                children: <Widget>[
+                  ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: c.selectedEvents.value.length,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          height: 30,
+                          padding:
+                              EdgeInsets.symmetric(vertical: 2.h, horizontal: 2.w),
+                          decoration: BoxDecoration(
+                            color: HexColor(c.selectedEvents.value[index].color!),
+                            border: Border.all(width: 0.8),
+                            borderRadius: BorderRadius.circular(5.r),
+                            // boxShadow: const <BoxShadow>[
+                            //   BoxShadow(
+                            //       color: Colors.black45,
+                            //       offset: Offset(0, 1),
+                            //       blurRadius: 3),
+                            // ],
+                          ),
+                          margin:
+                              EdgeInsets.symmetric(horizontal: 2.w, vertical: 4.h),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              FittedBox(
+                                child: Text(
+                                  '${c.selectedEvents.value[index].dateTime.toString().substring(8, 10)}-${c.selectedEvents.value[index].dateTime.toString().substring(5, 7)}-${c.selectedEvents.value[index].dateTime.toString().substring(0, 4)}',
+                                  style: TextStyle(
+                                      fontSize: 14.sp,
+                                      color: Theme.of(context)
+                                          .primaryTextTheme
+                                          .titleLarge!
+                                          .color),
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 20,
+                              ),
+                              FittedBox(
+                                child: Text(
+                                  c.selectedEvents.value[index].description!,
+                                  style: TextStyle(
+                                      fontSize: 16.sp,
+                                      fontWeight: FontWeight.bold,
+                                      color: Theme.of(context)
+                                          .primaryTextTheme
+                                          .titleLarge!
+                                          .color),
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 20,
+                              ),
+                              c.selectedEvents.value[index].startHour != null &&
+                                      c.selectedEvents.value[index].endHour != null
+                                  ? FittedBox(
+                                      child: Text(
+                                        '${c.selectedEvents.value[index].startHour.toString()} a ${c.selectedEvents.value[index].endHour.toString()}',
+                                        style: TextStyle(
+                                            fontSize: 14.sp,
+                                            color: Theme.of(context)
+                                                .primaryTextTheme
+                                                .titleLarge!
+                                                .color),
                                       ),
-                                      const SizedBox(
-                                        width: 20,
-                                      ),
-                                      FittedBox(
-                                        child: Text(
-                                          c.selectedEvents.value[index].description!,
-                                          style: TextStyle(
-                                              fontSize: 16.sp,
-                                              fontWeight: FontWeight.bold,
-                                              color: Theme.of(context)
-                                                  .primaryTextTheme
-                                                  .titleLarge!
-                                                  .color),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        width: 20,
-                                      ),
-                                      c.selectedEvents.value[index].startHour != null &&
-                                              c.selectedEvents.value[index].endHour != null
-                                          ? FittedBox(
-                                              child: Text(
-                                                '${c.selectedEvents.value[index].startHour.toString()} a ${c.selectedEvents.value[index].endHour.toString()}',
-                                                style: TextStyle(
-                                                    fontSize: 14.sp,
-                                                    color: Theme.of(context)
-                                                        .primaryTextTheme
-                                                        .titleLarge!
-                                                        .color),
-                                              ),
-                                            )
-                                          : Container(
-                                              padding: const EdgeInsets.only(right: 20),
-                                            )
-                                    ],
-                                  ),
-                                );
-                              }),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+                                    )
+                                  : Container(
+                                      padding: const EdgeInsets.only(right: 20),
+                                    )
+                            ],
+                          ),
+                        );
+                      }),
+                ],
               );
 
           Column(
