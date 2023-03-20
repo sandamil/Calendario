@@ -55,7 +55,7 @@ class BeautifulAlertDialog extends StatelessWidget {
                             style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.green,
                                 shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10.r)),
+                                    borderRadius: BorderRadius.circular(5.r)),
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 10.w, vertical: 10.h),
                                 textStyle: TextStyle(

@@ -5,23 +5,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-import 'cuadrante_calendar_day.dart';
+import 'day_selected_turno_widget.dart';
 
 class CustomAlertDilogDaySelected extends StatelessWidget {
-   CustomAlertDilogDaySelected({
-    super.key, required this.selectedDate,
-     required this.turno
-     // required this.dayType
-  });
+  CustomAlertDilogDaySelected(
+      {super.key, required this.selectedDate, required this.turno
+      // required this.dayType
+      });
 
   final DateTime selectedDate;
-   final List turno;
+  final List turno;
 
   CalendarController calendarController = CalendarController();
 
   @override
   Widget build(BuildContext context) {
-
     var theme = Theme.of(context);
 
     return Align(
@@ -36,7 +34,7 @@ class CustomAlertDilogDaySelected extends StatelessWidget {
               decoration: BoxDecoration(
                 color: theme.scaffoldBackgroundColor,
                 borderRadius: BorderRadius.all(
-                  Radius.circular(10.r),
+                  Radius.circular(5.r),
                 ),
               ),
               child: Column(
@@ -68,7 +66,7 @@ class CustomAlertDilogDaySelected extends StatelessWidget {
     return Container(
       color: theme.scaffoldBackgroundColor,
       height: 150,
-      child: const CuadranteCalendarDay(),
+      child: const DaySelecetedTurnoWidget(),
     );
   }
 
@@ -77,9 +75,7 @@ class CustomAlertDilogDaySelected extends StatelessWidget {
       onPressed: () async {
         await calendarController.fetchTurno();
         Navigator.pop(context);
-
         calendarController.showPopUp(Get.context!, selectedDate, turno);
-
       },
       child: const Text("+ Turno"),
     );

@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-import '../widgets/calendar/widget/customAlertDialogAddTurno.dart';
+import '../widgets/calendar/widget/customAlertDialogTurnoList.dart';
 import '../widgets/calendar/widget/customAlertDialogDaySelected.dart';
 
 class CalendarController extends GetxController {
@@ -39,7 +39,7 @@ class CalendarController extends GetxController {
 
   RxList<Cuadrante> cuadrante = <Cuadrante>[].obs;
 
-  List<TurnoType> turno = [];
+  RxList<TurnoType> turno = <TurnoType>[].obs;
 
   RxBool isReady = false.obs;
 
@@ -56,7 +56,7 @@ class CalendarController extends GetxController {
     }
     selectedEvents.value = getEventForDay(selectedDay.value);
     update();
-    Get.dialog(CustomAlertDilogDaySelected( selectedDate: selectedDate, turno: turno));
+    Get.dialog(CustomAlertDilogDaySelected( selectedDate: selectedDate, turno: turno.value));
   }
 
   onPageChanged(focusedDay) {
@@ -101,14 +101,16 @@ class CalendarController extends GetxController {
   }
 
   Future<List<TurnoType>> fetchTurno() async {
-    turno = await TurnoDbProvider.instance.getTypeModels();
+    turno.value = await TurnoDbProvider.instance.getTypeModels();
     return turno;
   }
 
 
   showPopUp(context, selectedDate, turno) => showDialog(
       context: context,
-      builder: (context) => CustomAlertDialogTurno(selectedDate: selectedDate, turno: turno),);
+      builder: (context) {
+        return CustomAlertDialogTurnoList(selectedDate: selectedDate, turno: turno);
+      },);
 
 
 }

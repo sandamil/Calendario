@@ -4,6 +4,7 @@ import 'package:calendario2/app/data/model/turnoCalendar.dart';
 import 'package:calendario2/app/data/model/turnoType.dart';
 import 'package:calendario2/config/util/hexColor.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 class CrearCuadranteController extends GetxController {
@@ -139,7 +140,7 @@ class CrearCuadranteController extends GetxController {
                         return ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             shape: RoundedRectangleBorder(
-                              borderRadius: new BorderRadius.circular(15.0),
+                              borderRadius: new BorderRadius.circular(5.r),
                             ),
                             backgroundColor: HexColor(m.color!),
                           ),

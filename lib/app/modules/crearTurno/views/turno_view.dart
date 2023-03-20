@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
 
@@ -24,7 +25,7 @@ class TurnoView extends GetView<CrearTurnoController> {
           ),
           color: theme.primaryColor,
           onPressed: () {
-            Get.to(const HomeView(),
+            Get.offAll(const HomeView(),
                 duration: const Duration(milliseconds: 100),
                 transition: Transition.leftToRight);
           },
@@ -55,7 +56,7 @@ class TurnoView extends GetView<CrearTurnoController> {
                   decoration: BoxDecoration(
                       color: HexColor(controller.turnoType[index].color!),
                       border: Border.all(width: 0.8),
-                      borderRadius: BorderRadius.circular(12.0),
+                      borderRadius: BorderRadius.circular(5.r),
                       boxShadow: const <BoxShadow>[
                         BoxShadow(
                             color: Colors.black45,

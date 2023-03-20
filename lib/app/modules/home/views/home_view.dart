@@ -1,6 +1,6 @@
 import 'package:calendario2/app/data/model/turnoCalendar.dart';
 import 'package:calendario2/app/modules/home/widgets/calendar/table_calendar.dart';
-import 'package:calendario2/app/modules/home/widgets/calendar/widget/cuadrante_calendar_day.dart';
+import 'package:calendario2/app/modules/home/widgets/calendar/widget/day_selected_turno_widget.dart';
 import 'package:calendario2/app/modules/home/widgets/calendar/widget/selected_day_widget.dart';
 import 'package:calendario2/config/util/hexColor.dart';
 import 'package:flutter/material.dart';

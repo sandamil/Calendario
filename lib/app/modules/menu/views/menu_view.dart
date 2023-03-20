@@ -60,7 +60,7 @@ class MenuView extends GetView<MenuAppController> {
                 elevation: 10,
                 padding: EdgeInsets.all(0),
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.r)),
+                    borderRadius: BorderRadius.circular(5.r)),
                 height: _qaButtonHeight,
                 minWidth: _qaButtonWidth,
                 color: Theme.of(context).hintColor,
@@ -108,7 +108,7 @@ class MenuView extends GetView<MenuAppController> {
                 elevation: 10,
                 padding: EdgeInsets.all(0),
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.r)),
+                    borderRadius: BorderRadius.circular(5.r)),
                 height: _qaButtonHeight,
                 minWidth: _qaButtonWidth,
                 color: Theme.of(context).hintColor,
@@ -151,7 +151,7 @@ class MenuView extends GetView<MenuAppController> {
                 elevation: 10,
                 padding: EdgeInsets.all(0),
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.r)),
+                    borderRadius: BorderRadius.circular(5.r)),
                 height: _qaButtonHeight,
                 minWidth: _qaButtonWidth,
                 color: Theme.of(context).hintColor,
@@ -194,7 +194,7 @@ class MenuView extends GetView<MenuAppController> {
                 elevation: 10,
                 padding: EdgeInsets.all(0),
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.h)),
+                    borderRadius: BorderRadius.circular(5.h)),
                 height: _qaButtonHeight,
                 minWidth: _qaButtonWidth,
                 color: Theme.of(context).hintColor,
@@ -237,7 +237,7 @@ class MenuView extends GetView<MenuAppController> {
                 elevation: 10,
                 padding: EdgeInsets.all(0),
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.r)),
+                    borderRadius: BorderRadius.circular(5.r)),
                 height: _qaButtonHeight,
                 minWidth: _qaButtonWidth,
                 color: Theme.of(context).hintColor,

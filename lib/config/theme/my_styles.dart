@@ -177,7 +177,7 @@ class MyStyles {
         style: ButtonStyle(
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
             RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(6.r),
+              borderRadius: BorderRadius.circular(5.r),
               //side: BorderSide(color: Colors.teal, width: 2.0),
             ),
           ),

@@ -77,7 +77,7 @@ class AddTurnoView extends GetView<CrearTurnoController> {
                                     width: 2),
                                 color:
                                     controller.turnoColor.value.withAlpha(600),
-                                borderRadius: BorderRadius.circular(15)),
+                                borderRadius: BorderRadius.circular(5.r)),
                             child: SizedBox(
                               width: 70,
                               height: 60,
@@ -213,7 +213,7 @@ class AddTurnoView extends GetView<CrearTurnoController> {
                   child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15.0),
+                          borderRadius: BorderRadius.circular(5.r),
                         ), // foreground (text) color
                       ),
                       child: const Text('Añadir'),

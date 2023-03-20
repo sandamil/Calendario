@@ -36,7 +36,7 @@ Widget _getLoadingIndicator({String? msg}){
       vertical: 10.h,
     ),
     decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(10.r),
+      borderRadius: BorderRadius.circular(5.r),
       color: Colors.white,
     ),
     child: Column(mainAxisSize: MainAxisSize.min,children: [

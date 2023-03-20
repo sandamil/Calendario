@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -30,7 +31,7 @@ class InputField extends StatelessWidget {
             padding: const EdgeInsets.only(left: 8),
             margin: const EdgeInsets.only(top: 8),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(5.r),
               border: Border.all(color: Colors.grey),
             ),
             child: Row(

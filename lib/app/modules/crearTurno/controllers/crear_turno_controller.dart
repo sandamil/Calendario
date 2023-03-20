@@ -1,3 +1,4 @@
+import 'package:calendario2/app/modules/home/controllers/calendar_controller.dart';
 import 'package:calendario2/config/util/convert_time.dart';
 import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
@@ -16,6 +17,8 @@ class CrearTurnoController extends GetxController {
   RxList<TurnoType> turnoType = <TurnoType>[].obs;
 
   RxString title = "".obs;
+
+  CalendarController calendarController = CalendarController();
 
   get getTitle => title.value;
   void setTitle(String titleString) => title.value = titleString;
@@ -76,6 +79,7 @@ class CrearTurnoController extends GetxController {
       color: turnoColor.value.value.toRadixString(16),
     );
     await TurnoDbProvider.instance.addTypeModel(eventType);
+    await calendarController.fetchTurno();
     fetchEventsType();
   }
 
@@ -92,7 +96,7 @@ class CrearTurnoController extends GetxController {
       },
       width: 40,
       height: 40,
-      borderRadius: 4,
+      borderRadius: 5.r,
       spacing: 5,
       runSpacing: 5,
       wheelDiameter: 155,
@@ -124,93 +128,4 @@ class CrearTurnoController extends GetxController {
           const BoxConstraints(minHeight: 480, minWidth: 300, maxWidth: 320),
     );
   }
-
-
-
-
-
-  // void openDialog() async {
-  //   Get.defaultDialog(
-  //     title: 'Choose Color',
-  //     buttonColor: mainColor,
-  //     cancelTextColor: Colors.black,
-  //     confirmTextColor: Colors.white,
-  //     textConfirm: 'Save',
-  //     textCancel: 'Cancal',
-  //     titleStyle: TextStyle(
-  //         fontWeight: FontWeight.bold,
-  //         fontFamily: 'Lato-Bold',
-  //         fontSize: 17.sp,
-  //         color: mainColor),
-  //     content: SizedBox(
-  //       height: 18.h,
-  //       child: MaterialColorPicker(
-  //         selectedColor: mainColor,
-  //         allowShades: false,
-  //         onMainColorChange: (color) {
-  //           tempMainColor = color;
-  //           update();
-  //         },
-  //       ),
-  //     ),
-  //     onCancel: () {
-  //       Get.back();
-  //     },
-  //     onConfirm: () {
-  //       mainColor = tempMainColor;
-  //       Get.back();
-  //       update();
-  //     },
-  //   );
-  // }
-
-  // Future<void> showPopUp(BuildContext context, {colorCallback}) {
-  //   return showDialog<void>(
-  //     context: context,
-  //     barrierDismissible: true,
-  //     builder: (BuildContext context) {
-  //       return AlertDialog(
-  //         contentPadding: const EdgeInsets.all(2.0),
-  //         backgroundColor: Colors.transparent,
-  //         content: Column(
-  //           children: <Widget>[
-  //             Expanded(
-  //               child: Container(
-  //                 decoration: BoxDecoration(
-  //                   color: Colors.white,
-  //                   borderRadius: BorderRadius.circular(30.0),
-  //                 ),
-  //                 child: MaterialColorPicker(
-  //                   colors: fullMaterialColors,
-  //                   onColorChange: (color) {
-  //                     tempMainColor = color;
-  //                     update();
-  //                   },
-  //                   circleSize: 60,
-  //                   selectedColor: Colors.red,
-  //                   elevation: 10,
-  //                 ),
-  //               ),
-  //             ),
-  //             ElevatedButton(
-  //               style: ElevatedButton.styleFrom(
-  //                 shape: RoundedRectangleBorder(
-  //                   borderRadius: BorderRadius.circular(15.0),
-  //                 ),
-  //               ),
-  //               onPressed: () {
-  //                 mainColor = tempMainColor;
-  //                 Get.back();
-  //                 update();
-  //               },
-  //               child: Icon(Icons.done),
-  //             )
-  //           ],
-  //         ),
-  //       );
-  //     },
-  //   );
-  // }
 }
-
-// typedef colorCallback = void Function(Color);

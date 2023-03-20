@@ -207,7 +207,7 @@ class CrearCuadranteView extends GetView<CrearCuadranteController> {
                       decoration: BoxDecoration(
                           color: HexColor(controller.list[index].color!),
                           border: Border.all(width: 0.8),
-                          borderRadius: BorderRadius.circular(12.0),
+                          borderRadius: BorderRadius.circular(5.r),
                           boxShadow: const <BoxShadow>[
                             BoxShadow(
                                 color: Colors.black45,
