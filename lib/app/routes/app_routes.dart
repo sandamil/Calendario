@@ -8,6 +8,7 @@ abstract class Routes {
   static const MENU = _Paths.MENU;
   static const CREAR_TURNO = _Paths.CREAR_TURNO;
   static const CREAR_CUADRANTE = _Paths.CREAR_CUADRANTE;
+  static const NOTAS = _Paths.NOTAS;
 }
 
 abstract class _Paths {
@@ -17,4 +18,5 @@ abstract class _Paths {
   static const MENU = '/menu';
   static const CREAR_TURNO = '/crear-turno';
   static const CREAR_CUADRANTE = '/crear-cuadrante';
+  static const NOTAS = '/notas';
 }

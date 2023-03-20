@@ -1,6 +1,8 @@
 import 'dart:collection';
 
 import 'package:calendario2/app/data/local/calendarDatabase.dart';
+import 'package:calendario2/app/data/local/taskDatabase.dart';
+import 'package:calendario2/app/data/model/taskModel.dart';
 import 'package:calendario2/app/data/model/turnoCalendar.dart';
 import 'package:calendario2/app/data/model/turnoType.dart';
 import 'package:flutter/material.dart';
@@ -37,6 +39,9 @@ class CalendarController extends GetxController {
   RxMap<DateTime, List<Cuadrante>> cuadranteMap =
       <DateTime, List<Cuadrante>>{}.obs;
 
+  RxMap<DateTime, List<Task>> notasMap =
+      <DateTime, List<Task>>{}.obs;
+
   RxList<Cuadrante> cuadrante = <Cuadrante>[].obs;
 
   RxList<TurnoType> turno = <TurnoType>[].obs;
@@ -46,6 +51,7 @@ class CalendarController extends GetxController {
   void onInit() async {
     await fetchCuadrante();
     await fetchTurno();
+    await getNotesFromDB();
     super.onInit();
   }
 
@@ -74,11 +80,11 @@ class CalendarController extends GetxController {
     return key.day * 1000000 + key.month * 10000 + key.year;
   }
 
-  List<Cuadrante> getEventForDay(DateTime day) {
-    final events = LinkedHashMap<DateTime, List<Cuadrante>>(
+  getEventForDay(DateTime day) {
+    final events = LinkedHashMap<DateTime, List<dynamic>>(
       equals: isSameDay,
       hashCode: getHashCode,
-    )..addAll(cuadranteMap);
+    )..addAll(cuadranteMap)..addAll(notasMap);
     return events[day] ?? [];
   }
 
@@ -99,6 +105,13 @@ class CalendarController extends GetxController {
     isReady.value = true;
     return cuadranteMap.value;
   }
+
+  getNotesFromDB() async {
+    notasMap.value = await DbProvider.instance.getNotesFromDB();
+    update();
+    return notasMap.value;
+  }
+
 
   Future<List<TurnoType>> fetchTurno() async {
     turno.value = await TurnoDbProvider.instance.getTypeModels();

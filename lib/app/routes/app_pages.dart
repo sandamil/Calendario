@@ -4,6 +4,8 @@ import '../modules/CrearCuadrante/bindings/crear_cuadrante_binding.dart';
 import '../modules/CrearCuadrante/views/crear_cuadrante_view.dart';
 import '../modules/CrearTurno/bindings/crear_turno_binding.dart';
 import '../modules/CrearTurno/views/turno_view.dart';
+import '../modules/Notas/bindings/notas_binding.dart';
+import '../modules/Notas/views/notas_view.dart';
 import '../modules/ajustes/bindings/ajustes_binding.dart';
 import '../modules/ajustes/views/ajustes_view.dart';
 import '../modules/home/bindings/home_binding.dart';
@@ -37,18 +39,6 @@ class AppPages {
       name: _Paths.MENU,
       page: () => const MenuView(),
       binding: MenuBinding(),
-      children: [
-        GetPage(
-          name: _Paths.MENU,
-          page: () => const MenuView(),
-          binding: MenuBinding(),
-        ),
-        GetPage(
-          name: _Paths.MENU,
-          page: () => const MenuView(),
-          binding: MenuBinding(),
-        ),
-      ],
     ),
     GetPage(
       name: _Paths.CREAR_TURNO,
@@ -59,6 +49,11 @@ class AppPages {
       name: _Paths.CREAR_CUADRANTE,
       page: () => const CrearCuadranteView(),
       binding: CrearCuadranteBinding(),
+    ),
+    GetPage(
+      name: _Paths.NOTAS,
+      page: () => const NotasView(),
+      binding: NotasBinding(),
     ),
   ];
 }

@@ -90,6 +90,7 @@ class MenuView extends GetView<MenuAppController> {
                 ),
 
                 onPressed: () {
+                  Get.toNamed('/notas');
                   //   Navigator.push(
                   //       context,
                   //       MaterialPageRoute(

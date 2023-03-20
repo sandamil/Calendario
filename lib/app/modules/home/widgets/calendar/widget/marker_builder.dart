@@ -13,7 +13,7 @@ class MarkerBuilderWidget extends StatelessWidget {
   });
 
   final DateTime day;
-  final List<Cuadrante> events;
+  final  events;
 
   @override
   Widget build(BuildContext context) {

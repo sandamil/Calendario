@@ -26,6 +26,8 @@ dependencies:
 
   flutter_screenutil: 5.6.1
 
+  flutter_slidable: ^2.0.0
+
   hive: ^2.2.3 # local database (SQFlite replacement)
   hive_flutter: ^1.1.0 # make it easy to use hive (no need for path provider)
   shared_preferences: ^2.0.18 # shared preferences persistence key value store
