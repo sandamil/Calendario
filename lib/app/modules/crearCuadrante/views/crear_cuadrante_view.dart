@@ -96,7 +96,6 @@ class CrearCuadranteView extends GetView<CrearCuadranteController> {
                                   color: Colors.redAccent),
                               tooltip: '',
                               onPressed: () {
-                                print(controller.inicialDate.value);
                                 // showTutorial();
                               },
                             ),

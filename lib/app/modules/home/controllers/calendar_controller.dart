@@ -56,7 +56,6 @@ class CalendarController extends GetxController {
     }
     selectedEvents.value = getEventForDay(selectedDay.value);
     update();
-    print('onDaySelected3selectedDate' '${_selectedDay.value}');
     Get.dialog(CustomAlertDilogDaySelected( selectedDate: selectedDate, turno: turno));
   }
 
@@ -109,7 +108,7 @@ class CalendarController extends GetxController {
 
   showPopUp(context, selectedDate, turno) => showDialog(
       context: context,
-      builder: (context) => CustomAlertDialogTurno(selectedDate: selectedDate, turno: turno));
+      builder: (context) => CustomAlertDialogTurno(selectedDate: selectedDate, turno: turno),);
 
 
 }

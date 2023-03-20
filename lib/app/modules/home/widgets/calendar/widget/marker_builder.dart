@@ -19,10 +19,9 @@ class MarkerBuilderWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     CalendarController calendarController = CalendarController();
     // calendarController.selectedEvents.value = events;
-    print(events.length);
     return events.isNotEmpty
-        ? Padding(
-            padding: EdgeInsets.only(top: 15.h),
+        ? Container(
+            margin: EdgeInsets.only(top: 12.h),
             child: ListView.builder(
                 padding: const EdgeInsets.all(8),
                 itemCount: events.length,

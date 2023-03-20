@@ -22,7 +22,8 @@ class CustomAlertDilogDaySelected extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    print(turno.length);
+    var theme = Theme.of(context);
+
     return Align(
       alignment: Alignment.center,
       child: Padding(
@@ -33,7 +34,7 @@ class CustomAlertDilogDaySelected extends StatelessWidget {
             Container(
               padding: EdgeInsets.symmetric(horizontal: 10.w),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: theme.scaffoldBackgroundColor,
                 borderRadius: BorderRadius.all(
                   Radius.circular(10.r),
                 ),
@@ -41,7 +42,7 @@ class CustomAlertDilogDaySelected extends StatelessWidget {
               child: Column(
                 children: [
                   SizedBox(height: 10.h),
-                  getContent(),
+                  getContent(theme),
                   SizedBox(height: 10.h),
                   Row(
                     children: [
@@ -63,8 +64,9 @@ class CustomAlertDilogDaySelected extends StatelessWidget {
     );
   }
 
-  Widget getContent() {
+  Widget getContent(theme) {
     return Container(
+      color: theme.scaffoldBackgroundColor,
       height: 150,
       child: const CuadranteCalendarDay(),
     );
