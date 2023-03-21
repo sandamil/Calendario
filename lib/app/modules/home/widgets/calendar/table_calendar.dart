@@ -82,7 +82,7 @@ class CalendarWidget extends StatelessWidget {
                             DayBuilderWidget(date: day, dayType: 'holiday'),
                         outsideBuilder: (context, date, events) =>
                             DayBuilderWidget(date: date, dayType: 'outside'),
-                        markerBuilder: (context, day, List<Cuadrante> events) =>
+                        markerBuilder: (context, day, events) =>
                             MarkerBuilderWidget(
                           day: day,
                           events: events,

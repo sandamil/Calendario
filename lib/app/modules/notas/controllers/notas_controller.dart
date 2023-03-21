@@ -1,4 +1,6 @@
+import 'package:calendario2/app/data/local/calendarDatabase.dart';
 import 'package:calendario2/app/data/local/taskDatabase.dart';
+import 'package:calendario2/app/data/model/turnoCalendar.dart';
 import 'package:calendario2/app/modules/notas/views/add_notas_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -7,26 +9,31 @@ import '../../../data/model/taskModel.dart';
 
 class NotasController extends GetxController {
 
+
+
+
   bool headerShouldHide = false;
   RxBool isFlagOn = false.obs;
   RxBool isSearchEmpty = true.obs;
 
-  List<Task> notesList = [];
+  List<Cuadrante> notesList = [];
 
   TextEditingController searchController = TextEditingController();
 
-  final TextEditingController _title = TextEditingController();
-  final TextEditingController _site = TextEditingController();
-  final TextEditingController _notes = TextEditingController();
+  final TextEditingController title = TextEditingController();
+  final TextEditingController site = TextEditingController();
+  final TextEditingController notes = TextEditingController();
 
-  late DateTime _startTime;
-  late DateTime _endTime;
+  late DateTime startTime;
+  late DateTime endTime;
   bool isImportant = false;
 
-
+  Map<DateTime, List> events = <DateTime, List>{}.obs;
+  DateTime time = DateTime.now();
 
 
   final count = 0.obs;
+
   @override
   void onInit() {
     setNotesFromDB();
@@ -44,16 +51,15 @@ class NotasController extends GetxController {
   }
 
   setNotesFromDB() async {
-    notesList = await DbProvider.instance.getNotesFromDB();
+    notesList = await TurnoDbProvider.instance.getItemModels();
     update();
 
     return notesList;
   }
 
-  void increment() => count.value++;
 
-  void gotoEditNote() {
-    Get.offAll(const AddNotasView(),
+  void gotoEditNote(datetime, events) {
+    Get.offAll( AddNotasView(),
         duration: const Duration(milliseconds: 100),
         transition: Transition.leftToRight);
     // Navigator.push(
@@ -63,7 +69,7 @@ class NotasController extends GetxController {
     //     ));
   }
 
-  openNoteToRead(Task noteData) async {
+  openNoteToRead(Cuadrante noteData) async {
     headerShouldHide = true;
 
     await Future.delayed(Duration(milliseconds: 230), () {});

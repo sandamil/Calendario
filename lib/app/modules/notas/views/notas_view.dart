@@ -63,7 +63,7 @@ class NotasView extends GetView<NotasController> {
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: theme.primaryColor,
         onPressed: () {
-          controller.gotoEditNote();
+          controller.gotoEditNote(controller.time, controller.notesList);
         },
         label: Text('Añade Nota'.toUpperCase()),
         icon: Icon(Icons.add),

@@ -8,14 +8,30 @@ class Cuadrante {
   String? description;
   String? color;
   DateTime? dateTime;
+  String? site;
+  String? notes;
+  int? startTimeMilliseconds;
+  int? endTimeMilliseconds;
+  String? time;
+  bool? isImportant;
+  bool? isCuadrante;
 
   Cuadrante(
-      {this.title,
+      {
+        this.id,
+        this.title,
       this.description,
       this.startHour,
       this.endHour,
       this.color,
-      this.dateTime});
+      this.dateTime,
+      this.site,
+      this.notes,
+      this.startTimeMilliseconds,
+      this.endTimeMilliseconds,
+      this.time,
+      this.isImportant,
+      this.isCuadrante});
 
   Cuadrante.shiftMorning({@required this.dateTime})
       : this.title = 'Morning',
@@ -40,12 +56,21 @@ class Cuadrante {
 
   Map<String, dynamic> toDb() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
     data['title'] = this.title;
     data['description'] = this.description;
     data['starthour'] = this.startHour;
     data['endhour'] = this.endHour;
     data['color'] = this.color;
     data['datetime'] = this.dateTime?.toIso8601String();
+    data['site'] = this.site;
+    data['notes'] = this.notes;
+    data['startTimeMilliseconds']= this.startTimeMilliseconds;
+    data['endTimeMilliseconds']= this.endTimeMilliseconds;
+    data['time']= this.time;
+    data['isImportant']= this.isImportant == true ? 1 : 0;
+    data['isCuadrante']= this.isCuadrante == true ? 1 : 0;
+
     return data;
   }
 
@@ -56,5 +81,13 @@ class Cuadrante {
         this.startHour = data['starthour'],
         this.endHour = data['endhour'],
         this.color = data['color'],
-        this.dateTime = DateTime.tryParse(data['datetime']);
+        this.site = data['site'],
+        this.notes = data['notes'],
+        this.startTimeMilliseconds = data['startTimeMilliseconds'],
+        this.endTimeMilliseconds = data['endTimeMilliseconds'],
+        this.time = data['time'],
+        this.isImportant = data['isImportant'] == 1 ? true : false,
+        this.isCuadrante = data['isCuadrante'] == 1 ? true : false,
+        this.dateTime = DateTime.tryParse(data['datetime'],
+        );
 }

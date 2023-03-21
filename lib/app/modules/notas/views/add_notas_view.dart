@@ -1,3 +1,5 @@
+import 'package:calendario2/app/data/local/calendarDatabase.dart';
+import 'package:calendario2/app/data/model/turnoCalendar.dart';
 import 'package:calendario2/app/modules/Notas/controllers/notas_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -5,13 +7,18 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 class AddNotasView extends GetView {
+
+
+
   const AddNotasView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+
     return GetX<NotasController>(
       init: NotasController(),
       builder: (controller) {
+
         return Scaffold(
           appBar: AppBar(
             centerTitle: true,
@@ -49,25 +56,22 @@ class AddNotasView extends GetView {
                     .primaryColor),
                 padding: EdgeInsets.only(right: 3),
                 onPressed: () async {
-                  addTravelEvent();
+                  controller.addTravelEvent();
 
-                  await DbProvider.instance.init().then((db) async {
-                    final String title = _title.text;
-                    final String site = _site.text;
-                    final String notes = _notes.text;
+                  await TurnoDbProvider.instance.init().then((db) async {
 
-                    Task _item = await DbProvider.instance.select(
+                    Cuadrante _item = await TurnoDbProvider.instance.select(
 
-                        await DbProvider.instance.insert(
-                          Task(
-                              title: title,
-                              site: site,
-                              notes: notes,
-                              isImportant: isImportant,
+                        await TurnoDbProvider.instance.insert(
+                          Cuadrante(
+                              title: controller.title,
+                              site: controller.site,
+                              notes: controller.notes,
+                              isImportant: controller.isImportant,
                               startTimeMilliseconds:
-                              _startTime.millisecondsSinceEpoch,
+                              controller.startTime.millisecondsSinceEpoch,
                               endTimeMilliseconds:
-                              _endTime.millisecondsSinceEpoch,
+                              controller.endTime.millisecondsSinceEpoch,
                               time: Jiffy().format('yyyy-MM-dd h:mm:ss a')),
                         ));
                     _warnList.forEach((e) {
@@ -78,8 +82,8 @@ class AddNotasView extends GetView {
                     });
                     Navigator.pop(context);
                     Navigator.of(context).pushReplacementNamed('/home');
-                    Toast.toast(context, msg: "¡Añadida! ");
-                    DbProvider.instance.close();
+                    // Toast.toast(context, msg: "¡Añadida! ");
+                    TurnoDbProvider.instance.close();
                   });
                 },
               )

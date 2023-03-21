@@ -1,4 +1,5 @@
 import 'package:calendario2/app/data/model/taskModel.dart';
+import 'package:calendario2/app/data/model/turnoCalendar.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 
@@ -30,8 +31,8 @@ class TaskCard extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  final Task noteData;
-  final Function(Task noteData) onTapAction;
+  final Cuadrante noteData;
+  final Function(Cuadrante noteData) onTapAction;
 
 
   @override

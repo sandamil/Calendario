@@ -9,6 +9,8 @@ import '../model/turnoType.dart';
 
 
 class TurnoDbProvider {
+  final String taskTable = 'Notas';
+
   //The singleton pattern ensures only one instance of a class is ever created.
   static final TurnoDbProvider instance = TurnoDbProvider._internal();
   factory TurnoDbProvider() => instance;
@@ -61,6 +63,17 @@ class TurnoDbProvider {
         status TEXT
       )
     ''');
+
+    await db.execute(
+        'CREATE TABLE IF NOT EXISTS Notas('
+            'id INTEGER PRIMARY KEY, '
+            'title TEXT, site TEXT, '
+            'notes TEXT, '
+            'startTimeMilliseconds INTEGER, '
+            'endTimeMilliseconds INTEGER, '
+            'time TEXT, '
+            'isImportant INTEGER)');
+
 
     db.execute("CREATE TABLE theme ("
         "id INTEGER NOT NULL"
@@ -182,6 +195,84 @@ class TurnoDbProvider {
   Future<int> clear() async {
     Database dbClient = await db;
     return await dbClient.delete("Cuadrante");
+  }
+
+  Future<int> insert(Cuadrante travel) async {
+    var dbClient = await db;
+    int res = await dbClient.insert(
+      taskTable,
+      travel.toDb(),
+      conflictAlgorithm: ConflictAlgorithm.ignore,
+    );
+    return res;
+  }
+
+  Future<Cuadrante> select(int id) async {
+    var dbClient = await db;
+    final List<Map<String, dynamic>> maps = await dbClient.query(
+      taskTable,
+      where: "id = ?",
+      whereArgs: [id],
+    );
+    if (maps.length == 1) {
+      return Cuadrante(
+        id: maps[0]['id'],
+        title: maps[0]['title'],
+        site: maps[0]['site'],
+        notes: maps[0]['notes'],
+        startTimeMilliseconds: maps[0]['startTimeMilliseconds'],
+        endTimeMilliseconds: maps[0]['endTimeMilliseconds'],
+        time: maps[0]['time'],
+        isImportant: maps[0]['isImportant'] == 1 ? true : false,
+      );
+    } else {
+      throw FormatException(
+          'Los datos de la base de datos son anormales, hay ${maps.length}!!! ¿ ++  ?');
+    }
+  }
+
+  Future<List<Cuadrante>> getNotesFromDB() async {
+    var dbClient = await db;
+    List<Cuadrante> notesList = [];
+    List<Map> maps = await dbClient.query(taskTable, columns: [
+      'id',
+      'title',
+      'site',
+      'notes',
+      'startTimeMilliseconds',
+      'endTimeMilliseconds',
+      'time',
+      'isImportant'
+    ]);
+    if (maps.length > 0) {
+      maps.forEach((map) {
+        notesList.add(Cuadrante.fromDb(map));
+      });
+    }
+    return notesList;
+  }
+
+  Future<void> update(Cuadrante travel) async {
+    var dbClient = await db;
+    await dbClient.update(
+      taskTable,
+      travel.toMap(),
+      where: "id = ?",
+      whereArgs: [travel.id],
+    );
+  }
+
+  Future<void> delete(int id) async {
+    var dbClient = await db;
+    await dbClient.delete(
+      taskTable,
+      where: "id = ?",
+      whereArgs: [id],
+    );
+  }
+
+  close() async {
+    await db.close();
   }
 }
 
