@@ -74,7 +74,7 @@ class Cuadrante {
     return data;
   }
 
-  Cuadrante.fromDb(Map<String, dynamic> data)
+  Cuadrante.fromDb(Map<dynamic, dynamic> data)
       : this.id = data['id'],
         this.title = data['title'],
         this.description = data['description'],

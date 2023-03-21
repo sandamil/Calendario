@@ -91,7 +91,7 @@ class AddNotasView extends GetView {
           ),
           body: Center(
             child: Form(
-                key: _formKey,
+                // key: _formKey,
                 child: ListView(
                   children: <Widget>[
                     Container(
@@ -99,7 +99,8 @@ class AddNotasView extends GetView {
                         child: _buildGeneralFormField(
                             _title, 'Titulo del evento', 1), key: keyButton13
                     ),
-                    Column(key: keyButton14,
+                    Column(
+                      // key: keyButton14,
                       children: <Widget>[
                         Container(
                           child: _buildGeneralColumn(context, 'Hora de inicio',
@@ -172,7 +173,8 @@ class AddNotasView extends GetView {
                       }),
                     ),
                     _buildLineBetween(),
-                    TextButton(key: keyButton16,
+                    TextButton(
+                        // key: keyButton16,
                         onPressed: markImportantAsDirty,
                         child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,

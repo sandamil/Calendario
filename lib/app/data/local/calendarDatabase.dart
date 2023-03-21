@@ -256,7 +256,7 @@ class TurnoDbProvider {
     var dbClient = await db;
     await dbClient.update(
       taskTable,
-      travel.toMap(),
+      travel.toDb(),
       where: "id = ?",
       whereArgs: [travel.id],
     );
