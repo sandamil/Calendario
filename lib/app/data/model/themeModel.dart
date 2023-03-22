@@ -17,7 +17,7 @@ class ThemeModel {
 
 
   Future<int> getThemeInt() async {
-    final Database db = await TurnoDbProvider.instance.init();
+    final Database db = await DBHelper.instance.init();
     final List<Map<String, dynamic>> maps = await db.query('theme');
     List.generate(
       maps.length,
@@ -31,7 +31,7 @@ class ThemeModel {
   }
 
   Future<void> updateTheme(int i) async {
-    final Database db = await TurnoDbProvider.instance.init();
+    final Database db = await DBHelper.instance.init();
     await db.rawUpdate('''
     UPDATE theme
     SET id = ?

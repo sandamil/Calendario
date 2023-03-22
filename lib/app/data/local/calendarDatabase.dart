@@ -8,49 +8,58 @@ import '../model/turnoCalendar.dart';
 import '../model/turnoType.dart';
 
 
-class TurnoDbProvider {
-  //The singleton pattern ensures only one instance of a class is ever created.
-  static final TurnoDbProvider instance = TurnoDbProvider._internal();
-  factory TurnoDbProvider() => instance;
-  TurnoDbProvider._internal();
-  static Database? _db;
+class DBHelper {
+  DBHelper._();
+  static final DBHelper db = DBHelper._();
+  static Database? _database;
+  static const String _cuadrantes = 'Cuadrantes';
+  static const String _turnos = 'Turnos';
+  static const String _notas = 'Notas';
+  static const int _version = 1;
 
-  get db async {
-    if (_db != null) {
-      return _db;
-    } else {
-      _db = await init();
-      return _db;
-    }
+  Future<Database?> get database async {
+    if (_database != null) return _database;
+    return _database = await initDb();
   }
 
-  Future<Database> init() async {
+  Future<Database> initDb() async {
     Directory doucumentDirectory = await getApplicationDocumentsDirectory();
     print(doucumentDirectory.path);
-    String path = join(doucumentDirectory.path, 'TurnoDatabase.db');
+    String path = join(doucumentDirectory.path, 'CalendarioAjatsoft.db');
     return await openDatabase(
       path,
-      version: 1,
+      version: _version,
       onCreate: _onCreate,
     );
-
-    return db;
   }
 
   void _onCreate(Database db, int version) async {
-    await db.execute('''CREATE TABLE Cuadrante
-      (
-        id INTEGER PRIMARY KEY,
-        datetime TEXT,
-        title TEXT,
-        starthour  TEXT,
-        endhour TEXT,
-        description TEXT,
-        color TEXT
-      )
-    ''');
+    await db.execute(
+        'CREATE TABLE $_cuadrantes('
+            'id INTEGER PRIMARY KEY AUTOINCREMENT, '
+            'title STRING, '
+            'datetime TEXT, '
+            'startHour TEXT, '
+            'endHour TEXT, '
+            'description TEXT, '
+            'color TEXT)',
+    );
 
-    await db.execute('''CREATE TABLE TurnoType
+
+
+    //     '''CREATE TABLE $_cuadrantes
+    //   (
+    //     id INTEGER PRIMARY KEY,
+    //     datetime TEXT,
+    //     title TEXT,
+    //     starthour  TEXT,
+    //     endhour TEXT,
+    //     description TEXT,
+    //     color TEXT
+    //   )
+    // ''');
+
+    await db.execute('''CREATE TABLE $_turnos
       (
         id INTEGER PRIMARY KEY,
         description TEXT,
@@ -72,9 +81,6 @@ class TurnoDbProvider {
     db.execute("INSERT into TurnoType(id, title, description, color) "   ' VALUES(4, "L", "Libre", "ffffff")  ');
 
 
-    db.execute("INSERT into theme (id) "
-        "VALUES(0) ");
-
     print("Database was Created!");
   }
 
@@ -92,7 +98,7 @@ class TurnoDbProvider {
     if (result.length == 0) {
       return null;
     } else {
-      return Cuadrante.fromDb(result.first);
+      return Cuadrante.fromMap(result.first);
     }
   }
 
@@ -106,13 +112,13 @@ class TurnoDbProvider {
     List<Map<String, dynamic>> result =
     await dbClient.rawQuery(
         "SELECT * FROM Cuadrante WHERE datetime BETWEEN '${dayStart.toString()}' AND '${dayEnd.toString()}'");
-    return result.map((m) => Cuadrante.fromDb(m)).toList();
+    return result.map((m) => Cuadrante.fromMap(m)).toList();
   }
 
   Future<int> addItemModel(Cuadrante itemModel) async {
     Database dbClient = await db;
 
-    int res = await dbClient.insert("Cuadrante", itemModel.toDb(),
+    int res = await dbClient.insert("Cuadrante", itemModel.toMap(),
         conflictAlgorithm: ConflictAlgorithm.ignore);
     return res;
   }
@@ -127,11 +133,11 @@ class TurnoDbProvider {
         await deleteItemDateTime(item['datetime']);
       }
 
-      int res = await dbClient.insert("Cuadrante", itemModel.toDb(),
+      int res = await dbClient.insert("Cuadrante", itemModel.toMap(),
           conflictAlgorithm: ConflictAlgorithm.ignore);
       return res;
     } else {
-      int res = await dbClient.insert("Cuadrante", itemModel.toDb(),
+      int res = await dbClient.insert("Cuadrante", itemModel.toMap(),
           conflictAlgorithm: ConflictAlgorithm.ignore);
       return res;
     }
