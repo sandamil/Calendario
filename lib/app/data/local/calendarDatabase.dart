@@ -151,12 +151,12 @@ class DBHelper {
   Future<List<TurnoType>> getTypeModels() async {
     final dbClient = await database;
     List<Map<String, dynamic>> result = await dbClient!.query(_turnos);
-    return result.map((m) => TurnoType.fromDb(m)).toList();
+    return result.map((m) => TurnoType.fromMap(m)).toList();
   }
 
   Future<int> addTypeModel(TurnoType itemModel) async {
     final dbClient = await database;
-    int res = await dbClient!.insert(_turnos, itemModel.toDb(),
+    int res = await dbClient!.insert(_turnos, itemModel.toMap(),
         conflictAlgorithm: ConflictAlgorithm.ignore);
     return res;
   }
