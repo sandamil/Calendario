@@ -83,7 +83,7 @@ class CalendarController extends GetxController {
   }
 
   Future<Map<DateTime, List<Cuadrante>>> fetchCuadrante() async {
-    cuadrante.value = await DBHelper.instance.getItemModels();
+    cuadrante.value = await DBHelper.db.getItemModels();
     for (Cuadrante turno in cuadrante) {
       // print(turno.dateTime);
     }
@@ -101,7 +101,7 @@ class CalendarController extends GetxController {
   }
 
   Future<List<TurnoType>> fetchTurno() async {
-    turno.value = await DBHelper.instance.getTypeModels();
+    turno.value = await DBHelper.db.getTypeModels();
     return turno;
   }
 
