@@ -78,7 +78,7 @@ class CrearCuadranteController extends GetxController {
       if (x >= list.length) {
         x = 0;
       }
-      await TurnoDbProvider.instance.replaceItemModel(
+      await DBHelper.db.replaceItemModel(
         Cuadrante(
           dateTime: date,
           color: list[x].color,
@@ -93,7 +93,7 @@ class CrearCuadranteController extends GetxController {
   }
 
   Future<List<TurnoType>> fetchTurnosType() async {
-    turnoType.value = await TurnoDbProvider.instance.getTypeModels();
+    turnoType.value = await DBHelper.db.getTypeModels();
     return turnoType;
   }
 

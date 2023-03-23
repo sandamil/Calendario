@@ -69,7 +69,7 @@ class CustomAlertDialogTurnoList extends StatelessWidget {
                             ),
                           ),
                           onPressed: () async {
-                            await TurnoDbProvider.instance.addItemModel(
+                            await DBHelper.db.addItemModel(
                               Cuadrante(
                                 dateTime: selectedDate,
                                 color: m.color,

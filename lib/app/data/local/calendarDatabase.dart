@@ -8,49 +8,46 @@ import '../model/turnoCalendar.dart';
 import '../model/turnoType.dart';
 
 
-class TurnoDbProvider {
-  //The singleton pattern ensures only one instance of a class is ever created.
-  static final TurnoDbProvider instance = TurnoDbProvider._internal();
-  factory TurnoDbProvider() => instance;
-  TurnoDbProvider._internal();
-  static Database? _db;
+class DBHelper {
+  DBHelper._();
+  static final DBHelper db = DBHelper._();
+  static Database? _database;
+  static const String _cuadrantes = 'Cuadrante';
+  static const String _turnos = 'Turnos';
+  static const String _notas = 'Notas';
+  static const int _version = 1;
 
-  get db async {
-    if (_db != null) {
-      return _db;
-    } else {
-      _db = await init();
-      return _db;
-    }
+  Future<Database?> get database async {
+    if (_database != null) return _database;
+    return _database = await initDb();
   }
 
-  Future<Database> init() async {
+  Future<Database> initDb() async {
     Directory doucumentDirectory = await getApplicationDocumentsDirectory();
     print(doucumentDirectory.path);
-    String path = join(doucumentDirectory.path, 'TurnoDatabase.db');
+    String path = join(doucumentDirectory.path, 'CalendarioAjatsoft.db');
     return await openDatabase(
       path,
-      version: 1,
+      version: _version,
       onCreate: _onCreate,
     );
-
-    return db;
   }
 
   void _onCreate(Database db, int version) async {
-    await db.execute('''CREATE TABLE Cuadrante
-      (
-        id INTEGER PRIMARY KEY,
-        datetime TEXT,
-        title TEXT,
-        starthour  TEXT,
-        endhour TEXT,
-        description TEXT,
-        color TEXT
-      )
-    ''');
+    await db.execute(
+        'CREATE TABLE $_cuadrantes('
+            'id INTEGER PRIMARY KEY AUTOINCREMENT, '
+            'title STRING, '
+            'datetime TEXT, '
+            'startHour TEXT, '
+            'endHour TEXT, '
+            'description TEXT, '
+            'color TEXT)',
+    );
 
-    await db.execute('''CREATE TABLE TurnoType
+
+
+    await db.execute('''CREATE TABLE $_turnos
       (
         id INTEGER PRIMARY KEY,
         description TEXT,
@@ -66,14 +63,11 @@ class TurnoDbProvider {
         "id INTEGER NOT NULL"
         ")");
 
-    db.execute("INSERT into TurnoType(id, title, description, color) "   ' VALUES(1, "M", "Mañana", "4287f5") ');
-    db.execute("INSERT into TurnoType(id, title, description, color) "   ' VALUES(2, "T", "Tarde", "71bd48")  ');
-    db.execute("INSERT into TurnoType(id, title, description, color) "   ' VALUES(3, "N", "Noche", "bd9648")  ');
-    db.execute("INSERT into TurnoType(id, title, description, color) "   ' VALUES(4, "L", "Libre", "ffffff")  ');
+    db.execute("INSERT into $_turnos(id, title, description, color) "   ' VALUES(1, "M", "Mañana", "4287f5") ');
+    db.execute("INSERT into $_turnos(id, title, description, color) "   ' VALUES(2, "T", "Tarde", "71bd48")  ');
+    db.execute("INSERT into $_turnos(id, title, description, color) "   ' VALUES(3, "N", "Noche", "bd9648")  ');
+    db.execute("INSERT into $_turnos(id, title, description, color) "   ' VALUES(4, "L", "Libre", "ffffff")  ');
 
-
-    db.execute("INSERT into theme (id) "
-        "VALUES(0) ");
 
     print("Database was Created!");
   }
@@ -82,44 +76,44 @@ class TurnoDbProvider {
 
 
   Future<Cuadrante?> fetchItem(int id) async {
-    var dbClient = await db;
+    final dbClient = await database;
     List result =
-    await dbClient.query(
-        "Cuadrante",
+    await dbClient!.query(
+        _cuadrantes,
         where: "id = ?",
         whereArgs: [id]
     );
     if (result.length == 0) {
       return null;
     } else {
-      return Cuadrante.fromDb(result.first);
+      return Cuadrante.fromMap(result.first);
     }
   }
 
   Future<List<Cuadrante>> getItemModels() async {
-    var dbClient = await db;
+    final dbClient = await database;
 
     var _day = DateTime.now();
     DateTime dayStart = _day.subtract(Duration(days: 60));
     DateTime dayEnd = _day.add(Duration(days: 300));
 
     List<Map<String, dynamic>> result =
-    await dbClient.rawQuery(
-        "SELECT * FROM Cuadrante WHERE datetime BETWEEN '${dayStart.toString()}' AND '${dayEnd.toString()}'");
-    return result.map((m) => Cuadrante.fromDb(m)).toList();
+    await dbClient!.rawQuery(
+        "SELECT * FROM $_cuadrantes WHERE datetime BETWEEN '${dayStart.toString()}' AND '${dayEnd.toString()}'");
+    return result.map((m) => Cuadrante.fromMap(m)).toList();
   }
 
   Future<int> addItemModel(Cuadrante itemModel) async {
-    Database dbClient = await db;
+    final dbClient = await database;
 
-    int res = await dbClient.insert("Cuadrante", itemModel.toDb(),
+    int res = await dbClient!.insert(_cuadrantes, itemModel.toMap(),
         conflictAlgorithm: ConflictAlgorithm.ignore);
     return res;
   }
 
   Future<int> replaceItemModel(Cuadrante itemModel) async {
-    Database dbClient = await db;
-    List result = await dbClient.query("Cuadrante",
+    final dbClient = await database;
+    List result = await dbClient!.query(_cuadrantes,
         where: "datetime = ?",
         whereArgs: [itemModel.dateTime?.toIso8601String()]);
     if (result.length != 0) {
@@ -127,61 +121,61 @@ class TurnoDbProvider {
         await deleteItemDateTime(item['datetime']);
       }
 
-      int res = await dbClient.insert("Cuadrante", itemModel.toDb(),
+      int res = await dbClient.insert(_cuadrantes, itemModel.toMap(),
           conflictAlgorithm: ConflictAlgorithm.ignore);
       return res;
     } else {
-      int res = await dbClient.insert("Cuadrante", itemModel.toDb(),
+      int res = await dbClient.insert(_cuadrantes, itemModel.toMap(),
           conflictAlgorithm: ConflictAlgorithm.ignore);
       return res;
     }
   }
 
   Future<void> deleteItemDateTime(String dateTime) async {
-    Database dbClient = await db;
-    await dbClient
-        .delete('Cuadrante', where: "datetime = ?", whereArgs: [dateTime]);
+    Database? dbClient = await database;
+    await dbClient!
+        .delete(_cuadrantes, where: "datetime = ?", whereArgs: [dateTime]);
     print('deleted');
   }
 
   Future<void> deleteItemID(int id) async {
-    Database dbClient = await db;
-    await dbClient
+    Database? dbClient = await database;
+    await dbClient!
         .delete(
-        'Cuadrante',
+        _cuadrantes,
         where: "id = ?",
         whereArgs: [id]);
     print('deleted');
   }
 
   Future<List<TurnoType>> getTypeModels() async {
-    var dbClient = await db;
-    List<Map<String, dynamic>> result = await dbClient.query("TurnoType");
-    return result.map((m) => TurnoType.fromDb(m)).toList();
+    final dbClient = await database;
+    List<Map<String, dynamic>> result = await dbClient!.query(_turnos);
+    return result.map((m) => TurnoType.fromMap(m)).toList();
   }
 
   Future<int> addTypeModel(TurnoType itemModel) async {
-    Database dbClient = await db;
-    int res = await dbClient.insert("TurnoType", itemModel.toDb(),
+    final dbClient = await database;
+    int res = await dbClient!.insert(_turnos, itemModel.toMap(),
         conflictAlgorithm: ConflictAlgorithm.ignore);
     return res;
   }
 
   Future<void> deleteTypeId(int id) async {
-    Database dbClient = await db;
-    await dbClient
-        .delete('TurnoType', where: "id = ?", whereArgs: [id]);
+    final dbClient = await database;
+    await dbClient!
+        .delete(_turnos, where: "id = ?", whereArgs: [id]);
     print('deleted');
   }
 
   Future closeDb() async {
-    var dbClient = await db;
-    dbClient.close();
+    var dbClient = await database;
+    dbClient!.close();
   }
 
   Future<int> clear() async {
-    Database dbClient = await db;
-    return await dbClient.delete("Cuadrante");
+    Database? dbClient = await database;
+    return await dbClient!.delete(_cuadrantes);
   }
 }
 

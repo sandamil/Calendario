@@ -60,12 +60,12 @@ class CrearTurnoController extends GetxController {
   // }
 
   Future<List<TurnoType>> fetchEventsType() async {
-    turnoType.value = await TurnoDbProvider.instance.getTypeModels();
+    turnoType.value = await DBHelper.db.getTypeModels();
     return turnoType;
   }
 
   Future<List<TurnoType>> deleteEventsType(index) async {
-    await TurnoDbProvider.instance.deleteTypeId(turnoType[index].id!);
+    await DBHelper.db.deleteTypeId(turnoType[index].id!);
     await fetchEventsType();
     return turnoType;
   }
@@ -78,7 +78,7 @@ class CrearTurnoController extends GetxController {
       endHour: endDate.value,
       color: turnoColor.value.value.toRadixString(16),
     );
-    await TurnoDbProvider.instance.addTypeModel(eventType);
+    await DBHelper.db.addTypeModel(eventType);
     await calendarController.fetchTurno();
     fetchEventsType();
   }
