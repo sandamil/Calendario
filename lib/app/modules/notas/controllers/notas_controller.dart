@@ -1,6 +1,7 @@
 import 'package:calendario2/app/data/local/calendarDatabase.dart';
 import 'package:calendario2/app/data/local/taskDatabase.dart';
 import 'package:calendario2/app/data/model/turnoCalendar.dart';
+import 'package:calendario2/app/modules/home/controllers/calendar_controller.dart';
 import 'package:calendario2/app/modules/notas/views/add_notas_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -20,23 +21,34 @@ class NotasController extends GetxController {
 
   TextEditingController searchController = TextEditingController();
 
-  final TextEditingController title = TextEditingController();
-  final TextEditingController site = TextEditingController();
-  final TextEditingController notes = TextEditingController();
+  TextEditingController title = TextEditingController();
+  TextEditingController site = TextEditingController();
+  TextEditingController notes = TextEditingController();
+
+
+
+
 
   late DateTime startTime;
   late DateTime endTime;
   bool isImportant = false;
 
-  Map<DateTime, List> events = <DateTime, List>{}.obs;
+  Map<DateTime, List<Cuadrante>> events = <DateTime, List<Cuadrante>>{}.obs;
   DateTime time = DateTime.now();
 
 
-  final count = 0.obs;
+
+  bool noWarn = false;
+
+  static var warnDefaultt = 'Al principio';
 
   @override
   void onInit() {
+    events = Get.find<CalendarController>().cuadranteMap;
+    startTime =DateTime.now();
+    endTime =DateTime.now();
     setNotesFromDB();
+    print( 'notesList.length ========='   '${notesList.length}');
     super.onInit();
   }
 
@@ -58,8 +70,11 @@ class NotasController extends GetxController {
   }
 
 
-  void gotoEditNote(datetime, events) {
-    Get.offAll( AddNotasView(),
+  void gotoEditNote() {
+
+
+
+    Get.to(() =>  const AddNotasView(),
         duration: const Duration(milliseconds: 100),
         transition: Transition.leftToRight);
     // Navigator.push(
@@ -72,14 +87,14 @@ class NotasController extends GetxController {
   openNoteToRead(Cuadrante noteData) async {
     headerShouldHide = true;
 
-    await Future.delayed(Duration(milliseconds: 230), () {});
+    await Future.delayed(const Duration(milliseconds: 230), () {});
     // Navigator.push(
     //     Get.context,
     //     FadeRoute(
     //         page: TaskView(
     //             id: noteData.id!, triggerRefetch: refetchNotesFromDB, currentNote: noteData
     //         )));
-    await Future.delayed(Duration(milliseconds: 300), () {});
+    await Future.delayed(const Duration(milliseconds: 300), () {});
 
     headerShouldHide = false;
   }
@@ -103,30 +118,43 @@ class NotasController extends GetxController {
 
 
   void addTravelEvent() {
-    final int daysNum = _endTime.difference(_startTime).inDays;
+
+    print('startTime.isBlank');
+    print('startTime.isBlank');
+    print(startTime.isBlank);
+    print(startTime.toString());
+
+
+    final int daysNum = endTime.difference(startTime).inDays;
+
+    print('daysNum');
+    print('daysNum');
+    print(daysNum.isBlank);
+    print(daysNum);
+
     if (0 == daysNum) {
-      final DateTime _time =
-      DateTime(_startTime.year, _startTime.month, _startTime.day);
+      final DateTime time =
+      DateTime(startTime.year, startTime.month, startTime.day);
       setTravelEvent(
-        _time,
-        _title.text,
-        _site.text,
-        _startTime,
-        _endTime,
+        time,
+        title.text,
+        site.text,
+        startTime,
+        endTime,
         isImportant,
       );
     } else {
       for (int i = 0; i <= daysNum; i++) {
         DateTime _time =
-        DateTime(_startTime.year, _startTime.month, _startTime.day + i);
+        DateTime(startTime.year, startTime.month, startTime.day + i);
         if (0 == i) {
-          setTravelEvent(_time, _title.text, _site.text, _startTime,
+          setTravelEvent(_time, title.text, site.text, startTime,
               DateTime(0, 0, 0, 24), isImportant);
         } else if (i == daysNum) {
-          setTravelEvent(_time, _title.text, _site.text, DateTime(0, 0, 0, 0),
-              _endTime, isImportant);
+          setTravelEvent(time, title.text, site.text, DateTime(0, 0, 0, 0),
+              endTime, isImportant);
         } else {
-          setTravelEvent(_time, _title.text, _site.text, DateTime(0, 0, 0, 0),
+          setTravelEvent(_time, title.text, site.text, DateTime(0, 0, 0, 0),
               DateTime(0, 0, 0, 24), isImportant);
         }
       }
@@ -137,24 +165,104 @@ class NotasController extends GetxController {
   void setTravelEvent(DateTime time, String title, String site,
       DateTime startTime, DateTime endTime, bool isImportant) {
 
+    print( 'setTravelEvent ========='   '${events[time] != null}');
+    print( 'setTravelEvent ========='   '${events.length}');
+
+
     if (events[time] != null) {
-      events[time]?.add({
-        'title': title,
-        'site': site,
-        'startTime': startTime,
-        'isImportant': isImportant,
-        'endTime': endTime
-      });
+
+      print( 'if (events 1 ========='   '$site' '${title}' '${startTime}'  '$endTime''$isImportant');
+      print( 'if (events 1 ========='   '$site' '${title}' '${startTime}'  '$endTime''$isImportant');
+      print( 'if (events 1 ========='   '$site' '${title}' '${startTime}'  '$endTime''$isImportant');
+
+      events[time]?.add(
+          Cuadrante(
+            title: title,
+            site: site,
+            startTimeMilliseconds: startTime.millisecondsSinceEpoch,
+            endTimeMilliseconds: endTime.millisecondsSinceEpoch,
+            isImportant: isImportant,
+          )
+
+      );
     } else {
+      print( 'if (events 2 ========='   '$site' '${title}' '${startTime}'  '$endTime''$isImportant');
+      print( 'if (events 2 ========='   '$site' '${title}' '${startTime}'  '$endTime''$isImportant');
+      print( 'if (events 2 ========='   '$site' '${title}' '${startTime}'  '$endTime''$isImportant');
+
       events[time] = [
-        {
-          'title': title,
-          'site': site,
-          'startTime': startTime,
-          'isImportant': isImportant,
-          'endTime': endTime
-        }
+        Cuadrante(
+          title: title,
+          site: site,
+          startTimeMilliseconds: startTime.millisecondsSinceEpoch,
+          endTimeMilliseconds: endTime.millisecondsSinceEpoch,
+          isImportant: isImportant,
+        )
       ];
     }
   }
+
+  void markImportantAsDirty() {
+
+      isImportant = !isImportant;
+   update();
+  }
+
+  List warnList = [
+    {
+      'name': warnDefaultt,
+      'select': true,
+      'time': (DateTime time) => time,
+      'id': 0
+    },
+    {
+      'name': '5 minutos de anticipación',
+      'select': false,
+      'time': (DateTime time) => time.subtract(const Duration(minutes: 5)),
+      'id': 1
+    },
+    {
+      'name': '10 minutos de anticipación',
+      'select': false,
+      'time': (DateTime time) => time.subtract(const Duration(minutes: 10)),
+      'id': 2
+    },
+    {
+      'name': '15 minutos de anticipación',
+      'select': false,
+      'time': (DateTime time) => time.subtract(const Duration(minutes: 15)),
+      'id': 3
+    },
+    {
+      'name': '30 minutos de anticipación',
+      'select': false,
+      'time': (DateTime time) => time.subtract(const Duration(minutes: 30)),
+      'id': 4
+    },
+    {
+      'name': '1 hora de anticipación',
+      'select': false,
+      'time': (DateTime time) => time.subtract(const Duration(hours: 1)),
+      'id': 5
+    },
+    {
+      'name': '1 día de antelación',
+      'select': false,
+      'time': (DateTime time) => time.subtract(const Duration(days: 1)),
+      'id': 6
+    },
+    {
+      'name': '2 días de anticipación',
+      'select': false,
+      'time': (DateTime time) => time.subtract(const Duration(days: 2)),
+      'id': 7
+    },
+    {
+      'name': '1 semana de anticipación',
+      'select': false,
+      'time': (DateTime time) => time.subtract(const Duration(days: 7)),
+      'id': 8
+    },
+  ];
+
 }

@@ -1,23 +1,23 @@
 import 'package:calendario2/app/data/local/calendarDatabase.dart';
 import 'package:calendario2/app/data/model/turnoCalendar.dart';
 import 'package:calendario2/app/modules/Notas/controllers/notas_controller.dart';
+import 'package:calendario2/app/modules/home/widgets/calendar/widget/warn-select.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
+import 'package:jiffy/jiffy.dart';
 
-class AddNotasView extends GetView {
+class AddNotasView extends GetView<NotasController> {
 
 
 
-  const AddNotasView({Key? key}) : super(key: key);
+  const AddNotasView( {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
 
-    return GetX<NotasController>(
-      init: NotasController(),
-      builder: (controller) {
+    // NotasController controller = NotasController();
 
         return Scaffold(
           appBar: AppBar(
@@ -64,9 +64,9 @@ class AddNotasView extends GetView {
 
                         await TurnoDbProvider.instance.insert(
                           Cuadrante(
-                              title: controller.title,
-                              site: controller.site,
-                              notes: controller.notes,
+                              title: controller.title.text,
+                              site: controller.site.text,
+                              notes: controller.notes.text,
                               isImportant: controller.isImportant,
                               startTimeMilliseconds:
                               controller.startTime.millisecondsSinceEpoch,
@@ -74,7 +74,7 @@ class AddNotasView extends GetView {
                               controller.endTime.millisecondsSinceEpoch,
                               time: Jiffy().format('yyyy-MM-dd h:mm:ss a')),
                         ));
-                    _warnList.forEach((e) {
+                    controller.warnList.forEach((e) {
                       if (e['select']) {
                         // push.setOneTime(_item.id * 10 + e['id'], title, notes,
                         //     e['time'](_startTime));
@@ -90,21 +90,25 @@ class AddNotasView extends GetView {
             ],
           ),
           body: Center(
-            child: Form(
+            child:
+
+
+            Form(
                 // key: _formKey,
                 child: ListView(
                   children: <Widget>[
                     Container(
                         margin: EdgeInsets.symmetric(horizontal: 6),
                         child: _buildGeneralFormField(
-                            _title, 'Titulo del evento', 1), key: keyButton13
+                            controller.title, 'Titulo del evento', 1),
+                        // key: keyButton13
                     ),
                     Column(
                       // key: keyButton14,
                       children: <Widget>[
                         Container(
                           child: _buildGeneralColumn(context, 'Hora de inicio',
-                              '${Jiffy(_startTime).yMd} ${Jiffy(_startTime)
+                              '${Jiffy(controller.startTime).yMd} ${Jiffy(controller.startTime)
                                   .Hm}', () {
                                 //     dp.DatePicker.showDateTimePicker(context,
                                 //
@@ -127,7 +131,7 @@ class AddNotasView extends GetView {
                         ),
                         Container(
                           child: _buildGeneralColumn(context, 'Hora final',
-                              '${Jiffy(_endTime).yMd} ${Jiffy(_endTime)
+                              '${Jiffy(controller.endTime).yMd} ${Jiffy(controller.endTime)
                                   .Hm}', () {
                                 // dp.DatePicker.showDateTimePicker(context,
                                 //
@@ -149,33 +153,37 @@ class AddNotasView extends GetView {
                     ),
 
                     _buildLineBetween(),
-                    Container(key: keyButton15,
-                      child: _buildGeneralColumn(
-                          context, 'Recordatorio', _warn, () async {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  WarnView(_noWarn, _warnList, (bool value) {
-                                    setState(() {
-                                      _noWarn = value;
-                                    });
-                                  }, (int item, bool value) {
-                                    setState(() {
-                                      _warnList[item]['select'] = value;
-                                    });
-                                  }, (String warn) {
-                                    setState(() {
-                                      _warn = warn;
-                                    });
-                                  })),
-                        );
-                      }),
-                    ),
+                    // Container(
+                    //   // key: keyButton15,
+                    //   child: _buildGeneralColumn(
+                    //       context, 'Recordatorio', NotasController.warnDefaultt, () async {
+                    //     Navigator.push(
+                    //       context,
+                    //       MaterialPageRoute(
+                    //           builder: (context) =>
+                    //               WarnView(controller.noWarn, controller.warnList, (bool value) {
+                    //
+                    //                   controller.noWarn = value;
+                    //                controller.update();
+                    //               }, (int item, bool value) {
+                    //
+                    //                 controller.warnList[item]['select'] = value;
+                    //                   controller.update();
+                    //
+                    //               }, (String warn) {
+                    //                String warnDefaultt = 'Al principio';
+                    //
+                    //                warnDefaultt = warn;
+                    //                   controller.update();
+                    //
+                    //               })),
+                    //     );
+                    //   }),
+                    // ),
                     _buildLineBetween(),
                     TextButton(
                         // key: keyButton16,
-                        onPressed: markImportantAsDirty,
+                        onPressed: controller.markImportantAsDirty,
                         child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -183,7 +191,7 @@ class AddNotasView extends GetView {
                               Text(
                                 'Marcar como importante',
                                 style: TextStyle(color: Colors.blue,
-                                    fontSize: 4 * SizeConfig.textMultiplierW),
+                                    fontSize: 14.sp),
 
                               ),
                               Row(
@@ -192,27 +200,28 @@ class AddNotasView extends GetView {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: <Widget>[
                                   Icon(
-                                    isImportant ? Icons.flag : Icons
+                                    controller.isImportant ? Icons.flag : Icons
                                         .outlined_flag,
-                                    color: isImportant ? Colors.red : Colors
+                                    color: controller.isImportant ? Colors.red : Colors
                                         .black,
                                   )
                                 ],
                               )
                             ])),
                     _buildLineBetween(),
-                    Column(key: keyButton17,
+                    Column(
+                      // key: keyButton17,
                       children: <Widget>[
                         Container(
                           margin: EdgeInsets.symmetric(horizontal: 6),
-                          child: _buildGeneralFormField(_site, 'Ubicación', 2),
+                          child: _buildGeneralFormField(controller.site, 'Ubicación', 2),
                         ), SizedBox(
                           height: 6,
                         ),
                         Container(
                           margin: EdgeInsets.symmetric(horizontal: 6),
                           child: _buildGeneralFormField(
-                              _notes, 'Observaciones', 8),
+                              controller.notes, 'Observaciones', 8),
                         ),
                       ],
                     ),
@@ -224,15 +233,15 @@ class AddNotasView extends GetView {
                           Text(
                             "Pulsa aqui si necesitas ayuda para crear notas.",
                             style: TextStyle(
-                              fontSize: 3 * SizeConfig.textMultiplierW,
+                              fontSize: 12.sp,
                             ),
                           ),
                           IconButton(
-                            icon: Icon(FontAwesomeIcons.infoCircle,
+                            icon: Icon(Icons.info,
                                 color: Colors.redAccent),
                             tooltip: '',
                             onPressed: () {
-                              showTutorial(context: context);
+                              // showTutorial(context: context);
                             },
                           ),
                         ],
@@ -242,7 +251,85 @@ class AddNotasView extends GetView {
                 )),
           ),
         );
-      },
+
+  }
+  TextFormField _buildGeneralFormField(
+      TextEditingController value, String hint, int lines) {
+    final double _radiusNum = 10;
+    return TextFormField(
+      controller: value,
+      decoration: InputDecoration(
+        filled: true,
+        contentPadding: EdgeInsets.only(left: 20, top: 20),
+        fillColor: Colors.white12,
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(_radiusNum),
+          ),
+          borderSide: BorderSide.none,
+        ),
+        focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(_radiusNum),
+            ),
+            borderSide: BorderSide(
+              color: Colors.green,
+              width: 2,
+            )),
+        hintText: hint,
+      ),
+      maxLines: lines,
     );
   }
+
+  Widget _buildLineBetween() {
+    return Container(
+      padding: EdgeInsets.only(top: 10, bottom: 10),
+      child: Center(
+        child: Container(
+          width: 320, //max-width is 240
+          height: 1,
+          color: Colors.grey[300],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildGeneralColumn(
+      BuildContext context,
+      String title,
+      var value,
+      Function onPressed,
+      ) {
+    return TextButton(
+        onPressed: onPressed(),
+        child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                title,
+                style: TextStyle(color: Colors.blue,
+                    fontSize: 14.sp),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    value,
+                    style: TextStyle(color: Colors.blue,
+                        fontSize: 14.sp),
+
+                  ),
+                  Icon(
+                    Icons.arrow_forward_ios,
+                    size: 14.sp,
+                  )
+                ],
+              )
+            ]));
+  }
+
+
 }
