@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:calendario2/app/data/model/turnoCalendar.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
@@ -74,9 +75,9 @@ class DbProvider {
     }
   }
 
-  Future<List<Task>> getNotesFromDB() async {
+  Future<List<Cuadrante>> getNotesFromDB() async {
     var dbClient = await db;
-    List<Task> notesList = [];
+    List<Cuadrante> notesList = [];
     List<Map> maps = await dbClient.query(taskTable, columns: [
       'id',
       'title',
@@ -89,7 +90,7 @@ class DbProvider {
     ]);
     if (maps.length > 0) {
       maps.forEach((map) {
-        notesList.add(Task.fromMap(map));
+        notesList.add(Cuadrante.fromDb(map));
       });
     }
     return notesList;

@@ -72,7 +72,14 @@ class TurnoDbProvider {
             'startTimeMilliseconds INTEGER, '
             'endTimeMilliseconds INTEGER, '
             'time TEXT, '
-            'isImportant INTEGER)');
+            'description TEXT, '
+            'endhour TEXT, '
+            'starthour TEXT, '
+            'datetime TEXT, '
+            'color TEXT, '
+            'isCuadrante INTEGER, '
+            'isImportant INTEGER)'
+    );
 
 
     db.execute("CREATE TABLE theme ("

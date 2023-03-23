@@ -63,7 +63,7 @@ class NotasView extends GetView<NotasController> {
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: theme.primaryColor,
         onPressed: () {
-          controller.gotoEditNote(controller.time, controller.notesList);
+          controller.gotoEditNote();
         },
         label: Text('Añade Nota'.toUpperCase()),
         icon: Icon(Icons.add),
@@ -98,11 +98,12 @@ class NotasView extends GetView<NotasController> {
             .contains(controller.searchController.text.toLowerCase()) ||
             note.title!
                 .toLowerCase()
-                .contains(controller.searchController.text.toLowerCase()))
+                .contains(controller.searchController.text.toLowerCase())) {
           noteComponentsList.add(TaskCard(
             noteData: note,
             onTapAction: controller.openNoteToRead,
           ));
+        }
       });
       return noteComponentsList;
     }
