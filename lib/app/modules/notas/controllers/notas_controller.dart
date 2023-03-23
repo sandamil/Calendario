@@ -5,6 +5,7 @@ import 'package:calendario2/app/modules/home/controllers/calendar_controller.dar
 import 'package:calendario2/app/modules/notas/views/add_notas_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:jiffy/jiffy.dart';
 
 import '../../../data/model/taskModel.dart';
 
@@ -63,7 +64,7 @@ class NotasController extends GetxController {
   }
 
   setNotesFromDB() async {
-    notesList = await TurnoDbProvider.instance.getItemModels();
+    notesList = await TurnoDbProvider.instance.getNotesFromDB();
     update();
 
     return notesList;
@@ -163,7 +164,7 @@ class NotasController extends GetxController {
 
 
   void setTravelEvent(DateTime time, String title, String site,
-      DateTime startTime, DateTime endTime, bool isImportant) {
+      DateTime startTime, DateTime endTime, bool isImportant) async {
 
     print( 'setTravelEvent ========='   '${events[time] != null}');
     print( 'setTravelEvent ========='   '${events.length}');
@@ -200,10 +201,27 @@ class NotasController extends GetxController {
         )
       ];
     }
+    await TurnoDbProvider.instance.insert(
+      Cuadrante(
+          title: title,
+          site: site,
+          notes: notes.text,
+          isImportant: isImportant,
+          startTimeMilliseconds:
+          startTime.millisecondsSinceEpoch,
+          endTimeMilliseconds:
+          endTime.millisecondsSinceEpoch,
+          time: Jiffy().format('yyyy-MM-dd h:mm:ss a')),
+    );
+    print( '   _________ await TurnoDbProvider.instance.insert'   '$site' '${title}' '${startTime}'  '$endTime''$isImportant');
+
   }
 
-  void markImportantAsDirty() {
 
+
+
+
+  void markImportantAsDirty() {
       isImportant = !isImportant;
    update();
   }

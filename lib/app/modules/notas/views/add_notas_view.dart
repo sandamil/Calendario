@@ -2,6 +2,7 @@ import 'package:calendario2/app/data/local/calendarDatabase.dart';
 import 'package:calendario2/app/data/model/turnoCalendar.dart';
 import 'package:calendario2/app/modules/Notas/controllers/notas_controller.dart';
 import 'package:calendario2/app/modules/home/widgets/calendar/widget/warn-select.dart';
+import 'package:calendario2/config/util/hexColor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -25,7 +26,7 @@ class AddNotasView extends GetView<NotasController> {
             elevation: 0.0,
             // for elevation
             title: AnimatedContainer(
-              duration: Duration(milliseconds: 200),
+              duration: const Duration(milliseconds: 200),
               curve: Curves.easeIn,
 //          margin: EdgeInsets.only(top: 8, bottom: 32, left: 10),
               width: controller.headerShouldHide ? 0 : 200,
@@ -54,11 +55,13 @@ class AddNotasView extends GetView<NotasController> {
                 icon: Icon(Icons.check, color: Theme
                     .of(context)
                     .primaryColor),
-                padding: EdgeInsets.only(right: 3),
+                padding: const EdgeInsets.only(right: 3),
                 onPressed: () async {
                   controller.addTravelEvent();
 
                   await TurnoDbProvider.instance.init().then((db) async {
+print('TurnoDbProvider');
+print(controller.title.text);
 
                     Cuadrante _item = await TurnoDbProvider.instance.select(
 
@@ -72,7 +75,17 @@ class AddNotasView extends GetView<NotasController> {
                               controller.startTime.millisecondsSinceEpoch,
                               endTimeMilliseconds:
                               controller.endTime.millisecondsSinceEpoch,
-                              time: Jiffy().format('yyyy-MM-dd h:mm:ss a')),
+                              time: Jiffy().format('yyyy-MM-dd h:mm:ss a'),
+                              dateTime: DateTime.parse(controller.startTime.toString()),
+                              startHour: '',
+                              endHour: '',
+                              description: '',
+                              isCuadrante: false,
+                              color: 'eb4034',
+
+
+
+                          ),
                         ));
                     controller.warnList.forEach((e) {
                       if (e['select']) {
@@ -83,7 +96,7 @@ class AddNotasView extends GetView<NotasController> {
                     Navigator.pop(context);
                     Navigator.of(context).pushReplacementNamed('/home');
                     // Toast.toast(context, msg: "¡Añadida! ");
-                    TurnoDbProvider.instance.close();
+                    // TurnoDbProvider.instance.close();
                   });
                 },
               )
@@ -98,7 +111,7 @@ class AddNotasView extends GetView<NotasController> {
                 child: ListView(
                   children: <Widget>[
                     Container(
-                        margin: EdgeInsets.symmetric(horizontal: 6),
+                        margin: const EdgeInsets.symmetric(horizontal: 6),
                         child: _buildGeneralFormField(
                             controller.title, 'Titulo del evento', 1),
                         // key: keyButton13
@@ -213,20 +226,20 @@ class AddNotasView extends GetView<NotasController> {
                       // key: keyButton17,
                       children: <Widget>[
                         Container(
-                          margin: EdgeInsets.symmetric(horizontal: 6),
+                          margin: const EdgeInsets.symmetric(horizontal: 6),
                           child: _buildGeneralFormField(controller.site, 'Ubicación', 2),
-                        ), SizedBox(
+                        ), const SizedBox(
                           height: 6,
                         ),
                         Container(
-                          margin: EdgeInsets.symmetric(horizontal: 6),
+                          margin: const EdgeInsets.symmetric(horizontal: 6),
                           child: _buildGeneralFormField(
                               controller.notes, 'Observaciones', 8),
                         ),
                       ],
                     ),
                     Container(
-                      padding: EdgeInsets.only(left: 8.0, top: 16),
+                      padding: const EdgeInsets.only(left: 8.0, top: 16),
 
                       child: Row(
                         children: <Widget>[
@@ -237,7 +250,7 @@ class AddNotasView extends GetView<NotasController> {
                             ),
                           ),
                           IconButton(
-                            icon: Icon(Icons.info,
+                            icon: const Icon(Icons.info,
                                 color: Colors.redAccent),
                             tooltip: '',
                             onPressed: () {
@@ -255,20 +268,20 @@ class AddNotasView extends GetView<NotasController> {
   }
   TextFormField _buildGeneralFormField(
       TextEditingController value, String hint, int lines) {
-    final double _radiusNum = 10;
+    const double _radiusNum = 10;
     return TextFormField(
       controller: value,
       decoration: InputDecoration(
         filled: true,
-        contentPadding: EdgeInsets.only(left: 20, top: 20),
+        contentPadding: const EdgeInsets.only(left: 20, top: 20),
         fillColor: Colors.white12,
-        enabledBorder: OutlineInputBorder(
+        enabledBorder: const OutlineInputBorder(
           borderRadius: BorderRadius.all(
             Radius.circular(_radiusNum),
           ),
           borderSide: BorderSide.none,
         ),
-        focusedBorder: OutlineInputBorder(
+        focusedBorder: const OutlineInputBorder(
             borderRadius: BorderRadius.all(
               Radius.circular(_radiusNum),
             ),
@@ -284,7 +297,7 @@ class AddNotasView extends GetView<NotasController> {
 
   Widget _buildLineBetween() {
     return Container(
-      padding: EdgeInsets.only(top: 10, bottom: 10),
+      padding: const EdgeInsets.only(top: 10, bottom: 10),
       child: Center(
         child: Container(
           width: 320, //max-width is 240
