@@ -57,13 +57,8 @@ class AddNotasView extends GetView<NotasController> {
                 padding: EdgeInsets.only(right: 3),
                 onPressed: () async {
                   controller.addTravelEvent();
-
-                  await TurnoDbProvider.instance.init().then((db) async {
-
-                    Cuadrante _item = await TurnoDbProvider.instance.select(
-
-                        await TurnoDbProvider.instance.insert(
-                          Cuadrante(
+                  await TurnoDbProvider.instance.insert(
+                    Cuadrante(
                               title: controller.title.text,
                               site: controller.site.text,
                               notes: controller.notes.text,
@@ -73,7 +68,7 @@ class AddNotasView extends GetView<NotasController> {
                               endTimeMilliseconds:
                               controller.endTime.millisecondsSinceEpoch,
                               time: Jiffy().format('yyyy-MM-dd h:mm:ss a')),
-                        ));
+                        );
                     controller.warnList.forEach((e) {
                       if (e['select']) {
                         // push.setOneTime(_item.id * 10 + e['id'], title, notes,
@@ -84,7 +79,7 @@ class AddNotasView extends GetView<NotasController> {
                     Navigator.of(context).pushReplacementNamed('/home');
                     // Toast.toast(context, msg: "¡Añadida! ");
                     TurnoDbProvider.instance.close();
-                  });
+
                 },
               )
             ],
