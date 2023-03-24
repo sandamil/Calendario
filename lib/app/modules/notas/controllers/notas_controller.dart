@@ -10,6 +10,9 @@ import 'package:jiffy/jiffy.dart';
 import '../../../data/model/taskModel.dart';
 
 class NotasController extends GetxController {
+  CalendarController calendarController = CalendarController();
+
+
   bool headerShouldHide = false;
   RxBool isFlagOn = false.obs;
   RxBool isSearchEmpty = true.obs;

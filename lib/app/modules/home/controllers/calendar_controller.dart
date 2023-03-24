@@ -53,7 +53,8 @@ class CalendarController extends GetxController {
   void onInit() async {
     await fetchCuadrante();
     await fetchTurno();
-
+    await getListEvent();
+    print(listEvent.length);
     super.onInit();
   }
 
@@ -131,31 +132,31 @@ class CalendarController extends GetxController {
 
   RxList<Task> listEvent = <Task>[].obs;
 
-  // void getListEvent() {
-  //   listEvent.add();
-  // }
-  //
-  // bool hasEvent(DateTime day) {
-  //   bool check = false;
-  //   if (listEvent.isNotEmpty) {
-  //     listEvent.value.forEach((event) {
-  //       if (DataValidator.isSameDay(event.day, day)) {
-  //         check = true;
-  //       }
-  //     });
-  //   }
-  //   return check;
-  // }
-  //
-  // List<Task> getEventsOfDay(DateTime day) {
-  //   List<Task> list = [];
-  //   listEvent.value.forEach((event) {
-  //     if (DataValidator.isSameDay(event.day, day)) {
-  //       list.add(event);
-  //     }
-  //   });
-  //   return list;
-  // }
+   getListEvent() async {
+    listEvent.value = await DbProvider.instance.getNotesFromDB();
+  }
+
+  bool hasEvent(DateTime day) {
+    bool check = false;
+    if (listEvent.isNotEmpty) {
+      listEvent.value.forEach((event) {
+        if (DataValidator.isSameDay(DateTime.fromMillisecondsSinceEpoch(event.startTimeMilliseconds!), day)) {
+          check = true;
+        }
+      });
+    }
+    return check;
+  }
+
+  List<Task> getEventsOfDay(DateTime day) {
+    List<Task> list = [];
+    listEvent.value.forEach((event) {
+      if (DataValidator.isSameDay(DateTime.fromMillisecondsSinceEpoch(event.startTimeMilliseconds!), day)) {
+        list.add(event);
+      }
+    });
+    return list;
+  }
 
 
 
@@ -171,4 +172,15 @@ class DataValidator {
     return false;
   }
 }
-
+List<Task> mockData = [
+  Task(
+    title: 'Hola',
+    startTimeMilliseconds: 1679611528918,
+   ),
+  Task(
+    title: 'Work From Home Opportunity - Webinar',
+  ),
+  Task(
+    title: 'Free Speed Reading Course - Ho Chi Minh City',
+  ),
+];
