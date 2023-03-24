@@ -88,6 +88,5 @@ class Cuadrante {
         this.time = data['time'],
         this.isImportant = data['isImportant'] == 1 ? true : false,
         this.isCuadrante = data['isCuadrante'] == 1 ? true : false,
-        this.dateTime = DateTime.tryParse(data['datetime'],
-        );
+        this.dateTime = DateTime.tryParse(data['datetime'] == DateTime.now() ? '':'');
 }

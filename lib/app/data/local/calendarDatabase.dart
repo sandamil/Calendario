@@ -249,7 +249,13 @@ class TurnoDbProvider {
       'startTimeMilliseconds',
       'endTimeMilliseconds',
       'time',
-      'isImportant'
+      'isImportant',
+      'startHour',
+      'endHour',
+      'description',
+      'color',
+      'dateTime',
+      'isCuadrante'
     ]);
     if (maps.length > 0) {
       maps.forEach((map) {
