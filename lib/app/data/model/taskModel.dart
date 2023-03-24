@@ -18,7 +18,7 @@ class Task {
       this.time,
       this.isImportant});
 
-  Map<dynamic , dynamic> toMap() {
+   Map<String, Object?> toMap() {
     return {
       'id': id,
       'title': title,

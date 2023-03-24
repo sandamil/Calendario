@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:calendario2/app/data/model/turnoCalendar.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
@@ -41,11 +40,11 @@ class DbProvider {
         'CREATE TABLE IF NOT EXISTS $taskTable(id INTEGER PRIMARY KEY, title TEXT, site TEXT, notes TEXT, startTimeMilliseconds INTEGER, endTimeMilliseconds INTEGER, time TEXT, isImportant INTEGER)');
   }
 
-  Future<int> insert(Task travel) async {
+  Future<int> insert(Task notas) async {
     var dbClient = await db;
     int res = await dbClient.insert(
       taskTable,
-      travel.toMap(),
+      notas.toMap(),
       conflictAlgorithm: ConflictAlgorithm.ignore,
     );
     return res;
@@ -75,9 +74,9 @@ class DbProvider {
     }
   }
 
-  Future<List<Cuadrante>> getNotesFromDB() async {
+  Future<List<Task>> getNotesFromDB() async {
     var dbClient = await db;
-    List<Cuadrante> notesList = [];
+    List<Task> notesList = [];
     List<Map> maps = await dbClient.query(taskTable, columns: [
       'id',
       'title',
@@ -90,19 +89,19 @@ class DbProvider {
     ]);
     if (maps.length > 0) {
       maps.forEach((map) {
-        notesList.add(Cuadrante.fromDb(map));
+        notesList.add(Task.fromMap(map));
       });
     }
     return notesList;
   }
 
-  Future<void> update(Task travel) async {
+  Future<void> update(Task notas) async {
     var dbClient = await db;
     await dbClient.update(
       taskTable,
-      travel.toMap(),
+      notas.toMap(),
       where: "id = ?",
-      whereArgs: [travel.id],
+      whereArgs: [notas.id],
     );
   }
 

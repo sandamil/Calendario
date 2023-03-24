@@ -86,9 +86,12 @@ class NotasView extends GetView<NotasController> {
       ),
     );
   }
+
+
+  /// todo rehacer esto por que esta continuo cargando, ver prints activados
   List<Widget> buildNoteComponentsList() {
 
-    print('1');
+    // print('1');
     List<Widget> noteComponentsList = [];
     controller.notesList.sort((a, b) {
       return b.startTimeMilliseconds!.compareTo(a.startTimeMilliseconds as num);
@@ -122,7 +125,7 @@ class NotasView extends GetView<NotasController> {
           ));
       });
     } else {
-      print('4');
+      // print('4');
 
       controller.notesList.forEach((note) {
         noteComponentsList.add(TaskCard(

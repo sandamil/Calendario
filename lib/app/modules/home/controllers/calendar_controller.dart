@@ -39,8 +39,7 @@ class CalendarController extends GetxController {
   RxMap<DateTime, List<Cuadrante>> cuadranteMap =
       <DateTime, List<Cuadrante>>{}.obs;
 
-  RxMap<DateTime, List<Task>> notasMap =
-      <DateTime, List<Task>>{}.obs;
+  RxMap<DateTime, List<Task>> notasMap = <DateTime, List<Task>>{}.obs;
 
   RxList<Cuadrante> cuadrante = <Cuadrante>[].obs;
 
@@ -48,10 +47,12 @@ class CalendarController extends GetxController {
 
   RxBool isReady = false.obs;
 
+///////////////oninit
+  /// ==
+
   void onInit() async {
     await fetchCuadrante();
     await fetchTurno();
-
 
     super.onInit();
   }
@@ -63,7 +64,8 @@ class CalendarController extends GetxController {
     }
     selectedEvents.value = getEventForDay(selectedDay.value);
     update();
-    Get.dialog(CustomAlertDilogDaySelected( selectedDate: selectedDate, turno: turno.value));
+    Get.dialog(CustomAlertDilogDaySelected(
+        selectedDate: selectedDate, turno: turno.value));
   }
 
   onPageChanged(focusedDay) {
@@ -107,20 +109,66 @@ class CalendarController extends GetxController {
     return cuadranteMap.value;
   }
 
-
-
-
   Future<List<TurnoType>> fetchTurno() async {
     turno.value = await TurnoDbProvider.instance.getTypeModels();
     return turno;
   }
 
-
-  showPopUp(context, selectedDate, turno) => showDialog(
+  showPopUp(context, selectedDate, turno) {
+    return showDialog(
       context: context,
       builder: (context) {
-        return CustomAlertDialogTurnoList(selectedDate: selectedDate, turno: turno);
-      },);
+        return CustomAlertDialogTurnoList(
+            selectedDate: selectedDate, turno: turno);
+      },
+    );
+  }
+
+///////////////     Notas
+/// ==
+
+
+
+  RxList<Task> listEvent = <Task>[].obs;
+
+  // void getListEvent() {
+  //   listEvent.add();
+  // }
+  //
+  // bool hasEvent(DateTime day) {
+  //   bool check = false;
+  //   if (listEvent.isNotEmpty) {
+  //     listEvent.value.forEach((event) {
+  //       if (DataValidator.isSameDay(event.day, day)) {
+  //         check = true;
+  //       }
+  //     });
+  //   }
+  //   return check;
+  // }
+  //
+  // List<Task> getEventsOfDay(DateTime day) {
+  //   List<Task> list = [];
+  //   listEvent.value.forEach((event) {
+  //     if (DataValidator.isSameDay(event.day, day)) {
+  //       list.add(event);
+  //     }
+  //   });
+  //   return list;
+  // }
+
 
 
 }
+
+class DataValidator {
+  static bool isSameDay(DateTime first, DateTime second) {
+    if (first.year == second.year &&
+        first.month == second.month &&
+        first.day == second.day) {
+      return true;
+    }
+    return false;
+  }
+}
+

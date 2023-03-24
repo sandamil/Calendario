@@ -14,7 +14,7 @@ class NotasController extends GetxController {
   RxBool isFlagOn = false.obs;
   RxBool isSearchEmpty = true.obs;
 
-  List<Cuadrante> notesList = [];
+  List<Task> notesList = [];
 
   TextEditingController searchController = TextEditingController();
 
@@ -26,7 +26,7 @@ class NotasController extends GetxController {
   late DateTime endTime;
   bool isImportant = false;
 
-  Map<DateTime, List<Cuadrante>> events = <DateTime, List<Cuadrante>>{}.obs;
+  Map<DateTime, List<Task>> events = <DateTime, List<Task>>{}.obs;
   DateTime time = DateTime.now();
 
   bool noWarn = false;
@@ -35,7 +35,6 @@ class NotasController extends GetxController {
 
   @override
   void onInit() {
-    events = Get.find<CalendarController>().cuadranteMap;
     startTime = DateTime.now();
     endTime = DateTime.now();
     setNotesFromDB();
@@ -54,7 +53,7 @@ class NotasController extends GetxController {
   }
 
   setNotesFromDB() async {
-    notesList = await TurnoDbProvider.instance.getNotesFromDB();
+    notesList = await DbProvider.instance.getNotesFromDB();
     update();
 
     return notesList;
@@ -71,7 +70,7 @@ class NotasController extends GetxController {
     //     ));
   }
 
-  openNoteToRead(Cuadrante noteData) async {
+  openNoteToRead(Task noteData) async {
     headerShouldHide = true;
 
     await Future.delayed(const Duration(milliseconds: 230), () {});
@@ -102,18 +101,7 @@ class NotasController extends GetxController {
   /// =========================    AddNtasView
 
   void addTravelEvent() {
-    print('startTime.isBlank');
-    print('startTime.isBlank');
-    print(startTime.isBlank);
-    print(startTime.toString());
-
     final int daysNum = endTime.difference(startTime).inDays;
-
-    print('daysNum');
-    print('daysNum');
-    print(daysNum.isBlank);
-    print(daysNum);
-
     if (0 == daysNum) {
       final DateTime time =
           DateTime(startTime.year, startTime.month, startTime.day);
@@ -145,30 +133,9 @@ class NotasController extends GetxController {
 
   void setTravelEvent(DateTime time, String title, String site,
       DateTime startTime, DateTime endTime, bool isImportant) async {
-    print('setTravelEvent =========' '${events[time] != null}');
-    print('setTravelEvent =========' '${events.length}');
-
     if (events[time] != null) {
-      print('if (events 1 ========='
-          '$site'
-          '${title}'
-          '${startTime}'
-          '$endTime'
-          '$isImportant');
-      print('if (events 1 ========='
-          '$site'
-          '${title}'
-          '${startTime}'
-          '$endTime'
-          '$isImportant');
-      print('if (events 1 ========='
-          '$site'
-          '${title}'
-          '${startTime}'
-          '$endTime'
-          '$isImportant');
-
-      events[time]?.add(Cuadrante(
+      print('if (events 1 =========' '${title}');
+      events[time]?.add(Task(
         title: title,
         site: site,
         startTimeMilliseconds: startTime.millisecondsSinceEpoch,
@@ -176,27 +143,9 @@ class NotasController extends GetxController {
         isImportant: isImportant,
       ));
     } else {
-      print('if (events 2 ========='
-          '$site'
-          '${title}'
-          '${startTime}'
-          '$endTime'
-          '$isImportant');
-      print('if (events 2 ========='
-          '$site'
-          '${title}'
-          '${startTime}'
-          '$endTime'
-          '$isImportant');
-      print('if (events 2 ========='
-          '$site'
-          '${title}'
-          '${startTime}'
-          '$endTime'
-          '$isImportant');
-
+      print('if (events 2 =========' '${title}');
       events[time] = [
-        Cuadrante(
+        Task(
           title: title,
           site: site,
           startTimeMilliseconds: startTime.millisecondsSinceEpoch,
@@ -205,22 +154,21 @@ class NotasController extends GetxController {
         )
       ];
     }
-    await TurnoDbProvider.instance.insert(
-      Cuadrante(
-          title: title,
-          site: site,
-          notes: notes.text,
-          isImportant: isImportant,
-          startTimeMilliseconds: startTime.millisecondsSinceEpoch,
-          endTimeMilliseconds: endTime.millisecondsSinceEpoch,
-          time: Jiffy().format('yyyy-MM-dd h:mm:ss a')),
+  }
+
+  addEvent() async {
+    Task _item = await DbProvider.instance.select(
+      await DbProvider.instance.insert(
+        Task(
+            title: title.text,
+            site: site.text,
+            notes: notes.text,
+            isImportant: isImportant,
+            startTimeMilliseconds: startTime.millisecondsSinceEpoch,
+            endTimeMilliseconds: endTime.millisecondsSinceEpoch,
+            time: Jiffy().format('yyyy-MM-dd h:mm:ss a')),
+      ),
     );
-    print('   _________ await TurnoDbProvider.instance.insert'
-        '$site'
-        '${title}'
-        '${startTime}'
-        '$endTime'
-        '$isImportant');
   }
 
   void markImportantAsDirty() {
