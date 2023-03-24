@@ -59,6 +59,7 @@ class AddNotasView extends GetView<NotasController> {
                 onPressed: () async {
                   controller.addTravelEvent();
 
+/*
                   await TurnoDbProvider.instance.init().then((db) async {
 print('TurnoDbProvider');
 print(controller.title.text);
@@ -92,12 +93,13 @@ print(controller.title.text);
                         // push.setOneTime(_item.id * 10 + e['id'], title, notes,
                         //     e['time'](_startTime));
                       }
-                    });
+                    });*/
                     Navigator.pop(context);
                     Navigator.of(context).pushReplacementNamed('/home');
                     // Toast.toast(context, msg: "¡Añadida! ");
                     // TurnoDbProvider.instance.close();
-                  });
+                  // });
+
                 },
               )
             ],

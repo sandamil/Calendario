@@ -10,10 +10,6 @@ import 'package:jiffy/jiffy.dart';
 import '../../../data/model/taskModel.dart';
 
 class NotasController extends GetxController {
-
-
-
-
   bool headerShouldHide = false;
   RxBool isFlagOn = false.obs;
   RxBool isSearchEmpty = true.obs;
@@ -26,18 +22,12 @@ class NotasController extends GetxController {
   TextEditingController site = TextEditingController();
   TextEditingController notes = TextEditingController();
 
-
-
-
-
   late DateTime startTime;
   late DateTime endTime;
   bool isImportant = false;
 
   Map<DateTime, List<Cuadrante>> events = <DateTime, List<Cuadrante>>{}.obs;
   DateTime time = DateTime.now();
-
-
 
   bool noWarn = false;
 
@@ -46,10 +36,10 @@ class NotasController extends GetxController {
   @override
   void onInit() {
     events = Get.find<CalendarController>().cuadranteMap;
-    startTime =DateTime.now();
-    endTime =DateTime.now();
+    startTime = DateTime.now();
+    endTime = DateTime.now();
     setNotesFromDB();
-    print( 'notesList.length ========='   '${notesList.length}');
+    print('notesList.length =========' '${notesList.length}');
     super.onInit();
   }
 
@@ -70,12 +60,8 @@ class NotasController extends GetxController {
     return notesList;
   }
 
-
   void gotoEditNote() {
-
-
-
-    Get.to(() =>  const AddNotasView(),
+    Get.to(() => const AddNotasView(),
         duration: const Duration(milliseconds: 100),
         transition: Transition.leftToRight);
     // Navigator.push(
@@ -113,18 +99,13 @@ class NotasController extends GetxController {
     isSearchEmpty.value = true;
   }
 
-
-
-/// =========================    AddNtasView
-
+  /// =========================    AddNtasView
 
   void addTravelEvent() {
-
     print('startTime.isBlank');
     print('startTime.isBlank');
     print(startTime.isBlank);
     print(startTime.toString());
-
 
     final int daysNum = endTime.difference(startTime).inDays;
 
@@ -135,7 +116,7 @@ class NotasController extends GetxController {
 
     if (0 == daysNum) {
       final DateTime time =
-      DateTime(startTime.year, startTime.month, startTime.day);
+          DateTime(startTime.year, startTime.month, startTime.day);
       setTravelEvent(
         time,
         title.text,
@@ -147,7 +128,7 @@ class NotasController extends GetxController {
     } else {
       for (int i = 0; i <= daysNum; i++) {
         DateTime _time =
-        DateTime(startTime.year, startTime.month, startTime.day + i);
+            DateTime(startTime.year, startTime.month, startTime.day + i);
         if (0 == i) {
           setTravelEvent(_time, title.text, site.text, startTime,
               DateTime(0, 0, 0, 24), isImportant);
@@ -162,34 +143,57 @@ class NotasController extends GetxController {
     }
   }
 
-
   void setTravelEvent(DateTime time, String title, String site,
       DateTime startTime, DateTime endTime, bool isImportant) async {
-
-    print( 'setTravelEvent ========='   '${events[time] != null}');
-    print( 'setTravelEvent ========='   '${events.length}');
-
+    print('setTravelEvent =========' '${events[time] != null}');
+    print('setTravelEvent =========' '${events.length}');
 
     if (events[time] != null) {
+      print('if (events 1 ========='
+          '$site'
+          '${title}'
+          '${startTime}'
+          '$endTime'
+          '$isImportant');
+      print('if (events 1 ========='
+          '$site'
+          '${title}'
+          '${startTime}'
+          '$endTime'
+          '$isImportant');
+      print('if (events 1 ========='
+          '$site'
+          '${title}'
+          '${startTime}'
+          '$endTime'
+          '$isImportant');
 
-      print( 'if (events 1 ========='   '$site' '${title}' '${startTime}'  '$endTime''$isImportant');
-      print( 'if (events 1 ========='   '$site' '${title}' '${startTime}'  '$endTime''$isImportant');
-      print( 'if (events 1 ========='   '$site' '${title}' '${startTime}'  '$endTime''$isImportant');
-
-      events[time]?.add(
-          Cuadrante(
-            title: title,
-            site: site,
-            startTimeMilliseconds: startTime.millisecondsSinceEpoch,
-            endTimeMilliseconds: endTime.millisecondsSinceEpoch,
-            isImportant: isImportant,
-          )
-
-      );
+      events[time]?.add(Cuadrante(
+        title: title,
+        site: site,
+        startTimeMilliseconds: startTime.millisecondsSinceEpoch,
+        endTimeMilliseconds: endTime.millisecondsSinceEpoch,
+        isImportant: isImportant,
+      ));
     } else {
-      print( 'if (events 2 ========='   '$site' '${title}' '${startTime}'  '$endTime''$isImportant');
-      print( 'if (events 2 ========='   '$site' '${title}' '${startTime}'  '$endTime''$isImportant');
-      print( 'if (events 2 ========='   '$site' '${title}' '${startTime}'  '$endTime''$isImportant');
+      print('if (events 2 ========='
+          '$site'
+          '${title}'
+          '${startTime}'
+          '$endTime'
+          '$isImportant');
+      print('if (events 2 ========='
+          '$site'
+          '${title}'
+          '${startTime}'
+          '$endTime'
+          '$isImportant');
+      print('if (events 2 ========='
+          '$site'
+          '${title}'
+          '${startTime}'
+          '$endTime'
+          '$isImportant');
 
       events[time] = [
         Cuadrante(
@@ -207,23 +211,21 @@ class NotasController extends GetxController {
           site: site,
           notes: notes.text,
           isImportant: isImportant,
-          startTimeMilliseconds:
-          startTime.millisecondsSinceEpoch,
-          endTimeMilliseconds:
-          endTime.millisecondsSinceEpoch,
+          startTimeMilliseconds: startTime.millisecondsSinceEpoch,
+          endTimeMilliseconds: endTime.millisecondsSinceEpoch,
           time: Jiffy().format('yyyy-MM-dd h:mm:ss a')),
     );
-    print( '   _________ await TurnoDbProvider.instance.insert'   '$site' '${title}' '${startTime}'  '$endTime''$isImportant');
-
+    print('   _________ await TurnoDbProvider.instance.insert'
+        '$site'
+        '${title}'
+        '${startTime}'
+        '$endTime'
+        '$isImportant');
   }
 
-
-
-
-
   void markImportantAsDirty() {
-      isImportant = !isImportant;
-   update();
+    isImportant = !isImportant;
+    update();
   }
 
   List warnList = [
@@ -282,5 +284,4 @@ class NotasController extends GetxController {
       'id': 8
     },
   ];
-
 }

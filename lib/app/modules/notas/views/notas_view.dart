@@ -87,11 +87,15 @@ class NotasView extends GetView<NotasController> {
     );
   }
   List<Widget> buildNoteComponentsList() {
+
+    print('1');
     List<Widget> noteComponentsList = [];
     controller.notesList.sort((a, b) {
       return b.startTimeMilliseconds!.compareTo(a.startTimeMilliseconds as num);
     });
     if (controller.searchController.text.isNotEmpty) {
+      print('2');
+
       controller.notesList.forEach((note) {
         if (note.title!
             .toLowerCase()
@@ -108,6 +112,8 @@ class NotasView extends GetView<NotasController> {
       return noteComponentsList;
     }
     if (controller.isFlagOn.value) {
+      print('3');
+
       controller.notesList.forEach((note) {
         if (note.isImportant!)
           noteComponentsList.add(TaskCard(
@@ -116,6 +122,8 @@ class NotasView extends GetView<NotasController> {
           ));
       });
     } else {
+      print('4');
+
       controller.notesList.forEach((note) {
         noteComponentsList.add(TaskCard(
           noteData: note,
