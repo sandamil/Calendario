@@ -17,7 +17,7 @@ class NotasController extends GetxController {
   RxBool isFlagOn = false.obs;
   RxBool isSearchEmpty = true.obs;
 
-  List<Task> notesList = [];
+  RxList<Task> notesList = <Task>[].obs;
 
   TextEditingController searchController = TextEditingController();
 
@@ -25,9 +25,10 @@ class NotasController extends GetxController {
   TextEditingController site = TextEditingController();
   TextEditingController notes = TextEditingController();
 
-  late DateTime startTime;
-  late DateTime endTime;
-  bool isImportant = false;
+  Rx<DateTime> startTime = DateTime.now().obs;
+  Rx<DateTime> endTime = DateTime.now().obs;
+
+  RxBool isImportant = false.obs;
 
   Map<DateTime, List<Task>> events = <DateTime, List<Task>>{}.obs;
   DateTime time = DateTime.now();
@@ -38,10 +39,8 @@ class NotasController extends GetxController {
 
   @override
   void onInit() {
-    startTime = DateTime.now();
-    endTime = DateTime.now();
     setNotesFromDB();
-    print('notesList.length =========' '${notesList.length}');
+    print('notesList.length =========' '${notesList.value.length}');
     super.onInit();
   }
 
@@ -56,10 +55,10 @@ class NotasController extends GetxController {
   }
 
   setNotesFromDB() async {
-    notesList = await DbProvider.instance.getNotesFromDB();
+    notesList.value = await DbProvider.instance.getNotesFromDB();
     update();
 
-    return notesList;
+    return notesList.value;
   }
 
   void gotoEditNote() {
@@ -104,31 +103,32 @@ class NotasController extends GetxController {
   /// =========================    AddNtasView
 
   void addTravelEvent() {
-    final int daysNum = endTime.difference(startTime).inDays;
+    print('addTravelEvent' '$startTime');
+    final int daysNum = endTime.value.difference(startTime.value).inDays;
     if (0 == daysNum) {
       final DateTime time =
-          DateTime(startTime.year, startTime.month, startTime.day);
+          DateTime(startTime.value.year, startTime.value.month, startTime.value.day);
       setTravelEvent(
         time,
         title.text,
         site.text,
-        startTime,
-        endTime,
-        isImportant,
+        startTime.value,
+        endTime.value,
+        isImportant.value,
       );
     } else {
       for (int i = 0; i <= daysNum; i++) {
         DateTime _time =
-            DateTime(startTime.year, startTime.month, startTime.day + i);
+            DateTime(startTime.value.year, startTime.value.month, startTime.value.day + i);
         if (0 == i) {
-          setTravelEvent(_time, title.text, site.text, startTime,
-              DateTime(0, 0, 0, 24), isImportant);
+          setTravelEvent(_time, title.text, site.text, startTime.value,
+              DateTime(0, 0, 0, 24), isImportant.value);
         } else if (i == daysNum) {
           setTravelEvent(time, title.text, site.text, DateTime(0, 0, 0, 0),
-              endTime, isImportant);
+              endTime.value, isImportant.value);
         } else {
           setTravelEvent(_time, title.text, site.text, DateTime(0, 0, 0, 0),
-              DateTime(0, 0, 0, 24), isImportant);
+              DateTime(0, 0, 0, 24), isImportant.value);
         }
       }
     }
@@ -166,16 +166,18 @@ class NotasController extends GetxController {
             title: title.text,
             site: site.text,
             notes: notes.text,
-            isImportant: isImportant,
-            startTimeMilliseconds: startTime.millisecondsSinceEpoch,
-            endTimeMilliseconds: endTime.millisecondsSinceEpoch,
+            isImportant: isImportant.value,
+            startTimeMilliseconds: startTime.value.millisecondsSinceEpoch,
+            endTimeMilliseconds: endTime.value.millisecondsSinceEpoch,
             time: Jiffy().format('yyyy-MM-dd h:mm:ss a')),
       ),
     );
+    print('addEvent' '${title.text}');
+
   }
 
   void markImportantAsDirty() {
-    isImportant = !isImportant;
+    isImportant.value = !isImportant.value;
     update();
   }
 
