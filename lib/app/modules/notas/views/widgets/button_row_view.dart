@@ -17,7 +17,11 @@ class ButtonRowView extends StatelessWidget {
             children: <Widget>[
               GestureDetector(
                 onTap: () {
-                  controller.isFlagOn.value ?? controller.isFlagOn.value;
+                  if (controller.isFlagOn.value) {
+                    controller.isFlagOn.value = false;
+                  } else {
+                    controller.isFlagOn.value = true;
+                  }
                 },
                 child: AnimatedContainer(
                   duration: Duration(milliseconds: 160),

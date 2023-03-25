@@ -44,7 +44,7 @@ class NotasView extends GetView<NotasController> {
               style: TextStyle(
                   fontFamily: 'ZillaSlab',
                   fontWeight: FontWeight.w700,
-                  fontSize: 36.sp,
+                  fontSize: 28.sp,
                   color: theme.primaryColor),
               overflow: TextOverflow.clip,
               softWrap: false,

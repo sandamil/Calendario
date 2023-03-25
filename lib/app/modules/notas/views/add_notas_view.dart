@@ -14,13 +14,15 @@ class AddNotasView extends GetView<NotasController> {
 
   @override
   Widget build(BuildContext context) {
+    var theme = Theme.of(context);
+
     // NotasController controller = NotasController();
 
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         elevation: 0.0,
-        // for elevation
+        backgroundColor: Colors.transparent,
         title: AnimatedContainer(
           duration: Duration(milliseconds: 200),
           curve: Curves.easeIn,
@@ -29,8 +31,10 @@ class AddNotasView extends GetView<NotasController> {
           child: Text(
             'Añadir Nota',
             style: TextStyle(
-                fontSize: 16.sp,
-                color: Theme.of(context).textTheme.titleLarge!.color),
+                fontFamily: 'ZillaSlab',
+                fontWeight: FontWeight.w700,
+                fontSize: 24.sp,
+                color: theme.primaryColor),
             overflow: TextOverflow.clip,
             softWrap: false,
           ),
@@ -46,37 +50,9 @@ class AddNotasView extends GetView<NotasController> {
             padding: EdgeInsets.only(right: 3),
             onPressed: () async {
               controller.addTravelEvent();
-
               await controller.addEvent();
               Navigator.pop(context);
               Navigator.of(context).pushReplacementNamed('/notas');
-              // await TurnoDbProvider.instance.init().then((db) async {
-              //
-              //   // Cuadrante _item = await TurnoDbProvider.instance.select(
-              //   //
-              //   //     await TurnoDbProvider.instance.insert(
-              //   //       Cuadrante(
-              //   //           title: controller.title.text,
-              //   //           site: controller.site.text,
-              //   //           notes: controller.notes.text,
-              //   //           isImportant: controller.isImportant,
-              //   //           startTimeMilliseconds:
-              //   //           controller.startTime.millisecondsSinceEpoch,
-              //   //           endTimeMilliseconds:
-              //   //           controller.endTime.millisecondsSinceEpoch,
-              //   //           time: Jiffy().format('yyyy-MM-dd h:mm:ss a')),
-              //   //     ));
-              //   controller.warnList.forEach((e) {
-              //     if (e['select']) {
-              //       // push.setOneTime(_item.id * 10 + e['id'], title, notes,
-              //       //     e['time'](_startTime));
-              //     }
-              //   });
-              //   Navigator.pop(context);
-              //   Navigator.of(context).pushReplacementNamed('/home');
-              //   // Toast.toast(context, msg: "¡Añadida! ");
-              //   TurnoDbProvider.instance.close();
-              // });
             },
           )
         ],
@@ -87,12 +63,16 @@ class AddNotasView extends GetView<NotasController> {
               // key: _formKey,
               child: ListView(
             children: <Widget>[
+              _buildLineBetween(),
+
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 6),
                 child: _buildGeneralFormField(
                     controller.title, 'Titulo del evento', 1),
                 // key: keyButton13
               ),
+              _buildLineBetween(),
+
               Column(
                 // key: keyButton14,
                 children: <Widget>[
@@ -113,7 +93,7 @@ class AddNotasView extends GetView<NotasController> {
                               },
                               onConfirm: (DateTime date) {},
                               currentTime: controller.startTime.value,
-                              // locale: LocaleType.es
+                              locale: dp.LocaleType.es
                             );
                           },
                           child: Row(
@@ -158,7 +138,7 @@ class AddNotasView extends GetView<NotasController> {
                             },
                             onConfirm: (DateTime date) {},
                             currentTime: controller.endTime.value,
-                            // locale: LocaleType.es
+                            locale: dp.LocaleType.es
                           );
                         },
                         child: Row(
@@ -187,59 +167,60 @@ class AddNotasView extends GetView<NotasController> {
                                 ],
                               )
                             ])),
-
-                    // _buildGeneralColumn(
-                    //     context, 'Hora final',
-                    //     '${Jiffy(controller.endTime.value).yMd} ${Jiffy(controller.endTime.value).Hm}',
-                    //     () {
-                    //   // dp.DatePicker.showDateTimePicker(
-                    //   //   Get.context!,
-                    //   //
-                    //   //   showTitleActions: true,
-                    //   //   onChanged: (DateTime date) {},
-                    //   //   onConfirm: (DateTime date) {
-                    //   //     if (controller.startTime.value.millisecondsSinceEpoch <=
-                    //   //         date.millisecondsSinceEpoch) {
-                    //   //       controller.endTime.value = date;
-                    //   //
-                    //   //     }
-                    //   //   },
-                    //   //   currentTime: controller.endTime.value,
-                    //   //   // locale: LocaleType.es
-                    //   // );
-                    // }),
                   ),
                 ],
               ),
 
               _buildLineBetween(),
-              // Container(
-              //   // key: keyButton15,
-              //   child: _buildGeneralColumn(
-              //       context, 'Recordatorio', NotasController.warnDefaultt, () async {
-              //     Navigator.push(
-              //       context,
-              //       MaterialPageRoute(
-              //           builder: (context) =>
-              //               WarnView(controller.noWarn, controller.warnList, (bool value) {
-              //
-              //                   controller.noWarn = value;
-              //                controller.update();
-              //               }, (int item, bool value) {
-              //
-              //                 controller.warnList[item]['select'] = value;
-              //                   controller.update();
-              //
-              //               }, (String warn) {
-              //                String warnDefaultt = 'Al principio';
-              //
-              //                warnDefaultt = warn;
-              //                   controller.update();
-              //
-              //               })),
-              //     );
-              //   }),
-              // ),
+              TextButton(
+                  onPressed: ()async{
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              WarnView(controller.noWarn, controller.warnList, (bool value) {
+
+                                controller.noWarn = value;
+                                controller.update();
+                              }, (int item, bool value) {
+
+                                controller.warnList[item]['select'] = value;
+                                controller.update();
+
+                              }, (String warn) {
+                                String warnDefaultt = 'Al principio';
+
+                                warnDefaultt = warn;
+                                controller.update();
+
+                              })),
+                    );
+
+                  },
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Text(
+                          'Recordatorio',
+                          style: TextStyle(color: Colors.blue, fontSize: 14.sp),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Text(
+                              NotasController.warnDefaultt,
+                              style: TextStyle(color: Colors.blue, fontSize: 14.sp),
+                            ),
+                            Icon(
+                              Icons.arrow_forward_ios,
+                              size: 14.sp,
+                            )
+                          ],
+                        )
+                      ])),
+
               _buildLineBetween(),
               TextButton(
                   // key: keyButton16,
