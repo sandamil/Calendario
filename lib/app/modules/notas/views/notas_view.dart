@@ -91,45 +91,5 @@ class NotasView extends GetView<NotasController> {
 
 
   /// todo rehacer esto por que esta continuo cargando, ver prints activados
-  List<Widget> buildNoteComponentsList() {
-    List<Widget> noteComponentsList = [];
-    controller.notesList.value.sort((a, b) {
-      return b.startTimeMilliseconds!.compareTo(a.startTimeMilliseconds as num);
-    });
-    if (controller.searchController.text.isNotEmpty) {
-      controller.notesList.value.forEach((note) {
-        if (note.title!
-            .toLowerCase()
-            .contains(controller.searchController.text.toLowerCase()) ||
-            note.title!
-                .toLowerCase()
-                .contains(controller.searchController.text.toLowerCase())) {
-          noteComponentsList.add(TaskCard(
-            noteData: note,
-            onTapAction: controller.openNoteToRead,
-          ));
-        }
-      });
-      return noteComponentsList;
-    }
-    if (controller.isFlagOn.value) {
-      controller.notesList.value.forEach((note) {
-        if (note.isImportant!) {
-          noteComponentsList.add(TaskCard(
-            noteData: note,
-            onTapAction: controller.openNoteToRead,
-          ));
-        }
-      });
-    } else {
-      controller.notesList.value.forEach((note) {
-        noteComponentsList.add(TaskCard(
-          noteData: note,
-          onTapAction: controller.openNoteToRead,
-        ));
-      });
-    }
-    return noteComponentsList;
-  }
 
 }

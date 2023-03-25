@@ -8,10 +8,10 @@ import 'package:get/get.dart';
 import 'package:jiffy/jiffy.dart';
 
 import '../../../data/model/taskModel.dart';
+import '../views/widgets/taskCard.dart';
 
 class NotasController extends GetxController {
   CalendarController calendarController = CalendarController();
-
 
   bool headerShouldHide = false;
   RxBool isFlagOn = false.obs;
@@ -106,8 +106,8 @@ class NotasController extends GetxController {
     print('addTravelEvent' '$startTime');
     final int daysNum = endTime.value.difference(startTime.value).inDays;
     if (0 == daysNum) {
-      final DateTime time =
-          DateTime(startTime.value.year, startTime.value.month, startTime.value.day);
+      final DateTime time = DateTime(
+          startTime.value.year, startTime.value.month, startTime.value.day);
       setTravelEvent(
         time,
         title.text,
@@ -118,8 +118,8 @@ class NotasController extends GetxController {
       );
     } else {
       for (int i = 0; i <= daysNum; i++) {
-        DateTime _time =
-            DateTime(startTime.value.year, startTime.value.month, startTime.value.day + i);
+        DateTime _time = DateTime(startTime.value.year, startTime.value.month,
+            startTime.value.day + i);
         if (0 == i) {
           setTravelEvent(_time, title.text, site.text, startTime.value,
               DateTime(0, 0, 0, 24), isImportant.value);
@@ -173,7 +173,6 @@ class NotasController extends GetxController {
       ),
     );
     print('addEvent' '${title.text}');
-
   }
 
   void markImportantAsDirty() {
@@ -237,4 +236,45 @@ class NotasController extends GetxController {
       'id': 8
     },
   ];
+
+  List<Widget> buildNoteComponentsList() {
+    List<Widget> noteComponentsList = [];
+    notesList.value.sort((a, b) {
+      return b.startTimeMilliseconds!.compareTo(a.startTimeMilliseconds as num);
+    });
+    if (searchController.text.isNotEmpty) {
+      notesList.value.forEach((note) {
+        if (note.title!
+                .toLowerCase()
+                .contains(searchController.text.toLowerCase()) ||
+            note.title!
+                .toLowerCase()
+                .contains(searchController.text.toLowerCase())) {
+          noteComponentsList.add(TaskCard(
+            noteData: note,
+            onTapAction: openNoteToRead,
+          ));
+        }
+      });
+      return noteComponentsList;
+    }
+    if (isFlagOn.value) {
+      notesList.value.forEach((note) {
+        if (note.isImportant!) {
+          noteComponentsList.add(TaskCard(
+            noteData: note,
+            onTapAction: openNoteToRead,
+          ));
+        }
+      });
+    } else {
+      notesList.value.forEach((note) {
+        noteComponentsList.add(TaskCard(
+          noteData: note,
+          onTapAction: openNoteToRead,
+        ));
+      });
+    }
+    return noteComponentsList;
+  }
 }
