@@ -74,15 +74,17 @@ class NotasView extends GetView<NotasController> {
           duration: Duration(milliseconds: 200),
           margin: EdgeInsets.only(top: 6),
           padding: EdgeInsets.only(left: 15, right: 15),
-          child: ListView(
-            physics: BouncingScrollPhysics(),
-            children: <Widget>[
-              ButtonRowView(),
-              ImportantIndicatorTextView(),
-              Container(height: 6),
-              ...buildNoteComponentsList(),
-              Container(height: 100)
-            ],
+          child: SingleChildScrollView(
+            child: Column(
+              // physics: BouncingScrollPhysics(),
+              children: <Widget>[
+                ButtonRowView(),
+                ImportantIndicatorTextView(),
+                Container(height: 6),
+                ...controller.buildNoteComponentsList(),
+                Container(height: 100)
+              ],
+            ),
           ),
         ),
       );
