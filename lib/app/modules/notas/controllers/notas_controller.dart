@@ -19,7 +19,7 @@ class NotasController extends GetxController {
 
   RxList<Task> notesList = <Task>[].obs;
 
-  TextEditingController searchController = TextEditingController();
+  Rx<TextEditingController> searchController = TextEditingController().obs;
 
   TextEditingController title = TextEditingController();
   TextEditingController site = TextEditingController();
@@ -89,16 +89,20 @@ class NotasController extends GetxController {
 
   void handleSearch(String value) {
     if (value.isNotEmpty) {
+      setNotesFromDB();
       isSearchEmpty.value = false;
     } else {
+      setNotesFromDB();
       isSearchEmpty.value = true;
     }
   }
 
-  void cancelSearch() {
-    searchController.clear();
+   cancelSearch() {
+    searchController.value.clear();
     isSearchEmpty.value = true;
-  }
+     setNotesFromDB();
+
+   }
 
   /// =========================    AddNtasView
 
@@ -242,14 +246,14 @@ class NotasController extends GetxController {
     notesList.value.sort((a, b) {
       return b.startTimeMilliseconds!.compareTo(a.startTimeMilliseconds as num);
     });
-    if (searchController.text.isNotEmpty) {
+    if (searchController.value.text.isNotEmpty) {
       notesList.value.forEach((note) {
         if (note.title!
                 .toLowerCase()
-                .contains(searchController.text.toLowerCase()) ||
+                .contains(searchController.value.text.toLowerCase()) ||
             note.title!
                 .toLowerCase()
-                .contains(searchController.text.toLowerCase())) {
+                .contains(searchController.value.text.toLowerCase())) {
           noteComponentsList.add(TaskCard(
             noteData: note,
             onTapAction: openNoteToRead,
