@@ -18,12 +18,13 @@ class NotasViewController extends GetxController {
       currentNote = Get.arguments['noteData'];
       id = Get.arguments['id'];
     }
-    print(currentNote.title);
     super.onInit();
   }
 
   @override
   void onReady() {
+
+
     print(currentNote.title);
 
     super.onReady();
