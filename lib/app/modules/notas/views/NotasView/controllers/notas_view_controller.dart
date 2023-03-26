@@ -1,11 +1,14 @@
 import 'package:calendario2/app/components/toast.dart';
 import 'package:calendario2/app/data/local/taskDatabase.dart';
 import 'package:calendario2/app/data/model/taskModel.dart';
+import 'package:calendario2/app/modules/Notas/controllers/notas_controller.dart';
 import 'package:calendario2/config/util/convert_time.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class NotasViewController extends GetxController {
+  NotasController notasController = Get.put(NotasController());
+
   RxBool headerShouldShow = false.obs;
   RxBool important = false.obs;
 
@@ -84,7 +87,7 @@ class NotasViewController extends GetxController {
         builder: (BuildContext context) {
           return AlertDialog(
             shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
             title: const Text('Borrar nota'),
             content: const Text('Se borrará permanentemente'),
             actions: <Widget>[
@@ -94,18 +97,16 @@ class NotasViewController extends GetxController {
                         color: Colors.red.shade300,
                         fontWeight: FontWeight.w500,
                         letterSpacing: 1)),
-                onPressed: () {
-                  Navigator.of(context).pop(true); //关闭对话框
-                  // DbProvider.instance.delete( widget.currentNote.id);
-
+                onPressed: () async {
+                  await DbProvider.instance.delete(id);
+                  Get.offAllNamed('/notas');
+                  notasController.refetchNotesFromDB();
                   //删除本次提醒
                   // for (int i = 0; i < 10; i++) {
                   //   push.cancelNotifications(widget.currentNote.id * 10 + i);
                   // }
 
-                  Navigator.pushReplacementNamed(context, '/home');
                   Toast.toast(context, msg: "Eliminado exitosamente!");
-                  DbProvider.instance.close();
                 },
               ),
               TextButton(
