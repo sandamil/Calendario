@@ -40,9 +40,10 @@ class CalendarWidget extends StatelessWidget {
 
                       ),
                 holidayPredicate: (day) {
-                        print(calendarController.hasEvent(day));
-                  return calendarController.hasEvent(day);
-                },
+                        // print('comprobar refactor' '${calendarController.hasEvent(day)}'
+                        // );
+                        return calendarController.hasEvent(day);
+                      },
                       weekendDays: const [DateTime.saturday, DateTime.sunday],
                       // enabledDayPredicate: (date) {
                       //   return (date.weekday != DateTime.sunday &&

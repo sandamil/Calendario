@@ -1,32 +1,30 @@
 import 'package:calendario2/app/components/toast.dart';
 import 'package:calendario2/app/data/local/taskDatabase.dart';
 import 'package:calendario2/app/data/model/taskModel.dart';
+import 'package:calendario2/config/util/convert_time.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class NotasViewController extends GetxController {
-  bool headerShouldShow = false;
+  RxBool headerShouldShow = false.obs;
+  RxBool important = false.obs;
 
-
-  late Task currentNote;
+  Rx<Task> currentNote = Task().obs;
   late int id;
-
 
   @override
   void onInit() {
-    if(Get.arguments != null){
-      currentNote = Get.arguments['noteData'];
+    if (Get.arguments != null) {
+      currentNote.value = Get.arguments['noteData'];
       id = Get.arguments['id'];
     }
+    important.value = currentNote.value.isImportant!;
+    showHeader();
     super.onInit();
   }
 
   @override
   void onReady() {
-
-
-    print(currentNote.title);
-
     super.onReady();
   }
 
@@ -37,35 +35,34 @@ class NotasViewController extends GetxController {
 
   void showHeader() async {
     Future.delayed(const Duration(milliseconds: 100), () {
-        headerShouldShow = true;
-     update();
+      headerShouldShow.value = true;
+      update();
     });
   }
 
   void handleSave() async {
-
-    DbProvider.instance.update(
+    await DbProvider.instance.update(
       Task(
-          id: currentNote.id,
-          title: currentNote.title,
-          isImportant: currentNote.isImportant,
-          site: currentNote.site,
-          notes: currentNote.notes,
-          startTimeMilliseconds: currentNote.startTimeMilliseconds,
-          endTimeMilliseconds: currentNote.endTimeMilliseconds,
-          time: currentNote.time),
+          id: currentNote.value.id,
+          title: currentNote.value.title,
+          isImportant: currentNote.value.isImportant,
+          site: currentNote.value.site,
+          notes: currentNote.value.notes,
+          startTimeMilliseconds: currentNote.value.startTimeMilliseconds,
+          endTimeMilliseconds: currentNote.value.endTimeMilliseconds,
+          time: currentNote.value.time),
     );
 
-    Toast.toast(Get.context!, msg: "Editado! ", showTime: 3000);
-    DbProvider.instance.close();
-
+    // Toast.toast(Get.context!, msg: "Editado! ", showTime: 3000);
+    // DbProvider.instance.close();
   }
 
-  void markImportantAsDirty() {
-
-      currentNote.isImportant = !currentNote.isImportant!;
-   update();
+  void markImportantAsDirty() async {
+    print(currentNote.value.isImportant);
+    important.value = !important.value!;
+    currentNote.value.isImportant = !currentNote.value.isImportant!;
     handleSave();
+    print(currentNote.value.isImportant);
   }
 
   void handleEdit() {
@@ -74,6 +71,7 @@ class NotasViewController extends GetxController {
     //     CupertinoPageRoute(
     //         builder: (context) => EditTaskPage(widget.currentNote, _warnList)));
   }
+
   ///todo share
   void handleShare() {
     //   Share.share(
@@ -86,7 +84,7 @@ class NotasViewController extends GetxController {
         builder: (BuildContext context) {
           return AlertDialog(
             shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
             title: const Text('Borrar nota'),
             content: const Text('Se borrará permanentemente'),
             actions: <Widget>[
@@ -108,7 +106,6 @@ class NotasViewController extends GetxController {
                   Navigator.pushReplacementNamed(context, '/home');
                   Toast.toast(context, msg: "Eliminado exitosamente!");
                   DbProvider.instance.close();
-
                 },
               ),
               TextButton(
@@ -123,9 +120,6 @@ class NotasViewController extends GetxController {
               )
             ],
           );
-
-
         });
   }
-
 }
