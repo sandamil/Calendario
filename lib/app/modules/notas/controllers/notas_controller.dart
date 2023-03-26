@@ -3,6 +3,7 @@ import 'package:calendario2/app/data/local/taskDatabase.dart';
 import 'package:calendario2/app/data/model/turnoCalendar.dart';
 import 'package:calendario2/app/modules/home/controllers/calendar_controller.dart';
 import 'package:calendario2/app/modules/notas/views/add_notas_view.dart';
+import 'package:calendario2/app/modules/notas/views/notas_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:jiffy/jiffy.dart';
@@ -37,6 +38,8 @@ class NotasController extends GetxController {
 
   static var warnDefaultt = 'Al principio';
 
+
+
   @override
   void onInit() {
     setNotesFromDB();
@@ -53,7 +56,7 @@ class NotasController extends GetxController {
   void onClose() {
     super.onClose();
   }
-
+///todo update notes sin cargar toda la base de datos
   setNotesFromDB() async {
     notesList.value = await DbProvider.instance.getNotesFromDB();
     update();
@@ -72,17 +75,25 @@ class NotasController extends GetxController {
     //     ));
   }
 
+  void refetchNotesFromDB() async {
+    await setNotesFromDB();
+    print("Refetched notes");
+  }
+
   openNoteToRead(Task noteData) async {
     headerShouldHide = true;
+    // await Future.delayed(const Duration(milliseconds: 230), () {});
+    Get.toNamed( '/notas-view',
+      arguments: {'id': noteData.id!, 'noteData': noteData},);
 
-    await Future.delayed(const Duration(milliseconds: 230), () {});
+      // arguments: { noteData.id!, refetchNotesFromDB, noteData},);
     // Navigator.push(
     //     Get.context,
     //     FadeRoute(
     //         page: TaskView(
     //             id: noteData.id!, triggerRefetch: refetchNotesFromDB, currentNote: noteData
     //         )));
-    await Future.delayed(const Duration(milliseconds: 300), () {});
+    // await Future.delayed(const Duration(milliseconds: 300), () {});
 
     headerShouldHide = false;
   }

@@ -9,6 +9,7 @@ abstract class Routes {
   static const CREAR_TURNO = _Paths.CREAR_TURNO;
   static const CREAR_CUADRANTE = _Paths.CREAR_CUADRANTE;
   static const NOTAS = _Paths.NOTAS;
+  static const NOTAS_VIEW = _Paths.NOTAS_VIEW;
 }
 
 abstract class _Paths {
@@ -19,4 +20,5 @@ abstract class _Paths {
   static const CREAR_TURNO = '/crear-turno';
   static const CREAR_CUADRANTE = '/crear-cuadrante';
   static const NOTAS = '/notas';
+  static const NOTAS_VIEW = '/notas-view';
 }
