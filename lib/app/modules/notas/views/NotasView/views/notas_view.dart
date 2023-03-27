@@ -45,10 +45,10 @@ class NotasView extends GetView<NotasViewController> {
               const Spacer(),
               Obx(() {
                 return IconButton(
-                  icon: Icon(controller.important.value!
+                  icon: Icon(controller.important.value
                       ? Icons.flag
                       : Icons.outlined_flag),
-                  color: controller.important.value! ? Colors.red : Colors.grey,
+                  color: controller.important.value ? Colors.red : Colors.grey,
                   onPressed: () {
                     controller.markImportantAsDirty();
                   },

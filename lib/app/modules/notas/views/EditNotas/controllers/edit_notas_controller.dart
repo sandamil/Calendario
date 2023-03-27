@@ -8,8 +8,9 @@ import 'package:jiffy/jiffy.dart';
 class EditNotasController extends GetxController {
 
   bool headerShouldHide = false;
+  RxBool important = false.obs;
 
-  TextEditingController title = TextEditingController();
+  Rx<TextEditingController> title = TextEditingController().obs;
   TextEditingController site = TextEditingController();
   TextEditingController notes = TextEditingController();
   Rx<DateTime> startTime = DateTime.now().obs;
@@ -26,20 +27,25 @@ class EditNotasController extends GetxController {
   late int id;
 
   @override
-  void onInit() {
+  void onInit() async {
     if (Get.arguments != null) {
       currentNote.value = Get.arguments['noteData'];
       id = Get.arguments['id'];
     }
-    title = new TextEditingController(text: '');
-    site = new TextEditingController(text: '');
-    notes = new TextEditingController(text: '');
-
+    print(currentNote.value.title);
+    title.value.text =  currentNote.value.title!;
+    site.text =  currentNote.value.site!;
+    notes.text =  currentNote.value.notes!;
+    startTime.value = DateTime.fromMillisecondsSinceEpoch(currentNote.value.startTimeMilliseconds!);
+    endTime.value = DateTime.fromMillisecondsSinceEpoch(currentNote.value.endTimeMilliseconds!);
+    important.value = currentNote.value.isImportant!;
     super.onInit();
   }
 
   @override
   void onReady() {
+    print(currentNote.value.title);
+
     super.onReady();
   }
 
@@ -48,44 +54,25 @@ class EditNotasController extends GetxController {
     super.onClose();
   }
 
-  void markImportantAsDirty() {
-    isImportant.value = !isImportant.value;
-    update();
+  markImportantAsDirty() async {
+    print(currentNote.value.isImportant);
+    important.value = !important.value!;
+    currentNote.value.isImportant = !currentNote.value.isImportant!;
+    print(currentNote.value.isImportant);
   }
 
-  void editNote() {
-    //Eliminar este recordatorio
-    for (int i = 0; i < 10; i++) {
-      final int _id = id! * 10 + i;
-      // push.cancelNotifications(_id);
-    }
-
-    DbProvider.instance.init().then((db) async {
-
-
-      DbProvider.instance.update(
-        Task(
-            id: currentNote.value.id,
-            title: title.text,
-            site: site.text,
-            notes: notes.text,
-            isImportant: isImportant.value,
-            startTimeMilliseconds: startTime.value.millisecondsSinceEpoch,
-            endTimeMilliseconds: endTime.value.millisecondsSinceEpoch,
-            time: Jiffy().format('yyyy-MM-dd h:mm:ss a')),
-      );
-
-      // Task item = await DbProvider.instance.select( notelist.id!);
-      // warnList.forEach((e) {
-      //   if (e['select']) {
-      //     // push.setOneTime(_item.id * 10 + e['id'], title, notes,
-      //     //     e['time'](_startTime));
-      //   }
-      // });
-     Get.offAndToNamed('/notas');
-      // Navigator.pushNamed(context, '/hoGet.tome');
-      Toast.toast(Get.context!, msg: "Editado! ", showTime: 3000);
-    });
+   editNote() async {
+    await DbProvider.instance.update(
+      Task(
+          id: currentNote.value.id,
+          title: currentNote.value.title,
+          isImportant: currentNote.value.isImportant,
+          site: currentNote.value.site,
+          notes: currentNote.value.notes,
+          startTimeMilliseconds: currentNote.value.startTimeMilliseconds,
+          endTimeMilliseconds: currentNote.value.endTimeMilliseconds,
+          time: currentNote.value.time),
+    );
   }
 
 

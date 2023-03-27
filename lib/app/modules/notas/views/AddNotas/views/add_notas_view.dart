@@ -1,6 +1,4 @@
 import 'package:calendario2/app/modules/home/widgets/calendar/widget/warn-select.dart';
-import 'package:calendario2/app/modules/notas/views/widgets/generalFormField.dart';
-import 'package:calendario2/app/modules/notas/views/widgets/generalLineBetween.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart' as dp;
@@ -23,21 +21,15 @@ class AddNotasView extends GetView<AddNotasController> {
         centerTitle: true,
         elevation: 0.0,
         backgroundColor: Colors.transparent,
-        title: AnimatedContainer(
-          duration: const Duration(milliseconds: 200),
-          curve: Curves.easeIn,
-//          margin: EdgeInsets.only(top: 8, bottom: 32, left: 10),
-          width: controller.headerShouldHide ? 0 : 200,
-          child: Text(
-            'Añadir Nota',
-            style: TextStyle(
-                fontFamily: 'ZillaSlab',
-                fontWeight: FontWeight.w700,
-                fontSize: 24.sp,
-                color: theme.primaryColor),
-            overflow: TextOverflow.clip,
-            softWrap: false,
-          ),
+        title: Text(
+          'Añadir Nota',
+          style: TextStyle(
+              fontFamily: 'ZillaSlab',
+              fontWeight: FontWeight.w700,
+              fontSize: 24.sp,
+              color: theme.primaryColor),
+          overflow: TextOverflow.clip,
+          softWrap: false,
         ),
         leading: IconButton(
             icon: Icon(Icons.clear, color: Theme.of(context).primaryColor),
@@ -51,7 +43,6 @@ class AddNotasView extends GetView<AddNotasController> {
             onPressed: () async {
               controller.addTravelEvent();
               await controller.addEvent();
-              Navigator.pop(context);
               Navigator.of(context).pushReplacementNamed('/notas');
             },
           )
@@ -61,17 +52,17 @@ class AddNotasView extends GetView<AddNotasController> {
         return Center(
           child: Form(
             // key: _formKey,
-              child: ListView(
+              child: Column(
                 children: <Widget>[
-                  GeneralLineBetween(),
+                  _buildLineBetween(),
 
                   Container(
                     margin: const EdgeInsets.symmetric(horizontal: 6),
-                    child: GeneralFormField(
+                    child: _buildGeneralFormField(
                         controller.title, 'Titulo del evento', 1),
                     // key: keyButton13
                   ),
-                  GeneralLineBetween(),
+                  _buildLineBetween(),
 
                   Column(
                     // key: keyButton14,
@@ -171,7 +162,7 @@ class AddNotasView extends GetView<AddNotasController> {
                     ],
                   ),
 
-                  GeneralLineBetween(),
+                  _buildLineBetween(),
                   TextButton(
                       onPressed: ()async{
                         Navigator.push(
@@ -221,7 +212,7 @@ class AddNotasView extends GetView<AddNotasController> {
                             )
                           ])),
 
-                  GeneralLineBetween(),
+                  _buildLineBetween(),
                   TextButton(
                     // key: keyButton16,
                       onPressed: controller.markImportantAsDirty,
@@ -248,21 +239,21 @@ class AddNotasView extends GetView<AddNotasController> {
                               ],
                             )
                           ])),
-                  GeneralLineBetween(),
+                  _buildLineBetween(),
                   Column(
                     // key: keyButton17,
                     children: <Widget>[
                       Container(
                         margin: const EdgeInsets.symmetric(horizontal: 6),
                         child:
-                        GeneralFormField(controller.site, 'Ubicación', 2),
+                        _buildGeneralFormField(controller.site, 'Ubicación', 2),
                       ),
                       const SizedBox(
                         height: 6,
                       ),
                       Container(
                         margin: const EdgeInsets.symmetric(horizontal: 6),
-                        child: GeneralFormField(
+                        child: _buildGeneralFormField(
                             controller.notes, 'Observaciones', 8),
                       ),
                     ],
@@ -294,7 +285,47 @@ class AddNotasView extends GetView<AddNotasController> {
     );
   }
 
+  TextFormField _buildGeneralFormField(
+      TextEditingController value, String hint, int lines) {
+    final double _radiusNum = 10;
+    return TextFormField(
+      controller: value,
+      decoration: InputDecoration(
+        filled: true,
+        contentPadding: const EdgeInsets.only(left: 20, top: 20),
+        fillColor: Colors.white12,
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(_radiusNum),
+          ),
+          borderSide: BorderSide.none,
+        ),
+        focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(_radiusNum),
+            ),
+            borderSide: const BorderSide(
+              color: Colors.green,
+              width: 2,
+            )),
+        hintText: hint,
+      ),
+      maxLines: lines,
+    );
+  }
 
+  Widget _buildLineBetween() {
+    return Container(
+      padding: const EdgeInsets.only(top: 10, bottom: 10),
+      child: Center(
+        child: Container(
+          width: 320, //max-width is 240
+          height: 1,
+          color: Colors.grey[300],
+        ),
+      ),
+    );
+  }
 
 
 }
