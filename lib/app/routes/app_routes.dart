@@ -10,6 +10,8 @@ abstract class Routes {
   static const CREAR_CUADRANTE = _Paths.CREAR_CUADRANTE;
   static const NOTAS = _Paths.NOTAS;
   static const NOTAS_VIEW = _Paths.NOTAS_VIEW;
+  static const ADD_NOTAS = _Paths.ADD_NOTAS;
+  static const EDIT_NOTAS = _Paths.EDIT_NOTAS;
 }
 
 abstract class _Paths {
@@ -21,4 +23,6 @@ abstract class _Paths {
   static const CREAR_CUADRANTE = '/crear-cuadrante';
   static const NOTAS = '/notas';
   static const NOTAS_VIEW = '/notas-view';
+  static const ADD_NOTAS = '/add-notas';
+  static const EDIT_NOTAS = '/edit-notas';
 }

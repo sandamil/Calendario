@@ -8,8 +8,8 @@ class ButtonRowView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetX<NotasController>(
-      init: NotasController(),
+    return GetX<NotasListController>(
+      init: NotasListController(),
       builder: (controller) {
         return Padding(
           padding: const EdgeInsets.only(left: 10, right: 10),

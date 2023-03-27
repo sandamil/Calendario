@@ -1,3 +1,4 @@
+import 'package:calendario2/app/modules/Notas/controllers/notas_controller.dart';
 import 'package:calendario2/app/modules/home/views/home_view.dart';
 import 'package:calendario2/app/modules/notas/views/widgets/important_indicator_text_view.dart';
 import 'package:flutter/material.dart';
@@ -5,11 +6,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
 
-import '../controllers/notas_controller.dart';
 import 'widgets/button_row_view.dart';
 import 'widgets/taskCard.dart';
 
-class NotasListView extends GetView<NotasController> {
+class NotasListView extends GetView<NotasListController> {
   const NotasListView({Key? key}) : super(key: key);
 
   @override

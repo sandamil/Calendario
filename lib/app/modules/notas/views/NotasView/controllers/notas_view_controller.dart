@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class NotasViewController extends GetxController {
-  NotasController notasController = Get.put(NotasController());
+  NotasListController notasListController = Get.put(NotasListController());
 
   RxBool headerShouldShow = false.obs;
   RxBool important = false.obs;
@@ -69,6 +69,10 @@ class NotasViewController extends GetxController {
   }
 
   void handleEdit() {
+    Get.toNamed(
+      '/edit-notas',
+      arguments: {'id': currentNote.value.id!, 'noteData': currentNote.value},
+    );
     // Navigator.push(
     //     context,
     //     CupertinoPageRoute(
@@ -100,7 +104,7 @@ class NotasViewController extends GetxController {
                 onPressed: () async {
                   await DbProvider.instance.delete(id);
                   Get.offAllNamed('/notas');
-                  notasController.refetchNotesFromDB();
+                  notasListController.refetchNotesFromDB();
                   //删除本次提醒
                   // for (int i = 0; i < 10; i++) {
                   //   push.cancelNotifications(widget.currentNote.id * 10 + i);

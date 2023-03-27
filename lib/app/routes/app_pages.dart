@@ -1,20 +1,23 @@
 import 'package:get/get.dart';
 
+import '../modules/Notas/views/AddNotas/bindings/add_notas_binding.dart';
+import '../modules/Notas/views/AddNotas/views/add_notas_view.dart';
 import '../modules/CrearCuadrante/bindings/crear_cuadrante_binding.dart';
 import '../modules/CrearCuadrante/views/crear_cuadrante_view.dart';
 import '../modules/CrearTurno/bindings/crear_turno_binding.dart';
 import '../modules/CrearTurno/views/turno_view.dart';
+import '../modules/Notas/views/EditNotas/bindings/edit_notas_binding.dart';
+import '../modules/Notas/views/EditNotas/views/edit_notas_view.dart';
+import '../modules/Notas/bindings/notas_binding.dart';
+import '../modules/Notas/views/NotasView/bindings/notas_view_binding.dart';
+import '../modules/Notas/views/NotasView/views/notas_view.dart';
+import '../modules/Notas/views/notas_list_view.dart';
 import '../modules/ajustes/bindings/ajustes_binding.dart';
 import '../modules/ajustes/views/ajustes_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/menu/bindings/menu_binding.dart';
 import '../modules/menu/views/menu_view.dart';
-import 'package:calendario2/app/modules/Notas/bindings/notas_binding.dart';
-import 'package:calendario2/app/modules/Notas/views/notas_list_view.dart';
-import 'package:calendario2/app/modules/Notas/views/NotasView/bindings/notas_view_binding.dart';
-import 'package:calendario2/app/modules/Notas/views/NotasView/views/notas_view.dart';
-
 
 part 'app_routes.dart';
 
@@ -52,12 +55,22 @@ class AppPages {
     GetPage(
       name: _Paths.NOTAS,
       page: () => const NotasListView(),
-      binding: NotasBinding(),
+      binding: NotasListBinding(),
     ),
     GetPage(
       name: _Paths.NOTAS_VIEW,
       page: () => const NotasView(),
       binding: NotasViewBinding(),
+    ),
+    GetPage(
+      name: _Paths.ADD_NOTAS,
+      page: () => const AddNotasView(),
+      binding: AddNotasBinding(),
+    ),
+    GetPage(
+      name: _Paths.EDIT_NOTAS,
+      page: () => const EditNotasView(),
+      binding: EditNotasBinding(),
     ),
   ];
 }
