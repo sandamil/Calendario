@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:math';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
@@ -17,12 +18,15 @@ import 'widget/day_builder.dart';
 import 'widget/marker_builder.dart';
 
 class CalendarWidget extends StatelessWidget {
+
   final calendarController = Get.put(CalendarController());
 
   CalendarWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
+    var theme = Theme.of(context);
+
     return Column(
       children: [
         Container(
@@ -74,66 +78,154 @@ class CalendarWidget extends StatelessWidget {
                       ///
 
                       calendarBuilders: CalendarBuilders(
+                        ///======holidayBuilder:============== ============== ============== ==============
+                        ///
+
+                        markerBuilder: (context, day, List<Cuadrante> events)
+                        {
+                          // if (events.isEmpty) return SizedBox();
+                          return Container(
+                            margin: EdgeInsets.only(top: 20.h),
+                            child: ListView.builder(
+                                shrinkWrap: true,
+                                itemCount: events.length,
+                                itemBuilder: (context, index) {
+                                  return Container(
+                                    decoration: BoxDecoration(
+                                      color: HexColor(events[index].color!).withAlpha(600),
+                                      border: Border.all(
+                                          color: HexColor(events[index].color!), width: 1),
+                                      borderRadius: BorderRadius.circular(5.r),
+                                    ),
+                                    height: 18.h,
+                                    child: Align(
+                                      alignment: Alignment.center,
+                                      child: Text(events[index].title!.toUpperCase(),
+                                          style: TextStyle(
+                                              fontSize: 14.sp,
+                                              color: HexColor(events[index].color!),
+
+                                              fontWeight: FontWeight.w900)),
+                                    ),
+                                  );
+                                }),
+                          );
+                        },
+                        // {
+                        //   return Padding(
+                        //     padding: const EdgeInsets.all(2),
+                        //     child: Column(
+                        //       children: [
+                        //         SizedBox(
+                        //           height: 15.h,
+                        //         ),
+                        //         Expanded(
+                        //           child: SingleChildScrollView(
+                        //             child: Column(
+                        //               children: events
+                        //                   .map((event) => Padding(
+                        //                         padding:
+                        //                             EdgeInsets.only(top: 2.h),
+                        //                         child: Container(
+                        //                             // margin: const EdgeInsets.all(1.0),
+                        //                             //   padding: const EdgeInsets.all(1.0),
+                        //                             decoration: BoxDecoration(
+                        //                               color: event.color != null
+                        //                                   ? HexColor(
+                        //                                           event.color!)
+                        //                                       .withAlpha(600)
+                        //                                   : Theme.of(context)
+                        //                                       .highlightColor,
+                        //                               border: event.color !=
+                        //                                       null
+                        //                                   ? Border.all(
+                        //                                       color: HexColor(
+                        //                                           event.color!),
+                        //                                       width: 1)
+                        //                                   : Border.all(
+                        //                                       color: Theme.of(
+                        //                                               context)
+                        //                                           .highlightColor,
+                        //                                       width: 1),
+                        //                               borderRadius:
+                        //                                   BorderRadius.circular(
+                        //                                       5.r),
+                        //                             ),
+                        //                             height: 18.h,
+                        //                             //  padding: EdgeInsets.symmetric(horizontal: 3.0, vertical: 0.0),
+                        //                             child: Container(
+                        //                               child: event.title != null
+                        //                                   ? Stack(
+                        //                                       children: <
+                        //                                           Widget>[
+                        //                                         Positioned.fill(
+                        //                                           bottom: 0.0,
+                        //                                           child: Align(
+                        //                                             alignment:
+                        //                                                 Alignment
+                        //                                                     .center,
+                        //                                             child: Text(
+                        //                                                 event
+                        //                                                     .title!
+                        //                                                     .toUpperCase(),
+                        //                                                 style: TextStyle(
+                        //                                                     fontSize: 14
+                        //                                                         .sp,
+                        //                                                     color: event.color != null
+                        //                                                         ? HexColor(event.color!)
+                        //                                                         : Theme.of(context).highlightColor,
+                        //                                                     fontWeight: FontWeight.w900)),
+                        //                                           ),
+                        //                                         )
+                        //                                       ],
+                        //                                     )
+                        //                                   : null,
+                        //                             )),
+                        //                       ))
+                        //                   .toList(),
+                        //             ),
+                        //           ),
+                        //         ),
+                        //       ],
+                        //     ),
+                        //   );
+                        // },
+
+                        // =>
+                        //     MarkerBuilderWidget(
+                        //       key: UniqueKey(),
+                        //       day: day,
+                        //       events: events,
+                        //     ),
+
+                        ///========== holidayBuilder:========================================
+                        ///
+
                         holidayBuilder: (context, day, focusDay) {
                           final events = calendarController.getEventsOfDay(day);
-                          return Padding(
-                            padding: const EdgeInsets.all(2),
-                            child: Container(
-                              width: double.maxFinite,
-                              height: double.maxFinite,
-                              decoration: BoxDecoration(
-                                color: Colors.red,
-                                border: Border.all(
-                                    width: 1, color: Colors.redAccent),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 5),
-                                child: Column(
-                                  children: [
-                                    Text(
-                                      day.day.toString(),
-                                    ),
-                                    SizedBox(
-                                      height: 5,
-                                    ),
-                                    Expanded(
-                                      child: SingleChildScrollView(
-                                        child: Column(
-                                          children: events
-                                              .map(
-                                                (event) => GestureDetector(
-                                                  onTap: () {},
-                                                  child: Container(
-                                                    margin: EdgeInsets.only(
-                                                        bottom: 5),
-                                                    height: 20,
-                                                    width: double.maxFinite,
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.redAccent,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              4),
-                                                    ),
-                                                    child: Align(
-                                                      child: Text(
-                                                        event.title!,
-                                                        maxLines: 1,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              )
-                                              .toList(),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          );
+                          return ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: events.length,
+                              itemBuilder: (context, index) {
+                                return Container(
+                                  decoration: BoxDecoration(
+                                    color: theme.primaryColor,
+                                    border: Border.all(
+                                        color: theme.primaryColor, width: 1),
+                                    borderRadius: BorderRadius.circular(5.r),
+                                  ),
+                                  height: 18.h,
+                                  child: Align(
+                                    alignment: Alignment.bottomCenter,
+                                    child: Text(events[index].title!.toUpperCase(),
+                                        style: TextStyle(
+                                            fontSize: 14.sp,
+
+
+                                            fontWeight: FontWeight.w900),
+                                  ),
+                                ));
+                              });
                         },
                         defaultBuilder: (context, day, focusedDay) =>
                             DayBuilderWidget(date: day, dayType: ''),
@@ -145,11 +237,7 @@ class CalendarWidget extends StatelessWidget {
                         //     DayBuilderWidget(date: day, dayType: 'holiday'),
                         outsideBuilder: (context, date, events) =>
                             DayBuilderWidget(date: date, dayType: 'outside'),
-                        markerBuilder: (context, day, events) =>
-                            MarkerBuilderWidget(
-                          day: day,
-                          events: events,
-                        ),
+
                         dowBuilder: (context, day) {
                           if (day.weekday == DateTime.sunday ||
                               day.weekday == DateTime.saturday) {

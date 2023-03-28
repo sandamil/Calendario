@@ -179,15 +179,4 @@ class DataValidator {
     return false;
   }
 }
-List<Task> mockData = [
-  Task(
-    title: 'Hola',
-    startTimeMilliseconds: 1679611528918,
-   ),
-  Task(
-    title: 'Work From Home Opportunity - Webinar',
-  ),
-  Task(
-    title: 'Free Speed Reading Course - Ho Chi Minh City',
-  ),
-];
+

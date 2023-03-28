@@ -14,7 +14,6 @@ class DBHelper {
   static Database? _database;
   static const String _cuadrantes = 'Cuadrante';
   static const String _turnos = 'Turnos';
-  static const String _notas = 'Notas';
   static const int _version = 1;
 
   Future<Database?> get database async {

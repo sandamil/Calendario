@@ -11,8 +11,8 @@ class EditNotasController extends GetxController {
   RxBool important = false.obs;
 
   Rx<TextEditingController> title = TextEditingController().obs;
-  TextEditingController site = TextEditingController();
-  TextEditingController notes = TextEditingController();
+  Rx<TextEditingController> site = TextEditingController().obs;
+  Rx<TextEditingController> notes = TextEditingController().obs;
   Rx<DateTime> startTime = DateTime.now().obs;
   Rx<DateTime> endTime = DateTime.now().obs;
   RxBool isImportant = false.obs;
@@ -34,8 +34,8 @@ class EditNotasController extends GetxController {
     }
     print(currentNote.value.title);
     title.value.text =  currentNote.value.title!;
-    site.text =  currentNote.value.site!;
-    notes.text =  currentNote.value.notes!;
+    site.value.text =  currentNote.value.site!;
+    notes.value.text =  currentNote.value.notes!;
     startTime.value = DateTime.fromMillisecondsSinceEpoch(currentNote.value.startTimeMilliseconds!);
     endTime.value = DateTime.fromMillisecondsSinceEpoch(currentNote.value.endTimeMilliseconds!);
     important.value = currentNote.value.isImportant!;
@@ -44,8 +44,6 @@ class EditNotasController extends GetxController {
 
   @override
   void onReady() {
-    print(currentNote.value.title);
-
     super.onReady();
   }
 
@@ -65,12 +63,12 @@ class EditNotasController extends GetxController {
     await DbProvider.instance.update(
       Task(
           id: currentNote.value.id,
-          title: currentNote.value.title,
+          title: title.value.text,
           isImportant: currentNote.value.isImportant,
-          site: currentNote.value.site,
-          notes: currentNote.value.notes,
-          startTimeMilliseconds: currentNote.value.startTimeMilliseconds,
-          endTimeMilliseconds: currentNote.value.endTimeMilliseconds,
+          site: site.value.text,
+          notes: notes.value.text,
+          startTimeMilliseconds: startTime.value.millisecondsSinceEpoch,
+          endTimeMilliseconds: endTime.value.millisecondsSinceEpoch,
           time: currentNote.value.time),
     );
   }

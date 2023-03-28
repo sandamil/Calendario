@@ -211,7 +211,7 @@ class EditNotasView extends GetView<EditNotasController> {
               GeneralLineBetween(),
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 6.w),
-                child: _buildGeneralFormField(controller.site, 'Ubicación', 2),
+                child: _buildGeneralFormField(controller.site.value, 'Ubicación', 2),
               ),
               const SizedBox(
                 height: 6,
@@ -219,7 +219,7 @@ class EditNotasView extends GetView<EditNotasController> {
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 6.w),
                 child: _buildGeneralFormField(
-                    controller.notes, 'Observaciones', 8),
+                    controller.notes.value, 'Observaciones', 8),
               ),
             ],
           )),

@@ -6,7 +6,6 @@ import 'package:sqflite/sqflite.dart';
 
 import '../model/taskModel.dart';
 
-
 class DbProvider {
   final String taskTable = 'travel';
 
@@ -36,8 +35,14 @@ class DbProvider {
   }
 
   void _onCreate(Database db, int version) async {
-    await db.execute(
-        'CREATE TABLE IF NOT EXISTS $taskTable(id INTEGER PRIMARY KEY, title TEXT, site TEXT, notes TEXT, startTimeMilliseconds INTEGER, endTimeMilliseconds INTEGER, time TEXT, isImportant INTEGER)');
+    await db.execute('CREATE TABLE IF NOT EXISTS $taskTable('
+        'id INTEGER PRIMARY KEY, '
+        'title TEXT, site TEXT, '
+        'notes TEXT, '
+        'startTimeMilliseconds INTEGER, '
+        'endTimeMilliseconds INTEGER, '
+        'time TEXT, '
+        'isImportant INTEGER)');
   }
 
   Future<int> insert(Task notas) async {

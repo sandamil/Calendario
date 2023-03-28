@@ -13,62 +13,56 @@ class MarkerBuilderWidget extends StatelessWidget {
   });
 
   final DateTime day;
-  final  events;
+  final events;
 
   @override
   Widget build(BuildContext context) {
-    CalendarController calendarController = CalendarController();
-    // calendarController.selectedEvents.value = events;
-    return events.isNotEmpty
-        ? Container(
-            margin: EdgeInsets.only(top: 12.h),
-            child: ListView.builder(
-                padding: const EdgeInsets.all(8),
-                itemCount: events.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return Padding(
-                    padding: EdgeInsets.only(top: 2.h),
-                    child: Container(
-                        // margin: const EdgeInsets.all(1.0),
-                        //   padding: const EdgeInsets.all(1.0),
-                        decoration: BoxDecoration(
-                          color: events[index].color != null
-                              ? HexColor(events[index].color!).withAlpha(600)
-                              : Theme.of(context).highlightColor,
-                          border:  events[index].color != null
-                              ? Border.all(
-                                  color: HexColor(events[index].color), width: 1)
-                              : Border.all(
-                              color: Theme.of(context).highlightColor, width: 1),
-                          borderRadius: BorderRadius.circular(5.r),
+    print('MarkerBuilderWidget');
+    // return events.isNotEmpty
+    //     ?
+    return Container(
+      margin: EdgeInsets.only(top: 12.h),
+      child: ListView.builder(
+          shrinkWrap: true,
+
+          padding: const EdgeInsets.all(8),
+          itemCount: events.length,
+          itemBuilder: (BuildContext context, final int index) {
+            return Padding(
+              padding: EdgeInsets.only(top: 2.h),
+              child: Container(
+                  // margin: const EdgeInsets.all(1.0),
+                  //   padding: const EdgeInsets.all(1.0),
+                  decoration: BoxDecoration(
+                    color: HexColor(events[index].color!).withAlpha(600),
+                    border: Border.all(
+                        color: HexColor(events[index].color), width: 1),
+                    borderRadius: BorderRadius.circular(5.r),
+                  ),
+                  height: 18.h,
+                  //  padding: EdgeInsets.symmetric(horizontal: 3.0, vertical: 0.0),
+                  child: Container(
+                      child: Stack(
+                    children: <Widget>[
+                      Positioned.fill(
+                        bottom: 0.0,
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: Text(events[index].title!.toUpperCase(),
+                              style: TextStyle(
+                                  fontSize: 14.sp,
+                                  color: HexColor(events[index].color!),
+
+                                  fontWeight: FontWeight.w900)),
                         ),
-                        height: 18.h,
-                        //  padding: EdgeInsets.symmetric(horizontal: 3.0, vertical: 0.0),
-                        child: Container(
-                          child: events[index].title != null
-                              ? Stack(
-                                  children: <Widget>[
-                                    Positioned.fill(
-                                      bottom: 0.0,
-                                      child: Align(
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                            events[index].title!.toUpperCase(),
-                                            style: TextStyle(
-                                                fontSize: 14.sp,
-                                                color: events[index].color != null
-                                                    ? HexColor(events[index].color!)
-                                                :Theme.of(context).highlightColor,
-                                                fontWeight: FontWeight.w900)),
-                                      ),
-                                    )
-                                  ],
-                                )
-                              : null,
-                        )),
-                  );
-                }),
-          )
-        : Container();
+                      )
+                    ],
+                  )),
+              ),
+            );
+          }),
+    )
+        // : Container()
+        ;
   }
 }
