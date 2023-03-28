@@ -19,7 +19,7 @@ import 'widget/marker_builder.dart';
 class CalendarWidget extends StatelessWidget {
   final calendarController = Get.put(CalendarController());
 
-   CalendarWidget({super.key});
+  CalendarWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -31,15 +31,12 @@ class CalendarWidget extends StatelessWidget {
             () {
               return calendarController.isReady.value
                   ? TableCalendar(
-
                       headerVisible: false,
                       locale: 'es_ES',
                       calendarStyle: const CalendarStyle(
-                          outsideDaysVisible: false,
-
-
+                        outsideDaysVisible: false,
                       ),
-                holidayPredicate: (day) {
+                      holidayPredicate: (day) {
                         // print('comprobar refactor' '${calendarController.hasEvent(day)}'
                         // );
                         return calendarController.hasEvent(day);
@@ -50,9 +47,10 @@ class CalendarWidget extends StatelessWidget {
                       //       date.weekday != DateTime.saturday);
                       // },
                       rowHeight: 90.h,
-                      firstDay: DateTime.now().subtract(Duration(days: 200, hours: 23)),
-                      lastDay:
-                          DateTime.now().add(const Duration(days: 600, hours: 23)),
+                      firstDay: DateTime.now()
+                          .subtract(Duration(days: 200, hours: 23)),
+                      lastDay: DateTime.now()
+                          .add(const Duration(days: 600, hours: 23)),
                       focusedDay: calendarController.focusedDay,
                       // calendarFormat: controller.calendarFormat,
                       eventLoader: calendarController.getEventForDay,
@@ -85,11 +83,13 @@ class CalendarWidget extends StatelessWidget {
                               height: double.maxFinite,
                               decoration: BoxDecoration(
                                 color: Colors.red,
-                                border: Border.all(width: 1, color: Colors.redAccent),
+                                border: Border.all(
+                                    width: 1, color: Colors.redAccent),
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 5),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 5),
                                 child: Column(
                                   children: [
                                     Text(
@@ -104,27 +104,27 @@ class CalendarWidget extends StatelessWidget {
                                           children: events
                                               .map(
                                                 (event) => GestureDetector(
-                                              onTap: () {
-
-                                              },
-                                              child: Container(
-                                                margin: EdgeInsets.only(bottom: 5),
-                                                height: 20,
-                                                width: double.maxFinite,
-                                                decoration: BoxDecoration(
-                                                  color: Colors.redAccent,
-                                                  borderRadius: BorderRadius.circular(4),
-                                                ),
-                                                child: Align(
-                                                  child: Text(
-                                                    event.title!,
-                                                    maxLines: 1,
-
+                                                  onTap: () {},
+                                                  child: Container(
+                                                    margin: EdgeInsets.only(
+                                                        bottom: 5),
+                                                    height: 20,
+                                                    width: double.maxFinite,
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.redAccent,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              4),
+                                                    ),
+                                                    child: Align(
+                                                      child: Text(
+                                                        event.title!,
+                                                        maxLines: 1,
+                                                      ),
+                                                    ),
                                                   ),
                                                 ),
-                                              ),
-                                            ),
-                                          )
+                                              )
                                               .toList(),
                                         ),
                                       ),
@@ -151,7 +151,6 @@ class CalendarWidget extends StatelessWidget {
                           events: events,
                         ),
                         dowBuilder: (context, day) {
-
                           if (day.weekday == DateTime.sunday ||
                               day.weekday == DateTime.saturday) {
                             final text = DateFormat.E('es').format(day);
