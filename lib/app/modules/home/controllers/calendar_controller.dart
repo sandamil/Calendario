@@ -39,8 +39,7 @@ class CalendarController extends GetxController {
   RxMap<DateTime, List<Cuadrante>> cuadranteMap =
       <DateTime, List<Cuadrante>>{}.obs;
 
-  RxMap<DateTime, List<Task>> notasMap =
-      <DateTime, List<Task>>{}.obs;
+  RxMap<DateTime, List<Task>> notasMap = <DateTime, List<Task>>{}.obs;
 
   RxList<Cuadrante> cuadrante = <Cuadrante>[].obs;
 
@@ -48,10 +47,14 @@ class CalendarController extends GetxController {
 
   RxBool isReady = false.obs;
 
+///////////////oninit
+  /// ==
+
   void onInit() async {
-    await fetchCuadrante();
+   await fetchCuadrante();
     await fetchTurno();
-    await getNotesFromDB();
+    await getListEvent();
+    print(listEvent.length);
     super.onInit();
   }
 
@@ -62,7 +65,8 @@ class CalendarController extends GetxController {
     }
     selectedEvents.value = getEventForDay(selectedDay.value);
     update();
-    Get.dialog(CustomAlertDilogDaySelected( selectedDate: selectedDate, turno: turno.value));
+    Get.dialog(CustomAlertDilogDaySelected(
+        selectedDate: selectedDate, turno: turno.value));
   }
 
   onPageChanged(focusedDay) {
@@ -118,12 +122,72 @@ class CalendarController extends GetxController {
     return turno;
   }
 
-
-  showPopUp(context, selectedDate, turno) => showDialog(
+  showPopUp(context, selectedDate, turno) {
+    return showDialog(
       context: context,
       builder: (context) {
-        return CustomAlertDialogTurnoList(selectedDate: selectedDate, turno: turno);
-      },);
+        return CustomAlertDialogTurnoList(
+            selectedDate: selectedDate, turno: turno);
+      },
+    );
+  }
+
+///////////////     Notas
+/// ==
+
+
+
+  RxList<Task> listEvent = <Task>[].obs;
+
+   getListEvent() async {
+    listEvent.value = await DbProvider.instance.getNotesFromDB();
+  }
+
+  bool hasEvent(DateTime day) {
+    bool check = false;
+    if (listEvent.isNotEmpty) {
+      listEvent.value.forEach((event) {
+        if (DataValidator.isSameDay(DateTime.fromMillisecondsSinceEpoch(event.startTimeMilliseconds!), day)) {
+          check = true;
+        }
+      });
+    }
+    return check;
+  }
+
+  List<Task> getEventsOfDay(DateTime day) {
+    List<Task> list = [];
+    listEvent.value.forEach((event) {
+      if (DataValidator.isSameDay(DateTime.fromMillisecondsSinceEpoch(event.startTimeMilliseconds!), day)) {
+        list.add(event);
+      }
+    });
+    return list;
+  }
+
 
 
 }
+
+class DataValidator {
+  static bool isSameDay(DateTime first, DateTime second) {
+    if (first.year == second.year &&
+        first.month == second.month &&
+        first.day == second.day) {
+      return true;
+    }
+    return false;
+  }
+}
+List<Task> mockData = [
+  Task(
+    title: 'Hola',
+    startTimeMilliseconds: 1679611528918,
+   ),
+  Task(
+    title: 'Work From Home Opportunity - Webinar',
+  ),
+  Task(
+    title: 'Free Speed Reading Course - Ho Chi Minh City',
+  ),
+];

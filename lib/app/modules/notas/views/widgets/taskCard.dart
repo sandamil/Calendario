@@ -1,4 +1,5 @@
 import 'package:calendario2/app/data/model/taskModel.dart';
+import 'package:calendario2/app/data/model/turnoCalendar.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 
@@ -38,7 +39,9 @@ class TaskCard extends StatelessWidget {
   Widget build(BuildContext context) {
     var date = DateTime.fromMillisecondsSinceEpoch(noteData.startTimeMilliseconds!);
     String neatDate = DateFormat('dd-MM-yyyy HH:mm').format(date);
-    print(noteData.endTimeMilliseconds);
+
+    // print(noteData.endTimeMilliseconds);
+
     Color color = colorList.elementAt(noteData.title!.length % colorList.length);
 
     return Slidable(

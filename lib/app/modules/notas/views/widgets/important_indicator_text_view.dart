@@ -9,7 +9,7 @@ class ImportantIndicatorTextView extends GetView {
 
   @override
   Widget build(BuildContext context) {
-    NotasController controller = NotasController();
+    NotasListController controller = NotasListController();
 
     return Obx(() {
       return AnimatedCrossFade(

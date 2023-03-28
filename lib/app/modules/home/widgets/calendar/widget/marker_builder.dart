@@ -32,13 +32,14 @@ class MarkerBuilderWidget extends StatelessWidget {
                         // margin: const EdgeInsets.all(1.0),
                         //   padding: const EdgeInsets.all(1.0),
                         decoration: BoxDecoration(
-                          color: events != null
+                          color: events[index].color != null
                               ? HexColor(events[index].color!).withAlpha(600)
                               : Theme.of(context).highlightColor,
-                          border: events != null
+                          border:  events[index].color != null
                               ? Border.all(
-                                  color: HexColor(events[index].color!), width: 1)
-                              : null,
+                                  color: HexColor(events[index].color), width: 1)
+                              : Border.all(
+                              color: Theme.of(context).highlightColor, width: 1),
                           borderRadius: BorderRadius.circular(5.r),
                         ),
                         height: 18.h,
@@ -55,8 +56,9 @@ class MarkerBuilderWidget extends StatelessWidget {
                                             events[index].title!.toUpperCase(),
                                             style: TextStyle(
                                                 fontSize: 14.sp,
-                                                color:
-                                                    HexColor(events[index].color!),
+                                                color: events[index].color != null
+                                                    ? HexColor(events[index].color!)
+                                                :Theme.of(context).highlightColor,
                                                 fontWeight: FontWeight.w900)),
                                       ),
                                     )

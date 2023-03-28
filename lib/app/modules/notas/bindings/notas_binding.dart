@@ -2,11 +2,11 @@ import 'package:get/get.dart';
 
 import '../controllers/notas_controller.dart';
 
-class NotasBinding extends Bindings {
+class NotasListBinding extends Bindings {
   @override
   void dependencies() {
-    Get.lazyPut<NotasController>(
-      () => NotasController(),
+    Get.lazyPut<NotasListController>(
+      () => NotasListController(),
     );
   }
 }

@@ -1,35 +1,26 @@
 import 'package:calendario2/app/data/local/taskDatabase.dart';
-import 'package:calendario2/app/modules/notas/views/add_notas_view.dart';
+import 'package:calendario2/app/modules/home/controllers/calendar_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../data/model/taskModel.dart';
+import '../views/widgets/taskCard.dart';
 
-class NotasController extends GetxController {
+class NotasListController extends GetxController {
+  CalendarController calendarController = CalendarController();
 
   bool headerShouldHide = false;
   RxBool isFlagOn = false.obs;
   RxBool isSearchEmpty = true.obs;
 
-  List<Task> notesList = [];
+  RxList<Task> notesList = <Task>[].obs;
 
-  TextEditingController searchController = TextEditingController();
+  Rx<TextEditingController> searchController = TextEditingController().obs;
 
-  final TextEditingController _title = TextEditingController();
-  final TextEditingController _site = TextEditingController();
-  final TextEditingController _notes = TextEditingController();
-
-  late DateTime _startTime;
-  late DateTime _endTime;
-  bool isImportant = false;
-
-
-
-
-  final count = 0.obs;
   @override
   void onInit() {
     setNotesFromDB();
+    print('notesList.length =========' '${notesList.value.length}');
     super.onInit();
   }
 
@@ -43,112 +34,86 @@ class NotasController extends GetxController {
     super.onClose();
   }
 
+  ///todo update notes sin cargar toda la base de datos
   setNotesFromDB() async {
-    notesList = await DbProvider.instance.getNotesFromDB();
+    notesList.value = await DbProvider.instance.getNotesFromDB();
     update();
 
-    return notesList;
+    return notesList.value;
   }
 
-  void increment() => count.value++;
-
   void gotoEditNote() {
-    Get.offAll(const AddNotasView(),
-        duration: const Duration(milliseconds: 100),
-        transition: Transition.leftToRight);
-    // Navigator.push(
-    //     context,
-    //     MaterialPageRoute(
-    //       builder: (context) => AddTaskPage(widget.time!, widget.events ),
-    //     ));
+    Get.toNamed('/add-notas');
+  }
+
+  void refetchNotesFromDB() async {
+    await setNotesFromDB();
+    print("Refetched notes");
   }
 
   openNoteToRead(Task noteData) async {
     headerShouldHide = true;
-
-    await Future.delayed(Duration(milliseconds: 230), () {});
-    // Navigator.push(
-    //     Get.context,
-    //     FadeRoute(
-    //         page: TaskView(
-    //             id: noteData.id!, triggerRefetch: refetchNotesFromDB, currentNote: noteData
-    //         )));
-    await Future.delayed(Duration(milliseconds: 300), () {});
-
+    Get.toNamed(
+      '/notas-view',
+      arguments: {'id': noteData.id!, 'noteData': noteData},
+    );
     headerShouldHide = false;
   }
 
   void handleSearch(String value) {
     if (value.isNotEmpty) {
+      setNotesFromDB();
       isSearchEmpty.value = false;
     } else {
+      setNotesFromDB();
       isSearchEmpty.value = true;
     }
   }
 
-  void cancelSearch() {
-    searchController.clear();
+  cancelSearch() {
+    searchController.value.clear();
     isSearchEmpty.value = true;
+    setNotesFromDB();
   }
 
-
-
-/// =========================    AddNtasView
-
-
-  void addTravelEvent() {
-    final int daysNum = _endTime.difference(_startTime).inDays;
-    if (0 == daysNum) {
-      final DateTime _time =
-      DateTime(_startTime.year, _startTime.month, _startTime.day);
-      setTravelEvent(
-        _time,
-        _title.text,
-        _site.text,
-        _startTime,
-        _endTime,
-        isImportant,
-      );
-    } else {
-      for (int i = 0; i <= daysNum; i++) {
-        DateTime _time =
-        DateTime(_startTime.year, _startTime.month, _startTime.day + i);
-        if (0 == i) {
-          setTravelEvent(_time, _title.text, _site.text, _startTime,
-              DateTime(0, 0, 0, 24), isImportant);
-        } else if (i == daysNum) {
-          setTravelEvent(_time, _title.text, _site.text, DateTime(0, 0, 0, 0),
-              _endTime, isImportant);
-        } else {
-          setTravelEvent(_time, _title.text, _site.text, DateTime(0, 0, 0, 0),
-              DateTime(0, 0, 0, 24), isImportant);
+  List<Widget> buildNoteComponentsList() {
+    List<Widget> noteComponentsList = [];
+    notesList.value.sort((a, b) {
+      return b.startTimeMilliseconds!.compareTo(a.startTimeMilliseconds as num);
+    });
+    if (searchController.value.text.isNotEmpty) {
+      notesList.value.forEach((note) {
+        if (note.title!
+                .toLowerCase()
+                .contains(searchController.value.text.toLowerCase()) ||
+            note.title!
+                .toLowerCase()
+                .contains(searchController.value.text.toLowerCase())) {
+          noteComponentsList.add(TaskCard(
+            noteData: note,
+            onTapAction: openNoteToRead,
+          ));
         }
-      }
+      });
+      return noteComponentsList;
     }
-  }
-
-
-  void setTravelEvent(DateTime time, String title, String site,
-      DateTime startTime, DateTime endTime, bool isImportant) {
-
-    if (events[time] != null) {
-      events[time]?.add({
-        'title': title,
-        'site': site,
-        'startTime': startTime,
-        'isImportant': isImportant,
-        'endTime': endTime
+    if (isFlagOn.value) {
+      notesList.value.forEach((note) {
+        if (note.isImportant!) {
+          noteComponentsList.add(TaskCard(
+            noteData: note,
+            onTapAction: openNoteToRead,
+          ));
+        }
       });
     } else {
-      events[time] = [
-        {
-          'title': title,
-          'site': site,
-          'startTime': startTime,
-          'isImportant': isImportant,
-          'endTime': endTime
-        }
-      ];
+      notesList.value.forEach((note) {
+        noteComponentsList.add(TaskCard(
+          noteData: note,
+          onTapAction: openNoteToRead,
+        ));
+      });
     }
+    return noteComponentsList;
   }
 }

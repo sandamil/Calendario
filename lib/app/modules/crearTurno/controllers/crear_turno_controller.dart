@@ -16,10 +16,11 @@ class CrearTurnoController extends GetxController {
 
   RxList<TurnoType> turnoType = <TurnoType>[].obs;
 
-  RxString title = "".obs;
 
   CalendarController calendarController = CalendarController();
 
+
+  RxString title = "".obs;
   get getTitle => title.value;
   void setTitle(String titleString) => title.value = titleString;
   var titleValueController = TextEditingController();
