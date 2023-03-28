@@ -51,7 +51,7 @@ class CalendarController extends GetxController {
   /// ==
 
   void onInit() async {
-    await fetchCuadrante();
+   await fetchCuadrante();
     await fetchTurno();
     await getListEvent();
     print(listEvent.length);
@@ -84,11 +84,11 @@ class CalendarController extends GetxController {
     return key.day * 1000000 + key.month * 10000 + key.year;
   }
 
-  List<Cuadrante> getEventForDay(DateTime day) {
-    final events = LinkedHashMap<DateTime, List<Cuadrante>>(
+  getEventForDay(DateTime day) {
+    final events = LinkedHashMap<DateTime, List<dynamic>>(
       equals: isSameDay,
       hashCode: getHashCode,
-    )..addAll(cuadranteMap);
+    )..addAll(cuadranteMap)..addAll(notasMap);
     return events[day] ?? [];
   }
 
@@ -109,6 +109,13 @@ class CalendarController extends GetxController {
     isReady.value = true;
     return cuadranteMap.value;
   }
+
+  getNotesFromDB() async {
+    notasMap.value = await DbProvider.instance.getNotesFromDB();
+    update();
+    return notasMap.value;
+  }
+
 
   Future<List<TurnoType>> fetchTurno() async {
     turno.value = await DBHelper.db.getTypeModels();
