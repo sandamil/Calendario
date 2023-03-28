@@ -43,7 +43,7 @@ class AddNotasView extends GetView<AddNotasController> {
             onPressed: () async {
               controller.addTravelEvent();
               await controller.addEvent();
-              Navigator.of(context).pushReplacementNamed('/notas');
+              Get.offAllNamed('/notas');
             },
           )
         ],

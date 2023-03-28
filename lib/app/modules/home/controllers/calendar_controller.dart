@@ -84,11 +84,11 @@ class CalendarController extends GetxController {
     return key.day * 1000000 + key.month * 10000 + key.year;
   }
 
-  getEventForDay(DateTime day) {
-    final events = LinkedHashMap<DateTime, List<dynamic>>(
+  List<Cuadrante> getEventForDay(DateTime day) {
+    final events = LinkedHashMap<DateTime, List<Cuadrante>>(
       equals: isSameDay,
       hashCode: getHashCode,
-    )..addAll(cuadranteMap)..addAll(notasMap);
+    )..addAll(cuadranteMap);
     return events[day] ?? [];
   }
 
@@ -110,11 +110,11 @@ class CalendarController extends GetxController {
     return cuadranteMap.value;
   }
 
-  getNotesFromDB() async {
-    notasMap.value = await DbProvider.instance.getNotesFromDB();
-    update();
-    return notasMap.value;
-  }
+  // getNotesFromDB() async {
+  //   notasMap.value = await DbProvider.instance.getNotesFromDB();
+  //   update();
+  //   return notasMap.value;
+  // }
 
 
   Future<List<TurnoType>> fetchTurno() async {

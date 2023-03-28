@@ -9,7 +9,7 @@ import '../controllers/notas_controller.dart';
 import 'widgets/button_row_view.dart';
 import 'widgets/taskCard.dart';
 
-class NotasView extends GetView<NotasController> {
+class NotasView extends GetView<NotasListController> {
   const NotasView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -91,14 +91,14 @@ class NotasView extends GetView<NotasController> {
     controller.notesList.sort((a, b) {
       return b.startTimeMilliseconds!.compareTo(a.startTimeMilliseconds as num);
     });
-    if (controller.searchController.text.isNotEmpty) {
+    if (controller.searchController.value.text.isNotEmpty) {
       controller.notesList.forEach((note) {
         if (note.title!
             .toLowerCase()
-            .contains(controller.searchController.text.toLowerCase()) ||
+            .contains(controller.searchController.value.text.toLowerCase()) ||
             note.title!
                 .toLowerCase()
-                .contains(controller.searchController.text.toLowerCase()))
+                .contains(controller.searchController.value.text.toLowerCase()))
           noteComponentsList.add(TaskCard(
             noteData: note,
             onTapAction: controller.openNoteToRead,
