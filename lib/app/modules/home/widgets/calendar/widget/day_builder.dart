@@ -21,7 +21,7 @@ class DayBuilderWidget extends StatelessWidget {
         color: dayType == 'outside' ? Colors.white : MyColors.cellColor,
           // backgroundBlendMode: dayType == 'outside' ? BlendMode.modulate :  BlendMode.darken,
           border: Border.all(
-            color: dayType == 'today' ? MyColors.primary : Colors.transparent,
+            color: dayType == 'today' ? PRIMARY_COLOR : Colors.transparent,
             width: dayType == 'selected' ? 3.w : 1.w,
           ),
           borderRadius: BorderRadius.circular(5.r),
