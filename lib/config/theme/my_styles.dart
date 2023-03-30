@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -7,7 +8,6 @@ import 'my_fonts.dart';
 import 'light_theme_colors.dart';
 
 class MyStyles {
-
   ///icons theme
   static IconThemeData getIconTheme({required bool isLightTheme}) =>
       IconThemeData(
@@ -16,8 +16,8 @@ class MyStyles {
             : DarkThemeColors.iconColor,
       );
 
-
-  static FloatingActionButtonThemeData getFloatingActionButtonTheme({required bool isLightTheme}) =>
+  static FloatingActionButtonThemeData getFloatingActionButtonTheme(
+          {required bool isLightTheme}) =>
       FloatingActionButtonThemeData(
         backgroundColor: isLightTheme
             ? LightThemeColors.floatingActionButtonColor
@@ -39,6 +39,9 @@ class MyStyles {
   ///app bar theme
   static AppBarTheme getAppBarTheme({required bool isLightTheme}) =>
       AppBarTheme(
+        systemOverlayStyle: isLightTheme
+            ? SystemUiOverlayStyle.dark
+            : SystemUiOverlayStyle.light,
         elevation: 0,
         titleTextStyle:
             getTextTheme(isLightTheme: isLightTheme).bodyText1!.copyWith(
