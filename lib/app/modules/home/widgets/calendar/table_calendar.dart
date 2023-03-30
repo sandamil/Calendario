@@ -25,8 +25,6 @@ class CalendarWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var theme = Theme.of(context);
-
     return Column(
       children: [
         Container(
@@ -55,7 +53,7 @@ class CalendarWidget extends StatelessWidget {
                           .subtract(const Duration(days: 200, hours: 23)),
                       lastDay: DateTime.now()
                           .add(const Duration(days: 600, hours: 23)),
-                      focusedDay: calendarController.focusedDay,
+                      focusedDay: calendarController.focusedDay.value,
                       // calendarFormat: controller.calendarFormat,
                       eventLoader: calendarController.getEventForDay,
                       startingDayOfWeek: StartingDayOfWeek.monday,
@@ -73,343 +71,7 @@ class CalendarWidget extends StatelessWidget {
                         await calendarController.update;
                       },
                       onPageChanged: calendarController.onPageChanged,
-
-                      /// ===        Calendar builders     ========================================
-                      calendarBuilders: CalendarBuilders(
-                        /// =       markerBuilder:          =======================================
-                        markerBuilder: (context, day, List<Cuadrante> events) {
-                          return Padding(
-                            padding: const EdgeInsets.all(2),
-                            child: Container(
-                              width: double.maxFinite,
-                              height: double.maxFinite,
-                              decoration: BoxDecoration(
-                                // color: OLD_LACE_COLOR,
-                                border: Border.all(width: 1, color: GREY_COLOR),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Container(
-                                margin: const EdgeInsets.only(bottom: 20),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 1),
-                                  child: Column(
-                                    children: [
-                                      const Text(
-                                       '',
-                                        // style: AppTextStyle.defaultTextStyle(),
-                                      ),
-
-                                      Expanded(
-                                        child: SingleChildScrollView(
-                                          child: ListView.builder(
-                                              shrinkWrap: true,
-                                              itemCount: events.length,
-                                              itemBuilder: (context, index) {
-                                                return Padding(
-                                                  padding:  EdgeInsets.all(0.5.w),
-                                                  child: Container(
-                                                    decoration: BoxDecoration(
-                                                      color: HexColor(events[index].color!)
-                                                          .withAlpha(600),
-                                                      border: Border.all(
-                                                          color: HexColor(events[index].color!),
-                                                          width: 1),
-                                                      borderRadius: BorderRadius.circular(5.r),
-                                                    ),
-                                                    height: 18.h,
-                                                    child: Align(
-                                                      alignment: Alignment.center,
-                                                      child: Text(
-                                                          events[index].title!.toUpperCase(),
-                                                          style: TextStyle(
-                                                              fontSize: 14.sp,
-                                                              color: HexColor(
-                                                                  events[index].color!),
-                                                              fontWeight: FontWeight.w900)),
-                                                    ),
-                                                  ),
-                                                );
-                                              }),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          );
-
-                          // if (events.isEmpty) return SizedBox();
-                          // return Container(
-                          //   margin: EdgeInsets.only(top: 20.h,bottom: 40.h),
-                          //   child: ListView.builder(
-                          //       shrinkWrap: true,
-                          //       itemCount: events.length,
-                          //       itemBuilder: (context, index) {
-                          //         return Container(
-                          //           decoration: BoxDecoration(
-                          //             color: HexColor(events[index].color!)
-                          //                 .withAlpha(600),
-                          //             border: Border.all(
-                          //                 color: HexColor(events[index].color!),
-                          //                 width: 1),
-                          //             borderRadius: BorderRadius.circular(5.r),
-                          //           ),
-                          //           height: 18.h,
-                          //           child: Align(
-                          //             alignment: Alignment.center,
-                          //             child: Text(
-                          //                 events[index].title!.toUpperCase(),
-                          //                 style: TextStyle(
-                          //                     fontSize: 14.sp,
-                          //                     color: HexColor(
-                          //                         events[index].color!),
-                          //                     fontWeight: FontWeight.w900)),
-                          //           ),
-                          //         );
-                          //       }),
-                          // );
-                        },
-                        ///==      holidayBuilder:         ========================================
-
-                        holidayBuilder: (context, day, focusDay) {
-                          final events = calendarController.getEventsOfDay(day);
-
-                          return Padding(
-                            padding: const EdgeInsets.all(2),
-                            child: Container(
-                              width: double.maxFinite,
-                              height: double.maxFinite,
-                              decoration: BoxDecoration(
-                                color: OLD_LACE_COLOR,
-                                border: Border.all(width: 1, color: GREY_COLOR),
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 2),
-                                child: Column(
-                                  children: [
-                                    Text(
-                                      day.day.toString(),
-                                      // style: AppTextStyle.defaultTextStyle(),
-                                    ),
-                                    SizedBox(
-                                      height: 50.h,
-                                    ),
-                                    Expanded(
-                                      child: SingleChildScrollView(
-                                        child: ListView.builder(
-                                            shrinkWrap: true,
-                                            itemCount: events.length,
-                                            itemBuilder: (context, index) {
-                                              return Padding(
-                                                padding:  EdgeInsets.all(1.w),
-                                                child: GestureDetector(
-                                                  onTap: () {
-                                                   print('tap');
-                                                    },
-
-                                                  child: Container(
-                                                      decoration: BoxDecoration(
-                                                        color: theme.primaryColor,
-                                                        border: Border.all(
-                                                            color: theme.primaryColor, width: 1),
-                                                        borderRadius: BorderRadius.circular(5.r),
-                                                      ),
-                                                      height: 14.h,
-                                                      child: Align(
-                                                        alignment: Alignment.bottomCenter,
-                                                        child: Text(
-                                                          events[index].title!.toUpperCase(),
-                                                          style: TextStyle(
-                                                              fontSize: 11.sp,
-                                                              fontWeight: FontWeight.w700),
-                                                        ),
-                                                      )),
-                                                ),
-                                              );
-                                            }),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          );
-
-
-                          // final events = calendarController.getEventsOfDay(day);
-                          //
-                          // return Container(
-                          //   margin: EdgeInsets.only(top: 60.h,),
-                          //   child: ListView.builder(
-                          //       shrinkWrap: true,
-                          //       itemCount: events.length,
-                          //       itemBuilder: (context, index) {
-                          //         return Container(
-                          //             decoration: BoxDecoration(
-                          //               color: theme.primaryColor,
-                          //               border: Border.all(
-                          //                   color: theme.primaryColor, width: 1),
-                          //               borderRadius: BorderRadius.circular(5.r),
-                          //             ),
-                          //             height: 18.h,
-                          //             child: Align(
-                          //               alignment: Alignment.bottomCenter,
-                          //               child: Text(
-                          //                 events[index].title!.toUpperCase(),
-                          //                 style: TextStyle(
-                          //                     fontSize: 14.sp,
-                          //                     fontWeight: FontWeight.w900),
-                          //               ),
-                          //             ));
-                          //       }),
-                          // );
-                        },
-                        defaultBuilder: (context, day, focusedDay) {
-                          return Padding(
-                            padding: const EdgeInsets.all(2),
-                            child: Container(
-                              width: double.maxFinite,
-                              height: double.maxFinite,
-                              decoration: BoxDecoration(
-                                border: Border.all(width: 1, color: GREY_COLOR),
-                                borderRadius: BorderRadius.circular(5),
-                              ),
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(vertical: 1.h),
-                                child: Column(
-                                  children: [
-                                    Text(
-                                      day.day.toString(),
-                                      // style: AppTextStyle.defaultTextStyle(),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          );
-                          // return Padding(
-                          //   padding: EdgeInsets.all(1.h),
-                          //   child: Container(
-                          //     alignment: Alignment.center,
-                          //     decoration: BoxDecoration(
-                          //       color: MyColors.cellColor,
-                          //       // backgroundBlendMode: dayType == 'outside' ? BlendMode.modulate :  BlendMode.darken,
-                          //       border: Border.all(
-                          //         color: PRIMARY_COLOR,
-                          //         width: 0.05.w,
-                          //       ),
-                          //       borderRadius: BorderRadius.circular(5.r),
-                          //     ),
-                          //     child: Align(
-                          //       alignment: Alignment.topCenter,
-                          //       child: Text(
-                          //         day.day.toString(),
-                          //         // textWidthBasis: TextWidthBasis.longestLine,
-                          //         style: TextStyle(
-                          //           fontSize: 15.sp,
-                          //           // fontFamily: 'FiraCode',
-                          //           // color: MyColors.cellTextColor,
-                          //         ),
-                          //       ),
-                          //     ),
-                          //
-                          //   ),
-                          // );
-                        },
-
-                        selectedBuilder: (context, day, focusedDay) {
-                          return Padding(
-                            padding: EdgeInsets.all(1.h),
-                            child: Container(
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                color: MyColors.cellColor,
-                                // backgroundBlendMode: dayType == 'outside' ? BlendMode.modulate :  BlendMode.darken,
-                                border: Border.all(
-                                  color: PRIMARY_COLOR,
-                                  width: 0.05.w,
-                                ),
-                                borderRadius: BorderRadius.circular(5.r),
-                              ),
-                              child: Align(
-                                alignment: Alignment.topCenter,
-                                child: Text(
-                                  day.day.toString(),
-                                  // textWidthBasis: TextWidthBasis.longestLine,
-                                  style: TextStyle(
-                                    fontSize: 15.sp,
-                                    // fontFamily: 'FiraCode',
-                                    // color: MyColors.cellTextColor,
-                                  ),
-                                ),
-                              ),
-
-                            ),
-                          );
-                        },
-
-                        todayBuilder: (context, day, events) {
-                          return Padding(
-                            padding: EdgeInsets.all(1.h),
-                            child: Container(
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                color: MyColors.cellColor,
-                                // backgroundBlendMode: dayType == 'outside' ? BlendMode.modulate :  BlendMode.darken,
-                                border: Border.all(
-                                  color: PRIMARY_COLOR,
-                                  width: 0.05.w,
-                                ),
-                                borderRadius: BorderRadius.circular(5.r),
-                              ),
-                              child: Align(
-                                alignment: Alignment.topCenter,
-                                child: Text(
-                                  day.day.toString(),
-                                  // textWidthBasis: TextWidthBasis.longestLine,
-                                  style: TextStyle(
-                                    fontSize: 15.sp,
-                                    // fontFamily: 'FiraCode',
-                                    // color: MyColors.cellTextColor,
-                                  ),
-                                ),
-                              ),
-
-                            ),
-                          );
-                        },
-
-                        // // holidayBuilder: (context, day, events) =>
-                        // //     DayBuilderWidget(date: day, dayType: 'holiday'),
-                        //
-                        // outsideBuilder: (context, date, events) =>
-                        //     DayBuilderWidget(date: date, dayType: 'outside'),
-
-                        dowBuilder: (context, day) {
-                        //   if (day.weekday == DateTime.sunday ||
-                        //       day.weekday == DateTime.saturday) {
-                            final text = DateFormat.E('es').format(day);
-                            return Center(
-                              child: Text(
-                                text.toUpperCase(),
-                        //         style: const TextStyle(color: Colors.red),
-                              ),
-                            );
-                        //   } else {
-                        //     final text = DateFormat.E('es').format(day);
-                        //     return Center(
-                        //       child: Text(
-                        //         text.toUpperCase(),
-                        //         style:
-                        //             const TextStyle(color: Colors.orangeAccent),
-                        //       ),
-                        //     );
-                        //   }
-                        },
-                      ),
-                    )
+                      calendarBuilders: _calendarBuilders())
                   : const Center(child: CircularProgressIndicator());
             },
           ),
@@ -417,4 +79,217 @@ class CalendarWidget extends StatelessWidget {
       ],
     );
   }
+
+  /// ===        Calendar builders     ========================================
+
+  _calendarBuilders() => CalendarBuilders(
+        /// =       markerBuilder:          =======================================
+
+        markerBuilder: (context, day, List<Cuadrante> events) {
+          final notas = calendarController.getEventsOfDay(day);
+          return Container(
+            alignment: Alignment.topCenter,
+            margin: EdgeInsets.only(top: 20.h),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ...events.map((turno) => Padding(
+                    padding: EdgeInsets.symmetric(vertical: 0.5.h, horizontal: 3.w),
+                    child: Container(
+                          decoration: BoxDecoration(
+                            color: HexColor(turno.color!).withAlpha(600),
+                            border:
+                                Border.all(color: HexColor(turno.color!), width: 1),
+                            borderRadius: BorderRadius.circular(3.r),
+                          ),
+                          height: 14.h,
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: Text(turno.title!.toUpperCase(),
+                                style: TextStyle(
+                                    fontSize: 11.sp,
+                                    color: HexColor(turno.color!),
+                                    fontWeight: FontWeight.w900)),
+                          ),
+                        ),
+                  )),
+                  SizedBox(height: 3.h,),
+                  ...notas.map((nota) => Padding(
+                    padding: EdgeInsets.symmetric(vertical: 0.5.h, horizontal: 3.w),
+                        child: GestureDetector(
+                          onTap: () {
+                            print('tap');
+                          },
+                          child: Container(
+                              decoration: BoxDecoration(
+                                color: PRIMARY_COLOR_TRANSPARENTE,
+                                border:
+                                    Border.all(color: PRIMARY_COLOR, width: 1),
+                                borderRadius: BorderRadius.circular(3.r),
+                              ),
+                              height: 14.h,
+                              child: Align(
+                                alignment: Alignment.bottomCenter,
+                                child: Text(
+                                  nota.title!.toUpperCase(),
+                                  style: TextStyle(
+                                      fontSize: 11.sp,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                              )),
+                        ),
+                      )),
+                ],
+              ),
+            ),
+          );
+        },
+        ///==      holidayBuilder:         ========================================
+        holidayBuilder: (context, day, focusedDay) {
+          return Padding(
+            padding: EdgeInsets.all(2.h),
+            child: Container(
+              width: double.maxFinite,
+              height: double.maxFinite,
+              decoration: BoxDecoration(
+                border: Border.all(width: 1.w, color: MyColors.borderCellColor),
+                borderRadius: BorderRadius.circular(5.r),
+              ),
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 1.h),
+                child: Column(
+                  children: [
+                    Text(
+                      day.day.toString(),
+                      style: TextStyle(
+                        fontSize: 12.sp,
+                        // fontFamily: 'FiraCode',
+                        // color: MyColors.cellTextColor,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+
+        ///==      outsideBuilder:         ========================================
+        // outsideBuilder: (context, date, events) =>
+        //     DayBuilderWidget(date: date, dayType: 'outside'),
+
+        ///==      defaultBuilder:         ========================================
+        defaultBuilder: (context, day, focusedDay) {
+          return Padding(
+            padding: EdgeInsets.all(2.h),
+            child: Container(
+              width: double.maxFinite,
+              height: double.maxFinite,
+              decoration: BoxDecoration(
+                border: Border.all(width: 1.w, color: MyColors.borderCellColor),
+                borderRadius: BorderRadius.circular(5.r),
+              ),
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 1.h),
+                child: Column(
+                  children: [
+                    Text(
+                      day.day.toString(),
+                      style: TextStyle(
+                        fontSize: 12.sp,
+                        // fontFamily: 'FiraCode',
+                        // color: MyColors.cellTextColor,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+
+        ///==      selectedBuilder:         ========================================
+        selectedBuilder: (context, day, focusedDay) {
+          return Padding(
+            padding: EdgeInsets.all(2.h),
+            child: Container(
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: MyColors.cellSelectedColor,
+                // backgroundBlendMode: dayType == 'outside' ? BlendMode.modulate :  BlendMode.darken,
+                border: Border.all(
+                  color: PRIMARY_COLOR,
+                  width: 0.05.w,
+                ),
+                borderRadius: BorderRadius.circular(5.r),
+              ),
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: Text(
+                  day.day.toString(),
+                  style: TextStyle(
+                    fontSize: 15.sp,
+                    fontWeight: FontWeight.bold,
+                    // fontFamily: 'FiraCode',
+                    // color: MyColors.cellTextColor,
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
+
+        ///==      todayBuilder:         ========================================
+        todayBuilder: (context, day, events) {
+          return Padding(
+            padding: EdgeInsets.all(2.h),
+            child: Container(
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: MyColors.cellColor,
+                // backgroundBlendMode: dayType == 'outside' ? BlendMode.modulate :  BlendMode.darken,
+                border: Border.all(
+                  color: PRIMARY_COLOR,
+                  width: 1.w,
+                ),
+                borderRadius: BorderRadius.circular(5.r),
+              ),
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: Text(
+                  day.day.toString(),
+                  // textWidthBasis: TextWidthBasis.longestLine,
+                  style: TextStyle(
+                    fontSize: 15.sp,
+                    fontWeight: FontWeight.bold,
+                    // fontFamily: 'FiraCode',
+                    color: PRIMARY_COLOR,
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
+
+        ///==      dowBuilder:         ========================================
+        dowBuilder: (context, day) {
+          final text = DateFormat.E('es').format(day);
+          if (day.weekday == DateTime.sunday ||
+              day.weekday == DateTime.saturday) {
+            return Center(
+              child: Text(
+                text.toUpperCase(),
+                style: const TextStyle(color: Colors.red),
+              ),
+            );
+          }
+          return Center(
+            child: Text(
+              text.toUpperCase(),
+              // style: const TextStyle(color: Colors.red),
+            ),
+          );
+        },
+      );
 }

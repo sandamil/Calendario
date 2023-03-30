@@ -19,10 +19,10 @@ class CalendarController extends GetxController {
   Rx<CalendarFormat> get calendarFormat => _calendarFormat;
 
   Rx<DateTime> _selectedDay = DateTime.now().obs;
-  DateTime _focusedDay = DateTime.now();
+  Rx<DateTime> _focusedDay = DateTime.now().obs;
 
   Rx<DateTime> get selectedDay => _selectedDay;
-  DateTime get focusedDay => _focusedDay;
+  Rx<DateTime> get focusedDay => _focusedDay;
 
   setFocusedDay(DateTime day) => _focusedDay;
 
@@ -47,11 +47,12 @@ class CalendarController extends GetxController {
 
   RxBool isReady = false.obs;
 
+
 ///////////////oninit
   /// ==
 
   void onInit() async {
-   await fetchCuadrante();
+    await fetchCuadrante();
     await fetchTurno();
     await getListEvent();
     print(listEvent.length);
@@ -61,16 +62,16 @@ class CalendarController extends GetxController {
   onDaySelected(DateTime selectedDate, DateTime focusedDate) {
     if (!isSameDay(selectedDate, _selectedDay.value)) {
       _selectedDay.value = selectedDate;
-      _focusedDay = focusedDate;
+      _focusedDay.value = focusedDate;
     }
     selectedEvents.value = getEventForDay(selectedDay.value);
-    update();
     Get.dialog(CustomAlertDilogDaySelected(
         selectedDate: selectedDate, turno: turno.value));
   }
 
+//TODO Comprobar rendimiento focusedday obs
   onPageChanged(focusedDay) {
-    _focusedDay = focusedDay;
+    _focusedDay.value = focusedDay;
     update();
   }
 
