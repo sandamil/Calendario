@@ -2,7 +2,7 @@ import 'package:calendario2/app/components/toast.dart';
 import 'package:calendario2/app/data/local/taskDatabase.dart';
 import 'package:calendario2/app/data/model/taskModel.dart';
 import 'package:calendario2/app/modules/Notas/controllers/notas_controller.dart';
-import 'package:calendario2/config/util/convert_time.dart';
+import 'package:calendario2/config/util/dateUtils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

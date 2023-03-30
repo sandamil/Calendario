@@ -18,10 +18,10 @@ class CalendarController extends GetxController {
   Rx<CalendarFormat> _calendarFormat = CalendarFormat.month.obs;
   Rx<CalendarFormat> get calendarFormat => _calendarFormat;
 
-  Rx<DateTime> _selectedDay = DateTime.now().obs;
+  var selectedDay = DateTime.now().obs;
   Rx<DateTime> _focusedDay = DateTime.now().obs;
 
-  Rx<DateTime> get selectedDay => _selectedDay;
+  // Rx<DateTime> get selectedDay => _selectedDay;
   Rx<DateTime> get focusedDay => _focusedDay;
 
   setFocusedDay(DateTime day) => _focusedDay;
@@ -60,8 +60,17 @@ class CalendarController extends GetxController {
   }
 
   onDaySelected(DateTime selectedDate, DateTime focusedDate) {
-    if (!isSameDay(selectedDate, _selectedDay.value)) {
-      _selectedDay.value = selectedDate;
+    if (!isSameDay(selectedDate, selectedDay.value)) {
+      selectedDay.value = selectedDate;
+      _focusedDay.value = focusedDate;
+    }
+    selectedEvents.value = getEventForDay(selectedDay.value);
+    // Get.dialog(CustomAlertDilogDaySelected(
+    //     selectedDate: selectedDate, turno: turno.value));
+  }
+  onDaySelectedLongPress(DateTime selectedDate, DateTime focusedDate) {
+    if (!isSameDay(selectedDate, selectedDay.value)) {
+      selectedDay.value = selectedDate;
       _focusedDay.value = focusedDate;
     }
     selectedEvents.value = getEventForDay(selectedDay.value);
@@ -139,6 +148,7 @@ class CalendarController extends GetxController {
 
 
   RxList<Task> listEvent = <Task>[].obs;
+  RxList<Task> listEvent2 = <Task>[].obs;
 
    getListEvent() async {
     listEvent.value = await DbProvider.instance.getNotesFromDB();

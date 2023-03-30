@@ -1,7 +1,12 @@
+import 'package:calendario2/app/data/model/taskModel.dart';
 import 'package:calendario2/app/data/model/turnoCalendar.dart';
+import 'package:calendario2/app/modules/home/controllers/calendar_controller.dart';
 import 'package:calendario2/app/modules/home/widgets/calendar/table_calendar.dart';
+import 'package:calendario2/app/modules/home/widgets/calendar/widget/card_event.dart';
 import 'package:calendario2/app/modules/home/widgets/calendar/widget/day_selected_turno_widget.dart';
+import 'package:calendario2/app/modules/home/widgets/calendar/widget/line.dart';
 import 'package:calendario2/app/modules/home/widgets/calendar/widget/selected_day_widget.dart';
+import 'package:calendario2/config/util/dateUtils.dart';
 import 'package:calendario2/config/util/hexColor.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -17,7 +22,6 @@ import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
   const HomeView({Key? key}) : super(key: key);
-
 
   @override
   Widget build(BuildContext context) {
@@ -51,10 +55,10 @@ class HomeView extends GetView<HomeController> {
               icon: const Icon(
                 Icons.today,
               ),
-              tooltip: 'Open shopping cart',
+              tooltip: 'today',
               onPressed: () async {
-                await Get.deleteAll(force: true); //deleting all controllers
-                Get.reset();
+                // await Get.deleteAll(force: true); //deleting all controllers
+                // Get.reset();
               },
             ),
           ],
@@ -69,17 +73,67 @@ class HomeView extends GetView<HomeController> {
         body: Column(
           children: [
             CalendarWidget(),
-
+            SizedBox(height: 10.h),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: LineWidget(),
+            ),
+            SizedBox(height: 2.h),
+            Obx(() => _buildSelectedDay()),
+            SizedBox(height: 2.h),
+            Obx(() {
+              return Expanded(child: _buildListEvent());
+            }),
           ],
-        )
+        ));
+  }
+
+  Widget _buildListEvent() {
+    final calendarVM = Get.find<CalendarController>();
+    final selectedDay = calendarVM.selectedDay.value;
+
+    List events = calendarVM.getEventsOfDay(selectedDay);
+    return SingleChildScrollView(
+        child: Column(
+      children: events
+          .map(
+            (event) => Column(
+              children: [
+                CardEvent(event: event),
+                const SizedBox(height: 8),
+              ],
+            ),
+          )
+          .toList(),
+    ));
+  }
+
+  Widget _buildSelectedDay() {
+    final calendarVM = Get.find<CalendarController>();
+
+    final selectedDay = calendarVM.selectedDay.value;
+    String formattedDate =
+        '${selectedDay.day} / ${selectedDay.month} / ${selectedDay.year}';
+
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          margin: const EdgeInsets.only(left: 10),
+          child: const Text(
+            'Anotaciones',
+            // style: AppTextStyle.titleTextStyle(),
+          ),
+        ),
+        const SizedBox(height: 5),
+        Container(
+          margin: const EdgeInsets.only(left: 10),
+          child: Text(
+            formattedDate,
+            // style: AppTextStyle.disableTextStyle(),
+          ),
+        ),
+      ],
     );
   }
 }
-
-
-
-
-
-
-
-

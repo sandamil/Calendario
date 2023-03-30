@@ -33,6 +33,7 @@ class CalendarWidget extends StatelessWidget {
             () {
               return calendarController.isReady.value
                   ? TableCalendar(
+                  onDayLongPressed: calendarController.onDaySelectedLongPress,
                       headerVisible: false,
                       locale: 'es_ES',
                       calendarStyle: const CalendarStyle(
