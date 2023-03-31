@@ -26,9 +26,7 @@ class NotasListView extends GetView<NotasListController> {
             ),
             color: theme.primaryColor,
             onPressed: () {
-              Get.offAll(const HomeView(),
-                  duration: const Duration(milliseconds: 100),
-                  transition: Transition.leftToRight);
+              Get.offAllNamed('/home');
             },
           ),
           centerTitle: false,

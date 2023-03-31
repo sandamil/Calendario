@@ -1,8 +1,8 @@
 import 'package:calendario2/app/data/model/taskModel.dart';
 import 'package:calendario2/app/data/model/turnoCalendar.dart';
+import 'package:calendario2/app/modules/Notas/views/widgets/taskCard.dart';
 import 'package:calendario2/app/modules/home/controllers/calendar_controller.dart';
 import 'package:calendario2/app/modules/home/widgets/calendar/table_calendar.dart';
-import 'package:calendario2/app/modules/home/widgets/calendar/widget/card_event.dart';
 import 'package:calendario2/app/modules/home/widgets/calendar/widget/day_selected_turno_widget.dart';
 import 'package:calendario2/app/modules/home/widgets/calendar/widget/line.dart';
 import 'package:calendario2/app/modules/home/widgets/calendar/widget/selected_day_widget.dart';
@@ -99,8 +99,8 @@ class HomeView extends GetView<HomeController> {
           .map(
             (event) => Column(
               children: [
-                CardEvent(event: event),
-                const SizedBox(height: 8),
+                // CardEvent(event: event),
+                TaskCard(noteData: event, onTapAction: controller.notasController.openNoteToRead)
               ],
             ),
           )

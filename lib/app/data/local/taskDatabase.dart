@@ -7,12 +7,12 @@ import 'package:sqflite/sqflite.dart';
 import '../model/taskModel.dart';
 
 class DbProvider {
-  final String taskTable = 'travel';
-
   static final DbProvider instance = DbProvider._internal();
   factory DbProvider() => instance;
   DbProvider._internal();
   static Database? _db;
+  final String taskTable = 'travel';
+
 
   get db async {
     if (_db != null) {
@@ -45,7 +45,7 @@ class DbProvider {
         'isImportant INTEGER)');
   }
 
-  Future<int> insert(Task notas) async {
+  Future<int> insertNotas(Task notas) async {
     var dbClient = await db;
     int res = await dbClient.insert(
       taskTable,

@@ -98,7 +98,7 @@ class AddNotasController extends GetxController {
 
   addEvent() async {
     Task _item = await DbProvider.instance.select(
-      await DbProvider.instance.insert(
+      await DbProvider.instance.insertNotas(
         Task(
             title: title.text,
             site: site.text,

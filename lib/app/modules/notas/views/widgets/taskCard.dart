@@ -1,15 +1,14 @@
 import 'package:calendario2/app/data/model/taskModel.dart';
 import 'package:calendario2/app/data/model/turnoCalendar.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 
-
-
-
+import '../../../Notas/views/NotasView/controllers/notas_view_controller.dart';
 
 List<Color> colorList = [
   Colors.blue,
@@ -22,8 +21,6 @@ List<Color> colorList = [
   Colors.deepOrange
 ];
 
-
-
 class TaskCard extends StatelessWidget {
   const TaskCard({
     required this.noteData,
@@ -34,15 +31,18 @@ class TaskCard extends StatelessWidget {
   final Task noteData;
   final Function(Task noteData) onTapAction;
 
-
   @override
   Widget build(BuildContext context) {
-    var date = DateTime.fromMillisecondsSinceEpoch(noteData.startTimeMilliseconds!);
+    NotasViewController notasViewController = NotasViewController();
+
+    var date =
+        DateTime.fromMillisecondsSinceEpoch(noteData.startTimeMilliseconds!);
     String neatDate = DateFormat('dd-MM-yyyy HH:mm').format(date);
 
     // print(noteData.endTimeMilliseconds);
 
-    Color color = colorList.elementAt(noteData.title!.length % colorList.length);
+    Color color =
+        colorList.elementAt(noteData.title!.length % colorList.length);
 
     return Slidable(
       startActionPane: ActionPane(
@@ -57,49 +57,41 @@ class TaskCard extends StatelessWidget {
           ),
         ],
       ),
-        endActionPane: ActionPane(
-        motion: const DrawerMotion(),
-    extentRatio: 0.25,
-    children: [
-
-        Container(
-          decoration: const BoxDecoration(
-            boxShadow: [
-              BoxShadow(
-                  color: Colors.black38,
-                  offset: Offset(1.0, 2.0)
-              )
-            ],
-            borderRadius: BorderRadius.all(Radius.circular(12)),
-            color: Colors.indigo,
-          ),
-          child: SlidableAction(
-              label: 'Compartir',
-              backgroundColor: Colors.indigo.withOpacity(0.0),
-              icon: Icons.share,
-    onPressed:(context) {},
-
-          ),
-        ),
-        Container(
-          decoration: const BoxDecoration(
-            boxShadow: [
-              BoxShadow(
-                  color: Colors.black38,
-                  offset: Offset(1.0, 2.0)
-              )
-            ],
-            borderRadius: BorderRadius.all(Radius.circular(12)),
-            color: Colors.red,
-          ),
-          child: SlidableAction(
-              label: 'Delete',
-              backgroundColor: Colors.red.withOpacity(0.0),
-              icon: Icons.delete,
-              onPressed:(context) {},
-          ),
-        ),
-      ]),
+      endActionPane: ActionPane(
+          motion: const DrawerMotion(),
+          extentRatio: 0.25,
+          children: [
+            Container(
+              decoration: const BoxDecoration(
+                boxShadow: [
+                  BoxShadow(color: Colors.black38, offset: Offset(1.0, 2.0))
+                ],
+                borderRadius: BorderRadius.all(Radius.circular(12)),
+                color: Colors.indigo,
+              ),
+              child: SlidableAction(
+                label: 'Compartir',
+                backgroundColor: Colors.indigo.withOpacity(0.0),
+                icon: Icons.share,
+                onPressed: (context) {},
+              ),
+            ),
+            Container(
+              decoration: const BoxDecoration(
+                boxShadow: [
+                  BoxShadow(color: Colors.black38, offset: Offset(1.0, 2.0))
+                ],
+                borderRadius: BorderRadius.all(Radius.circular(12)),
+                color: Colors.red,
+              ),
+              child: SlidableAction(
+                label: 'Delete',
+                backgroundColor: Colors.red.withOpacity(0.0),
+                icon: Icons.delete,
+                onPressed: (context) {},
+              ),
+            ),
+          ]),
       child: Container(
           margin: const EdgeInsets.fromLTRB(6, 4, 6, 4),
           height: 60,
@@ -127,24 +119,23 @@ class TaskCard extends StatelessWidget {
                         Container(
                           margin: const EdgeInsets.only(top: 8, left: 8),
                           child: Text(
-                            noteData.title!.trim().length <= 20 ? noteData.title!.trim() : noteData.title!.trim().substring(0, 20) + '...',
+                            noteData.title!.trim().length <= 20
+                                ? noteData.title!.trim()
+                                : noteData.title!.trim().substring(0, 20) +
+                                    '...',
                             style: const TextStyle(
                                 fontFamily: 'ZillaSlab',
                                 fontSize: 20,
-                                fontWeight:
-                                FontWeight.w800
-                            ),
+                                fontWeight: FontWeight.w800),
                           ),
                         ),
                         const Spacer(),
-                        Container(
-                          margin: const EdgeInsets.only(top: 4, right: 8),
-
-                          child: Icon(Icons.flag,
-                              size: 28,
-                              color: noteData.isImportant == 1
-                                  ? Colors.red
-                                  : Colors.transparent),
+                        Icon(
+                          noteData.isImportant!
+                              ? Icons.star
+                              : Icons.star_outline,
+                          color:
+                              noteData.isImportant! ? Colors.red : Colors.grey,
                         ),
                       ],
                     ),
@@ -156,15 +147,17 @@ class TaskCard extends StatelessWidget {
                           Container(
                             margin: const EdgeInsets.only(bottom: 4, left: 8),
                             child: Text(
-                              noteData.notes!.trim().split('\n').first.length <= 30 ? noteData.notes!.trim().split('\n').first : '${noteData.notes!.trim().split('\n').first.substring(0, 30)}...',
-                              style:
-                              TextStyle(fontSize: 14, color: Colors.grey.shade400),
+                              noteData.notes!.trim().split('\n').first.length <=
+                                      30
+                                  ? noteData.notes!.trim().split('\n').first
+                                  : '${noteData.notes!.trim().split('\n').first.substring(0, 30)}...',
+                              style: TextStyle(
+                                  fontSize: 14, color: Colors.grey.shade400),
                             ),
                           ),
                           const Spacer(),
                           Container(
                             margin: const EdgeInsets.only(bottom: 4, right: 8),
-
                             child: Text(
                               neatDate,
                               textAlign: TextAlign.right,
@@ -186,15 +179,13 @@ class TaskCard extends StatelessWidget {
   }
 
   BoxShadow buildBoxShadow(Color color, BuildContext context) {
-    if (Theme.of(context).brightness == Brightness.dark) {
-      return BoxShadow(
-          color:  Colors.black.withAlpha(10),
-          blurRadius: 8,
-          offset: const Offset(0, 8));
-    }
+    // if (Theme.of(context).brightness == Brightness.dark) {
+    //   return BoxShadow(
+    //       color: Colors.black.withAlpha(200),
+    //       blurRadius: 8,
+    //       offset: const Offset(0, 8));
+    // }
     return BoxShadow(
-        color:  color.withAlpha(25),
-        blurRadius: 8,
-        offset: const Offset(0, 8));
+        color: color.withAlpha(25), blurRadius: 8, offset: const Offset(0, 8));
   }
 }

@@ -25,6 +25,7 @@ class Cuadrante {
 
   Map<String, dynamic> toMap() {
     return {
+      'id' : id,
       'title': title,
       'description': description,
       'startHour': startHour,

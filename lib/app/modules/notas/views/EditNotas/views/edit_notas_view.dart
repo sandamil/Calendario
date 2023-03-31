@@ -50,7 +50,7 @@ class EditNotasView extends GetView<EditNotasController> {
             )
           ],
         ),
-        body: Center(
+        body: SingleChildScrollView(
           child: Form(
               // key: _formKey,
               child: Column(
