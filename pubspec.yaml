@@ -19,22 +19,25 @@ dependencies:
   table_calendar: ^3.0.9
 
 
+  # for state management and context less stuff
+  get: ^4.6.5
 
-  get: ^4.6.5 # for state management and context less stuff
+  # log events in clear way insted of (print)
+  logger: ^1.3.0
 
-  logger: ^1.2.2 # log events in clear way insted of (print)
-
-  flutter_screenutil: 5.6.1
+  flutter_screenutil: ^5.7.0
 
   flutter_slidable: ^2.0.0
   jiffy: ^5.0.1
 
-
-  hive: ^2.2.3 # local database (SQFlite replacement)
-  hive_flutter: ^1.1.0 # make it easy to use hive (no need for path provider)
-  shared_preferences: ^2.0.18 # shared preferences persistence key value store
-  sqflite: ^2.2.5
-  path_provider: ^2.0.13
+  # local database (SQFlite replacement)
+  hive: ^2.2.3
+  # make it easy to use hive (no need for path provider)
+  hive_flutter: ^1.1.0
+  # shared preferences persistence key value store
+  shared_preferences: ^2.1.0
+  sqflite: ^2.2.6
+  path_provider: ^2.0.14
   flutter_datetime_picker: ^1.5.1
 
   flutter_material_color_picker: ^1.1.0+2

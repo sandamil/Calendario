@@ -32,7 +32,7 @@ class Cuadrante {
       'startHour': startHour,
       'endHour': endHour,
       'color': color,
-      'datetime': DateFormat("yyyy-MM-ddTHH:mm:ss").format(dateTime!),
+      'datetime': dateTime!.toIso8601String().substring(0,10),
     };
   }
 
@@ -66,7 +66,7 @@ class Cuadrante {
       startHour: map['startHour'] as String?,
       endHour: map['endHour'] as String?,
       color: map['color'] as String?,
-      dateTime: DateTime.tryParse(map['datetime']),
+      dateTime: DateTime.parse(map['datetime'].substring(0, 10)),
     );
   }
 }

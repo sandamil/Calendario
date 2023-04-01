@@ -78,7 +78,7 @@ class CrearCuadranteController extends GetxController {
       if (x >= list.length) {
         x = 0;
       }
-      await DBHelper.db.replaceItemModel(
+      await DBHelper.db.addItem(
         Cuadrante(
           dateTime: date,
           color: list[x].color,

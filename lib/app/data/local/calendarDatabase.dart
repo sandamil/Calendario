@@ -100,8 +100,7 @@ class DBHelper {
     await dbClient!.rawQuery(
         "SELECT * FROM $_cuadrantes WHERE datetime BETWEEN '${dayStart.toString()}' AND '${dayEnd.toString()}'");
 
-    print(result.asMap());
-    print(result.last);
+
     return result.map((m) => Cuadrante.fromMap(m)).toList();
   }
 
@@ -111,7 +110,7 @@ class DBHelper {
 
   Future<int> addItem(Cuadrante item) async {
     final dbClient = await database;
-    int res = await dbClient!.insert(_cuadrantes, item.toMap(),
+    int res = await dbClient!.insert("Cuadrante", item.toMap(),
         conflictAlgorithm: ConflictAlgorithm.ignore);
     return res;
   }
@@ -120,25 +119,26 @@ class DBHelper {
 
 
 
-  Future<int> replaceItemModel(Cuadrante itemModel) async {
-    final dbClient = await database;
-    List result = await dbClient!.query(_cuadrantes,
-        where: "datetime = ?",
-        whereArgs: [itemModel.dateTime?.toIso8601String()]);
-    if (result.isNotEmpty) {
-      for (var item in result) {
-        await deleteItemDateTime(item['datetime']);
-      }
+  // Future<int> replaceItemModel(Cuadrante itemModel) async {
+  //   Database? dbClient = await database;
+  //   List result = await dbClient!.query("Cuadrante",
+  //       where: "datetime = ?",
+  //       whereArgs: [itemModel.dateTime?.toIso8601String().substring(0,10)]);
+  //   if (result.length != 0) {
+  //     for (var item in result) {
+  //       await deleteItemDateTime(item['datetime']);
+  //     }
+  //
+  //     int res = await dbClient.insert("Cuadrante", itemModel.toMap(),
+  //         conflictAlgorithm: ConflictAlgorithm.ignore);
+  //     return res;
+  //   } else {
+  //     int res = await dbClient.insert("Cuadrante", itemModel.toMap(),
+  //         conflictAlgorithm: ConflictAlgorithm.ignore);
+  //     return res;
+  //   }
+  // }
 
-      int res = await dbClient.insert(_cuadrantes, itemModel.toMap(),
-          conflictAlgorithm: ConflictAlgorithm.ignore);
-      return res;
-    } else {
-      int res = await dbClient.insert(_cuadrantes, itemModel.toMap(),
-          conflictAlgorithm: ConflictAlgorithm.ignore);
-      return res;
-    }
-  }
 
   Future<void> deleteItemDateTime(String dateTime) async {
     Database? dbClient = await database;
