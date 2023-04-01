@@ -21,6 +21,7 @@ class MyTheme {
       // card widget background color
       cardColor:
           isLight ? LightThemeColors.cardColor : DarkThemeColors.cardColor,
+
       // hint text color
       hintColor: isLight
           ? LightThemeColors.hintTextColor
@@ -29,13 +30,25 @@ class MyTheme {
       dividerColor: isLight
           ? LightThemeColors.dividerColor
           : DarkThemeColors.dividerColor,
-      // app background color
-      backgroundColor: isLight
-          ? LightThemeColors.backgroundColor
-          : DarkThemeColors.backgroundColor,
+
+      /// app background color
+
       scaffoldBackgroundColor: isLight
           ? LightThemeColors.scaffoldBackgroundColor
           : DarkThemeColors.scaffoldBackgroundColor,
+      colorScheme: ColorScheme.fromSwatch().copyWith(
+        brightness: isLight
+            ? Brightness.light
+            : Brightness.dark,
+          background: isLight
+              ? LightThemeColors.backgroundColor
+              : DarkThemeColors.backgroundColor,
+          secondary: isLight
+              ? LightThemeColors.accentColor
+              : DarkThemeColors.accentColor
+      ),
+
+
 
       // progress bar theme
       progressIndicatorTheme: ProgressIndicatorThemeData(

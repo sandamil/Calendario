@@ -54,7 +54,7 @@ class MyStyles {
                 : DarkThemeColors.appBarIconsColor),
         backgroundColor: isLightTheme
             ? LightThemeColors.appBarColor
-            : DarkThemeColors.appbarColor,
+            : DarkThemeColors.appBarColor,
       );
 
   ///text theme
@@ -130,6 +130,8 @@ class MyStyles {
     );
   }
 
+
+
   ///Chips text style
   static TextStyle getChipTextStyle({required bool isLightTheme}) {
     return MyFonts.chipTextStyle.copyWith(
@@ -173,6 +175,8 @@ class MyStyles {
     );
   }
 
+
+
   //elevated button theme data
   static ElevatedButtonThemeData getElevatedButtonTheme(
           {required bool isLightTheme}) =>
@@ -206,4 +210,32 @@ class MyStyles {
           ),
         ),
       );
+
+
+
+  static InputDecorationTheme getInputDecorationTheme(
+      {required bool isLightTheme}) =>
+      InputDecorationTheme(
+        // focusedErrorBorder: UnderlineInputBorder(
+        //     borderSide: BorderSide(width: 0.7, color: errorColor)),
+        // focusedBorder: UnderlineInputBorder(
+        //     borderSide: BorderSide(width: 0.5, color: primaryColor)),
+        enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(width: 2.0, color: Colors.redAccent)),
+        border: UnderlineInputBorder(
+            borderSide: BorderSide(width: 2.0, color: Colors.redAccent)),
+        // disabledBorder: UnderlineInputBorder(
+        //     borderSide: BorderSide(width: 2.0, color: disabledColor)),
+      );
+
+  static InputDecorationTheme getInputDecorationTheme2(
+      {required bool isLightTheme}) =>
+      InputDecorationTheme(
+        // border: OutlineInputBorder(
+        //   borderRadius: BorderRadius.circular(28),
+        //   borderSide: BorderSide(color: textColor),
+        // ),
+      );
+
+
 }

@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 import 'dart:math';
 import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -33,8 +34,8 @@ class CalendarWidget extends StatelessWidget {
             () {
               return calendarController.isReady.value
                   ? TableCalendar(
-                  onDayLongPressed: calendarController.onDaySelectedLongPress,
-                      headerVisible: false,
+                      daysOfWeekHeight: 18.h,
+                      headerVisible: Platform.isMacOS ? true : false,
                       locale: 'es_ES',
                       calendarStyle: const CalendarStyle(
                         outsideDaysVisible: false,
@@ -63,6 +64,8 @@ class CalendarWidget extends StatelessWidget {
                             calendarController.selectedDay.value, day);
                       },
                       onDaySelected: calendarController.onDaySelected,
+                      onDayLongPressed:
+                          calendarController.onDaySelectedLongPress,
                       // onFormatChanged: (format) {
                       //   if (controller.calendarFormat != format) {
                       //     controller.changeCalendarFormat(format);
@@ -96,12 +99,13 @@ class CalendarWidget extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   ...events.map((turno) => Padding(
-                    padding: EdgeInsets.symmetric(vertical: 0.5.h, horizontal: 3.w),
-                    child: Container(
+                        padding: EdgeInsets.symmetric(
+                            vertical: 0.5.h, horizontal: 3.w),
+                        child: Container(
                           decoration: BoxDecoration(
                             color: HexColor(turno.color!).withAlpha(600),
-                            border:
-                                Border.all(color: HexColor(turno.color!), width: 1),
+                            border: Border.all(
+                                color: HexColor(turno.color!), width: 1),
                             borderRadius: BorderRadius.circular(3.r),
                           ),
                           height: 14.h,
@@ -114,10 +118,13 @@ class CalendarWidget extends StatelessWidget {
                                     fontWeight: FontWeight.w900)),
                           ),
                         ),
-                  )),
-                  SizedBox(height: 3.h,),
+                      )),
+                  SizedBox(
+                    height: 3.h,
+                  ),
                   ...notas.map((nota) => Padding(
-                    padding: EdgeInsets.symmetric(vertical: 0.5.h, horizontal: 3.w),
+                        padding: EdgeInsets.symmetric(
+                            vertical: 0.5.h, horizontal: 3.w),
                         child: GestureDetector(
                           onTap: () {
                             print('tap');
@@ -146,10 +153,11 @@ class CalendarWidget extends StatelessWidget {
             ),
           );
         },
+
         ///==      holidayBuilder:         ========================================
         holidayBuilder: (context, day, focusedDay) {
           return Padding(
-            padding: EdgeInsets.all(2.h),
+            padding: EdgeInsets.all(0.h),
             child: Container(
               width: double.maxFinite,
               height: double.maxFinite,
@@ -183,11 +191,12 @@ class CalendarWidget extends StatelessWidget {
         ///==      defaultBuilder:         ========================================
         defaultBuilder: (context, day, focusedDay) {
           return Padding(
-            padding: EdgeInsets.all(2.h),
+            padding: EdgeInsets.all(0.h),
             child: Container(
               width: double.maxFinite,
               height: double.maxFinite,
               decoration: BoxDecoration(
+                color: MyColors.cellColor,
                 border: Border.all(width: 1.w, color: MyColors.borderCellColor),
                 borderRadius: BorderRadius.circular(5.r),
               ),
@@ -213,7 +222,7 @@ class CalendarWidget extends StatelessWidget {
         ///==      selectedBuilder:         ========================================
         selectedBuilder: (context, day, focusedDay) {
           return Padding(
-            padding: EdgeInsets.all(2.h),
+            padding: EdgeInsets.all(0.h),
             child: Container(
               alignment: Alignment.center,
               decoration: BoxDecoration(
@@ -244,11 +253,11 @@ class CalendarWidget extends StatelessWidget {
         ///==      todayBuilder:         ========================================
         todayBuilder: (context, day, events) {
           return Padding(
-            padding: EdgeInsets.all(2.h),
+            padding: EdgeInsets.all(0.h),
             child: Container(
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                color: MyColors.cellColor,
+                color: MyColors.cellTodayColor,
                 // backgroundBlendMode: dayType == 'outside' ? BlendMode.modulate :  BlendMode.darken,
                 border: Border.all(
                   color: PRIMARY_COLOR,

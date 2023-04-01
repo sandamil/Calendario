@@ -1,5 +1,6 @@
 import 'package:calendario2/app/data/model/taskModel.dart';
 import 'package:calendario2/app/data/model/turnoCalendar.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -93,85 +94,84 @@ class TaskCard extends StatelessWidget {
             ),
           ]),
       child: Container(
-          margin: const EdgeInsets.fromLTRB(6, 4, 6, 4),
-          height: 60,
+          margin: EdgeInsets.symmetric(vertical: 2.h, horizontal: 2.w),
+          height: 52.h,
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(12),
+
+            borderRadius: BorderRadius.circular(5.r),
             boxShadow: [buildBoxShadow(color, context)],
           ),
           child: Material(
-            borderRadius: BorderRadius.circular(12),
+
+            borderRadius: BorderRadius.circular(5.r),
             clipBehavior: Clip.antiAlias,
-            color: Theme.of(context).dialogBackgroundColor,
+            color: Theme.of(context).cardColor,
             child: InkWell(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(5.r),
               onTap: () {
                 onTapAction(noteData);
               },
               splashColor: color.withAlpha(20),
               highlightColor: color.withAlpha(10),
-              child: Container(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Row(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      Container(
+                        margin: EdgeInsets.only(top: 6.h, left: 4.w),
+                        child: Text(
+                          noteData.title!.trim().length <= 20
+                              ? noteData.title!.trim()
+                              : '${noteData.title!.trim().substring(0, 20)}...',
+                          style:  TextStyle(
+                              fontFamily: 'ZillaSlab',
+                              fontSize: 18.sp,
+                              fontWeight: FontWeight.w800),
+                        ),
+                      ),
+                      const Spacer(),
+                      Icon(
+                        noteData.isImportant!
+                            ? Icons.flag
+                            : Icons.flag_outlined,
+                        color:
+                            noteData.isImportant! ? Colors.red : Colors.grey,
+                      ),
+                    ],
+                  ),
+                  const Spacer(),
+                  Container(
+                    alignment: Alignment.centerRight,
+                    child: Row(
                       children: <Widget>[
                         Container(
-                          margin: const EdgeInsets.only(top: 8, left: 8),
+                          margin: EdgeInsets.only(bottom: 4.h, left: 4.w),
                           child: Text(
-                            noteData.title!.trim().length <= 20
-                                ? noteData.title!.trim()
-                                : noteData.title!.trim().substring(0, 20) +
-                                    '...',
-                            style: const TextStyle(
-                                fontFamily: 'ZillaSlab',
-                                fontSize: 20,
-                                fontWeight: FontWeight.w800),
+                            noteData.notes!.trim().split('\n').first.length <=
+                                    30
+                                ? noteData.notes!.trim().split('\n').first
+                                : '${noteData.notes!.trim().split('\n').first.substring(0, 30)}...',
+                            style: TextStyle(
+                                fontSize: 12.sp,),
                           ),
                         ),
                         const Spacer(),
-                        Icon(
-                          noteData.isImportant!
-                              ? Icons.star
-                              : Icons.star_outline,
-                          color:
-                              noteData.isImportant! ? Colors.red : Colors.grey,
+                        Container(
+                          margin: EdgeInsets.only(bottom: 3.h, right: 4.w),
+                          child: Text(
+                            neatDate,
+                            textAlign: TextAlign.right,
+                            style: TextStyle(
+                                fontSize: 11.sp,
+                                // color: Colors.grey.shade300,
+                                fontWeight: FontWeight.w500),
+                          ),
                         ),
                       ],
                     ),
-                    const Spacer(),
-                    Container(
-                      alignment: Alignment.centerRight,
-                      child: Row(
-                        children: <Widget>[
-                          Container(
-                            margin: const EdgeInsets.only(bottom: 4, left: 8),
-                            child: Text(
-                              noteData.notes!.trim().split('\n').first.length <=
-                                      30
-                                  ? noteData.notes!.trim().split('\n').first
-                                  : '${noteData.notes!.trim().split('\n').first.substring(0, 30)}...',
-                              style: TextStyle(
-                                  fontSize: 14, color: Colors.grey.shade400),
-                            ),
-                          ),
-                          const Spacer(),
-                          Container(
-                            margin: const EdgeInsets.only(bottom: 4, right: 8),
-                            child: Text(
-                              neatDate,
-                              textAlign: TextAlign.right,
-                              style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.grey.shade300,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
+                  )
+                ],
               ),
             ),
           )),

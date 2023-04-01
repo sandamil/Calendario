@@ -73,13 +73,13 @@ class HomeView extends GetView<HomeController> {
         body: Column(
           children: [
             CalendarWidget(),
-            SizedBox(height: 10.h),
+            SizedBox(height: 5.h),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
+              padding: EdgeInsets.symmetric(horizontal: 2.w),
               child: LineWidget(),
             ),
-            SizedBox(height: 2.h),
-            Obx(() => _buildSelectedDay()),
+            // SizedBox(height: 2.h),
+            // Obx(() => _buildSelectedDay()),
             SizedBox(height: 2.h),
             Obx(() {
               return Expanded(child: _buildListEvent());
@@ -91,49 +91,98 @@ class HomeView extends GetView<HomeController> {
   Widget _buildListEvent() {
     final calendarVM = Get.find<CalendarController>();
     final selectedDay = calendarVM.selectedDay.value;
-
-    List events = calendarVM.getEventsOfDay(selectedDay);
-    return SingleChildScrollView(
-        child: Column(
-      children: events
-          .map(
-            (event) => Column(
-              children: [
-                // CardEvent(event: event),
-                TaskCard(noteData: event, onTapAction: controller.notasController.openNoteToRead)
-              ],
-            ),
-          )
-          .toList(),
-    ));
-  }
-
-  Widget _buildSelectedDay() {
-    final calendarVM = Get.find<CalendarController>();
-
-    final selectedDay = calendarVM.selectedDay.value;
     String formattedDate =
         '${selectedDay.day} / ${selectedDay.month} / ${selectedDay.year}';
+    List events = calendarVM.getEventsOfDay(selectedDay);
 
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Column(
       children: [
-        Container(
-          margin: const EdgeInsets.only(left: 10),
-          child: const Text(
-            'Anotaciones',
-            // style: AppTextStyle.titleTextStyle(),
-          ),
-        ),
-        const SizedBox(height: 5),
-        Container(
-          margin: const EdgeInsets.only(left: 10),
-          child: Text(
-            formattedDate,
-            // style: AppTextStyle.disableTextStyle(),
-          ),
-        ),
+        events.isNotEmpty
+            ? Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(left: 4.w),
+                    child:  Text(
+                      'Notas para el día:',
+                      style: TextStyle(fontSize: 14.sp),
+                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  Container(
+                    margin:  EdgeInsets.only(left: 4.w),
+                    child: Text(
+                      formattedDate,
+                      style: TextStyle(fontSize: 14.sp),
+                    ),
+                  ),
+                ],
+              )
+            : Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(left: 4.w),
+                    child: Text(
+                      'No hay notas grabadas para el día:',
+                      style: TextStyle(fontSize: 14.sp),
+                    ),
+                  ),
+                   SizedBox(height: 5.h),
+                  Container(
+                    margin: EdgeInsets.only(left: 4.w),
+                    child: Text(
+                      formattedDate,
+                      style: TextStyle(fontSize: 14.sp),
+                    ),
+                  ),
+                ],
+              ),
+        SingleChildScrollView(
+            child: Column(
+          children: events
+              .map(
+                (event) => Column(
+                  children: [
+                    // CardEvent(event: event),
+                    TaskCard(
+                        noteData: event,
+                        onTapAction: controller.notasController.openNoteToRead)
+                  ],
+                ),
+              )
+              .toList(),
+        )),
       ],
     );
   }
+
+  // Widget _buildSelectedDay() {
+  //   final calendarVM = Get.find<CalendarController>();
+  //
+  //   final selectedDay = calendarVM.selectedDay.value;
+  //   String formattedDate =
+  //       '${selectedDay.day} / ${selectedDay.month} / ${selectedDay.year}';
+  //
+  //   return Row(
+  //     crossAxisAlignment: CrossAxisAlignment.start,
+  //     children: [
+  //       Container(
+  //         margin: const EdgeInsets.only(left: 10),
+  //         child: const Text(
+  //           'Notas para el dia:',
+  //           // style: AppTextStyle.titleTextStyle(),
+  //         ),
+  //       ),
+  //       const SizedBox(height: 5),
+  //       Container(
+  //         margin: const EdgeInsets.only(left: 10),
+  //         child: Text(
+  //           formattedDate + ':',
+  //           // style: AppTextStyle.disableTextStyle(),
+  //         ),
+  //       ),
+  //     ],
+  //   );
+  // }
 }

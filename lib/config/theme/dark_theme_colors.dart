@@ -6,18 +6,18 @@ import 'package:flutter/cupertino.dart';
 class DarkThemeColors
 {
   //dark swatch
-  static const Color primaryColor = Colors.orange;
-  static const Color primaryColor50 = const Color(0x80FF9800);
-  static Color accentColor = Colors.blueAccent;
+  static const Color primaryColor = const Color(0xFFFFA500);
+  static const Color primaryColor50 = const Color(0x80FFA500);
+  static Color accentColor = const Color(0xff005AFF);
 
-  //Appbar
-  static const Color appbarColor = Colors.black;
+  //APPBAR
+  static const Color appBarColor = const Color(0xFFA500);
 
   //SCAFFOLD
-  static const Color scaffoldBackgroundColor = Color(0xff171d2d);
-  static const Color backgroundColor = Color(0xff171d2d);
-  static const Color dividerColor = Color(0xff686868);
-  static const Color cardColor = Color(0xff1e2336);
+  static const Color scaffoldBackgroundColor = Color(0xff303030);
+  static const Color backgroundColor = Color(0xff333333);
+  static const Color dividerColor = Color(0xff898276);
+  static const Color cardColor = Color(0xff353535);
 
   //ICONS
   static const Color appBarIconsColor = Colors.white;
@@ -32,7 +32,7 @@ class DarkThemeColors
   static const Color buttonDisabledTextColor = Colors.black;
 
   //TEXT
-  static const Color bodyTextColor = Colors.white70;
+  static const Color bodyTextColor = Color(0xe5ffffff);
   static const Color headlinesTextColor = primaryColor;
   static const Color captionTextColor = Colors.grey;
   static const Color hintTextColor = Color(0xff686868);

@@ -32,21 +32,15 @@ class NotasListView extends GetView<NotasListController> {
           centerTitle: false,
           elevation: 0.0,
           backgroundColor: Colors.transparent,
-          title: AnimatedContainer(
-            duration: const Duration(milliseconds: 200),
-            curve: Curves.easeIn,
-//          margin: EdgeInsets.only(top: 8, bottom: 32, left: 10),
-            width: controller.headerShouldHide ? 0 : 200,
-            child: Text(
-              'Notas',
-              style: TextStyle(
-                  fontFamily: 'ZillaSlab',
-                  fontWeight: FontWeight.w700,
-                  fontSize: 28.sp,
-                  color: theme.primaryColor),
-              overflow: TextOverflow.clip,
-              softWrap: false,
-            ),
+          title: Text(
+            'Notas',
+            style: TextStyle(
+                fontFamily: 'ZillaSlab',
+                fontWeight: FontWeight.w700,
+                fontSize: 28.sp,
+                color: theme.primaryColor),
+            overflow: TextOverflow.clip,
+            softWrap: false,
           ),
           actions: <Widget>[
             IconButton(

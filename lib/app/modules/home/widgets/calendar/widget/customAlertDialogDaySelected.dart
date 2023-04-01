@@ -39,15 +39,15 @@ class CustomAlertDilogDaySelected extends StatelessWidget {
               ),
               child: Column(
                 children: [
-                  SizedBox(height: 10.h),
+                  SizedBox(height: 2.h),
                   getContent(theme),
-                  SizedBox(height: 10.h),
+                  SizedBox(height: 2.h),
                   Row(
                     children: [
                       Expanded(
                         child: turnoBtn(context, selectedDate),
                       ),
-                      const SizedBox(width: 10),
+                       SizedBox(width: 4.w),
                       Expanded(
                         child: eventoBtn(context, selectedDate),
                       ),
@@ -71,22 +71,28 @@ class CustomAlertDilogDaySelected extends StatelessWidget {
   }
 
   Widget turnoBtn(context, selectedDate) {
-    return ElevatedButton(
-      onPressed: () async {
-        await calendarController.fetchTurno();
-        Navigator.pop(context);
-        calendarController.showPopUp(Get.context!, selectedDate, turno);
-      },
-      child: const Text("+ Turno"),
+    return Padding(
+      padding:  EdgeInsets.only(right: 2.h, left: 2.h, bottom: 4.h, top: 1.h),
+      child: ElevatedButton(
+        onPressed: () async {
+          await calendarController.fetchTurno();
+          Navigator.pop(context);
+          calendarController.showPopUp(Get.context!, selectedDate, turno);
+        },
+        child: const Text("+ Turno"),
+      ),
     );
   }
 
   Widget eventoBtn(context, selectedDate) {
-    return ElevatedButton(
-      onPressed: () {
-        Get.toNamed('/add-notas', arguments: selectedDate);
-      },
-      child: const Text("+ Evento"),
+    return Padding(
+      padding:  EdgeInsets.all(2.h),
+      child: ElevatedButton(
+        onPressed: () {
+          Get.toNamed('/add-notas', arguments: selectedDate);
+        },
+        child: const Text("+ Evento"),
+      ),
     );
   }
 }

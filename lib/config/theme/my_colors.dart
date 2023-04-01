@@ -10,17 +10,24 @@ class MyColors {
   // Color Cell Calendar
 
   static Color get cellColor => MyTheme().getThemeIsLight
-      ? const Color.fromRGBO(201, 201, 201, 0.0784313725490196)
-      : const Color.fromRGBO(255, 255, 255, 0.10);
+      ? const Color(0xFFefeeee)
+      : const Color(0xFF2b2b2b);
+  static Color get cellTodayColor => MyTheme().getThemeIsLight
+      ? const Color(0xFFefeeee)
+      : const Color(0xff353535);
   static Color get cellSelectedColor => MyTheme().getThemeIsLight
-      ? const Color.fromRGBO(231, 231, 231, 1.0)
-      : const Color.fromRGBO(255, 255, 255, 0.10);
+      ? const Color(0xFFfdfcfc)
+      : const Color(0xff444444);
   static Color get borderCellColor => MyTheme().getThemeIsLight
       ? GREY_COLOR
       : GREY_DARK_COLOR;
   static Color get cellTextColor => MyTheme().getThemeIsLight
       ? const Color.fromRGBO(0, 0, 0, 1)
       : const Color.fromRGBO(255, 255, 255, 1);
+  static Color get borderAccentLine => MyTheme().getThemeIsLight
+      ? const Color(0xff444444)
+      : const Color(0xFFefeeee);
+
 
 }
 
