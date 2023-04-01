@@ -26,6 +26,12 @@ class AddNotasController extends GetxController {
 
   @override
   void onInit() {
+    var dateTimeCalendar = Get.arguments;
+    if (dateTimeCalendar != null) {
+      startTime.value = dateTimeCalendar;
+      endTime.value = dateTimeCalendar;
+    }
+
     super.onInit();
   }
 

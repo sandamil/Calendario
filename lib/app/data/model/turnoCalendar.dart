@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:intl/intl.dart';
 
 class Cuadrante {
   int? id;
@@ -31,7 +32,7 @@ class Cuadrante {
       'startHour': startHour,
       'endHour': endHour,
       'color': color,
-      'datetime': dateTime?.toIso8601String(),
+      'datetime': DateFormat("yyyy-MM-ddTHH:mm:ss").format(dateTime!),
     };
   }
 

@@ -27,6 +27,7 @@ class CalendarController extends GetxController {
   setFocusedDay(DateTime day) => _focusedDay;
 
   RxList<Cuadrante> selectedEvents = <Cuadrante>[].obs;
+  RxList<Task> selectedNotas = <Task>[].obs;
   // get selectedEvents => _selectedEvents;
 
   ///============================
@@ -65,15 +66,18 @@ class CalendarController extends GetxController {
       _focusedDay.value = focusedDate;
     }
     selectedEvents.value = getEventForDay(selectedDay.value);
+    selectedNotas.value = getEventsOfDay(selectedDay.value);
     // Get.dialog(CustomAlertDilogDaySelected(
     //     selectedDate: selectedDate, turno: turno.value));
   }
-  onDaySelectedLongPress(DateTime selectedDate, DateTime focusedDate) {
-    if (!isSameDay(selectedDate, selectedDay.value)) {
-      selectedDay.value = selectedDate;
-      _focusedDay.value = focusedDate;
-    }
-    selectedEvents.value = getEventForDay(selectedDay.value);
+  onDaySelectedLongPress(DateTime selectedDate, DateTime focusedDate) async {
+    if (!isSameDay(selectedDate, selectedDay.value)) await {
+      selectedDay.value = selectedDate,
+      _focusedDay.value = focusedDate,
+    };
+    selectedEvents.value = await getEventForDay(selectedDay.value);
+    selectedNotas.value = getEventsOfDay(selectedDay.value);
+
     Get.dialog(CustomAlertDilogDaySelected(
         selectedDate: selectedDate, turno: turno.value));
   }

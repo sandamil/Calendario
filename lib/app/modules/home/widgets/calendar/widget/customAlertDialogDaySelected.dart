@@ -49,7 +49,7 @@ class CustomAlertDilogDaySelected extends StatelessWidget {
                       ),
                       const SizedBox(width: 10),
                       Expanded(
-                        child: eventoBtn(),
+                        child: eventoBtn(context, selectedDate),
                       ),
                     ],
                   ),
@@ -81,9 +81,11 @@ class CustomAlertDilogDaySelected extends StatelessWidget {
     );
   }
 
-  Widget eventoBtn() {
+  Widget eventoBtn(context, selectedDate) {
     return ElevatedButton(
-      onPressed: () {},
+      onPressed: () {
+        Get.toNamed('/add-notas', arguments: selectedDate);
+      },
       child: const Text("+ Evento"),
     );
   }

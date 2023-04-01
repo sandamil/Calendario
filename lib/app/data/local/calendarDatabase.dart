@@ -82,7 +82,7 @@ class DBHelper {
         where: "id = ?",
         whereArgs: [id]
     );
-    if (result.length == 0) {
+    if (result.isEmpty) {
       return null;
     } else {
       return Cuadrante.fromMap(result.first);
@@ -99,23 +99,33 @@ class DBHelper {
     List<Map<String, dynamic>> result =
     await dbClient!.rawQuery(
         "SELECT * FROM $_cuadrantes WHERE datetime BETWEEN '${dayStart.toString()}' AND '${dayEnd.toString()}'");
+
+    print(result.asMap());
+    print(result.last);
     return result.map((m) => Cuadrante.fromMap(m)).toList();
   }
 
-  Future<int> addItemModel(Cuadrante itemModel) async {
-    final dbClient = await database;
 
-    int res = await dbClient!.insert(_cuadrantes, itemModel.toMap(),
+
+
+
+  Future<int> addItem(Cuadrante item) async {
+    final dbClient = await database;
+    int res = await dbClient!.insert(_cuadrantes, item.toMap(),
         conflictAlgorithm: ConflictAlgorithm.ignore);
     return res;
   }
+
+
+
+
 
   Future<int> replaceItemModel(Cuadrante itemModel) async {
     final dbClient = await database;
     List result = await dbClient!.query(_cuadrantes,
         where: "datetime = ?",
         whereArgs: [itemModel.dateTime?.toIso8601String()]);
-    if (result.length != 0) {
+    if (result.isNotEmpty) {
       for (var item in result) {
         await deleteItemDateTime(item['datetime']);
       }
