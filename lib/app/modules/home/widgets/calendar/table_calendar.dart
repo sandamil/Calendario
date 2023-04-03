@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 import 'dart:math';
+import 'package:calendario2/app/components/custom_snackbar.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
@@ -16,6 +17,7 @@ import 'package:table_calendar/table_calendar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../components/custom_dialog.dart';
 import 'widget/day_builder.dart';
 import 'widget/marker_builder.dart';
 
@@ -34,9 +36,10 @@ class CalendarWidget extends StatelessWidget {
             () {
               return calendarController.isReady.value
                   ? TableCalendar(
-                      daysOfWeekHeight: 18.h,
-                      headerVisible: Platform.isMacOS ? true : false,
                       locale: 'es_ES',
+                      daysOfWeekHeight: 18.h,
+                      rowHeight: 90.h,
+                      headerVisible: Platform.isMacOS ? true : false,
                       calendarStyle: const CalendarStyle(
                         outsideDaysVisible: false,
                       ),
@@ -50,7 +53,6 @@ class CalendarWidget extends StatelessWidget {
                       //   return (date.weekday != DateTime.sunday &&
                       //       date.weekday != DateTime.saturday);
                       // },
-                      rowHeight: 90.h,
                       firstDay: DateTime.now()
                           .subtract(const Duration(days: 200, hours: 23)),
                       lastDay: DateTime.now()
@@ -105,7 +107,7 @@ class CalendarWidget extends StatelessWidget {
                           decoration: BoxDecoration(
                             color: HexColor(turno.color!).withAlpha(600),
                             border: Border.all(
-                                color: HexColor(turno.color!), width: 1),
+                                color: HexColor(turno.color!), width: 1.h),
                             borderRadius: BorderRadius.circular(3.r),
                           ),
                           height: 14.h,
@@ -113,6 +115,7 @@ class CalendarWidget extends StatelessWidget {
                             alignment: Alignment.center,
                             child: Text(turno.title!.toUpperCase(),
                                 style: TextStyle(
+                                    height: 0.77.h,
                                     fontSize: 11.sp,
                                     color: HexColor(turno.color!),
                                     fontWeight: FontWeight.w900)),
@@ -127,21 +130,23 @@ class CalendarWidget extends StatelessWidget {
                             vertical: 0.5.h, horizontal: 3.w),
                         child: GestureDetector(
                           onTap: () {
-                            print('tap');
+                            CustomDialog.mostrarTask(nota);
                           },
                           child: Container(
                               decoration: BoxDecoration(
                                 color: PRIMARY_COLOR_TRANSPARENTE,
-                                border:
-                                    Border.all(color: PRIMARY_COLOR, width: 1),
+                                border: Border.all(
+                                    color: PRIMARY_COLOR, width: 1.h),
                                 borderRadius: BorderRadius.circular(3.r),
                               ),
-                              height: 14.h,
+                              height: 15.h,
                               child: Align(
-                                alignment: Alignment.bottomCenter,
+                                alignment: Alignment.center,
                                 child: Text(
                                   nota.title!.toUpperCase(),
+                                  maxLines:1,
                                   style: TextStyle(
+                                      height: 0.77.h,
                                       fontSize: 11.sp,
                                       fontWeight: FontWeight.w600),
                                 ),

@@ -2,9 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class CustomSnackBar {
+
+  static final _defaultBoxShadows = [
+    BoxShadow(
+      color: Colors.black.withOpacity(1),
+      offset: const Offset(0, 2),
+      blurRadius: 4,
+    ),
+  ];
+
   static showCustomSnackBar({required String title, required String message,Duration? duration})
   {
     Get.snackbar(
+      boxShadows: _defaultBoxShadows,
+
       title,
       message,
       duration: duration ?? const Duration(seconds: 3),
@@ -34,7 +45,7 @@ class CustomSnackBar {
   static showCustomToast({String? title, required String message,Color? color,Duration? duration}){
     Get.rawSnackbar(
       title: title,
-      duration: duration ?? const Duration(seconds: 3),
+      // duration: duration ?? const Duration(seconds: 3),
       snackStyle: SnackStyle.GROUNDED,
       backgroundColor: color ?? Colors.green,
       onTap: (snack){

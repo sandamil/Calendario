@@ -41,8 +41,8 @@ class CrearTurnoController extends GetxController {
   @override
   void onInit() {
     fetchEventsType();
-    startDate = DateTime.now().formatDate.obs;
-    endDate = DateTime.now().add(const Duration(hours: 1)).formatDate.obs;
+    startDate = DateTime.now().formatDateTime24H.obs;
+    endDate = DateTime.now().add(const Duration(hours: 1)).formatDateTime24H.obs;
     titleValueController = TextEditingController();
     descriptionValueController = TextEditingController();
     logger.i(turnoType.value.length);

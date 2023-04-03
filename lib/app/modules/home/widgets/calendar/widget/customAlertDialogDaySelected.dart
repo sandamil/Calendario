@@ -1,6 +1,7 @@
 import 'package:calendario2/app/modules/home/controllers/calendar_controller.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/config/theme/my_theme.dart';
+import 'package:calendario2/config/util/dateUtils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -48,6 +49,34 @@ class CustomAlertDilogDaySelected extends StatelessWidget {
                         child: turnoBtn(context, selectedDate),
                       ),
                        SizedBox(width: 4.w),
+                      Container(
+                        width: 60.w,
+                        height: 28.h,
+                        decoration: BoxDecoration(
+                          border: Border.all(width: 2.w, color: PRIMARY_COLOR),
+                          borderRadius: BorderRadius.circular(5.r),
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(width: 1.w),
+                            Container(
+                              child: Text(selectedDate.formatDateD,
+                                style: Theme.of(context).textTheme.titleSmall!.copyWith(fontSize: 16.sp)
+                              ),
+                            ),
+                            SizedBox(width: 2.w),
+                            Container(
+                              child: Text(selectedDate.formatDateMMM,
+                                  style: Theme.of(context).textTheme.titleSmall!.copyWith(fontSize: 16.sp)
+                              ),
+                            ),
+                            SizedBox(width: 1.w),
+                          ],
+                        ),
+                      ),
+
+                      SizedBox(width: 4.w),
                       Expanded(
                         child: eventoBtn(context, selectedDate),
                       ),
@@ -72,7 +101,7 @@ class CustomAlertDilogDaySelected extends StatelessWidget {
 
   Widget turnoBtn(context, selectedDate) {
     return Padding(
-      padding:  EdgeInsets.only(right: 2.h, left: 2.h, bottom: 4.h, top: 1.h),
+      padding:  EdgeInsets.all(2.h),
       child: ElevatedButton(
         onPressed: () async {
           await calendarController.fetchTurno();

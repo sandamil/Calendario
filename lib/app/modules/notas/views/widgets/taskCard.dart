@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:calendario2/app/data/model/taskModel.dart';
 import 'package:calendario2/app/data/model/turnoCalendar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -40,152 +42,141 @@ class TaskCard extends StatelessWidget {
         DateTime.fromMillisecondsSinceEpoch(noteData.startTimeMilliseconds!);
     String neatDate = DateFormat('dd-MM-yyyy HH:mm').format(date);
 
-    // print(noteData.endTimeMilliseconds);
-
     Color color =
-        colorList.elementAt(noteData.title!.length % colorList.length);
+    colorList.elementAt(Random().nextInt(colorList.length));
 
-    return Slidable(
-      startActionPane: ActionPane(
-        motion: const DrawerMotion(),
-        extentRatio: 0.25,
-        children: [
-          SlidableAction(
-            label: 'Archive',
-            backgroundColor: Colors.blue,
-            icon: Icons.archive,
-            onPressed: (context) {},
-          ),
-        ],
+    return Container(
+      padding: const EdgeInsets.only(left: 10, right: 10),
+      decoration: BoxDecoration(
+
+        borderRadius: BorderRadius.circular(5.r),
+        boxShadow: [buildBoxShadow(color, context)],
       ),
-      endActionPane: ActionPane(
-          motion: const DrawerMotion(),
-          extentRatio: 0.25,
-          children: [
-            Container(
-              decoration: const BoxDecoration(
-                boxShadow: [
-                  BoxShadow(color: Colors.black38, offset: Offset(1.0, 2.0))
-                ],
-                borderRadius: BorderRadius.all(Radius.circular(12)),
-                color: Colors.indigo,
-              ),
-              child: SlidableAction(
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(12),
+        child: Slidable(
+          startActionPane: ActionPane(
+            motion: const DrawerMotion(),
+            extentRatio: 0.3,
+            children: [
+              SlidableAction(
                 label: 'Compartir',
-                backgroundColor: Colors.indigo.withOpacity(0.0),
-                icon: Icons.share,
+                borderRadius: BorderRadius.all(Radius.circular(5.r)),
+                backgroundColor: Colors.blue,
+                icon: Icons.send,
                 onPressed: (context) {},
               ),
-            ),
-            Container(
-              decoration: const BoxDecoration(
-                boxShadow: [
-                  BoxShadow(color: Colors.black38, offset: Offset(1.0, 2.0))
-                ],
-                borderRadius: BorderRadius.all(Radius.circular(12)),
-                color: Colors.red,
-              ),
-              child: SlidableAction(
-                label: 'Delete',
-                backgroundColor: Colors.red.withOpacity(0.0),
-                icon: Icons.delete,
-                onPressed: (context) {},
-              ),
-            ),
-          ]),
-      child: Container(
-          margin: EdgeInsets.symmetric(vertical: 2.h, horizontal: 2.w),
-          height: 52.h,
-          decoration: BoxDecoration(
-
-            borderRadius: BorderRadius.circular(5.r),
-            boxShadow: [buildBoxShadow(color, context)],
+            ],
           ),
-          child: Material(
+          endActionPane: ActionPane(
+              motion: const DrawerMotion(),
+              extentRatio: 0.5,
+              children: [
+                SlidableAction(
+                  label: 'Compartir',
+                  icon: Icons.share,
+                  backgroundColor: Colors.blue,
+                  borderRadius: BorderRadius.all(Radius.circular(5.r)),
+                  onPressed: (context) {},
+                ),
+                SlidableAction(
+                  label: 'Delete',
+                  icon: Icons.delete,
+                  backgroundColor: Colors.red,
+                  borderRadius: BorderRadius.all(Radius.circular(5.r)),
+                  onPressed: (context) {
+                    notasViewController.handleDeleteCalendar(noteData.id);
+                  },
+                ),
+              ]),
+          child: Container(
+              margin: EdgeInsets.symmetric(vertical: 2.h, horizontal: 2.w),
+              height: 52.h,
+              decoration: BoxDecoration(
 
-            borderRadius: BorderRadius.circular(5.r),
-            clipBehavior: Clip.antiAlias,
-            color: Theme.of(context).cardColor,
-            child: InkWell(
-              borderRadius: BorderRadius.circular(5.r),
-              onTap: () {
-                onTapAction(noteData);
-              },
-              splashColor: color.withAlpha(20),
-              highlightColor: color.withAlpha(10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Row(
+                borderRadius: BorderRadius.circular(5.r),
+                boxShadow: [buildBoxShadow(color, context)],
+              ),
+              child: Material(
+                borderRadius: BorderRadius.circular(5.r),
+                clipBehavior: Clip.antiAlias,
+                color: Theme.of(context).cardColor,
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(5.r),
+                  onTap: () {
+                    onTapAction(noteData);
+                  },
+                  splashColor: color.withAlpha(20),
+                  highlightColor: color.withAlpha(10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Container(
-                        margin: EdgeInsets.only(top: 6.h, left: 4.w),
-                        child: Text(
-                          noteData.title!.trim().length <= 20
-                              ? noteData.title!.trim()
-                              : '${noteData.title!.trim().substring(0, 20)}...',
-                          style:  TextStyle(
-                              fontFamily: 'ZillaSlab',
-                              fontSize: 18.sp,
-                              fontWeight: FontWeight.w800),
-                        ),
+                      Row(
+                        children: <Widget>[
+                          Container(
+                            margin: EdgeInsets.only(top: 6.h, left: 4.w),
+                            child: Text(
+                              noteData.title!.trim().length <= 20
+                                  ? noteData.title!.trim()
+                                  : '${noteData.title!.trim().substring(0, 20)}...',
+                              style:  TextStyle(
+                                  fontFamily: 'ZillaSlab',
+                                  fontSize: 18.sp,
+                                  fontWeight: FontWeight.w800),
+                            ),
+                          ),
+                          const Spacer(),
+                          Icon(
+                            noteData.isImportant!
+                                ? Icons.flag
+                                : Icons.flag_outlined,
+                            color:
+                                noteData.isImportant! ? Colors.red : Colors.grey,
+                          ),
+                        ],
                       ),
                       const Spacer(),
-                      Icon(
-                        noteData.isImportant!
-                            ? Icons.flag
-                            : Icons.flag_outlined,
-                        color:
-                            noteData.isImportant! ? Colors.red : Colors.grey,
-                      ),
+                      Container(
+                        alignment: Alignment.centerRight,
+                        child: Row(
+                          children: <Widget>[
+                            Container(
+                              margin: EdgeInsets.only(bottom: 4.h, left: 4.w),
+                              child: Text(
+                                noteData.notes!.trim().split('\n').first.length <=
+                                        30
+                                    ? noteData.notes!.trim().split('\n').first
+                                    : '${noteData.notes!.trim().split('\n').first.substring(0, 30)}...',
+                                style: TextStyle(
+                                    fontSize: 12.sp,),
+                              ),
+                            ),
+                            const Spacer(),
+                            Container(
+                              margin: EdgeInsets.only(bottom: 3.h, right: 4.w),
+                              child: Text(
+                                neatDate,
+                                textAlign: TextAlign.right,
+                                style: TextStyle(
+                                    fontSize: 11.sp,
+                                    // color: Colors.grey.shade300,
+                                    fontWeight: FontWeight.w500),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
                     ],
                   ),
-                  const Spacer(),
-                  Container(
-                    alignment: Alignment.centerRight,
-                    child: Row(
-                      children: <Widget>[
-                        Container(
-                          margin: EdgeInsets.only(bottom: 4.h, left: 4.w),
-                          child: Text(
-                            noteData.notes!.trim().split('\n').first.length <=
-                                    30
-                                ? noteData.notes!.trim().split('\n').first
-                                : '${noteData.notes!.trim().split('\n').first.substring(0, 30)}...',
-                            style: TextStyle(
-                                fontSize: 12.sp,),
-                          ),
-                        ),
-                        const Spacer(),
-                        Container(
-                          margin: EdgeInsets.only(bottom: 3.h, right: 4.w),
-                          child: Text(
-                            neatDate,
-                            textAlign: TextAlign.right,
-                            style: TextStyle(
-                                fontSize: 11.sp,
-                                // color: Colors.grey.shade300,
-                                fontWeight: FontWeight.w500),
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ),
-          )),
+                ),
+              )),
+        ),
+      ),
     );
   }
 
   BoxShadow buildBoxShadow(Color color, BuildContext context) {
-    // if (Theme.of(context).brightness == Brightness.dark) {
-    //   return BoxShadow(
-    //       color: Colors.black.withAlpha(200),
-    //       blurRadius: 8,
-    //       offset: const Offset(0, 8));
-    // }
     return BoxShadow(
-        color: color.withAlpha(25), blurRadius: 8, offset: const Offset(0, 8));
+        color: color.withAlpha(8), blurRadius: 8, offset: const Offset(1, 1));
   }
 }

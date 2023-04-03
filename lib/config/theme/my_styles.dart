@@ -29,8 +29,8 @@ class MyStyles {
           style: ButtonStyle(
         // backgroundColor: MaterialStateColor.resolveWith((states) => Colors.black),
         foregroundColor: MaterialStateColor.resolveWith((states) => isLightTheme
-            ? LightThemeColors.primaryColor
-            : DarkThemeColors.primaryColor),
+            ? LightThemeColors.buttonTextColor
+            : DarkThemeColors.buttonTextColor),
         overlayColor: MaterialStateColor.resolveWith((states) => isLightTheme
             ? LightThemeColors.primaryColor50
             : DarkThemeColors.primaryColor50),

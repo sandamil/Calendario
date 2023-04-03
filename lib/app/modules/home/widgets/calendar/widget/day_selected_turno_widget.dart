@@ -1,6 +1,8 @@
+import 'package:calendario2/app/components/custom_dialog.dart';
 import 'package:calendario2/app/data/model/turnoCalendar.dart';
 import 'package:calendario2/app/modules/home/controllers/calendar_controller.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
+import 'package:calendario2/config/util/dateUtils.dart';
 import 'package:calendario2/config/util/hexColor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -12,7 +14,6 @@ class DaySelecetedTurnoWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     var theme = Theme.of(context);
 
     return Scaffold(
@@ -20,117 +21,150 @@ class DaySelecetedTurnoWidget extends StatelessWidget {
       body: GetX<CalendarController>(
         init: CalendarController(),
         builder: (c) {
-
           return c.selectedEvents.value.isEmpty
               ? Container()
               : SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    ListView.builder(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      ListView.builder(
                         shrinkWrap: true,
                         itemCount: c.selectedEvents.value.length,
                         itemBuilder: (context, index) {
                           return Container(
-                            height: 30,
-                            padding:
-                                EdgeInsets.symmetric(vertical: 1.h, horizontal: 2.w),
+                            height: 20.h,
+                            padding: EdgeInsets.symmetric(
+                                vertical: 1.h, horizontal: 2.w),
                             decoration: BoxDecoration(
-                              color: HexColor(c.selectedEvents.value[index].color!),
+                              color: HexColor(
+                                  c.selectedEvents.value[index].color!),
                               border: Border.all(width: 0.8.r),
                               borderRadius: BorderRadius.circular(5.r),
                             ),
-                            margin:
-                                EdgeInsets.symmetric(horizontal: 2.w, vertical: 2.h),
+                            margin: EdgeInsets.symmetric(
+                                horizontal: 2.w, vertical: 2.h),
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
-                                FittedBox(
-                                  child: Text(
-                                    '${c.selectedEvents.value[index].dateTime.toString().substring(8, 10)}-${c.selectedEvents.value[index].dateTime.toString().substring(5, 7)}-${c.selectedEvents.value[index].dateTime.toString().substring(0, 4)}',
-                                    style: TextStyle(
-                                        fontSize: 14.sp,
-                                        color: HexColor(c.selectedEvents.value[index]
-                                                        .color!)
-                                                    .computeLuminance() >
-                                                0.5
-                                            ? Colors.black
-                                            : Colors.white),
-                                  ),
-                                ),
-                                 SizedBox(
-                                  width: 20.w,
-                                ),
+                                // FittedBox(
+                                //   child: Text(
+                                //     '${c.selectedEvents.value[index].dateTime.toString().substring(8, 10)}-${c.selectedEvents.value[index].dateTime.toString().substring(5, 7)}-${c.selectedEvents.value[index].dateTime.toString().substring(0, 4)}',
+                                //     style: TextStyle(
+                                //         fontSize: 14.sp,
+                                //         color: HexColor(c.selectedEvents
+                                //                         .value[index].color!)
+                                //                     .computeLuminance() >
+                                //                 0.5
+                                //             ? Colors.black
+                                //             : Colors.white),
+                                //   ),
+                                // ),
+                                // SizedBox(
+                                //   width: 20.w,
+                                // ),
                                 FittedBox(
                                   child: Text(
                                     c.selectedEvents.value[index].description!,
                                     style: TextStyle(
                                         fontSize: 16.sp,
                                         fontWeight: FontWeight.bold,
-                                        color: HexColor(c.selectedEvents.value[index]
-                                                        .color!)
+                                        color: HexColor(c.selectedEvents
+                                                        .value[index].color!)
                                                     .computeLuminance() >
                                                 0.5
                                             ? Colors.black
                                             : Colors.white),
                                   ),
                                 ),
-                                 SizedBox(
-                                  width: 20.w,
-                                ),
-                                c.selectedEvents.value[index].startHour != null &&
-                                        c.selectedEvents.value[index].endHour != null
-                                    ? FittedBox(
-                                        child: Text(
-                                          '${c.selectedEvents.value[index].startHour.toString()} a ${c.selectedEvents.value[index].endHour.toString()}',
-                                          style: TextStyle(
-                                              fontSize: 14.sp,
-                                              color: HexColor(c.selectedEvents.value[index]
-                                                  .color!)
-                                                  .computeLuminance() >
-                                                  0.5
-                                                  ? Colors.black
-                                                  : Colors.white),
+                                // SizedBox(
+                                //   width: 20.w,
+                                // ),
+                                c.selectedEvents.value[index].startHour !=
+                                            null &&
+                                        c.selectedEvents.value[index].endHour !=
+                                            null
+                                    ? Padding(
+                                      padding:  EdgeInsets.only(left: 15.w),
+                                      child: FittedBox(
+                                          child: Text(
+                                            '${c.selectedEvents.value[index].startHour.toString()} a ${c.selectedEvents.value[index].endHour.toString()}',
+                                            style: TextStyle(
+                                                height: 1.h,
+                                                fontSize: 14.sp,
+                                                color: HexColor(c
+                                                                .selectedEvents
+                                                                .value[index]
+                                                                .color!)
+                                                            .computeLuminance() >
+                                                        0.5
+                                                    ? Colors.black
+                                                    : Colors.white),
+                                          ),
                                         ),
-                                      )
+                                    )
                                     : Container(
-                                        padding:  EdgeInsets.only(right: 20.w),
+                                        padding: EdgeInsets.only(right: 20.w),
                                       )
                               ],
                             ),
                           );
                         },
                       ),
-                    SizedBox(height: 3.h,),
-                    ...c.selectedNotas.value.map((nota) => Padding(
-                      padding: EdgeInsets.symmetric(vertical: 0.5.h, horizontal: 3.w),
-                      child: GestureDetector(
-                        onTap: () {
-                          print('tap');
-                        },
-                        child: Container(
-                            decoration: BoxDecoration(
-                              color: PRIMARY_COLOR_TRANSPARENTE,
-                              border:
-                              Border.all(color: PRIMARY_COLOR, width: 1),
-                              borderRadius: BorderRadius.circular(3.r),
-                            ),
-                            height: 14.h,
-                            child: Align(
-                              alignment: Alignment.bottomCenter,
-                              child: Text(
-                                nota.title!.toUpperCase(),
-                                style: TextStyle(
-                                    fontSize: 11.sp,
-                                    fontWeight: FontWeight.w600),
-                              ),
-                            )),
+                      SizedBox(
+                        height: 3.h,
                       ),
-                    )),
-
-                  ],
-                ),
-              );
+                      ...c.selectedNotas.value.map((nota) => Padding(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 1.h, horizontal: 2.w),
+                            child: GestureDetector(
+                              onTap: () {
+                                CustomDialog.mostrarTask(nota);
+                              },
+                              child: Container(
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 4.w),
+                                  decoration: BoxDecoration(
+                                    color: MyColors.cellSelectedColor,
+                                    border: Border.all(
+                                        color: MyColors.borderAccentLine,
+                                        width: 1),
+                                    borderRadius: BorderRadius.circular(3.r),
+                                  ),
+                                  height: 15.h,
+                                  child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        '${DateTime.fromMillisecondsSinceEpoch(nota.startTimeMilliseconds!).formatDateTime24H}',
+                                        style: TextStyle(
+                                            fontSize: 11.sp,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                      SizedBox(width: 4.w,),
+                                      Text(
+                                        nota.title!.toUpperCase(),
+                                        style: TextStyle(
+                                            fontSize: 11.sp,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                      SizedBox(width: 4.w,),
+                                      Container(
+                                        width: 150.w,
+                                        child: Text(
+                                          nota.notes!,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              fontSize: 11.sp,
+                                              fontWeight: FontWeight.w600),
+                                        ),
+                                      ),
+                                    ],
+                                  )),
+                            ),
+                          )),
+                    ],
+                  ),
+                );
         },
       ),
     );

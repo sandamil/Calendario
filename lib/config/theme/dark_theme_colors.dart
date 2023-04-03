@@ -33,7 +33,7 @@ class DarkThemeColors
 
   //TEXT
   static const Color bodyTextColor = Color(0xe5ffffff);
-  static const Color headlinesTextColor = primaryColor;
+  static const Color headlinesTextColor =  Color(0xe5ffffff);
   static const Color captionTextColor = Colors.grey;
   static const Color hintTextColor = Color(0xff686868);
 

@@ -95,65 +95,67 @@ class HomeView extends GetView<HomeController> {
         '${selectedDay.day} / ${selectedDay.month} / ${selectedDay.year}';
     List events = calendarVM.getEventsOfDay(selectedDay);
 
-    return Column(
-      children: [
-        events.isNotEmpty
-            ? Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(left: 4.w),
-                    child:  Text(
-                      'Notas para el día:',
-                      style: TextStyle(fontSize: 14.sp),
-                    ),
-                  ),
-                  const SizedBox(height: 5),
-                  Container(
-                    margin:  EdgeInsets.only(left: 4.w),
-                    child: Text(
-                      formattedDate,
-                      style: TextStyle(fontSize: 14.sp),
-                    ),
-                  ),
-                ],
-              )
-            : Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(left: 4.w),
-                    child: Text(
-                      'No hay notas grabadas para el día:',
-                      style: TextStyle(fontSize: 14.sp),
-                    ),
-                  ),
-                   SizedBox(height: 5.h),
-                  Container(
-                    margin: EdgeInsets.only(left: 4.w),
-                    child: Text(
-                      formattedDate,
-                      style: TextStyle(fontSize: 14.sp),
-                    ),
-                  ),
-                ],
-              ),
-        SingleChildScrollView(
-            child: Column(
-          children: events
-              .map(
-                (event) => Column(
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          events.isNotEmpty
+              ? Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // CardEvent(event: event),
-                    TaskCard(
-                        noteData: event,
-                        onTapAction: controller.notasController.openNoteToRead)
+                    Container(
+                      margin: EdgeInsets.only(left: 4.w),
+                      child:  Text(
+                        'Notas para el día:',
+                        style: TextStyle(fontSize: 14.sp),
+                      ),
+                    ),
+                    const SizedBox(height: 5),
+                    Container(
+                      margin:  EdgeInsets.only(left: 4.w),
+                      child: Text(
+                        formattedDate,
+                        style: TextStyle(fontSize: 14.sp),
+                      ),
+                    ),
+                  ],
+                )
+              : Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      margin: EdgeInsets.only(left: 4.w),
+                      child: Text(
+                        'No hay notas grabadas para el día:',
+                        style: TextStyle(fontSize: 14.sp),
+                      ),
+                    ),
+                     SizedBox(height: 5.h),
+                    Container(
+                      margin: EdgeInsets.only(left: 4.w),
+                      child: Text(
+                        formattedDate,
+                        style: TextStyle(fontSize: 14.sp),
+                      ),
+                    ),
                   ],
                 ),
-              )
-              .toList(),
-        )),
-      ],
+          SingleChildScrollView(
+              child: Column(
+            children: events
+                .map(
+                  (event) => Column(
+                    children: [
+                      // CardEvent(event: event),
+                      TaskCard(
+                          noteData: event,
+                          onTapAction: controller.notasController.openNoteToRead)
+                    ],
+                  ),
+                )
+                .toList(),
+          )),
+        ],
+      ),
     );
   }
 

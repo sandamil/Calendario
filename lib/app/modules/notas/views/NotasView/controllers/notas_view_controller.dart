@@ -127,4 +127,47 @@ class NotasViewController extends GetxController {
           );
         });
   }
+
+  void handleDeleteCalendar(id) async{
+    showDialog(
+        context: Get.context!,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+            title: const Text('Borrar nota'),
+            content: const Text('Se borrará permanentemente'),
+            actions: <Widget>[
+              TextButton(
+                child: Text('BORRAR',
+                    style: TextStyle(
+                        color: Colors.red.shade300,
+                        fontWeight: FontWeight.w500,
+                        letterSpacing: 1)),
+                onPressed: () async {
+                  await DbProvider.instance.delete(id);
+                  Get.offAllNamed('/home');
+                  notasListController.refetchNotesFromDB();
+                  //删除本次提醒
+                  // for (int i = 0; i < 10; i++) {
+                  //   push.cancelNotifications(widget.currentNote.id * 10 + i);
+                  // }
+
+                  Toast.toast(context, msg: "Eliminado exitosamente!");
+                },
+              ),
+              TextButton(
+                child: Text('CANCELAR',
+                    style: TextStyle(
+                        color: Theme.of(context).primaryColor,
+                        fontWeight: FontWeight.w500,
+                        letterSpacing: 1)),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              )
+            ],
+          );
+        });
+  }
 }
