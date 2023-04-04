@@ -31,6 +31,7 @@ class NotasListController extends GetxController {
 
   @override
   void onClose() {
+    searchController.value.clear();
     super.onClose();
   }
 

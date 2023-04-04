@@ -1,3 +1,4 @@
+import 'package:calendario2/config/util/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -90,7 +91,14 @@ class MyStyles {
             color: isLightTheme
                 ? LightThemeColors.headlinesTextColor
                 : DarkThemeColors.headlinesTextColor),
-        headlineMedium: (MyFonts.headlineTextStyle).copyWith(
+        headlineLarge: (MyFonts.headlineTextStyle).copyWith(
+            fontSize: MyFonts.headline2TextSize,
+            fontWeight: FontWeight.bold,
+            fontFamily: ConstantData.ralewayFont,
+            color: isLightTheme
+                ? LightThemeColors.headlinesTextColor
+                : DarkThemeColors.headlinesTextColor),
+         headlineMedium: (MyFonts.headlineTextStyle).copyWith(
             fontSize: MyFonts.headline4TextSize,
             fontWeight: FontWeight.bold,
             color: isLightTheme

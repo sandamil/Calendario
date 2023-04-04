@@ -49,6 +49,9 @@ class EditNotasController extends GetxController {
 
   @override
   void onClose() {
+    title.value.clear();
+    site.value.clear();
+    notes.value.clear();
     super.onClose();
   }
 

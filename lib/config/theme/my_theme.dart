@@ -107,25 +107,17 @@ class MyTheme {
 
   /// update app theme and save theme type to shared pref
   /// (so when the app is killed and up again theme will remain the same)
-  static changeTheme(ThemeMode themeMode) {
-    print(themeMode.name);
+  static changeTheme() {
     // *) check if the current theme is light (default is light)
     bool isLightTheme = MySharedPref.getThemeIsLight();
-    print('changeTheme=====isLightTheme ========${isLightTheme}');
     // *) store the new theme mode on get storage
     MySharedPref.setThemeIsLight(!isLightTheme);
-    // print('changeTheme=======setThemeIsLight ========${MySharedPref.setThemeIsLight(!isLightTheme)}');
-
     // *) let GetX change theme
-    MySharedPref.setThemeMode(themeMode);
-
-    Get.changeThemeMode(themeMode);
+    Get.changeThemeMode(!isLightTheme ? ThemeMode.light : ThemeMode.dark);
   }
 
   /// check if the theme is light or dark
-  bool get getThemeIsLight {
-    return MySharedPref.getThemeIsLight();
-  }
+  bool get getThemeIsLight => MySharedPref.getThemeIsLight();
 
 
 }

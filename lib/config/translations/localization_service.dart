@@ -28,12 +28,15 @@ class LocalizationService extends Translations {
     'es' : const Locale('es', 'ES'),
   };
 
-  // supported languages fonts family (must be in assets & pubspec yaml) or you can use google fonts
+
+
+  // todo add font
+  //  supported languages fonts family (must be in assets & pubspec yaml) or you can use google fonts
   static Map<String,TextStyle> supportedLanguagesFontsFamilies = {
     // todo add your English font families (add to assets/fonts, pubspec and name it here) default is poppins for english and cairo for arabic
-    'es' : const TextStyle(fontFamily: 'Poppins'),
-    'en' : const TextStyle(fontFamily: 'Poppins'),
-    'ar': const TextStyle(fontFamily: 'Cairo'),
+    'es' : const TextStyle(fontFamily: 'Raleway-Black'),
+    'en' : const TextStyle(fontFamily: 'Raleway-Black'),
+    'ar': const TextStyle(fontFamily: 'cairo'),
   };
 
   @override

@@ -42,6 +42,9 @@ class AddNotasController extends GetxController {
 
   @override
   void onClose() {
+    title.clear();
+    site.clear();
+    notes.clear();
     super.onClose();
   }
 

@@ -5,17 +5,13 @@ import 'package:calendario2/app/data/model/language.dart';
 import 'package:calendario2/app/modules/ajustes/views/widgets/language_screen.dart';
 import 'package:calendario2/config/theme/my_theme.dart';
 import 'package:calendario2/config/translations/localization_service.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class AjustesController extends GetxController {
-  String image = 'assets/3.png';
-  String name = 'Jose Manuel';
-  String number = '722642022';
+  RxBool isDark = true.obs;
 
   final List<Language> languages = <Language>[];
   late Rx<Language> selectedLanguage;
-
 
   @override
   void onInit() {
@@ -38,9 +34,14 @@ class AjustesController extends GetxController {
     super.onClose();
   }
 
-
-  void setThemeMode(ThemeMode themeMode) {
-    MyTheme.changeTheme(themeMode);
+  Future<void> changeTheme(bool value) async {
+    if (value) {
+      isDark.value = true;
+      MyTheme.changeTheme();
+    } else {
+      isDark.value = false;
+      MyTheme.changeTheme();
+    }
   }
 
   void goToLanguageScreen() {
@@ -70,5 +71,4 @@ class AjustesController extends GetxController {
       Language(name: 'English', languageCode: 'en'),
     ];
   }
-
 }
