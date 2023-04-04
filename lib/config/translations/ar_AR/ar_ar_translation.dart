@@ -14,4 +14,12 @@ final Map<String, String> arAR =
   Strings.apiNotFound : 'الرابط الذي تحاول الوصول اليه غير موجود!',
   Strings.serverError : 'مشكلة من السيرفر',
   Strings.urlNotFound : 'مشكلة في الرابط',
+
+
+  //ajustes screen
+  Strings.title: 'تعديل بياناتي',
+  Strings.address: 'الموقع',
+  Strings.notification: 'الإشعارات',
+  Strings.language: 'اللغة',
+  Strings.logout: 'تسجيل الخروج',
 };

@@ -34,21 +34,24 @@ Future<void> main() async {
       splitScreenMode: true,
       useInheritedMediaQuery: true,
       rebuildFactor: (old, data) => true,
+
       builder: (context, widget) {
         return GetMaterialApp(
           title: "Calendario",
           useInheritedMediaQuery: true,
           debugShowCheckedModeBanner: false,
+          //
+          themeMode: MySharedPref.getThemeMode,
+          theme: MyTheme.getThemeData(isLight: true),
+          darkTheme: MyTheme.getThemeData(isLight: false),
+
           builder: (context,widget) {
-            bool themeIsLight = MySharedPref.getThemeIsLight();
-            return Theme(
-              data: MyTheme.getThemeData(isLight: themeIsLight),
-              child: MediaQuery(
-                // prevent font from scalling (some people use big/small device fonts)
-                // but we want our app font to still the same and dont get affected
-                data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-                child: widget!,
-              ),
+            // bool themeIsLight = MySharedPref.getThemeIsLight();
+            return MediaQuery(
+              // prevent font from scalling (some people use big/small device fonts)
+              // but we want our app font to still the same and dont get affected
+              data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+              child: widget!,
             );
           },
           initialRoute: AppPages.INITIAL, // first screen to show when app is running

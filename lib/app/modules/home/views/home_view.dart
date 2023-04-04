@@ -66,7 +66,7 @@ class HomeView extends GetView<HomeController> {
         floatingActionButton: FloatingActionButton(
           elevation: 0,
           onPressed: () {
-            MyTheme.changeTheme();
+            // MyTheme.changeTheme();
           },
           child: const Icon(Icons.icecream_rounded),
         ),

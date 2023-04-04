@@ -13,4 +13,13 @@ class Strings {
   static const String apiNotFound = 'api not found';
   static const String serverError = 'Server error';
   static const String urlNotFound = 'Url not found';
+
+
+  //ajustes screen
+  static const String title = 'Settings';
+  static const String address = 'Address';
+  static const String notification = 'Notification';
+  static const String language = 'Language';
+  static const String logout = 'Logout';
+
 }

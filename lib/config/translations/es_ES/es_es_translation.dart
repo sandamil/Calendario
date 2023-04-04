@@ -13,4 +13,12 @@ const Map<String, String> esES = {
   Strings.apiNotFound : 'Route not found!',
   Strings.serverError : 'Server error',
   Strings.urlNotFound : 'Url not found',
+
+
+  //ajustes screen
+  Strings.title: 'Ajustes',
+  Strings.address: 'DIreccion',
+  Strings.notification: 'Notificacion',
+  Strings.language: 'Idioma',
+  Strings.logout: 'Salir',
 };

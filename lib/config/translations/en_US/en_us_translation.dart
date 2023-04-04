@@ -6,11 +6,18 @@ const Map<String, String> enUs = {
 
   Strings.changeTheme : 'Change theme',
   Strings.changeLanguage : 'Change language',
-
   Strings.noInternetConnection : 'No internet connection!',
   Strings.serverNotResponding : 'Server is not responding!',
   Strings.someThingWentWorng : 'Something went wrong',
   Strings.apiNotFound : 'Route not found!',
   Strings.serverError : 'Server error',
   Strings.urlNotFound : 'Url not found',
+
+
+  //ajustes screen
+  Strings.title: 'Settings',
+  Strings.address: 'Address',
+  Strings.notification: 'Notification',
+  Strings.language: 'Language',
+  Strings.logout: 'Logout',
 };

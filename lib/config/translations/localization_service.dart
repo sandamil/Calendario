@@ -49,14 +49,12 @@ class LocalizationService extends Translations {
 
 
   /// update app language by code language for example (en,ar..etc)
-  static updateLanguage(String languageCode) async {
-    // check if the language is supported
-    if(!isLanguageSupported(languageCode)) return;
+  static Future<void> changeLanguage(String languageCode) async {
+    assert(isLanguageSupported(languageCode), languageCode);
     // update current language in shared pref
     await MySharedPref.setCurrentLanguage(languageCode);
-    if(!Get.testMode) {
-      Get.updateLocale(supportedLanguages[languageCode]!);
-    }
+    await Get.updateLocale(supportedLanguages[languageCode]!);
+
   }
 
   /// check if the language is english
