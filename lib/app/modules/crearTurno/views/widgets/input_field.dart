@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 
 class InputField extends StatelessWidget {
@@ -24,7 +23,7 @@ class InputField extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(label, style: titleStyle),
+          Text(label),
           Container(
             // width: SizeConfig.screenWidth,
             height: 52,
@@ -42,10 +41,10 @@ class InputField extends StatelessWidget {
                     cursorColor:
                         Get.isDarkMode ? Colors.grey[100] : Colors.grey[700],
                     readOnly: widget != null,
-                    style: subTitleStyle,
+                    // style: subTitleStyle,
                     decoration: InputDecoration(
                       hintText: hintText,
-                      hintStyle: subTitleStyle,
+                      // hintStyle: subTitleStyle,
                       enabledBorder:
                           const OutlineInputBorder(borderSide: BorderSide.none),
                       focusedBorder:
@@ -62,14 +61,4 @@ class InputField extends StatelessWidget {
     );
   }
 }
-TextStyle get titleStyle => GoogleFonts.cabin(
-    textStyle: TextStyle(
-      fontSize: 18,
-      fontWeight: FontWeight.bold,
-      color: Get.isDarkMode ? Colors.white : Colors.black,
-    ));
-TextStyle get subTitleStyle => GoogleFonts.cabin(
-    textStyle: TextStyle(
-      fontSize: 14,
-      color: Get.isDarkMode ? Colors.white : Colors.black,
-    ));
+

@@ -1,12 +1,12 @@
 class Task {
-   int? id;
-   String? title;
-   String? site;
-   String? notes;
-   int? startTimeMilliseconds;
-   int? endTimeMilliseconds;
-   String? time;
-   bool? isImportant;
+  int? id;
+  String? title;
+  String? site;
+  String? notes;
+  int? startTimeMilliseconds;
+  int? endTimeMilliseconds;
+  // String? time;
+  bool? isImportant;
 
   Task(
       {this.id,
@@ -15,10 +15,10 @@ class Task {
       this.notes,
       this.startTimeMilliseconds,
       this.endTimeMilliseconds,
-      this.time,
+      // this.time,
       this.isImportant});
 
-   Map<String, Object?> toMap() {
+  Map<String, Object?> toMap() {
     return {
       'id': id,
       'title': title,
@@ -26,7 +26,7 @@ class Task {
       'notes': notes,
       'startTimeMilliseconds': startTimeMilliseconds,
       'endTimeMilliseconds': endTimeMilliseconds,
-      'time': time,
+      // 'time': time,
       'isImportant': this.isImportant == true ? 1 : 0,
     };
   }
@@ -38,12 +38,19 @@ class Task {
     this.notes = map['notes'];
     this.startTimeMilliseconds = map['startTimeMilliseconds'];
     this.endTimeMilliseconds = map['endTimeMilliseconds'];
-    this.time = map['time'];
+    // this.time = map['time'];
     this.isImportant = map['isImportant'] == 1 ? true : false;
   }
 
   @override
   String toString() {
-    return 'Travel {id: $id, title: $title, site: $site, notes: $notes, startTimeMilliseconds: $startTimeMilliseconds, endTimeMilliseconds: $endTimeMilliseconds}, time: $time}';
+    return 'Travel '
+        '{id: $id, '
+        'title: $title, '
+        'site: $site, '
+        'notes: $notes, '
+        'startTimeMilliseconds: $startTimeMilliseconds, '
+        'endTimeMilliseconds: $endTimeMilliseconds}, '
+        '';
   }
 }

@@ -2,7 +2,6 @@ import 'package:calendario2/app/data/local/taskDatabase.dart';
 import 'package:calendario2/app/data/model/taskModel.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jiffy/jiffy.dart';
 
 class AddNotasController extends GetxController {
 
@@ -115,7 +114,8 @@ class AddNotasController extends GetxController {
             isImportant: isImportant.value,
             startTimeMilliseconds: startTime.value.millisecondsSinceEpoch,
             endTimeMilliseconds: endTime.value.millisecondsSinceEpoch,
-            time: Jiffy().format('yyyy-MM-dd h:mm:ss a')),
+            // time: Jiffy().format('yyyy-MM-dd h:mm:ss a')
+        ),
       ),
     );
     print('addEvent' '${title.text}');

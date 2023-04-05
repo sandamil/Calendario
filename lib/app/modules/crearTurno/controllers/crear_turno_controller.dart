@@ -1,7 +1,7 @@
 import 'package:calendario2/app/modules/home/controllers/calendar_controller.dart';
 import 'package:calendario2/config/util/dateUtils.dart';
 import 'package:flex_color_picker/flex_color_picker.dart';
-import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
+// import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';

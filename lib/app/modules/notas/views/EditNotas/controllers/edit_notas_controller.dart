@@ -3,7 +3,6 @@ import 'package:calendario2/app/data/local/taskDatabase.dart';
 import 'package:calendario2/app/data/model/taskModel.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jiffy/jiffy.dart';
 
 class EditNotasController extends GetxController {
 
@@ -72,7 +71,8 @@ class EditNotasController extends GetxController {
           notes: notes.value.text,
           startTimeMilliseconds: startTime.value.millisecondsSinceEpoch,
           endTimeMilliseconds: endTime.value.millisecondsSinceEpoch,
-          time: currentNote.value.time),
+          // time: currentNote.value.time
+      ),
     );
   }
 

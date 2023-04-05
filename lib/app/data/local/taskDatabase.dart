@@ -70,7 +70,7 @@ class DbProvider {
         notes: maps[0]['notes'],
         startTimeMilliseconds: maps[0]['startTimeMilliseconds'],
         endTimeMilliseconds: maps[0]['endTimeMilliseconds'],
-        time: maps[0]['time'],
+        // time: maps[0]['time'],
         isImportant: maps[0]['isImportant'] == 1 ? true : false,
       );
     } else {

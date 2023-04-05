@@ -1,12 +1,10 @@
 import 'package:calendario2/app/modules/home/widgets/calendar/widget/warn-select.dart';
 import 'package:calendario2/app/modules/notas/views/widgets/generalLineBetween.dart';
+import 'package:calendario2/config/util/dateUtils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart' as dp;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import 'package:get/get.dart';
-import 'package:jiffy/jiffy.dart';
-
 import '../controllers/edit_notas_controller.dart';
 
 class EditNotasView extends GetView<EditNotasController> {
@@ -88,7 +86,7 @@ class EditNotasView extends GetView<EditNotasController> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
                             Text(
-                              '${Jiffy(controller.startTime.value).yMd} ${Jiffy(controller.startTime.value).Hm}',
+                              '${controller.startTime.value.formatDateYMD} ${controller.startTime.value.formatDateTime24H}',
                               style: TextStyle(
                                   color: Colors.blue, fontSize: 16.sp),
                             ),
@@ -125,7 +123,7 @@ class EditNotasView extends GetView<EditNotasController> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
                             Text(
-                              '${Jiffy(controller.endTime.value).yMd} ${Jiffy(controller.endTime.value).Hm}',
+                              '${controller.endTime.value.formatDateYMD} ${controller.endTime.value.formatDateTime24H}',
                               style: TextStyle(
                                   color: Colors.blue, fontSize: 16.sp),
                             ),

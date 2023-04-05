@@ -5,7 +5,10 @@ import 'package:calendario2/app/data/model/language.dart';
 import 'package:calendario2/app/modules/ajustes/views/widgets/language_screen.dart';
 import 'package:calendario2/config/theme/my_theme.dart';
 import 'package:calendario2/config/translations/localization_service.dart';
+import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 
 class AjustesController extends GetxController {
   RxBool isDark = true.obs;
@@ -16,7 +19,9 @@ class AjustesController extends GetxController {
   @override
   void onInit() {
     loadShippingTypes();
-    final currentLanguageCode = MySharedPref.getCurrentLocal().languageCode;
+    final currentLanguageCode = MySharedPref
+        .getCurrentLocal()
+        .languageCode;
     log('curent language code: $currentLanguageCode');
     selectedLanguage = languages
         .firstWhere((element) => element.languageCode == currentLanguageCode)
@@ -71,4 +76,48 @@ class AjustesController extends GetxController {
       Language(name: 'English', languageCode: 'en'),
     ];
   }
+
+  // launch url
+  void launchGmail() async {
+    final Uri params = Uri(
+      scheme: 'mailto',
+      path: 'ajatsoft@gmail.com',
+      query: 'subject= Sugerencia para app Calendario 2.0 = ',
+    );
+    String url = params.toString();
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      print('Could not launch gmail');
+    }
+  }
+
+  //Report a problem
+  void reportProblem() async {
+    final Uri params = Uri(
+        scheme: 'mailto',
+        path: 'ajatsoft@gmail.com',
+        query: 'subject=Reportando un problema en App Calendario 2.0= ');
+    String url = params.toString();
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      print('Could not launch gmail');
+    }
+  }
+
+  void launchTwitter() async {
+    final String url = 'https://www.twitter.com/@ajatsoft';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      print('Could not launch twitter');
+    }
+  }
+
+  // void showFeedback(context) {
+  //   BetterFeedback.of(context).show((UserFeedback feedback) {
+  //     print(feedback.text);
+  //   });
+  // }
 }

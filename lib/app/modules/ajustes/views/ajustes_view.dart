@@ -61,7 +61,7 @@ class AjustesView extends GetView<AjustesController> {
                   controller.goToLanguageScreen
 
               ),
-              buildTitle("Notification".tr),
+              buildTitle("Notificationes".tr),
               SettingTile(
                 icon: const ImageIcon(AssetImage(MyIcon.notificationIcon)),
                 btnText: "Notificaciones".tr,
@@ -72,32 +72,40 @@ class AjustesView extends GetView<AjustesController> {
                 btnText: "daily_reminder".tr,
                 //   trailing: KSwitch(),
               ),
-              buildTitle("help_feed".tr),
+              buildTitle("Ayuda".tr),
               SettingTile(
                 icon: const ImageIcon(AssetImage(MyIcon.solIcon)),
 
-                btnText: "suggest".tr,
+                btnText: "Sugerencias".tr,
                 trailing: const Text(""),
                 onPressed: () {
-                  // _con.launchGmail();
+                  controller.launchGmail();
                 },
               ),
               SettingTile(
                 icon: const ImageIcon(AssetImage(MyIcon.solIcon)),
-                btnText: "report".tr,
+                btnText: "Errores".tr,
                 trailing: const Text(""),
                 onPressed: () {
-                  // _con.showFeedback(context);
+                  controller.reportProblem();
                 },
               ),
               //
               SettingTile(
                 icon: const ImageIcon(AssetImage(MyIcon.solIcon)),
+                btnText: "FeedBack".tr,
+                trailing: Text(""),
+                onPressed: () {
+                  // controller.showFeedback(context);
+                },
+              ),
+              SettingTile(
+                icon: const ImageIcon(AssetImage(MyIcon.solIcon)),
 
-                btnText: "follow twitt".tr,
+                btnText: "Twitter".tr,
                 trailing: const Text(""),
                 onPressed: () {
-                  // _con.launchTwitter();
+                  controller.launchTwitter();
                 },
               ),
               SizedBox(height: 20.h)

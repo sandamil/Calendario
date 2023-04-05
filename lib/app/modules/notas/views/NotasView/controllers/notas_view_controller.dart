@@ -53,7 +53,8 @@ class NotasViewController extends GetxController {
           notes: currentNote.value.notes,
           startTimeMilliseconds: currentNote.value.startTimeMilliseconds,
           endTimeMilliseconds: currentNote.value.endTimeMilliseconds,
-          time: currentNote.value.time),
+          // time: currentNote.value.time
+      ),
     );
 
     // Toast.toast(Get.context!, msg: "Editado! ", showTime: 3000);
