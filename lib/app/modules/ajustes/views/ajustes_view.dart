@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
+import 'package:rive/rive.dart';
 
 import '../controllers/ajustes_controller.dart';
 import 'widgets/setting_title.dart';
@@ -22,10 +23,7 @@ class AjustesView extends GetView<AjustesController> {
       appBar: AppBar(
         title: Text(
           'Settings'.tr,
-          style: Theme
-              .of(context)
-              .textTheme
-              .headlineLarge,
+          style: Theme.of(context).textTheme.headlineLarge,
         ),
         elevation: 0,
         centerTitle: true,
@@ -37,30 +35,46 @@ class AjustesView extends GetView<AjustesController> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               buildTitle('General'),
-              Obx(() {
-                return SettingTile(
-                  icon: !controller.isDark.value
-                      ? const ImageIcon(AssetImage(MyIcon.solIcon))
-                      : const ImageIcon(AssetImage(MyIcon.lunaIcon),color: Colors.black,),
-                  btnText: "Theme".tr,
-                  trailing: CupertinoSwitch(
-                    value: controller.isDark.value,
-                    onChanged: (val) async {
-                      controller.isDark.value = !controller.isDark.value;
 
-                      await controller.changeTheme(val);
-                    },
-                  ),
-                );
-              }),
               SettingTile(
-                icon: const ImageIcon(AssetImage(MyIcon.languageIcon)),
-                btnText: 'Language'.tr,
-                trailing:  Text(controller.selectedLanguage.value.name),
-                onPressed:
-                  controller.goToLanguageScreen
+                  icon: ConstrainedBox(
+                    constraints:
+                        const BoxConstraints.expand(height: 50, width: 50),
+                    child: Rive(
+                      artboard: controller.artboard,
+                      fit: BoxFit.fill,
+                      useArtboardSize: true,
+                    ),
+                  ),
+                  btnText: "Theme".tr,
+                  trailing: GestureDetector(
+                      child: ConstrainedBox(
+                        constraints:
+                            const BoxConstraints.expand(height: 40, width: 80),
+                        child: Rive(
+                          artboard: controller.artboard2,
+                          fit: BoxFit.fill,
+                          useArtboardSize: true,
+                        ),
+                      ),
+                      onTap: () async {
+                        controller.cambioModo();
+                      })
 
-              ),
+                  // CupertinoSwitch(
+                  //   value: controller.isDark.value,
+                  //   onChanged: (val) async {
+                  //     controller.isDark.value = !controller.isDark.value;
+                  //     await controller.changeTheme(val);
+                  //   },
+                  // ),
+                  ),
+
+              SettingTile(
+                  icon: const ImageIcon(AssetImage(MyIcon.languageIcon)),
+                  btnText: 'Language'.tr,
+                  trailing: Text(controller.selectedLanguage.value.name),
+                  onPressed: controller.goToLanguageScreen),
               buildTitle("Notificationes".tr),
               SettingTile(
                 icon: const ImageIcon(AssetImage(MyIcon.notificationIcon)),
@@ -69,13 +83,12 @@ class AjustesView extends GetView<AjustesController> {
               ),
               SettingTile(
                 icon: const ImageIcon(AssetImage(MyIcon.solIcon)),
-                btnText: "daily_reminder".tr,
+                btnText: "Recordatorio".tr,
                 //   trailing: KSwitch(),
               ),
               buildTitle("Ayuda".tr),
               SettingTile(
                 icon: const ImageIcon(AssetImage(MyIcon.solIcon)),
-
                 btnText: "Sugerencias".tr,
                 trailing: const Text(""),
                 onPressed: () {
@@ -101,7 +114,6 @@ class AjustesView extends GetView<AjustesController> {
               ),
               SettingTile(
                 icon: const ImageIcon(AssetImage(MyIcon.solIcon)),
-
                 btnText: "Twitter".tr,
                 trailing: const Text(""),
                 onPressed: () {

@@ -1,4 +1,3 @@
-import 'package:calendario2/app/modules/home/widgets/calendar/widget/warn-select.dart';
 import 'package:calendario2/app/modules/notas/views/widgets/generalLineBetween.dart';
 import 'package:calendario2/config/util/dateUtils.dart';
 import 'package:flutter/material.dart';
@@ -137,24 +136,13 @@ class EditNotasView extends GetView<EditNotasController> {
               GeneralLineBetween(),
               TextButton(
                   onPressed: () async {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              WarnView(controller.noWarn, controller.warnList,
-                                  (bool value) {
-                                controller.noWarn = value;
-                                controller.update();
-                              }, (int item, bool value) {
-                                controller.warnList[item]['select'] = value;
-                                controller.update();
-                              }, (String warn) {
-                                String warnDefaultt = 'Al principio';
-
-                                warnDefaultt = warn;
-                                controller.update();
-                              })),
-                    );
+                    // Navigator.push(
+                    //   context,
+                    //   MaterialPageRoute(
+                    //     builder: (context) => WarnView(
+                    //         controller.noWarn, controller.addWarnList),
+                    //   ),
+                    // );
                   },
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -169,7 +157,7 @@ class EditNotasView extends GetView<EditNotasController> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
                             Text(
-                              controller.warn.value,
+                              'controller.warn.value',
                               style: TextStyle(
                                   color: Colors.blue, fontSize: 16.sp),
                             ),
@@ -201,7 +189,7 @@ class EditNotasView extends GetView<EditNotasController> {
                                   : Icons.outlined_flag,
                               color: controller.important.value
                                   ? Colors.red
-                                  : Colors.black,
+                                  : Colors.black45,
                             )
                           ],
                         )

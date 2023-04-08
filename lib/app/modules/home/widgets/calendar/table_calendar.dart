@@ -6,7 +6,7 @@ import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
-import 'package:calendario2/app/data/model/turnoCalendar.dart';
+import 'package:calendario2/app/data/model/cuadranteDay.dart';
 import 'package:calendario2/app/modules/home/controllers/calendar_controller.dart';
 import 'package:calendario2/app/modules/home/controllers/home_controller.dart';
 import 'package:calendario2/config/util/hexColor.dart';
@@ -91,7 +91,7 @@ class CalendarWidget extends StatelessWidget {
   _calendarBuilders() => CalendarBuilders(
         /// =       markerBuilder:          =======================================
 
-        markerBuilder: (context, day, List<Cuadrante> events) {
+        markerBuilder: (context, day, List<CuadranteDay> events) {
           final notas = calendarController.getEventsOfDay(day);
           return Container(
             alignment: Alignment.topCenter,
@@ -115,7 +115,7 @@ class CalendarWidget extends StatelessWidget {
                             alignment: Alignment.center,
                             child: Text(turno.title!.toUpperCase(),
                                 style: TextStyle(
-                                    height: 0.77.h,
+                                    height: 1.h,
                                     fontSize: 11.sp,
                                     color: HexColor(turno.color!),
                                     fontWeight: FontWeight.w900)),
@@ -146,7 +146,7 @@ class CalendarWidget extends StatelessWidget {
                                   nota.title!.toUpperCase(),
                                   maxLines:1,
                                   style: TextStyle(
-                                      height: 0.77.h,
+                                      height: 1.h,
                                       fontSize: 11.sp,
                                       fontWeight: FontWeight.w600),
                                 ),

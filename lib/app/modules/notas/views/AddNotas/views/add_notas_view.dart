@@ -1,5 +1,4 @@
 import 'package:calendario2/app/modules/home/widgets/calendar/widget/line.dart';
-import 'package:calendario2/app/modules/home/widgets/calendar/widget/warn-select.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/config/util/dateUtils.dart';
 import 'package:flutter/material.dart';
@@ -48,15 +47,19 @@ class AddNotasView extends GetView<AddNotasController> {
       body: Obx(() {
         return SingleChildScrollView(
           child: Padding(
-            padding:  EdgeInsets.symmetric(horizontal: 6.w),
+            padding: EdgeInsets.symmetric(horizontal: 6.w),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               mainAxisSize: MainAxisSize.max,
               children: <Widget>[
-                SizedBox(height: 10.h,),
-                _buildGeneralFormField(controller.title, 'Titulo del evento', 1),
-                SizedBox(height: 4.h,),
-
+                SizedBox(
+                  height: 10.h,
+                ),
+                _buildGeneralFormField(
+                    controller.title, 'Titulo del evento', 1),
+                SizedBox(
+                  height: 4.h,
+                ),
                 Column(
                   // key: keyButton14,
                   children: <Widget>[
@@ -78,21 +81,27 @@ class AddNotasView extends GetView<AddNotasController> {
                                   locale: dp.LocaleType.es);
                             },
                             child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: <Widget>[
                                   Text(
                                     'Hora de inicio',
-                                    style: TextStyle(color: MyColors.textButtom, fontSize: 14.sp),
+                                    style: TextStyle(
+                                        color: MyColors.textButtom,
+                                        fontSize: 14.sp),
                                   ),
                                   Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                     children: <Widget>[
                                       Text(
                                         '${controller.startTime.value.formatDateYMD} ${controller.startTime.value.formatDateTime24H}',
-                                        style: TextStyle(color: MyColors.textButtom, fontSize: 14.sp),
+                                        style: TextStyle(
+                                            color: MyColors.textButtom,
+                                            fontSize: 14.sp),
                                       ),
                                       Icon(
                                         Icons.arrow_forward_ios,
@@ -124,7 +133,9 @@ class AddNotasView extends GetView<AddNotasController> {
                               children: <Widget>[
                                 Text(
                                   'Hora final',
-                                    style: TextStyle(color: MyColors.textButtom, fontSize: 14.sp),
+                                  style: TextStyle(
+                                      color: MyColors.textButtom,
+                                      fontSize: 14.sp),
                                 ),
                                 Row(
                                   mainAxisAlignment:
@@ -133,13 +144,14 @@ class AddNotasView extends GetView<AddNotasController> {
                                   children: <Widget>[
                                     Text(
                                       '${controller.endTime.value.formatDateYMD} ${controller.endTime.value.formatDateTime24H}',
-                                      style: TextStyle(color: MyColors.textButtom, fontSize: 14.sp),
+                                      style: TextStyle(
+                                          color: MyColors.textButtom,
+                                          fontSize: 14.sp),
                                     ),
                                     Icon(
                                       Icons.arrow_forward_ios,
                                       size: 14.sp,
                                       color: PRIMARY_COLOR,
-
                                     )
                                   ],
                                 )
@@ -147,29 +159,13 @@ class AddNotasView extends GetView<AddNotasController> {
                     ),
                   ],
                 ),
-                SizedBox(height: 2.h,),
-
+                SizedBox(
+                  height: 2.h,
+                ),
                 LineWidget(),
                 TextButton(
                     onPressed: () async {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                WarnView(controller.noWarn, controller.warnList,
-                                    (bool value) {
-                                  controller.noWarn = value;
-                                  controller.update();
-                                }, (int item, bool value) {
-                                  controller.warnList[item]['select'] = value;
-                                  controller.update();
-                                }, (String warn) {
-                                  String warnDefaultt = 'Al principio';
 
-                                  warnDefaultt = warn;
-                                  controller.update();
-                                })),
-                      );
                     },
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -177,28 +173,31 @@ class AddNotasView extends GetView<AddNotasController> {
                         children: <Widget>[
                           Text(
                             'Recordatorio',
-                            style: TextStyle(color: MyColors.textButtom, fontSize: 14.sp),
+                            style: TextStyle(
+                                color: MyColors.textButtom, fontSize: 14.sp),
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
                               Text(
-                                AddNotasController.warnDefaultt,
-                                style: TextStyle(color: MyColors.textButtom, fontSize: 14.sp),
+                                'controller.warn.value',
+                                style: TextStyle(
+                                    color: MyColors.textButtom,
+                                    fontSize: 14.sp),
                               ),
                               Icon(
                                 Icons.arrow_forward_ios,
                                 size: 14.sp,
                                 color: PRIMARY_COLOR,
-
                               )
                             ],
                           )
                         ])),
                 LineWidget(),
-                SizedBox(height: 2.h,),
-
+                SizedBox(
+                  height: 2.h,
+                ),
                 TextButton(
                     // key: keyButton16,
                     onPressed: controller.markImportantAsDirty,
@@ -208,7 +207,8 @@ class AddNotasView extends GetView<AddNotasController> {
                         children: <Widget>[
                           Text(
                             'Marcar como importante',
-                            style: TextStyle(color: MyColors.textButtom, fontSize: 14.sp),
+                            style: TextStyle(
+                                color: MyColors.textButtom, fontSize: 14.sp),
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -225,11 +225,13 @@ class AddNotasView extends GetView<AddNotasController> {
                             ],
                           )
                         ])),
-                SizedBox(height: 4.h,),
-
+                SizedBox(
+                  height: 4.h,
+                ),
                 _buildGeneralFormField(controller.site, 'Ubicación', 2),
-                SizedBox(height: 4.h,),
-
+                SizedBox(
+                  height: 4.h,
+                ),
                 _buildGeneralFormField(controller.notes, 'Observaciones', 8),
                 Container(
                   padding: const EdgeInsets.only(left: 8.0, top: 16),
@@ -272,7 +274,7 @@ class AddNotasView extends GetView<AddNotasController> {
         //   color: MyColors.hintText
         // ),
         filled: true,
-        contentPadding:  EdgeInsets.only(left: 10.w, top: 20.h),
+        contentPadding: EdgeInsets.only(left: 10.w, top: 20.h),
         fillColor: MyColors.cellColor,
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.all(
@@ -284,7 +286,7 @@ class AddNotasView extends GetView<AddNotasController> {
             borderRadius: BorderRadius.all(
               Radius.circular(_radiusNum),
             ),
-            borderSide:  BorderSide(
+            borderSide: BorderSide(
               color: MyColors.borderCellColor,
               width: 2.w,
             )),

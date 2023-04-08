@@ -27,9 +27,9 @@ class DarkThemeColors
   static const Color buttonColor = primaryColor;
   static const Color floatingActionButtonColor = primaryColor;
 
-  static const Color buttonTextColor = Colors.black;
+  static const Color buttonTextColor = Colors.white;
   static const Color buttonDisabledColor = Colors.grey;
-  static const Color buttonDisabledTextColor = Colors.black;
+  static const Color buttonDisabledTextColor = Colors.black12;
 
   //TEXT
   static const Color bodyTextColor = Color(0xe5ffffff);

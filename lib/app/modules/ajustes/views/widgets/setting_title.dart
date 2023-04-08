@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SettingTile extends StatelessWidget {
-  final ImageIcon? icon;
+  final Widget? icon;
   final String? btnText;
   final Widget? trailing;
   final void Function()? onPressed;

@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:path/path.dart';
 import 'dart:async';
 
-import '../model/turnoCalendar.dart';
+import '../model/cuadranteDay.dart';
 import '../model/turnoType.dart';
 
 
@@ -74,7 +74,7 @@ class DBHelper {
 
 
 
-  Future<Cuadrante?> fetchItem(int id) async {
+  Future<CuadranteDay?> fetchItem(int id) async {
     final dbClient = await database;
     List result =
     await dbClient!.query(
@@ -85,11 +85,11 @@ class DBHelper {
     if (result.isEmpty) {
       return null;
     } else {
-      return Cuadrante.fromMap(result.first);
+      return CuadranteDay.fromMap(result.first);
     }
   }
 
-  Future<List<Cuadrante>> getItemModels() async {
+  Future<List<CuadranteDay>> getItemModels() async {
     final dbClient = await database;
 
     var _day = DateTime.now();
@@ -101,14 +101,14 @@ class DBHelper {
         "SELECT * FROM $_cuadrantes WHERE datetime BETWEEN '${dayStart.toString()}' AND '${dayEnd.toString()}'");
 
 
-    return result.map((m) => Cuadrante.fromMap(m)).toList();
+    return result.map((m) => CuadranteDay.fromMap(m)).toList();
   }
 
 
 
 
 
-  Future<int> addItem(Cuadrante item) async {
+  Future<int> addItem(CuadranteDay item) async {
     final dbClient = await database;
     int res = await dbClient!.insert("Cuadrante", item.toMap(),
         conflictAlgorithm: ConflictAlgorithm.ignore);

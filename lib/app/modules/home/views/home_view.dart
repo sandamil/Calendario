@@ -1,5 +1,5 @@
 import 'package:calendario2/app/data/model/taskModel.dart';
-import 'package:calendario2/app/data/model/turnoCalendar.dart';
+import 'package:calendario2/app/data/model/cuadranteDay.dart';
 import 'package:calendario2/app/modules/Notas/views/widgets/taskCard.dart';
 import 'package:calendario2/app/modules/home/controllers/calendar_controller.dart';
 import 'package:calendario2/app/modules/home/widgets/calendar/table_calendar.dart';
@@ -63,19 +63,19 @@ class HomeView extends GetView<HomeController> {
             ),
           ],
         ),
-        floatingActionButton: FloatingActionButton(
-          elevation: 0,
-          onPressed: () {
-            // MyTheme.changeTheme();
-          },
-          child: const Icon(Icons.icecream_rounded),
-        ),
+        // floatingActionButton: FloatingActionButton(
+        //   elevation: 0,
+        //   onPressed: () {
+        //     // MyTheme.changeTheme();
+        //   },
+        //   child: const Icon(Icons.icecream_rounded),
+        // ),
         body: Column(
           children: [
             CalendarWidget(),
             SizedBox(height: 5.h),
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: 2.w),
+              padding: EdgeInsets.symmetric(horizontal: 8.w),
               child: LineWidget(),
             ),
             // SizedBox(height: 2.h),
@@ -98,47 +98,47 @@ class HomeView extends GetView<HomeController> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          events.isNotEmpty
-              ? Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      margin: EdgeInsets.only(left: 4.w),
-                      child:  Text(
-                        'Notas para el día:',
-                        style: TextStyle(fontSize: 14.sp),
-                      ),
-                    ),
-                    const SizedBox(height: 5),
-                    Container(
-                      margin:  EdgeInsets.only(left: 4.w),
-                      child: Text(
-                        formattedDate,
-                        style: TextStyle(fontSize: 14.sp),
-                      ),
-                    ),
-                  ],
-                )
-              : Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      margin: EdgeInsets.only(left: 4.w),
-                      child: Text(
-                        'No hay notas grabadas para el día:',
-                        style: TextStyle(fontSize: 14.sp),
-                      ),
-                    ),
-                     SizedBox(height: 5.h),
-                    Container(
-                      margin: EdgeInsets.only(left: 4.w),
-                      child: Text(
-                        formattedDate,
-                        style: TextStyle(fontSize: 14.sp),
-                      ),
-                    ),
-                  ],
-                ),
+          // events.isNotEmpty
+          //     ? Row(
+          //         crossAxisAlignment: CrossAxisAlignment.start,
+          //         children: [
+          //           Container(
+          //             margin: EdgeInsets.only(left: 4.w),
+          //             child:  Text(
+          //               'Notas para el día:',
+          //               style: TextStyle(fontSize: 14.sp),
+          //             ),
+          //           ),
+          //           const SizedBox(height: 5),
+          //           Container(
+          //             margin:  EdgeInsets.only(left: 4.w),
+          //             child: Text(
+          //               formattedDate,
+          //               style: TextStyle(fontSize: 14.sp),
+          //             ),
+          //           ),
+          //         ],
+          //       )
+          //     : Row(
+          //         crossAxisAlignment: CrossAxisAlignment.start,
+          //         children: [
+          //           Container(
+          //             margin: EdgeInsets.only(left: 4.w),
+          //             child: Text(
+          //               'No hay notas grabadas para el día:',
+          //               style: TextStyle(fontSize: 14.sp),
+          //             ),
+          //           ),
+          //            SizedBox(height: 5.h),
+          //           Container(
+          //             margin: EdgeInsets.only(left: 4.w),
+          //             child: Text(
+          //               formattedDate,
+          //               style: TextStyle(fontSize: 14.sp),
+          //             ),
+          //           ),
+          //         ],
+          //       ),
           SingleChildScrollView(
               child: Column(
             children: events

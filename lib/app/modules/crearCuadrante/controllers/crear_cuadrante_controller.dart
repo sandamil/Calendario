@@ -1,6 +1,6 @@
 import 'package:calendario2/app/modules/crearCuadrante/widgets/beautifulAlertDialog.dart';
 import 'package:calendario2/app/data/local/calendarDatabase.dart';
-import 'package:calendario2/app/data/model/turnoCalendar.dart';
+import 'package:calendario2/app/data/model/cuadranteDay.dart';
 import 'package:calendario2/app/data/model/turnoType.dart';
 import 'package:calendario2/config/util/hexColor.dart';
 import 'package:flutter/material.dart';
@@ -79,7 +79,7 @@ class CrearCuadranteController extends GetxController {
         x = 0;
       }
       await DBHelper.db.addItem(
-        Cuadrante(
+        CuadranteDay(
           dateTime: date,
           color: list[x].color,
           description: list[x].description,

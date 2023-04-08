@@ -3,7 +3,7 @@ import 'dart:collection';
 import 'package:calendario2/app/data/local/calendarDatabase.dart';
 import 'package:calendario2/app/data/local/taskDatabase.dart';
 import 'package:calendario2/app/data/model/taskModel.dart';
-import 'package:calendario2/app/data/model/turnoCalendar.dart';
+import 'package:calendario2/app/data/model/cuadranteDay.dart';
 import 'package:calendario2/app/data/model/turnoType.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -26,7 +26,7 @@ class CalendarController extends GetxController {
 
   setFocusedDay(DateTime day) => _focusedDay;
 
-  RxList<Cuadrante> selectedEvents = <Cuadrante>[].obs;
+  RxList<CuadranteDay> selectedEvents = <CuadranteDay>[].obs;
   RxList<Task> selectedNotas = <Task>[].obs;
   // get selectedEvents => _selectedEvents;
 
@@ -37,12 +37,12 @@ class CalendarController extends GetxController {
   // get selectedDay => _selectedDay;
   // var focusedDay = DateTime.now();
 
-  RxMap<DateTime, List<Cuadrante>> cuadranteMap =
-      <DateTime, List<Cuadrante>>{}.obs;
+  RxMap<DateTime, List<CuadranteDay>> cuadranteMap =
+      <DateTime, List<CuadranteDay>>{}.obs;
 
   RxMap<DateTime, List<Task>> notasMap = <DateTime, List<Task>>{}.obs;
 
-  RxList<Cuadrante> cuadrante = <Cuadrante>[].obs;
+  RxList<CuadranteDay> cuadrante = <CuadranteDay>[].obs;
 
   RxList<TurnoType> turno = <TurnoType>[].obs;
 
@@ -98,23 +98,23 @@ class CalendarController extends GetxController {
     return key.day * 1000000 + key.month * 10000 + key.year;
   }
 
-  List<Cuadrante> getEventForDay(DateTime day) {
-    final events = LinkedHashMap<DateTime, List<Cuadrante>>(
+  List<CuadranteDay> getEventForDay(DateTime day) {
+    final events = LinkedHashMap<DateTime, List<CuadranteDay>>(
       equals: isSameDay,
       hashCode: getHashCode,
     )..addAll(cuadranteMap);
     return events[day] ?? [];
   }
 
-  Future<Map<DateTime, List<Cuadrante>>> fetchCuadrante() async {
+  Future<Map<DateTime, List<CuadranteDay>>> fetchCuadrante() async {
     cuadrante.value = await DBHelper.db.getItemModels();
-    for (Cuadrante turno in cuadrante) {
+    for (CuadranteDay turno in cuadrante) {
       // print(turno.dateTime);
     }
     cuadranteMap.value.clear();
     for (var turno in cuadrante) {
-      cuadranteMap.value.putIfAbsent(turno.dateTime!, () => <Cuadrante>[]);
-      List<Cuadrante>? turnoData = cuadranteMap.value[turno.dateTime];
+      cuadranteMap.value.putIfAbsent(turno.dateTime!, () => <CuadranteDay>[]);
+      List<CuadranteDay>? turnoData = cuadranteMap.value[turno.dateTime];
       turnoData!.add(turno);
       cuadranteMap.value.update(turno.dateTime!, (data) {
         return turnoData;

@@ -1,5 +1,5 @@
 import 'package:calendario2/app/components/custom_dialog.dart';
-import 'package:calendario2/app/data/model/turnoCalendar.dart';
+import 'package:calendario2/app/data/model/cuadranteDay.dart';
 import 'package:calendario2/app/modules/home/controllers/calendar_controller.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/config/util/dateUtils.dart';

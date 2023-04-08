@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:calendario2/app/data/model/taskModel.dart';
-import 'package:calendario2/app/data/model/turnoCalendar.dart';
+import 'package:calendario2/app/data/model/cuadranteDay.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
@@ -46,7 +46,7 @@ class TaskCard extends StatelessWidget {
     colorList.elementAt(Random().nextInt(colorList.length));
 
     return Container(
-      padding: const EdgeInsets.only(left: 10, right: 10),
+      padding: EdgeInsets.only(left: 4.w, right: 4.w),
       decoration: BoxDecoration(
 
         borderRadius: BorderRadius.circular(5.r),
@@ -114,7 +114,7 @@ class TaskCard extends StatelessWidget {
                       Row(
                         children: <Widget>[
                           Container(
-                            margin: EdgeInsets.only(top: 6.h, left: 4.w),
+                            margin: EdgeInsets.only(top: 6.h, left: 6.w),
                             child: Text(
                               noteData.title!.trim().length <= 20
                                   ? noteData.title!.trim()
@@ -126,12 +126,15 @@ class TaskCard extends StatelessWidget {
                             ),
                           ),
                           const Spacer(),
-                          Icon(
-                            noteData.isImportant!
-                                ? Icons.flag
-                                : Icons.flag_outlined,
-                            color:
-                                noteData.isImportant! ? Colors.red : Colors.grey,
+                          Padding(
+                            padding: EdgeInsets.only(right: 4.w),
+                            child: Icon(
+                              noteData.isImportant!
+                                  ? Icons.flag
+                                  : Icons.flag_outlined,
+                              color:
+                                  noteData.isImportant! ? Colors.red : Colors.grey,
+                            ),
                           ),
                         ],
                       ),
@@ -141,7 +144,7 @@ class TaskCard extends StatelessWidget {
                         child: Row(
                           children: <Widget>[
                             Container(
-                              margin: EdgeInsets.only(bottom: 4.h, left: 4.w),
+                              margin: EdgeInsets.only(bottom: 4.h, left: 6.w),
                               child: Text(
                                 noteData.notes!.trim().split('\n').first.length <=
                                         30

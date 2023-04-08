@@ -1,5 +1,5 @@
 import 'package:calendario2/app/data/local/calendarDatabase.dart';
-import 'package:calendario2/app/data/model/turnoCalendar.dart';
+import 'package:calendario2/app/data/model/cuadranteDay.dart';
 import 'package:calendario2/app/modules/home/controllers/calendar_controller.dart';
 import 'package:calendario2/config/util/hexColor.dart';
 import 'package:flutter/material.dart';
@@ -71,7 +71,7 @@ class CustomAlertDialogTurnoList extends StatelessWidget {
                           onPressed: () async {
 
                             await DBHelper.db.addItem(
-                              Cuadrante(
+                              CuadranteDay(
                                 dateTime: DateTime.parse(selectedDate.toString().substring(0, 10)),
                                 color: m.color,
                                 description: m.description,

@@ -30,6 +30,9 @@ dependencies:
 
   url_launcher: ^6.1.10
 
+  rive: ^0.10.3
+
+
   # log events in clear way insted of (print)     ¡¡¡¡¡¡¡¡¡¡¡¡¡¡REMOVE¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡
   logger: ^1.3.0
 
@@ -45,7 +48,9 @@ flutter:
   uses-material-design: true
 
   assets:
+    - assets/
     - assets/images/
+    - assets/animaciones/
     - assets/images/iconos/
     - assets/other/
 

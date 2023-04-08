@@ -50,28 +50,25 @@ class CustomAlertDilogDaySelected extends StatelessWidget {
                       ),
                        SizedBox(width: 4.w),
                       Container(
-                        width: 60.w,
-                        height: 28.h,
+                        width: 75.w,
+                        height: 35.h,
                         decoration: BoxDecoration(
                           border: Border.all(width: 2.w, color: PRIMARY_COLOR),
                           borderRadius: BorderRadius.circular(5.r),
                         ),
-                        child: Row(
+                        child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            SizedBox(width: 1.w),
                             Container(
                               child: Text(selectedDate.formatDateD,
-                                style: Theme.of(context).textTheme.titleSmall!.copyWith(fontSize: 16.sp)
+                                style: Theme.of(context).textTheme.titleSmall!.copyWith(fontSize: 12.sp)
                               ),
                             ),
-                            SizedBox(width: 2.w),
                             Container(
                               child: Text(selectedDate.formatDateMMM,
-                                  style: Theme.of(context).textTheme.titleSmall!.copyWith(fontSize: 16.sp)
+                                  style: Theme.of(context).textTheme.titleSmall!.copyWith(fontSize: 12.sp)
                               ),
                             ),
-                            SizedBox(width: 1.w),
                           ],
                         ),
                       ),
