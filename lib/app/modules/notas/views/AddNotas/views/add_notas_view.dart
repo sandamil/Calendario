@@ -1,3 +1,4 @@
+import 'package:alarm/alarm.dart';
 import 'package:calendario2/app/modules/home/widgets/calendar/widget/line.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/config/util/dateUtils.dart';
@@ -11,6 +12,7 @@ import '../controllers/add_notas_controller.dart';
 
 class AddNotasView extends GetView<AddNotasController> {
   const AddNotasView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
@@ -69,20 +71,20 @@ class AddNotasView extends GetView<AddNotasController> {
                               dp.DatePicker.showDateTimePicker(Get.context!,
                                   showTitleActions: true,
                                   onChanged: (DateTime date) {
-                                if (controller
+                                    if (controller
                                         .endTime.value.millisecondsSinceEpoch <
-                                    date.millisecondsSinceEpoch) {
-                                  controller.endTime.value = date;
-                                }
-                                controller.startTime.value = date;
-                              },
+                                        date.millisecondsSinceEpoch) {
+                                      controller.endTime.value = date;
+                                    }
+                                    controller.startTime.value = date;
+                                  },
                                   onConfirm: (DateTime date) {},
                                   currentTime: controller.startTime.value,
                                   locale: dp.LocaleType.es);
                             },
                             child: Row(
                                 mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: <Widget>[
                                   Text(
@@ -93,9 +95,9 @@ class AddNotasView extends GetView<AddNotasController> {
                                   ),
                                   Row(
                                     mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceBetween,
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.center,
+                                    CrossAxisAlignment.center,
                                     children: <Widget>[
                                       Text(
                                         '${controller.startTime.value.formatDateYMD} ${controller.startTime.value.formatDateTime24H}',
@@ -117,12 +119,12 @@ class AddNotasView extends GetView<AddNotasController> {
                             dp.DatePicker.showDateTimePicker(Get.context!,
                                 showTitleActions: true,
                                 onChanged: (DateTime date) {
-                              if (controller
+                                  if (controller
                                       .endTime.value.millisecondsSinceEpoch <=
-                                  date.millisecondsSinceEpoch) {
-                                controller.endTime.value = date;
-                              }
-                            },
+                                      date.millisecondsSinceEpoch) {
+                                    controller.endTime.value = date;
+                                  }
+                                },
                                 onConfirm: (DateTime date) {},
                                 currentTime: controller.endTime.value,
                                 locale: dp.LocaleType.es);
@@ -139,7 +141,7 @@ class AddNotasView extends GetView<AddNotasController> {
                                 ),
                                 Row(
                                   mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  MainAxisAlignment.spaceBetween,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: <Widget>[
                                     Text(
@@ -165,7 +167,22 @@ class AddNotasView extends GetView<AddNotasController> {
                 LineWidget(),
                 TextButton(
                     onPressed: () async {
+                      final alarmSettings = AlarmSettings(
+                        id: 42,
+                        dateTime: controller.startTime.value,
+                        assetAudioPath: 'assets/alarmas/nokia.mp3',
+                        loopAudio: false,
+                        vibrate: true,
+                        fadeDuration: 1.0,
+                        notificationTitle: 'Titulo',
+                        notificationBody: 'body',
+                        enableNotificationOnKill: true,
+                      );
+                      Alarm.set(alarmSettings: alarmSettings);
+                      await Alarm.setNotificationOnAppKillContent(
+                          'Titulo', 'body');
 
+                      print(DateTime.now());
                     },
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -181,7 +198,7 @@ class AddNotasView extends GetView<AddNotasController> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
                               Text(
-                                'controller.warn.value',
+                                controller.startTime.value.toString(),
                                 style: TextStyle(
                                     color: MyColors.textButtom,
                                     fontSize: 14.sp),
@@ -199,7 +216,7 @@ class AddNotasView extends GetView<AddNotasController> {
                   height: 2.h,
                 ),
                 TextButton(
-                    // key: keyButton16,
+                  // key: keyButton16,
                     onPressed: controller.markImportantAsDirty,
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -261,8 +278,7 @@ class AddNotasView extends GetView<AddNotasController> {
     );
   }
 
-  TextFormField _buildGeneralFormField(
-      TextEditingController value, String hint, int lines) {
+  TextFormField _buildGeneralFormField(TextEditingController value, String hint, int lines) {
     final double _radiusNum = 5.r;
     return TextFormField(
       // onTapOutside: (event){

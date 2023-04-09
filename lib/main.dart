@@ -1,3 +1,4 @@
+import 'package:alarm/alarm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -10,52 +11,48 @@ import 'config/translations/localization_service.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
 
-
 Future<void> main() async {
-
   print('=====================================================');
   print('                     INICIO                          ');
   print('=====================================================');
   // wait for bindings
   WidgetsFlutterBinding.ensureInitialized();
 
-
-
+  await Alarm.init(showDebugLogs: true);
 
   // init shared preference
   await MySharedPref.init();
-  initializeDateFormatting()
-      .then((_) => runApp(
-    ScreenUtilInit(
-      // todo add your (Xd / Figma) artboard size
-      designSize: const Size(375, 812),
-      minTextAdapt: true,
-      splitScreenMode: true,
-      useInheritedMediaQuery: true,
-      rebuildFactor: (old, data) => true,
-      builder: (context, widget) {
-        return GetMaterialApp(
-          title: "Calendario",
+  initializeDateFormatting().then((_) => runApp(
+        ScreenUtilInit(
+          // todo add your (Xd / Figma) artboard size
+          designSize: const Size(375, 812),
+          minTextAdapt: true,
+          splitScreenMode: true,
           useInheritedMediaQuery: true,
-          debugShowCheckedModeBanner: false,
-          builder: (context,widget) {
-            bool themeIsLight = MySharedPref.getThemeIsLight();
-            return Theme(
-              data: MyTheme.getThemeData(isLight: themeIsLight),
-              child: MediaQuery(
-                // prevent font from scalling (some people use big/small device fonts)
-                // but we want our app font to still the same and dont get affected
-                data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
-                child: widget!,
-              ),
+          rebuildFactor: (old, data) => true,
+          builder: (context, widget) {
+            return GetMaterialApp(
+              title: "Calendario",
+              useInheritedMediaQuery: true,
+              debugShowCheckedModeBanner: false,
+              builder: (context,widget) {
+                bool themeIsLight = MySharedPref.getThemeIsLight();
+                return Theme(
+                  data: MyTheme.getThemeData(isLight: themeIsLight),
+                  child: MediaQuery(
+                    // prevent font from scalling (some people use big/small device fonts)
+                    // but we want our app font to still the same and dont get affected
+                    data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+                    child: widget!,
+                  ),
+                );
+              },
+              initialRoute: AppPages.INITIAL, // first screen to show when app is running
+              getPages: AppPages.routes, // app screens
+              locale: MySharedPref.getCurrentLocal(), // app language
+              translations: LocalizationService.getInstance(), // localization services in app (controller app language)
             );
           },
-          initialRoute: AppPages.INITIAL, // first screen to show when app is running
-          getPages: AppPages.routes, // app screens
-          locale: MySharedPref.getCurrentLocal(), // app language
-          translations: LocalizationService.getInstance(), // localization services in app (controller app language)
-        );
-      },
-    ),
-  ));
+        ),
+      ));
 }
