@@ -1,5 +1,6 @@
 import 'package:alarm/alarm.dart';
 import 'package:calendario2/app/modules/home/widgets/calendar/widget/line.dart';
+import 'package:calendario2/app/modules/notas/views/alarmas.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/config/util/dateUtils.dart';
 import 'package:flutter/material.dart';
@@ -167,22 +168,7 @@ class AddNotasView extends GetView<AddNotasController> {
                 LineWidget(),
                 TextButton(
                     onPressed: () async {
-                      final alarmSettings = AlarmSettings(
-                        id: 42,
-                        dateTime: controller.startTime.value,
-                        assetAudioPath: 'assets/alarmas/nokia.mp3',
-                        loopAudio: false,
-                        vibrate: true,
-                        fadeDuration: 1.0,
-                        notificationTitle: 'Titulo',
-                        notificationBody: 'body',
-                        enableNotificationOnKill: true,
-                      );
-                      Alarm.set(alarmSettings: alarmSettings);
-                      await Alarm.setNotificationOnAppKillContent(
-                          'Titulo', 'body');
-
-                      print(DateTime.now());
+                      Get.to(AlarmasPage());
                     },
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -198,7 +184,7 @@ class AddNotasView extends GetView<AddNotasController> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
                               Text(
-                                controller.startTime.value.toString(),
+                                controller.alarmaActivada.value,
                                 style: TextStyle(
                                     color: MyColors.textButtom,
                                     fontSize: 14.sp),
