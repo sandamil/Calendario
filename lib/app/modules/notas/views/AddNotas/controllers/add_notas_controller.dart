@@ -13,11 +13,16 @@ class AddNotasController extends GetxController {
   TextEditingController title = TextEditingController();
   TextEditingController site = TextEditingController();
   TextEditingController notes = TextEditingController();
-  Rx<DateTime> startTime = DateTime.now().obs;
-  Rx<DateTime> endTime = DateTime.now().obs;
+  Rx<DateTime> startTime = DateTime
+      .now()
+      .obs;
+  Rx<DateTime> endTime = DateTime
+      .now()
+      .obs;
   RxBool isImportant = false.obs;
 
   DateTime time = DateTime.now();
+
 
   @override
   void onInit() {
@@ -28,6 +33,9 @@ class AddNotasController extends GetxController {
     }
 
     super.onInit();
+    textController.addListener(() {
+      subtractTimeString.value = textController.text;
+    });
   }
 
   @override
@@ -50,7 +58,9 @@ class AddNotasController extends GetxController {
 
   void addTravelEvent() {
     print('addTravelEvent' '$startTime');
-    final int daysNum = endTime.value.difference(startTime.value).inDays;
+    final int daysNum = endTime.value
+        .difference(startTime.value)
+        .inDays;
     if (0 == daysNum) {
       final DateTime time = DateTime(
           startTime.value.year, startTime.value.month, startTime.value.day);
@@ -153,7 +163,11 @@ class AddNotasController extends GetxController {
   RxBool item5 = false.obs;
 
   late DateTime alarmTime;
+  final textController = TextEditingController();
+  RxString subtractTimeString = ''.obs;
   RxInt subtractTime = 0.obs;
+
+
   RxString assetAudioPathAddNotas = ConstantData.nokiaAlarm.obs;
 
   bool showNotifOnRing = true;
@@ -162,10 +176,12 @@ class AddNotasController extends GetxController {
   bool loopAudio = false;
   bool fadeVolume = false;
 
-  setAlarmTime([bool enableNotif = true]) async {
-    alarmTime = startTime.value.subtract(Duration(minutes: subtractTime.value));
-    print(alarmTime.millisecondsSinceEpoch ~/ 46755);
 
+  late Duration duracion;
+
+
+  setAlarmTime([bool enableNotif = true]) async {
+    alarmTime = startTime.value.subtract(duracion);
     final alarmSettings = AlarmSettings(
       id: alarmTime.millisecondsSinceEpoch ~/ 46755,
       dateTime: alarmTime,
@@ -173,134 +189,43 @@ class AddNotasController extends GetxController {
       loopAudio: loopAudio,
       fadeDuration: fadeVolume ? 5.0 : 0.0,
       notificationTitle:
-          showNotifOnRing && enableNotif ? 'Nota: ${title.text}' : null,
+      showNotifOnRing && enableNotif ? 'Nota: ${title.text}' : null,
       notificationBody:
-          showNotifOnRing && enableNotif ? 'Mensaje: ${notes.text}' : null,
+      showNotifOnRing && enableNotif ? 'Mensaje: ${notes.text}' : null,
       enableNotificationOnKill: showNotifOnKill,
     );
 
     Alarm.set(alarmSettings: alarmSettings);
     // await Alarm.setNotificationOnAppKillContent(
     //     title.text, notes.text);
-
-    print(alarmTime);
   }
 
-  String? selectedHMD;
+  String? selectedHMD2;
 
   var duracionHMD = <String>['Minutos', 'Horas', 'Dias'];
 
   void onSelected(String value) {
-    selectedHMD = value;
+    selectedHMD2 = value;
     update();
-    print(selectedHMD);
-    changeHMD(selectedHMD);
+    print(selectedHMD2);
+    changeHMD(selectedHMD2);
   }
 
   changeHMD(String? selectedHMD) {
     switch (selectedHMD) {
       case 'Minutos':
-        // Get.updateLocale(Locale('en_US'));
-        print('Minutos');
+        duracion = Duration(minutes: int.parse(subtractTimeString.value));
         break;
       case 'Horas':
-        // Get.updateLocale(Locale('en_US'));
-        print('Horas');
+        duracion = Duration(hours: int.parse(subtractTimeString.value));
         break;
       case 'Dias':
-        // Get.updateLocale(Locale('en_US'));
-        print('Dias');
+        duracion = Duration(days: int.parse(subtractTimeString.value));
         break;
       default:
-        // Get.updateLocale(Locale('en_US'));
-        print('Fallback to Minutos');
+        duracion = Duration(minutes: 0);
         break;
     }
   }
 
-  // String selectedBus1 = "";
-  // switch(newValue) {
-  // case "M100010":{
-  // selectedBus1 = buisnessLine2_02;
-  // break;
-  // }
-  // case "M100011":{
-  // selectedBus1 = buisnessLine2_03;
-  // break;
-  // }
-  // case "M100012":{
-  // selectedBus1 = buisnessLine2_04;
-  // break;
-  // }
-  // case "M100013":{
-  // selectedBus1 = buisnessLine2_05;
-  // break;
-  // }
-  // default: {
-  // selectedBus1 = buisnessLine2_default;
-  // }
-  // }
-
-  //
-  // String remind = warnDefaultt;
-  //
-  // RxList remindList = [
-  //   {
-  //     'name': warnDefaultt,
-  //     'select': true,
-  //     'time': (DateTime time) => time,
-  //     'id': 0
-  //   },
-  //   {
-  //     'name': '5 minutos de anticipación',
-  //     'select': false,
-  //     'time': (DateTime time) => time.subtract(Duration(minutes: 5)),
-  //     'id': 1
-  //   },
-  //   {
-  //     'name': '10 minutos de anticipación',
-  //     'select': false,
-  //     'time': (DateTime time) => time.subtract(Duration(minutes: 10)),
-  //     'id': 2
-  //   },
-  //   {
-  //     'name': '15 minutos de anticipación',
-  //     'select': false,
-  //     'time': (DateTime time) => time.subtract(Duration(minutes: 15)),
-  //     'id': 3
-  //   },
-  //   {
-  //     'name': '30 minutos de anticipación',
-  //     'select': false,
-  //     'time': (DateTime time) => time.subtract(Duration(minutes: 30)),
-  //     'id': 4
-  //   },
-  //   {
-  //     'name': '1 hora de anticipación',
-  //     'select': false,
-  //     'time': (DateTime time) => time.subtract(Duration(hours: 1)),
-  //     'id': 5
-  //   },
-  //   {
-  //     'name': '1 día de antelación',
-  //     'select': false,
-  //     'time': (DateTime time) => time.subtract(Duration(days: 1)),
-  //     'id': 6
-  //   },
-  //   {
-  //     'name': '2 días de anticipación',
-  //     'select': false,
-  //     'time': (DateTime time) => time.subtract(Duration(days: 2)),
-  //     'id': 7
-  //   },
-  //   {
-  //     'name': '1 semana de anticipación',
-  //     'select': false,
-  //     'time': (DateTime time) => time.subtract(Duration(days: 7)),
-  //     'id': 8
-  //   },
-  // ].obs;
-  //
-  //
-  // List selectWarnList = [];
 }

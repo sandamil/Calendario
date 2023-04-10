@@ -173,6 +173,7 @@ class AlarmasPage extends GetView<AddNotasController> {
                                           borderRadius:
                                               BorderRadius.circular(10)),
                                       child: TextFormField(
+                                        controller: controller.textController,
                                         cursorColor: MyColors.borderAccentLine,
                                         decoration: InputDecoration(
                                           enabledBorder: UnderlineInputBorder(
@@ -200,7 +201,7 @@ class AlarmasPage extends GetView<AddNotasController> {
                                     ),
                                     DropdownButton<String>(
                                         hint: const Text('Elige duracion'),
-                                        value: controller.selectedHMD,
+                                        value: controller.selectedHMD2,
                                         onChanged: (newValue) {
                                           controller.onSelected(newValue!);
                                         },
