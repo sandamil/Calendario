@@ -19,7 +19,6 @@ class AddNotasController extends GetxController {
 
   DateTime time = DateTime.now();
 
-
   @override
   void onInit() {
     var dateTimeCalendar = Get.arguments;
@@ -142,6 +141,8 @@ class AddNotasController extends GetxController {
   String sinRecordatorio = 'Sin recordatorio';
   RxBool noRemind = false.obs;
 
+  RxBool masOpcionesAlarma = false.obs;
+
   String alPrincipioString = 'Al Principio';
   RxBool alPrincipio = false.obs;
   int alPrincipioInt = 0;
@@ -158,9 +159,10 @@ class AddNotasController extends GetxController {
 
   setAlarmTime () async {
     alarmTime = startTime.value.subtract(Duration(minutes: subtractTime.value));
+    print(alarmTime.millisecondsSinceEpoch ~/ 46755);
 
     final alarmSettings = AlarmSettings(
-      id: alarmTime.millisecondsSinceEpoch,
+      id: alarmTime.millisecondsSinceEpoch ~/ 46755,
       dateTime: alarmTime,
       assetAudioPath: assetAudioPathAddNotas.value,
       loopAudio: false,
