@@ -156,8 +156,13 @@ class AddNotasController extends GetxController {
   RxInt subtractTime = 0.obs;
   RxString assetAudioPathAddNotas = ConstantData.nokiaAlarm.obs;
 
+  bool showNotifOnRing = true;
+  bool showNotifOnKill = true;
+  bool isRinging = false;
+  bool loopAudio = false;
+  bool fadeVolume = false;
 
-  setAlarmTime () async {
+  setAlarmTime([bool enableNotif = true]) async {
     alarmTime = startTime.value.subtract(Duration(minutes: subtractTime.value));
     print(alarmTime.millisecondsSinceEpoch ~/ 46755);
 
@@ -165,22 +170,21 @@ class AddNotasController extends GetxController {
       id: alarmTime.millisecondsSinceEpoch ~/ 46755,
       dateTime: alarmTime,
       assetAudioPath: assetAudioPathAddNotas.value,
-      loopAudio: false,
-      vibrate: true,
-      fadeDuration: 1.0,
-      notificationTitle: 'Titulo',
-      notificationBody: 'body',
-      enableNotificationOnKill: true,
+      loopAudio: loopAudio,
+      fadeDuration: fadeVolume ? 5.0 : 0.0,
+      notificationTitle:
+          showNotifOnRing && enableNotif ? 'Nota: ${title.text}' : null,
+      notificationBody:
+          showNotifOnRing && enableNotif ? 'Mensaje: ${notes.text}' : null,
+      enableNotificationOnKill: showNotifOnKill,
     );
 
     Alarm.set(alarmSettings: alarmSettings);
-    await Alarm.setNotificationOnAppKillContent(
-        title.text, notes.text);
+    // await Alarm.setNotificationOnAppKillContent(
+    //     title.text, notes.text);
 
     print(alarmTime);
-
   }
-
 
   String? selectedHMD;
 
