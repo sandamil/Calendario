@@ -11,7 +11,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
 
-import '../../../Notas/views/NotasView/controllers/notas_view_controller.dart';
+import '../../../notas/views/NotasView/controllers/notas_view_controller.dart';
 
 List<Color> colorList = [
   Colors.blue,

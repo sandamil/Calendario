@@ -1,7 +1,7 @@
 import 'package:calendario2/app/components/toast.dart';
 import 'package:calendario2/app/data/local/taskDatabase.dart';
 import 'package:calendario2/app/data/model/taskModel.dart';
-import 'package:calendario2/app/modules/Notas/controllers/notas_controller.dart';
+import 'package:calendario2/app/modules/notas/controllers/notas_controller.dart';
 import 'package:calendario2/config/util/dateUtils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -63,7 +63,7 @@ class NotasViewController extends GetxController {
 
   void markImportantAsDirty() async {
     print(currentNote.value.isImportant);
-    important.value = !important.value!;
+    important.value = !important.value;
     currentNote.value.isImportant = !currentNote.value.isImportant!;
     handleSave();
     print(currentNote.value.isImportant);

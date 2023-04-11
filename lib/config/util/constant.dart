@@ -1,4 +1,6 @@
 
+import 'dart:math';
+
 class ConstantData {
   ///icons
   static const BASEIMAGEURL = "assets/images/";
@@ -36,3 +38,37 @@ class ConstantData {
 
 /// notas
 const String warnDefaultt = 'Al principio';
+
+
+
+int idGenerator() {
+  final now = DateTime.now();
+  return now.microsecondsSinceEpoch ;
+}
+
+
+randomIdGenerator() {
+  var ranAssets = RanKeyAssets();
+  String middle4Digits = '';
+  for (int i = 0; i < 4; i++) {
+    middle4Digits +=
+    ranAssets.digits[Random.secure().nextInt(ranAssets.digits.length)];
+  }
+
+  return '$middle4Digits${DateTime.now().microsecondsSinceEpoch.toString().substring(8, 12)}';
+}
+
+class RanKeyAssets {
+  var digits = [
+    '0',
+    '1',
+    '2',
+    '3',
+    '4',
+    '5',
+    '6',
+    '7',
+    '8',
+    '9',
+  ];
+}

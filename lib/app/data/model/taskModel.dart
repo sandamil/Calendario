@@ -27,19 +27,19 @@ class Task {
       'startTimeMilliseconds': startTimeMilliseconds,
       'endTimeMilliseconds': endTimeMilliseconds,
       // 'time': time,
-      'isImportant': this.isImportant == true ? 1 : 0,
+      'isImportant': isImportant == true ? 1 : 0,
     };
   }
 
   Task.fromMap(Map<dynamic, dynamic> map) {
-    this.id = map['id'];
-    this.title = map['title'];
-    this.site = map['site'];
-    this.notes = map['notes'];
-    this.startTimeMilliseconds = map['startTimeMilliseconds'];
-    this.endTimeMilliseconds = map['endTimeMilliseconds'];
+    id = map['id'];
+    title = map['title'];
+    site = map['site'];
+    notes = map['notes'];
+    startTimeMilliseconds = map['startTimeMilliseconds'];
+    endTimeMilliseconds = map['endTimeMilliseconds'];
     // this.time = map['time'];
-    this.isImportant = map['isImportant'] == 1 ? true : false;
+    isImportant = map['isImportant'] == 1 ? true : false;
   }
 
   @override

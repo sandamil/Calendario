@@ -56,7 +56,7 @@ class EditNotasController extends GetxController {
 
   markImportantAsDirty() async {
     print(currentNote.value.isImportant);
-    important.value = !important.value!;
+    important.value = !important.value;
     currentNote.value.isImportant = !currentNote.value.isImportant!;
     print(currentNote.value.isImportant);
   }

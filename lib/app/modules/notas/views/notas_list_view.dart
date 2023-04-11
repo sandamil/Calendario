@@ -1,4 +1,4 @@
-import 'package:calendario2/app/modules/Notas/controllers/notas_controller.dart';
+import 'package:calendario2/app/modules/notas/controllers/notas_controller.dart';
 import 'package:calendario2/app/modules/home/views/home_view.dart';
 import 'package:calendario2/app/modules/notas/views/widgets/important_indicator_text_view.dart';
 import 'package:flutter/material.dart';

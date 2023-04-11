@@ -133,7 +133,7 @@ class MyStyles {
       secondaryLabelStyle: getChipTextStyle(isLightTheme: isLightTheme),
       selectedColor: Colors.black,
       disabledColor: Colors.green,
-      padding: EdgeInsets.all(5),
+      padding: const EdgeInsets.all(5),
       secondarySelectedColor: Colors.purple,
     );
   }
@@ -223,7 +223,7 @@ class MyStyles {
 
   static InputDecorationTheme getInputDecorationTheme(
       {required bool isLightTheme}) =>
-      InputDecorationTheme(
+      const InputDecorationTheme(
         // focusedErrorBorder: UnderlineInputBorder(
         //     borderSide: BorderSide(width: 0.7, color: errorColor)),
         // focusedBorder: UnderlineInputBorder(
@@ -238,7 +238,7 @@ class MyStyles {
 
   static InputDecorationTheme getInputDecorationTheme2(
       {required bool isLightTheme}) =>
-      InputDecorationTheme(
+      const InputDecorationTheme(
         // border: OutlineInputBorder(
         //   borderRadius: BorderRadius.circular(28),
         //   borderSide: BorderSide(color: textColor),

@@ -1,23 +1,25 @@
 import 'package:get/get.dart';
 
-import '../modules/Notas/views/AddNotas/bindings/add_notas_binding.dart';
-import '../modules/Notas/views/AddNotas/views/add_notas_view.dart';
 import '../modules/CrearCuadrante/bindings/crear_cuadrante_binding.dart';
 import '../modules/CrearCuadrante/views/crear_cuadrante_view.dart';
 import '../modules/CrearTurno/bindings/crear_turno_binding.dart';
 import '../modules/CrearTurno/views/turno_view.dart';
-import '../modules/Notas/views/EditNotas/bindings/edit_notas_binding.dart';
-import '../modules/Notas/views/EditNotas/views/edit_notas_view.dart';
-import '../modules/Notas/bindings/notas_binding.dart';
-import '../modules/Notas/views/NotasView/bindings/notas_view_binding.dart';
-import '../modules/Notas/views/NotasView/views/notas_view.dart';
-import '../modules/Notas/views/notas_list_view.dart';
 import '../modules/ajustes/bindings/ajustes_binding.dart';
 import '../modules/ajustes/views/ajustes_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/menu/bindings/menu_binding.dart';
 import '../modules/menu/views/menu_view.dart';
+import '../modules/notas/bindings/notas_binding.dart';
+import '../modules/notas/views/AddNotas/bindings/add_notas_binding.dart';
+import '../modules/notas/views/AddNotas/views/add_notas_view.dart';
+import '../modules/notas/views/EditNotas/bindings/edit_notas_binding.dart';
+import '../modules/notas/views/EditNotas/views/edit_notas_view.dart';
+import '../modules/notas/views/NotasView/bindings/notas_view_binding.dart';
+import '../modules/notas/views/NotasView/views/notas_view.dart';
+import '../modules/notas/views/notas_list_view.dart';
+import 'package:calendario2/app/modules/notas/views/alarmas/bindings/alarmas_binding.dart';
+import 'package:calendario2/app/modules/notas/views/alarmas/views/alarmas_view.dart';
 
 part 'app_routes.dart';
 
@@ -71,6 +73,11 @@ class AppPages {
       name: _Paths.EDIT_NOTAS,
       page: () => const EditNotasView(),
       binding: EditNotasBinding(),
+    ),
+    GetPage(
+      name: _Paths.ALARMAS,
+      page: () => const AlarmasView(),
+      binding: AlarmasBinding(),
     ),
   ];
 }

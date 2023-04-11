@@ -1,6 +1,6 @@
 import 'package:alarm/alarm.dart';
 import 'package:calendario2/app/modules/home/widgets/calendar/widget/line.dart';
-import 'package:calendario2/app/modules/notas/views/alarmas.dart';
+import 'package:calendario2/app/modules/notas/views/alarmas/views/widget/alarmTile.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/config/util/dateUtils.dart';
 import 'package:flutter/material.dart';
@@ -168,7 +168,16 @@ class AddNotasView extends GetView<AddNotasController> {
                 LineWidget(),
                 TextButton(
                     onPressed: () async {
-                      Get.to(AlarmasPage());
+                      Get.toNamed(
+                        '/alarmas',
+                        arguments: {
+                          'id': controller.idGenerated!,
+                          'startTime': controller.startTime.value,
+                          'notes': controller.notes.value,
+                          'title': controller.title.value
+                        },
+                      );
+                      // Get.to(AlarmasPage());
                     },
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -197,6 +206,34 @@ class AddNotasView extends GetView<AddNotasController> {
                             ],
                           )
                         ])),
+
+                controller.alarms.isNotEmpty
+                    ? Container(
+                  height: 400,
+                      child: ListView.separated(
+                  itemCount: controller.alarms.length,
+                  separatorBuilder: (context, index) => const Divider(),
+                  itemBuilder: (context, index) {
+                      return ExampleAlarmTile(
+                        key: Key(controller.alarms[index].id.toString()),
+                        title: TimeOfDay(
+                          hour: controller.alarms[index].dateTime.hour,
+                          minute: controller.alarms[index].dateTime.minute,
+                        ).format(context),
+                        onPressed: () => controller.navigateToAlarmScreen(controller.alarms[index]),
+                        onDismissed: () {
+                          Alarm.stop(controller.alarms[index].id).then((_) => controller.loadAlarms());
+                        },
+                      );
+                  },
+                ),
+                    )
+                    : Center(
+                  child: Text(
+                    "No alarms set",
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                ),
                 LineWidget(),
                 SizedBox(
                   height: 2.h,

@@ -66,18 +66,18 @@ class NotasView extends GetView<NotasListController> {
           controller.gotoEditNote();
         },
         label: Text('Añade Nota'.toUpperCase()),
-        icon: Icon(Icons.add),
+        icon: const Icon(Icons.add),
         // key: keyButton10,
       ),
       body: AnimatedContainer(
-        duration: Duration(milliseconds: 200),
-        margin: EdgeInsets.only(top: 6),
-        padding: EdgeInsets.only(left: 15, right: 15),
+        duration: const Duration(milliseconds: 200),
+        margin: const EdgeInsets.only(top: 6),
+        padding: const EdgeInsets.only(left: 15, right: 15),
         child: ListView(
-          physics: BouncingScrollPhysics(),
+          physics: const BouncingScrollPhysics(),
           children: <Widget>[
-            ButtonRowView(),
-            ImportantIndicatorTextView(),
+            const ButtonRowView(),
+            const ImportantIndicatorTextView(),
             Container(height: 6),
             ...buildNoteComponentsList(),
             Container(height: 100)
@@ -98,21 +98,23 @@ class NotasView extends GetView<NotasListController> {
             .contains(controller.searchController.value.text.toLowerCase()) ||
             note.title!
                 .toLowerCase()
-                .contains(controller.searchController.value.text.toLowerCase()))
+                .contains(controller.searchController.value.text.toLowerCase())) {
           noteComponentsList.add(TaskCard(
             noteData: note,
             onTapAction: controller.openNoteToRead,
           ));
+        }
       });
       return noteComponentsList;
     }
     if (controller.isFlagOn.value) {
       controller.notesList.forEach((note) {
-        if (note.isImportant!)
+        if (note.isImportant!) {
           noteComponentsList.add(TaskCard(
             noteData: note,
             onTapAction: controller.openNoteToRead,
           ));
+        }
       });
     } else {
       controller.notesList.forEach((note) {

@@ -92,9 +92,9 @@ class DBHelper {
   Future<List<CuadranteDay>> getItemModels() async {
     final dbClient = await database;
 
-    var _day = DateTime.now();
-    DateTime dayStart = _day.subtract(Duration(days: 60));
-    DateTime dayEnd = _day.add(Duration(days: 300));
+    var day = DateTime.now();
+    DateTime dayStart = day.subtract(Duration(days: 60));
+    DateTime dayEnd = day.add(Duration(days: 300));
 
     List<Map<String, dynamic>> result =
     await dbClient!.rawQuery(

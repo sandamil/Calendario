@@ -1,6 +1,6 @@
 import 'package:calendario2/app/data/model/taskModel.dart';
 import 'package:calendario2/app/data/model/cuadranteDay.dart';
-import 'package:calendario2/app/modules/Notas/views/widgets/taskCard.dart';
+import 'package:calendario2/app/modules/notas/views/widgets/taskCard.dart';
 import 'package:calendario2/app/modules/home/controllers/calendar_controller.dart';
 import 'package:calendario2/app/modules/home/widgets/calendar/table_calendar.dart';
 import 'package:calendario2/app/modules/home/widgets/calendar/widget/day_selected_turno_widget.dart';

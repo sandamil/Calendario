@@ -1,4 +1,4 @@
-import 'package:calendario2/app/modules/Notas/controllers/notas_controller.dart';
+import 'package:calendario2/app/modules/notas/controllers/notas_controller.dart';
 import 'package:get/get.dart';
 
 
