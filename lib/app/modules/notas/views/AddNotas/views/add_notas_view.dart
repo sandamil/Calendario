@@ -21,7 +21,8 @@ class AddNotasView extends GetView<AddNotasController> {
 
     AlarmasController alarmasController = AlarmasController();
     alarmasController.loadAlarms();
-    print('AddNotasView  build alarms length ${alarmasController.alarms.value.length}');
+    print(
+        'AddNotasView  build alarms length ${alarmasController.alarms.value.length}');
     print('AddNotasView  build  ${alarmasController.alarmaActivada}');
 
     return Scaffold(
@@ -79,22 +80,21 @@ class AddNotasView extends GetView<AddNotasController> {
                               dp.DatePicker.showDateTimePicker(Get.context!,
                                   showTitleActions: true,
                                   onChanged: (DateTime date) {
-                                    if (controller
+                                if (controller
                                         .endTime.value.millisecondsSinceEpoch <
-                                        date.millisecondsSinceEpoch) {
-                                      controller.endTime.value = date;
-                                    }
-                                    controller.startTime.value = date;
-                                  },
-                                  onConfirm: (DateTime date) {
-                                    controller.setStartTime(date);
-                                  },
+                                    date.millisecondsSinceEpoch) {
+                                  controller.endTime.value = date;
+                                }
+                                controller.startTime.value = date;
+                              }, onConfirm: (DateTime date) {
+                                controller.setStartTime(date);
+                              },
                                   currentTime: controller.startTime.value,
                                   locale: dp.LocaleType.es);
                             },
                             child: Row(
                                 mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: <Widget>[
                                   Text(
@@ -105,15 +105,12 @@ class AddNotasView extends GetView<AddNotasController> {
                                   ),
                                   Row(
                                     mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment.spaceBetween,
                                     crossAxisAlignment:
-                                    CrossAxisAlignment.center,
+                                        CrossAxisAlignment.center,
                                     children: <Widget>[
                                       Text(
-                                        '${controller.startTime.value
-                                            .formatDateYMD} ${controller
-                                            .startTime.value
-                                            .formatDateTime24H}',
+                                        '${controller.startTime.value.formatDateYMD} ${controller.startTime.value.formatDateTime24H}',
                                         style: TextStyle(
                                             color: MyColors.textButtom,
                                             fontSize: 14.sp),
@@ -132,12 +129,12 @@ class AddNotasView extends GetView<AddNotasController> {
                             dp.DatePicker.showDateTimePicker(Get.context!,
                                 showTitleActions: true,
                                 onChanged: (DateTime date) {
-                                  if (controller
+                              if (controller
                                       .endTime.value.millisecondsSinceEpoch <=
-                                      date.millisecondsSinceEpoch) {
-                                    controller.endTime.value = date;
-                                  }
-                                },
+                                  date.millisecondsSinceEpoch) {
+                                controller.endTime.value = date;
+                              }
+                            },
                                 onConfirm: (DateTime date) {},
                                 currentTime: controller.endTime.value,
                                 locale: dp.LocaleType.es);
@@ -154,13 +151,11 @@ class AddNotasView extends GetView<AddNotasController> {
                                 ),
                                 Row(
                                   mainAxisAlignment:
-                                  MainAxisAlignment.spaceBetween,
+                                      MainAxisAlignment.spaceBetween,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: <Widget>[
                                     Text(
-                                      '${controller.endTime.value
-                                          .formatDateYMD} ${controller.endTime
-                                          .value.formatDateTime24H}',
+                                      '${controller.endTime.value.formatDateYMD} ${controller.endTime.value.formatDateTime24H}',
                                       style: TextStyle(
                                           color: MyColors.textButtom,
                                           fontSize: 14.sp),
@@ -223,73 +218,76 @@ class AddNotasView extends GetView<AddNotasController> {
                             ],
                           )
                         ])),
-/// Todo recorrer la lista para encontar id igual
+
+                /// Todo recorrer la lista para encontar id igual
                 Container(
                   height: 200.h,
                   child: alarmasController.alarms.value.isNotEmpty
                       ? Column(
-                        children: [
-                          Row(
-                            children: [
-                              Text('alarmas:  '),
-                              Text(alarmasController.alarms.value.length.toString()),
-                              Text(' idgenerated:'),
-                              Text(controller.idGenerated.toString()),
-                              Text('alarma id:'),
-                              Text(alarmasController.alarms[10].id.toString()),
-                              // Text(alarmasController.alarms.value.length.toString()),
-                            ],
-                          ),
-
-
-            ListView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: alarmasController.alarms.value.length,
-                    itemBuilder: (context, index) {
-                          if (alarmasController.alarms[index].id ==
-                              controller.idGenerated) {
-                            return ExampleAlarmTile(
-                              key: Key(alarmasController
-                                  .alarms.value[index].id
-                                  .toString()),
-                              title: TimeOfDay(
-                                hour: alarmasController
-                                    .alarms.value[index].dateTime.hour,
-                                minute: alarmasController
-                                    .alarms.value[index].dateTime.minute,
-                              ).format(context),
-                              onPressed: () =>
-                                  alarmasController.navigateToAlarmScreen(
-                                      alarmasController.alarms.value[index]),
-                              onDismissed: () {
-                                Alarm.stop(alarmasController
-                                    .alarms.value[index].id)
-                                    .then((_) =>
-                                    alarmasController.loadAlarms());
+                          children: [
+                            Row(
+                              children: [
+                                Text('alarmas:  '),
+                                Text(alarmasController.alarms.value.length
+                                    .toString()),
+                                Text(' idgenerated:'),
+                                Text(controller.idGenerated.toString()),
+                                Text('alarma id:'),
+                                Text(alarmasController.alarms[4].dateTime.toString()),
+                                // Text(alarmasController.alarms.value.length.toString()),
+                              ],
+                            ),
+                            ListView.builder(
+                              physics: const NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: alarmasController.alarms.value.length,
+                              itemBuilder: (context, index) {
+                                return Column(
+                                  children: [
+                                    alarmasController.alarms[index].id ==
+                                            controller.idGenerated
+                                        ? ExampleAlarmTile(
+                                            key: Key(alarmasController
+                                                .alarms.value[index].id
+                                                .toString()),
+                                            title: TimeOfDay(
+                                              hour: alarmasController.alarms
+                                                  .value[index].dateTime.hour,
+                                              minute: alarmasController.alarms
+                                                  .value[index].dateTime.minute,
+                                            ).format(context),
+                                            onPressed: () => alarmasController
+                                                .navigateToAlarmScreen(
+                                                    alarmasController
+                                                        .alarms.value[index]),
+                                            onDismissed: () {
+                                              Alarm.stop(alarmasController
+                                                      .alarms.value[index].id)
+                                                  .then((_) => alarmasController
+                                                      .loadAlarms());
+                                            },
+                                          )
+                                        : Container()
+                                  ],
+                                );
                               },
-                            );
-                          }
-                          Center(
-                              child: Text(
-                                "No alarms set",
-                                style: Theme
-                                    .of(context)
-                                    .textTheme
-                                    .titleMedium,
-                              ));
-                    },
-                  ),
-                        ],
-                      )
+                              // Center(
+                              //     child: Text(
+                              //       "No alarms set",
+                              //       style: Theme
+                              //           .of(context)
+                              //           .textTheme
+                              //           .titleMedium,
+                              //     ));
+                              // },
+                            ),
+                          ],
+                        )
                       : Center(
-                      child: Text(
-                        "No alarms set",
-                        style: Theme
-                            .of(context)
-                            .textTheme
-                            .titleMedium,
-                      )),
+                          child: Text(
+                          "No alarms set",
+                          style: Theme.of(context).textTheme.titleMedium,
+                        )),
                 ),
 
                 LineWidget(),
@@ -297,7 +295,7 @@ class AddNotasView extends GetView<AddNotasController> {
                   height: 2.h,
                 ),
                 TextButton(
-                  // key: keyButton16,
+                    // key: keyButton16,
                     onPressed: controller.markImportantAsDirty,
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -359,8 +357,8 @@ class AddNotasView extends GetView<AddNotasController> {
     );
   }
 
-  TextFormField _buildGeneralFormField(TextEditingController value, String hint,
-      int lines) {
+  TextFormField _buildGeneralFormField(
+      TextEditingController value, String hint, int lines) {
     final double _radiusNum = 5.r;
     return TextFormField(
       // onTapOutside: (event){

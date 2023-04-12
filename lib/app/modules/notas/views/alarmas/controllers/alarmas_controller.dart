@@ -53,7 +53,7 @@ class AlarmasController extends GetxController {
 
   loadAlarms() {
     alarms.value = Alarm.getAlarms();
-    alarms.sort((a, b) => a.dateTime.isBefore(b.dateTime) ? 0 : 1);
+    // alarms.sort((a, b) => a.dateTime.isBefore(b.dateTime) ? 0 : 1);
     update();
   }
 
