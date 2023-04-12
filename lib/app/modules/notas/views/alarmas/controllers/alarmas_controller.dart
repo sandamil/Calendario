@@ -1,18 +1,27 @@
+
 import 'package:alarm/alarm.dart';
 import 'package:calendario2/app/data/model/taskModel.dart';
+import 'package:calendario2/app/modules/notas/views/AddNotas/controllers/add_notas_controller.dart';
+import 'package:calendario2/app/modules/notas/views/alarmas/views/edit_alarm.dart';
 import 'package:calendario2/config/util/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class AlarmasController extends GetxController {
+
+  RxList<AlarmSettings> alarms = <AlarmSettings>[].obs;
+
   late int id;
   var startTime;
   var title;
   var notes;
 
 
+
   @override
   void onInit() {
+    loadAlarms();
+
     if (Get.arguments != null) {
       startTime = Get.arguments['startTime'];
       title = Get.arguments['title'];
@@ -41,12 +50,42 @@ class AlarmasController extends GetxController {
     dias1(false);
   }
 
+
+  loadAlarms() {
+    alarms.value = Alarm.getAlarms();
+    alarms.sort((a, b) => a.dateTime.isBefore(b.dateTime) ? 0 : 1);
+    update();
+  }
+
+  Future<void> navigateToAlarmScreen(AlarmSettings? settings) async {
+    final res = await showModalBottomSheet<bool?>(
+        context: Get.context!,
+        isScrollControlled: true,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        builder: (context) {
+          return FractionallySizedBox(
+            heightFactor: 0.6,
+            child: ExampleAlarmEditScreen(alarmSettings: settings),
+          );
+        });
+
+    if (res != null && res == true) loadAlarms();
+  }
+
   RxString alarmaActivada = 'Sin recordatorio'.obs;
 
+  updatealarmaActivada() {
+    AddNotasController adNotasController = Get.find();
+    print('updatealarmaActivada() ${id} == ${adNotasController.idGenerated}');
+    adNotasController.alarmaActivada = alarmaActivada.value;
+  }
   String sinRecordatorio = 'Sin recordatorio';
   RxBool noRemind = false.obs;
 
   RxBool masOpcionesAlarma = false.obs;
+  String masOpcionesAlarmaString = 'Personalizado';
 
   String alPrincipioString = 'Al Principio';
   RxBool alPrincipio = false.obs;
@@ -101,7 +140,6 @@ class AlarmasController extends GetxController {
   void onSelected(String value) {
     selectedHMD = value;
     update();
-    print(selectedHMD);
     changeHMD(selectedHMD);
   }
 

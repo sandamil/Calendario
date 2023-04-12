@@ -6,6 +6,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
 
+import '../../AddNotas/controllers/add_notas_controller.dart';
+import '../../AddNotas/views/add_notas_view.dart';
 import '../controllers/alarmas_controller.dart';
 
 class AlarmasView extends GetView<AlarmasController> {
@@ -13,6 +15,8 @@ class AlarmasView extends GetView<AlarmasController> {
 
   @override
   Widget build(BuildContext context) {
+    final AddNotasController addNotasController = Get.find();
+
     var theme = Theme.of(context);
 
     return WillPopScope(
@@ -22,18 +26,21 @@ class AlarmasView extends GetView<AlarmasController> {
           leading: IconButton(
               icon: Icon(Icons.arrow_back_ios_new, color: theme.primaryColor),
               onPressed: () async {
+                await controller.updatealarmaActivada();
                 controller.noRemind.value
                     ? await controller.setAlarmTime()
                     : CustomSnackBar.showCustomSnackBar(
                     title: 'No has añadido Alarma',
                     message:
                     ' Vuelve a entrar si queires añadir recordatorio');
-                Navigator.of(context).pop();
+
+                Get.to(() => AddNotasView());
+                controller.loadAlarms();
               }),
         ),
-        body: Container(
-          child: Obx(() {
-            return Column(
+        body: Obx(() {
+          return Container(
+            child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 Padding(
@@ -51,7 +58,6 @@ class AlarmasView extends GetView<AlarmasController> {
                         controller.alarmaActivada.value =
                             controller.sinRecordatorio;
                         controller.alPrincipio(false);
-                        controller.alPrincipio(false);
                         controller.minutos5(false);
                         controller.minutos30(false);
                         controller.horas1(false);
@@ -60,105 +66,127 @@ class AlarmasView extends GetView<AlarmasController> {
                     },
                   ),
                 ),
+                Text('${controller.alarmaActivada.value} ${controller
+                    .startTime}'),
+                Text('${controller.id} == ${addNotasController.idGenerated}'),
                 controller.noRemind.value
                     ? Column(
                   children: [
-                    Obx(
-                          () {
-                        return Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 20.w, vertical: 20.h),
-                          child: Column(
-                            children: [
-                              //Checkboxes will go here
-                              CheckboxListTile(
-                                title: Text(controller.alPrincipioString),
-                                value: controller.alPrincipio.value,
-                                onChanged: controller
-                                    .masOpcionesAlarma.value
-                                    ? null
-                                    : (value) {
-                                  controller.alPrincipio.value =
-                                  value!;
-                                  controller.alarmaActivada.value =
-                                      controller.alPrincipioString;
-                                  controller.duracion =
-                                      Duration(minutes: 0);
-                                },
-                              ),
-                              CheckboxListTile(
-                                title: const Text(
-                                    '5 minutos de anticipación'),
-                                value: controller.minutos5.value,
-                                onChanged: controller
-                                    .masOpcionesAlarma.value
-                                    ? null
-                                    : (value) {
-                                  controller.minutos5.value = value!;
-                                  controller.alarmaActivada.value =
-                                      controller.minutos5String;
-                                  controller.duracion =
-                                      Duration(minutes: 5);
-                                },
-                              ),
-                              CheckboxListTile(
-                                title: const Text(
-                                    '30 minutos de anticipación'),
-                                value: controller.minutos30.value,
-                                onChanged: controller
-                                    .masOpcionesAlarma.value
-                                    ? null
-                                    : (value) {
-                                  controller.minutos30.value = value!;
-                                  controller.alarmaActivada.value =
-                                      controller.minutos30String;
-                                  controller.duracion =
-                                      Duration(minutes: 30);
 
-                                },
-                              ),
-                              CheckboxListTile(
-                                title:
-                                const Text('1 hora de anticipación'),
-                                value: controller.horas1.value,
-                                onChanged: controller
-                                    .masOpcionesAlarma.value
-                                    ? null
-                                    : (value) {
-                                  controller.horas1.value = value!;
-                                  controller.alarmaActivada.value =
-                                      controller.horas1String;
-                                  controller.duracion =
-                                      Duration(hours: 1);
-
-                                },
-                              ),
-                              CheckboxListTile(
-                                title: const Text('1 día de antelación'),
-                                value: controller.dias1.value,
-                                onChanged: controller
-                                    .masOpcionesAlarma.value
-                                    ? null
-                                    : (value) {
-                                  controller.dias1.value = value!;
-                                  controller.alarmaActivada.value =
-                                      controller.dias1String;
-                                  controller.duracion =
-                                      Duration(days: 1);
-
-                                },
-                              ),
-                            ],
+                    Padding(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 20.w, vertical: 20.h),
+                      child: Column(
+                        children: [
+                          //Checkboxes will go here
+                          CheckboxListTile(
+                            title: Text(controller.alPrincipioString),
+                            value: controller.alPrincipio.value,
+                            onChanged: controller
+                                .masOpcionesAlarma.value
+                                ? null
+                                : (value) {
+                              controller.minutos5(false);
+                              controller.minutos30(false);
+                              controller.horas1(false);
+                              controller.dias1(false);
+                              controller.alPrincipio.value =
+                              value!;
+                              controller.alarmaActivada.value =
+                                  controller.alPrincipioString;
+                              controller.duracion =
+                                  Duration(minutes: 0);
+                            },
                           ),
-                        );
-                      },
+                          CheckboxListTile(
+                            title: const Text(
+                                '5 minutos de anticipación'),
+                            value: controller.minutos5.value,
+                            onChanged: controller
+                                .masOpcionesAlarma.value
+                                ? null
+                                : (value) {
+                              controller.alPrincipio(false);
+                              controller.minutos30(false);
+                              controller.horas1(false);
+                              controller.dias1(false);
+                              controller.minutos5.value =
+                              value!;
+                              controller.alarmaActivada.value =
+                                  controller.minutos5String;
+                              controller.duracion =
+                                  Duration(minutes: 5);
+                            },
+                          ),
+                          CheckboxListTile(
+                            title: const Text(
+                                '30 minutos de anticipación'),
+                            value: controller.minutos30.value,
+                            onChanged: controller
+                                .masOpcionesAlarma.value
+                                ? null
+                                : (value) {
+                              controller.alPrincipio(false);
+                              controller.minutos5(false);
+                              controller.horas1(false);
+                              controller.dias1(false);
+                              controller.minutos30.value =
+                              value!;
+                              controller.alarmaActivada.value =
+                                  controller.minutos30String;
+                              controller.duracion =
+                                  Duration(minutes: 30);
+                            },
+                          ),
+                          CheckboxListTile(
+                            title:
+                            const Text('1 hora de anticipación'),
+                            value: controller.horas1.value,
+                            onChanged: controller
+                                .masOpcionesAlarma.value
+                                ? null
+                                : (value) {
+                              controller.alPrincipio(false);
+                              controller.minutos5(false);
+                              controller.minutos30(false);
+                              controller.dias1(false);
+                              controller.horas1.value = value!;
+                              controller.alarmaActivada.value =
+                                  controller.horas1String;
+                              controller.duracion =
+                                  Duration(hours: 1);
+                            },
+                          ),
+                          CheckboxListTile(
+                            title: const Text('1 día de antelación'),
+                            value: controller.dias1.value,
+                            onChanged: controller
+                                .masOpcionesAlarma.value
+                                ? null
+                                : (value) {
+                              controller.alPrincipio(false);
+                              controller.minutos5(false);
+                              controller.minutos30(false);
+                              controller.horas1(false);
+                              controller.dias1.value = value!;
+                              controller.alarmaActivada.value =
+                                  controller.dias1String;
+                              controller.duracion =
+                                  Duration(days: 1);
+                            },
+                          ),
+                        ],
+                      ),
                     ),
+
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 20.w),
                       child: SwitchListTile(
                         title: const Text('Mas opciones'),
                         value: controller.masOpcionesAlarma.value,
                         onChanged: (bool value) {
+                          controller.alarmaActivada.value =
+                              controller.masOpcionesAlarmaString;
                           controller.masOpcionesAlarma.value = value;
                           controller.alPrincipio(false);
                           controller.minutos5(false);
@@ -248,10 +276,12 @@ class AlarmasView extends GetView<AlarmasController> {
                 )
                     : Container(),
               ],
-            );
-          }),
-        ),
+            ),
+          );
+        }),
       ),
     );
   }
 }
+
+

@@ -1,20 +1,34 @@
 import 'package:alarm/alarm.dart';
 import 'package:calendario2/app/data/local/taskDatabase.dart';
 import 'package:calendario2/app/data/model/taskModel.dart';
+import 'package:calendario2/app/modules/notas/views/alarmas/controllers/alarmas_controller.dart';
 import 'package:calendario2/app/modules/notas/views/alarmas/views/edit_alarm.dart';
 import 'package:calendario2/config/util/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class AddNotasController extends GetxController {
+  AlarmasController alarmasController = AlarmasController();
+
   Map<DateTime, List<Task>> events = <DateTime, List<Task>>{}.obs;
 
   bool headerShouldHide = false;
+
+  var _derece = 20.obs;
+
+  int get derece => _derece.value;
+
+  void updateDerece(int value) {
+    _derece.value = value;
+  }
 
   TextEditingController title = TextEditingController();
   TextEditingController site = TextEditingController();
   TextEditingController notes = TextEditingController();
   Rx<DateTime> startTime = DateTime.now().obs;
+  void setStartTime(value) {
+    startTime.value = value;
+  }
   Rx<DateTime> endTime = DateTime.now().obs;
   RxBool isImportant = false.obs;
 
@@ -24,6 +38,7 @@ class AddNotasController extends GetxController {
 
   @override
   void onInit() {
+    alarmasController.loadAlarms();
     idGenerated = int.parse(randomIdGenerator());
     print(idGenerated);
     var dateTimeCalendar = Get.arguments;
@@ -33,7 +48,6 @@ class AddNotasController extends GetxController {
     }
 
     super.onInit();
-    loadAlarms();
 
     // textController.addListener(() {
     //   subtractTimeString.value = textController.text;
@@ -42,6 +56,7 @@ class AddNotasController extends GetxController {
 
   @override
   void onReady() {
+    print('        ________________________________________onReady');
     super.onReady();
   }
 
@@ -148,32 +163,9 @@ class AddNotasController extends GetxController {
 
   ///NOtificaciones
   ///
-  late List<AlarmSettings> alarms;
 
-  void loadAlarms() {
-    alarms = Alarm.getAlarms();
-    alarms.sort((a, b) => a.dateTime.isBefore(b.dateTime) ? 0 : 1);
-    update();
-  }
 
-  Future<void> navigateToAlarmScreen(AlarmSettings? settings) async {
-    final res = await showModalBottomSheet<bool?>(
-        context: Get.context!,
-        isScrollControlled: true,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        builder: (context) {
-          return FractionallySizedBox(
-            heightFactor: 0.6,
-            child: ExampleAlarmEditScreen(alarmSettings: settings),
-          );
-        });
-
-    if (res != null && res == true) loadAlarms();
-  }
-
-  RxString alarmaActivada = 'Sin recordatorio'.obs;
+  String alarmaActivada = 'Sin recordatorio';
   //
   // String sinRecordatorio = 'Sin recordatorio';
   // RxBool noRemind = false.obs;
