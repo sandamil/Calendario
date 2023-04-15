@@ -1,11 +1,17 @@
 import 'package:alarm/alarm.dart';
+import 'package:calendario2/app/modules/notas/views/AddNotas/controllers/add_notas_controller.dart';
+import 'package:calendario2/app/modules/notas/views/AddNotas/views/add_notas_view.dart';
+import 'package:calendario2/app/modules/notas/views/EditNotas/controllers/edit_notas_controller.dart';
 import 'package:calendario2/config/util/constant.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ExampleAlarmEditScreen extends StatefulWidget {
   final AlarmSettings? alarmSettings;
+  final RxBool isEditing;
 
-  const ExampleAlarmEditScreen({Key? key, this.alarmSettings})
+  const ExampleAlarmEditScreen(
+      {Key? key, this.alarmSettings, required this.isEditing})
       : super(key: key);
 
   @override
@@ -14,6 +20,7 @@ class ExampleAlarmEditScreen extends StatefulWidget {
 
 class _ExampleAlarmEditScreenState extends State<ExampleAlarmEditScreen> {
   late bool creating;
+  late bool isEditing;
 
   late TimeOfDay selectedTime;
   late bool loopAudio;
@@ -25,6 +32,7 @@ class _ExampleAlarmEditScreenState extends State<ExampleAlarmEditScreen> {
   void initState() {
     super.initState();
     creating = widget.alarmSettings == null;
+    isEditing = widget.isEditing.value;
 
     if (creating) {
       final dt = DateTime.now().add(const Duration(minutes: 1));
@@ -32,7 +40,7 @@ class _ExampleAlarmEditScreenState extends State<ExampleAlarmEditScreen> {
       loopAudio = true;
       vibrate = true;
       showNotification = true;
-      assetAudio = 'assets/mozart.mp3';
+      assetAudio = ConstantData.mozartAlarm;
     } else {
       selectedTime = TimeOfDay(
         hour: widget.alarmSettings!.dateTime.hour,
@@ -80,8 +88,9 @@ class _ExampleAlarmEditScreenState extends State<ExampleAlarmEditScreen> {
       dateTime: dateTime,
       loopAudio: loopAudio,
       vibrate: vibrate,
-      notificationTitle: showNotification ? 'Alarm example' : null,
-      notificationBody: showNotification ? 'Your alarm ($id) is ringing' : null,
+      notificationTitle: showNotification ? 'Alarma' : null,
+      notificationBody:
+          showNotification ? 'Tu alarma ($id) esta sonando' : null,
       assetAudioPath: assetAudio,
     );
     return alarmSettings;
@@ -93,8 +102,26 @@ class _ExampleAlarmEditScreenState extends State<ExampleAlarmEditScreen> {
   }
 
   Future<void> deleteAlarm() async {
-    Alarm.stop(widget.alarmSettings!.id)
-        .then((_) => Navigator.pop(context, true));
+    Alarm.stop(widget.alarmSettings!.id).then((_) {
+      updateNotaAddOrEdit();
+      Navigator.pop(context, true);
+    });
+  }
+
+  updateNotaAddOrEdit() {
+    isEditing ? updateNotaAdd() : updateNotaEdit();
+  }
+
+  updateNotaAdd() {
+    var addNotasController = Get.put(AddNotasController());
+    addNotasController.alarmaCreadaNota = null;
+    addNotasController.update();
+  }
+
+  updateNotaEdit() {
+    var editNotasController = Get.put(EditNotasController());
+    editNotasController.alarmaCreadaNota = null;
+    editNotasController.update();
   }
 
   @override
@@ -110,7 +137,7 @@ class _ExampleAlarmEditScreenState extends State<ExampleAlarmEditScreen> {
               TextButton(
                 onPressed: () => Navigator.pop(context, false),
                 child: Text(
-                  "Cancel",
+                  "Cancelar",
                   style: Theme.of(context)
                       .textTheme
                       .titleLarge!
@@ -120,7 +147,7 @@ class _ExampleAlarmEditScreenState extends State<ExampleAlarmEditScreen> {
               TextButton(
                 onPressed: saveAlarm,
                 child: Text(
-                  "Save",
+                  "Guardar",
                   style: Theme.of(context)
                       .textTheme
                       .titleLarge!
@@ -147,7 +174,7 @@ class _ExampleAlarmEditScreenState extends State<ExampleAlarmEditScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Loop alarm audio',
+                'Loop alarma audio',
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               Switch(
@@ -160,7 +187,7 @@ class _ExampleAlarmEditScreenState extends State<ExampleAlarmEditScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Vibrate',
+                'Vibración',
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               Switch(
@@ -173,7 +200,7 @@ class _ExampleAlarmEditScreenState extends State<ExampleAlarmEditScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Show notification',
+                'Mostrar notificación',
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               Switch(
@@ -186,7 +213,7 @@ class _ExampleAlarmEditScreenState extends State<ExampleAlarmEditScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Sound',
+                'Sonido',
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               DropdownButton(
@@ -217,11 +244,12 @@ class _ExampleAlarmEditScreenState extends State<ExampleAlarmEditScreen> {
             TextButton(
               onPressed: deleteAlarm,
               child: Text(
-                'Delete Alarm',
+                'Borar Alarma',
                 style: Theme.of(context)
                     .textTheme
                     .titleMedium!
-                    .copyWith(color: Colors.red),
+                    .copyWith(color: Colors.red)
+                    .copyWith(fontWeight: FontWeight.bold),
               ),
             ),
           const SizedBox(),

@@ -7,6 +7,9 @@ class Task {
   int? endTimeMilliseconds;
   // String? time;
   bool? isImportant;
+  int? idAlarma;
+  String? alarmaActivadaString;
+  bool? isAlarmaCreated;
 
   Task(
       {this.id,
@@ -16,7 +19,11 @@ class Task {
       this.startTimeMilliseconds,
       this.endTimeMilliseconds,
       // this.time,
-      this.isImportant});
+      this.isImportant,
+      this.idAlarma,
+      this.alarmaActivadaString,
+      this.isAlarmaCreated
+      });
 
   Map<String, Object?> toMap() {
     return {
@@ -28,6 +35,9 @@ class Task {
       'endTimeMilliseconds': endTimeMilliseconds,
       // 'time': time,
       'isImportant': isImportant == true ? 1 : 0,
+      'idAlarma': idAlarma,
+      'alarmaActivadaString': alarmaActivadaString,
+      'isAlarmaCreated': isAlarmaCreated == true ? 1 : 0,
     };
   }
 
@@ -40,6 +50,9 @@ class Task {
     endTimeMilliseconds = map['endTimeMilliseconds'];
     // this.time = map['time'];
     isImportant = map['isImportant'] == 1 ? true : false;
+    idAlarma = map['idAlarma'];
+    alarmaActivadaString = map['alarmaActivadaString'];
+    isAlarmaCreated = map['isAlarmaCreated'] == 1 ? true : false;
   }
 
   @override
@@ -50,7 +63,11 @@ class Task {
         'site: $site, '
         'notes: $notes, '
         'startTimeMilliseconds: $startTimeMilliseconds, '
-        'endTimeMilliseconds: $endTimeMilliseconds}, '
+        'endTimeMilliseconds: $endTimeMilliseconds, '
+        'isImportant: $isImportant, '
+        'idAlarma: $idAlarma, '
+        'alarmaActivadaString: $alarmaActivadaString, '
+        'isAlarmaCreated: $isAlarmaCreated}, '
         '';
   }
 }

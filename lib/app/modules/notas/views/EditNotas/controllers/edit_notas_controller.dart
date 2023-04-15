@@ -1,12 +1,15 @@
+import 'package:alarm/alarm.dart';
+import 'package:alarm/service/storage.dart';
 import 'package:calendario2/app/components/toast.dart';
 import 'package:calendario2/app/data/local/taskDatabase.dart';
 import 'package:calendario2/app/data/model/taskModel.dart';
+import 'package:calendario2/app/modules/notas/views/alarmas/controllers/alarmas_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class EditNotasController extends GetxController {
+  AlarmasController alarmasController = AlarmasController();
 
-  bool headerShouldHide = false;
   RxBool important = false.obs;
 
   Rx<TextEditingController> title = TextEditingController().obs;
@@ -15,15 +18,20 @@ class EditNotasController extends GetxController {
   Rx<DateTime> startTime = DateTime.now().obs;
   Rx<DateTime> endTime = DateTime.now().obs;
   RxBool isImportant = false.obs;
+  RxString alarmaActivadaString = ''.obs;
 
-
-  bool noWarn = false;
-  static var warnDefaultt = 'Al principio';
-  RxString warn = warnDefaultt.obs;
 
 
   Rx<Task> currentNote = Task().obs;
   late int id;
+
+  AlarmSettings? alarmaCreadaNota;
+
+  var _alarmaCreada = false.obs;
+  bool get alarmaCreada => _alarmaCreada.value;
+  void setAlarmaCreada(bool value) {
+    _alarmaCreada.value = value;
+  }
 
   @override
   void onInit() async {
@@ -31,14 +39,20 @@ class EditNotasController extends GetxController {
       currentNote.value = Get.arguments['noteData'];
       id = Get.arguments['id'];
     }
-    print(currentNote.value.title);
-    title.value.text =  currentNote.value.title!;
-    site.value.text =  currentNote.value.site!;
-    notes.value.text =  currentNote.value.notes!;
-    startTime.value = DateTime.fromMillisecondsSinceEpoch(currentNote.value.startTimeMilliseconds!);
-    endTime.value = DateTime.fromMillisecondsSinceEpoch(currentNote.value.endTimeMilliseconds!);
+
+    title.value.text = currentNote.value.title!;
+    site.value.text = currentNote.value.site!;
+    notes.value.text = currentNote.value.notes!;
+    startTime.value = DateTime.fromMillisecondsSinceEpoch(
+        currentNote.value.startTimeMilliseconds!);
+    endTime.value = DateTime.fromMillisecondsSinceEpoch(
+        currentNote.value.endTimeMilliseconds!);
     important.value = currentNote.value.isImportant!;
+    alarmaActivadaString.value = currentNote.value.alarmaActivadaString!;
+
     super.onInit();
+    await loadAlarm(id);
+
   }
 
   @override
@@ -61,78 +75,31 @@ class EditNotasController extends GetxController {
     print(currentNote.value.isImportant);
   }
 
-   editNote() async {
+  editNote() async {
     await DbProvider.instance.update(
       Task(
-          id: currentNote.value.id,
-          title: title.value.text,
-          isImportant: currentNote.value.isImportant,
-          site: site.value.text,
-          notes: notes.value.text,
-          startTimeMilliseconds: startTime.value.millisecondsSinceEpoch,
-          endTimeMilliseconds: endTime.value.millisecondsSinceEpoch,
-          // time: currentNote.value.time
+        id: currentNote.value.id,
+        title: title.value.text,
+        isImportant: currentNote.value.isImportant,
+        site: site.value.text,
+        notes: notes.value.text,
+        startTimeMilliseconds: startTime.value.millisecondsSinceEpoch,
+        endTimeMilliseconds: endTime.value.millisecondsSinceEpoch,
+        idAlarma: id,
+        alarmaActivadaString: alarmaActivadaString.value,
+        isAlarmaCreated: alarmaCreada,
+        // time: currentNote.value.time
       ),
     );
   }
 
 
 
-List warnList = [
-  {
-    'name': warnDefaultt,
-    'select': true,
-    'time': (DateTime time) => time,
-    'id': 0
-  },
-  {
-    'name': '5 minutos de anticipación',
-    'select': false,
-    'time': (DateTime time) => time.subtract(const Duration(minutes: 5)),
-    'id': 1
-  },
-  {
-    'name': '10 minutos de anticipación',
-    'select': false,
-    'time': (DateTime time) => time.subtract(const Duration(minutes: 10)),
-    'id': 2
-  },
-  {
-    'name': '15 minutos de anticipación',
-    'select': false,
-    'time': (DateTime time) => time.subtract(const Duration(minutes: 15)),
-    'id': 3
-  },
-  {
-    'name': '30 minutos de anticipación',
-    'select': false,
-    'time': (DateTime time) => time.subtract(const Duration(minutes: 30)),
-    'id': 4
-  },
-  {
-    'name': '1 hora de anticipación',
-    'select': false,
-    'time': (DateTime time) => time.subtract(const Duration(hours: 1)),
-    'id': 5
-  },
-  {
-    'name': '1 día de antelación',
-    'select': false,
-    'time': (DateTime time) => time.subtract(const Duration(days: 1)),
-    'id': 6
-  },
-  {
-    'name': '2 días de anticipación',
-    'select': false,
-    'time': (DateTime time) => time.subtract(const Duration(days: 2)),
-    'id': 7
-  },
-  {
-    'name': '1 semana de anticipación',
-    'select': false,
-    'time': (DateTime time) => time.subtract(const Duration(days: 7)),
-    'id': 8
-  },
-];
+  loadAlarm(id) async {
+    alarmaCreadaNota = Alarm.getAlarm(id);
+    // alarms.sort((a, b) => a.dateTime.isBefore(b.dateTime) ? 0 : 1);
+    update();
+  }
 
 }
+

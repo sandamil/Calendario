@@ -11,6 +11,7 @@ class NotasViewController extends GetxController {
 
   RxBool headerShouldShow = false.obs;
   RxBool important = false.obs;
+  RxBool isAlarmaCreated = false.obs;
 
   Rx<Task> currentNote = Task().obs;
   late int id;
@@ -22,6 +23,7 @@ class NotasViewController extends GetxController {
       id = Get.arguments['id'];
     }
     important.value = currentNote.value.isImportant!;
+    isAlarmaCreated.value = currentNote.value.isAlarmaCreated!;
     showHeader();
     super.onInit();
   }
@@ -106,11 +108,6 @@ class NotasViewController extends GetxController {
                   await DbProvider.instance.delete(id);
                   Get.offAllNamed('/notas');
                   notasListController.refetchNotesFromDB();
-                  //删除本次提醒
-                  // for (int i = 0; i < 10; i++) {
-                  //   push.cancelNotifications(widget.currentNote.id * 10 + i);
-                  // }
-
                   Toast.toast(context, msg: "Eliminado exitosamente!");
                 },
               ),
@@ -147,13 +144,8 @@ class NotasViewController extends GetxController {
                         letterSpacing: 1)),
                 onPressed: () async {
                   await DbProvider.instance.delete(id);
-                  Get.offAllNamed('/home');
+                  Get.offAllNamed('/notas');
                   notasListController.refetchNotesFromDB();
-                  //删除本次提醒
-                  // for (int i = 0; i < 10; i++) {
-                  //   push.cancelNotifications(widget.currentNote.id * 10 + i);
-                  // }
-
                   Toast.toast(context, msg: "Eliminado exitosamente!");
                 },
               ),

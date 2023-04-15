@@ -26,7 +26,7 @@ class NotasView extends GetView<NotasViewController> {
                 color: theme.primaryColor,
                 fontFamily: 'ZillaSlab',
                 fontWeight: FontWeight.w700,
-                fontSize: 32,
+                fontSize: 32.sp,
               ),
               overflow: TextOverflow.visible,
               // softWrap: true,
@@ -36,7 +36,7 @@ class NotasView extends GetView<NotasViewController> {
                 icon: Icon(
                   Icons.keyboard_arrow_left,
                   color: theme.primaryColor,
-                  size: 32,
+                  size: 32.sp,
                 ),
                 onPressed: () {
                   Navigator.of(context).pop();
@@ -84,18 +84,18 @@ class NotasView extends GetView<NotasViewController> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
                   Padding(
-                    padding: const EdgeInsets.only(
-                        left: 24.0, right: 24.0, top: 10.0, bottom: 16),
+                    padding: EdgeInsets.only(
+                        left: 24.w, right: 24.w, top: 24.h, bottom: 16.h),
                     child: AnimatedOpacity(
                       opacity: controller.headerShouldShow.value ? 1 : 0,
                       duration: const Duration(milliseconds: 200),
                       curve: Curves.easeIn,
                       child: Text(
                         controller.currentNote.value.title!,
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontFamily: 'ZillaSlab',
                           fontWeight: FontWeight.w700,
-                          fontSize: 36,
+                          fontSize: 36.sp,
                         ),
                         overflow: TextOverflow.visible,
                         softWrap: true,
@@ -106,7 +106,7 @@ class NotasView extends GetView<NotasViewController> {
                     duration: const Duration(milliseconds: 500),
                     opacity: controller.headerShouldShow.value ? 1 : 0,
                     child: Padding(
-                      padding: const EdgeInsets.only(left: 24),
+                      padding: EdgeInsets.only(left: 24.w),
                       child: Row(
                         children: <Widget>[
                           Text(
@@ -115,24 +115,27 @@ class NotasView extends GetView<NotasViewController> {
                                 .formatDateYMMMd
                                 .toString(),
                             style: TextStyle(
+                                fontSize: 14.sp,
                                 fontWeight: FontWeight.w500,
-                                color: Colors.grey.shade500),
+                                color: Colors.grey.shade600),
                           ),
                           const Spacer(),
                           Container(
-                            padding: const EdgeInsets.only(right: 6),
+                            padding:  EdgeInsets.only(right: 10.w),
                             child: controller.currentNote.value.site == null
                                 ? Text(
                                     "No hay ubicación",
                                     style: TextStyle(
+                                      fontSize: 14.sp,
                                         fontWeight: FontWeight.w500,
-                                        color: Colors.grey.shade500),
+                                        color: Colors.grey.shade600),
                                   )
                                 : Text(
                                     "${controller.currentNote.value.site}",
                                     style: TextStyle(
+                                        fontSize: 14.sp,
                                         fontWeight: FontWeight.w500,
-                                        color: Colors.grey.shade500),
+                                        color: Colors.grey.shade600),
                                   ),
                           )
                         ],
@@ -140,8 +143,29 @@ class NotasView extends GetView<NotasViewController> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(
-                        left: 24.0, top: 36, bottom: 24, right: 24),
+                    padding:  EdgeInsets.only(
+                        left: 24.w, top: 36.h, bottom: 24.h, right: 24.w),
+                    child: controller.isAlarmaCreated.value
+                        ? const Text(
+                      "No has añadido alarma",
+                      style: TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.w500),
+                    )
+                        : Row(
+                          children: [
+                            const Icon(Icons.alarm, color: Colors.redAccent,),
+                            SizedBox(width : 10.w),
+                            Text(
+                      "${controller.currentNote.value.alarmaActivadaString}",
+                      style: const TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.w500),
+                    ),
+                          ],
+                        ),
+                  ),
+                  Padding(
+                    padding:  EdgeInsets.only(
+                        left: 24.w, top: 36.h, bottom: 24.h, right: 24.w),
                     child: controller.currentNote.value.notes == null
                         ? const Text(
                             "No has añadido descripción",

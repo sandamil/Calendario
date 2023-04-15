@@ -55,6 +55,7 @@ class AppPages {
       binding: CrearCuadranteBinding(),
     ),
     GetPage(
+      transition: Transition.fadeIn,
       name: _Paths.NOTAS,
       page: () => const NotasListView(),
       binding: NotasListBinding(),

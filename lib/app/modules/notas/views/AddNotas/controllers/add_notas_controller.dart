@@ -8,19 +8,17 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class AddNotasController extends GetxController {
-  AlarmasController alarmasController = AlarmasController();
+  // AlarmasController alarmasController = AlarmasController();
 
   Map<DateTime, List<Task>> events = <DateTime, List<Task>>{}.obs;
 
   bool headerShouldHide = false;
 
-  var _derece = 20.obs;
-
+/*  var _derece = 20.obs;
   int get derece => _derece.value;
-
-  void updateDerece(int value) {
+  void setDerece(int value) {
     _derece.value = value;
-  }
+  }*/
 
   TextEditingController title = TextEditingController();
   TextEditingController site = TextEditingController();
@@ -29,6 +27,7 @@ class AddNotasController extends GetxController {
   void setStartTime(value) {
     startTime.value = value;
   }
+
   Rx<DateTime> endTime = DateTime.now().obs;
   RxBool isImportant = false.obs;
 
@@ -36,9 +35,17 @@ class AddNotasController extends GetxController {
 
   var idGenerated;
 
+  ///ALARMA
+  AlarmSettings? alarmaCreadaNota;
+
+  var _alarmaCreada = false.obs;
+  bool get alarmaCreada => _alarmaCreada.value;
+  void setAlarmaCreada(bool value) {
+    _alarmaCreada.value = value;
+  }
+
   @override
   void onInit() {
-    alarmasController.loadAlarms();
     idGenerated = int.parse(randomIdGenerator());
     print(idGenerated);
     var dateTimeCalendar = Get.arguments;
@@ -46,17 +53,16 @@ class AddNotasController extends GetxController {
       startTime.value = dateTimeCalendar;
       endTime.value = dateTimeCalendar;
     }
-
     super.onInit();
-
     // textController.addListener(() {
     //   subtractTimeString.value = textController.text;
     // });
+    print('var _alarmaCreada  ${_alarmaCreada.value}');
+
   }
 
   @override
   void onReady() {
-    print('        ________________________________________onReady');
     super.onReady();
   }
 
@@ -142,12 +148,14 @@ class AddNotasController extends GetxController {
           isImportant: isImportant.value,
           startTimeMilliseconds: startTime.value.millisecondsSinceEpoch,
           endTimeMilliseconds: endTime.value.millisecondsSinceEpoch,
+          idAlarma: idGenerated,
+          alarmaActivadaString: alarmaActivadaString,
+          isAlarmaCreated: alarmaCreada,
           // time: Jiffy().format('yyyy-MM-dd h:mm:ss a')
         ),
       ),
     );
-    print('addEvent' '${title.text}');
-    print('addEvent' '${idGenerated}');
+
     // remindList.forEach((e) {
     //   if (e['select']) {
     //     push.setOneTime(_item.id! * 10 + e['id'], title, notes,
@@ -164,8 +172,7 @@ class AddNotasController extends GetxController {
   ///NOtificaciones
   ///
 
-
-  String alarmaActivada = 'Sin recordatorio';
+  String alarmaActivadaString = 'Sin recordatorio';
   //
   // String sinRecordatorio = 'Sin recordatorio';
   // RxBool noRemind = false.obs;

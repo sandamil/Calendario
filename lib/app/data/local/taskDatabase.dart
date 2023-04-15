@@ -11,7 +11,7 @@ class DbProvider {
   factory DbProvider() => instance;
   DbProvider._internal();
   static Database? _db;
-  final String taskTable = 'travel';
+  final String taskTable = 'Notas';
 
 
   get db async {
@@ -26,7 +26,7 @@ class DbProvider {
   Future<Database> init() async {
     Directory doucumentDirectory = await getApplicationDocumentsDirectory();
     print(doucumentDirectory.path);
-    String path = join(doucumentDirectory.path, 'essay_database.db');
+    String path = join(doucumentDirectory.path, 'notas_database.db');
     return await openDatabase(
       path,
       version: 1,
@@ -42,7 +42,11 @@ class DbProvider {
         'startTimeMilliseconds INTEGER, '
         'endTimeMilliseconds INTEGER, '
         'time TEXT, '
-        'isImportant INTEGER)');
+        'isImportant INTEGER, '
+        'idAlarma INTEGER, '
+        'alarmaActivadaString TEXT, '
+        'isAlarmaCreated INTEGER)'
+    );
   }
 
   Future<int> insertNotas(Task notas) async {
@@ -72,6 +76,9 @@ class DbProvider {
         endTimeMilliseconds: maps[0]['endTimeMilliseconds'],
         // time: maps[0]['time'],
         isImportant: maps[0]['isImportant'] == 1 ? true : false,
+        idAlarma: maps[0]['idAlarma'],
+        alarmaActivadaString: maps[0]['alarmaActivadaString'],
+        isAlarmaCreated: maps[0]['isAlarmaCreated'] == 1 ? true : false,
       );
     } else {
       throw FormatException(
@@ -90,7 +97,10 @@ class DbProvider {
       'startTimeMilliseconds',
       'endTimeMilliseconds',
       'time',
-      'isImportant'
+      'isImportant',
+      'idAlarma',
+      'alarmaActivadaString',
+      'isAlarmaCreated'
     ]);
     if (maps.length > 0) {
       maps.forEach((map) {

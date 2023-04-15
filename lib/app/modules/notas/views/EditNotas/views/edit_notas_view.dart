@@ -1,3 +1,5 @@
+import 'package:calendario2/app/modules/notas/views/alarmas/controllers/alarmas_controller.dart';
+import 'package:calendario2/app/modules/notas/views/alarmas/views/widget/alarmTile.dart';
 import 'package:calendario2/app/modules/notas/views/widgets/generalLineBetween.dart';
 import 'package:calendario2/config/util/dateUtils.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +14,7 @@ class EditNotasView extends GetView<EditNotasController> {
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
+    AlarmasController alarmasController = AlarmasController();
 
     return Obx(() {
       return Scaffold(
@@ -33,7 +36,7 @@ class EditNotasView extends GetView<EditNotasController> {
               icon: Icon(Icons.clear, color: Theme.of(context).primaryColor),
               iconSize: 24.sp,
               onPressed: () {
-                Navigator.of(context).pop();
+                Get.offAllNamed('/notas');
               }),
           actions: <Widget>[
             IconButton(
@@ -78,7 +81,7 @@ class EditNotasView extends GetView<EditNotasController> {
                       children: <Widget>[
                         Text(
                           'Hora de inicio',
-                          style: TextStyle( fontSize: 16.sp),
+                          style: TextStyle(fontSize: 16.sp),
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -136,13 +139,65 @@ class EditNotasView extends GetView<EditNotasController> {
               GeneralLineBetween(),
               TextButton(
                   onPressed: () async {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (context) => WarnView(
-                    //         controller.noWarn, controller.addWarnList),
-                    //   ),
-                    // );
+                    controller.alarmaCreadaNota != null
+                        ? Get.dialog(Align(
+                            alignment: Alignment.center,
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 10.w),
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Container(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 10.w),
+                                    decoration: BoxDecoration(
+                                      color: theme.scaffoldBackgroundColor,
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(5.r),
+                                      ),
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        Padding(
+                                          padding: EdgeInsets.all(8.h),
+                                          child: Icon(
+                                            Icons.info,
+                                            color: Colors.redAccent,
+                                            size: 38.sp,
+                                          ),
+                                        ),
+                                        Container(
+                                          padding: EdgeInsets.all(6.h),
+                                          color: theme.scaffoldBackgroundColor,
+                                          height: 100.h,
+                                          child: Padding(
+                                            padding: EdgeInsets.all(4.h),
+                                            child: Text(
+                                              'Tienes una alarma creada, para modificarla o borrarla accede a las opciones pulsando en ella.',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .headlineMedium,
+                                            ),
+                                          ),
+                                        ),
+                                        ElevatedButton(
+                                          onPressed: () {
+                                            Get.back();
+                                            // Get.toNamed('/add-notas', arguments: selectedDate);
+                                          },
+                                          child: const Text("Aceptar"),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ))
+                        : Get.toNamed('/alarmas', arguments: {
+                            'currentNote': controller.currentNote.value,
+                            'isEditing': true,
+                          });
                   },
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -157,7 +212,7 @@ class EditNotasView extends GetView<EditNotasController> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
                             Text(
-                              'controller.warn.value',
+                              controller.alarmaActivadaString.value,
                               style: TextStyle(
                                   color: Colors.blue, fontSize: 16.sp),
                             ),
@@ -168,6 +223,25 @@ class EditNotasView extends GetView<EditNotasController> {
                           ],
                         )
                       ])),
+              controller.alarmaCreadaNota != null
+                  ? ExampleAlarmTile(
+                      key: Key(controller.alarmaCreadaNota!.id.toString()),
+                      title: TimeOfDay(
+                        hour: controller.alarmaCreadaNota!.dateTime.hour,
+                        minute: controller.alarmaCreadaNota!.dateTime.minute,
+                      ).format(context),
+                      onPressed: () {
+                        alarmasController.navigateToAlarmScreen(
+                            controller.alarmaCreadaNota, context);
+                      },
+                      // onDismissed: () {
+                      //   Alarm.stop(alarmasController
+                      //       .alarmaCreada!.id)
+                      //       .then((_) => alarmasController
+                      //       .loadAlarms());
+                      // },
+                    )
+                  : Container(),
               GeneralLineBetween(),
               TextButton(
                   onPressed: controller.markImportantAsDirty,
@@ -175,9 +249,9 @@ class EditNotasView extends GetView<EditNotasController> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                         Text(
+                        Text(
                           'Marcar como importante',
-                          style: TextStyle( fontSize: 16.sp),
+                          style: TextStyle(fontSize: 16.sp),
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -197,7 +271,8 @@ class EditNotasView extends GetView<EditNotasController> {
               GeneralLineBetween(),
               Container(
                 margin: EdgeInsets.symmetric(horizontal: 6.w),
-                child: _buildGeneralFormField(controller.site.value, 'Ubicación', 2),
+                child: _buildGeneralFormField(
+                    controller.site.value, 'Ubicación', 2),
               ),
               const SizedBox(
                 height: 6,
@@ -219,7 +294,7 @@ class EditNotasView extends GetView<EditNotasController> {
     final double radiusNum = 5.r;
     return TextFormField(
       controller: value,
-      style: TextStyle( fontSize: 16.sp),
+      style: TextStyle(fontSize: 16.sp),
       decoration: InputDecoration(
         filled: true,
         contentPadding: const EdgeInsets.only(left: 20, top: 20),

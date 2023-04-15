@@ -1,32 +1,49 @@
-
 import 'package:alarm/alarm.dart';
+import 'package:calendario2/app/components/custom_snackbar.dart';
 import 'package:calendario2/app/data/model/taskModel.dart';
 import 'package:calendario2/app/modules/notas/views/AddNotas/controllers/add_notas_controller.dart';
+import 'package:calendario2/app/modules/notas/views/AddNotas/views/add_notas_view.dart';
+import 'package:calendario2/app/modules/notas/views/EditNotas/controllers/edit_notas_controller.dart';
+import 'package:calendario2/app/modules/notas/views/EditNotas/views/edit_notas_view.dart';
 import 'package:calendario2/app/modules/notas/views/alarmas/views/edit_alarm.dart';
 import 'package:calendario2/config/util/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class AlarmasController extends GetxController {
-
   RxList<AlarmSettings> alarms = <AlarmSettings>[].obs;
 
   late int id;
   var startTime;
-  var title;
-  var notes;
+  String? title;
+  String? notes;
 
+  AlarmSettings? alarmaCreada;
+
+  Rx<Task> currentNote = Task().obs;
+
+  RxBool isEditing = false.obs;
 
 
   @override
   void onInit() {
-    loadAlarms();
-
+    print(isEditing);
     if (Get.arguments != null) {
-      startTime = Get.arguments['startTime'];
-      title = Get.arguments['title'];
-      notes = Get.arguments['notes'];
-      id = Get.arguments['id'];
+      if (Get.arguments['isEditing'] == true) {
+        currentNote.value = Get.arguments['currentNote'];
+        isEditing.value = true;
+        startTime = DateTime.fromMillisecondsSinceEpoch(
+            currentNote.value.startTimeMilliseconds!);
+        title = currentNote.value.title;
+        notes = currentNote.value.notes;
+        id = currentNote.value.id!;
+        print(currentNote.value.id!);
+      } else {
+        startTime = Get.arguments['startTime'];
+        title = Get.arguments['title'];
+        notes = Get.arguments['notes'];
+        id = Get.arguments['id'];
+      }
     }
 
     super.onInit();
@@ -50,16 +67,9 @@ class AlarmasController extends GetxController {
     dias1(false);
   }
 
-
-  loadAlarms() {
-    alarms.value = Alarm.getAlarms();
-    // alarms.sort((a, b) => a.dateTime.isBefore(b.dateTime) ? 0 : 1);
-    update();
-  }
-
-  Future<void> navigateToAlarmScreen(AlarmSettings? settings) async {
+  Future<void> navigateToAlarmScreen(AlarmSettings? settings, context) async {
     final res = await showModalBottomSheet<bool?>(
-        context: Get.context!,
+        context: context,
         isScrollControlled: true,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
@@ -67,20 +77,42 @@ class AlarmasController extends GetxController {
         builder: (context) {
           return FractionallySizedBox(
             heightFactor: 0.6,
-            child: ExampleAlarmEditScreen(alarmSettings: settings),
+            child: ExampleAlarmEditScreen(alarmSettings: settings, isEditing: isEditing),
           );
         });
 
     if (res != null && res == true) loadAlarms();
   }
 
+  loadAlarms() async {
+    alarms.value = Alarm.getAlarms();
+    // alarms.sort((a, b) => a.dateTime.isBefore(b.dateTime) ? 0 : 1);
+    // searchIdAlarma();
+    update();
+  }
+
+
+
+
+
   RxString alarmaActivada = 'Sin recordatorio'.obs;
 
-  updatealarmaActivada() {
-    AddNotasController adNotasController = Get.find();
-    print('updatealarmaActivada() ${id} == ${adNotasController.idGenerated}');
-    adNotasController.alarmaActivada = alarmaActivada.value;
-  }
+  updatealarmaActivadaString() {
+    if (isEditing.value) {
+      EditNotasController editNotasController = Get.find();
+      editNotasController.alarmaActivadaString.value = alarmaActivada.value;
+
+    } else {
+      AddNotasController adNotasController = Get.find();
+      adNotasController.alarmaActivadaString = alarmaActivada.value;
+    }
+     }
+
+  // updatealarmaActivada() {
+  //   AddNotasController adNotasController = Get.find();
+  //   print('updatealarmaActivada() ${id} == ${adNotasController.idGenerated}');
+  //   adNotasController.alarmaCreadaNota = alarmaCreada;
+  // }
   String sinRecordatorio = 'Sin recordatorio';
   RxBool noRemind = false.obs;
 
@@ -111,7 +143,7 @@ class AlarmasController extends GetxController {
   bool loopAudio = false;
   bool fadeVolume = false;
 
-  late Duration duracion;
+  Duration duracion = const Duration(microseconds: 2);
 
   setAlarmTime([bool enableNotif = true]) async {
     alarmTime = startTime.subtract(duracion);
@@ -122,15 +154,14 @@ class AlarmasController extends GetxController {
       loopAudio: loopAudio,
       fadeDuration: fadeVolume ? 5.0 : 0.0,
       notificationTitle:
-      showNotifOnRing && enableNotif ? 'Nota: ${title.text}' : null,
+          showNotifOnRing && enableNotif ? 'Nota: ${title}' : null,
       notificationBody:
-      showNotifOnRing && enableNotif ? 'Mensaje: ${notes.text}' : null,
+          showNotifOnRing && enableNotif ? 'Mensaje: ${notes}' : null,
       enableNotificationOnKill: showNotifOnKill,
     );
 
     Alarm.set(alarmSettings: alarmSettings);
-    await Alarm.setNotificationOnAppKillContent(
-        title.text, notes.text);
+    await Alarm.setNotificationOnAppKillContent(title ?? '', notes ?? '');
   }
 
   String? selectedHMD;
@@ -159,5 +190,55 @@ class AlarmasController extends GetxController {
         break;
     }
   }
-}
 
+  goToEditingNotas() async {
+    final editNotasController = Get.find<EditNotasController>();
+    noRemind.value
+        ? await setAlarmTime()
+        : CustomSnackBar.showCustomSnackBar(
+        title: 'No has añadido Alarma',
+        message: ' Vuelve a entrar si queires añadir recordatorio');
+    // await loadAlarmCreada();
+    await updatealarmaActivadaString();
+    await loadAlarmCreadaEdit();
+
+    editNotasController.setAlarmaCreada(noRemind.value);
+    await Get.to(() => EditNotasView());
+
+  }
+
+  goToAddNotas() async {
+    final addNotasController = Get.find<AddNotasController>();
+
+    noRemind.value
+        ? await setAlarmTime()
+        : CustomSnackBar.showCustomSnackBar(
+            title: 'No has añadido Alarma',
+            message: ' Vuelve a entrar si queires añadir recordatorio');
+    await loadAlarmCreada();
+    await updatealarmaActivadaString();
+    addNotasController.setAlarmaCreada(noRemind.value);
+    await Get.to(() => AddNotasView());
+  }
+
+  loadAlarmCreada() {
+      AddNotasController adNotasController = Get.find();
+      AlarmSettings? alarm = Alarm.getAlarm(id);
+      adNotasController.alarmaCreadaNota = alarm;
+  }
+
+  loadAlarmCreadaEdit() {
+    EditNotasController editNotasController = Get.find();
+    AlarmSettings? alarm = Alarm.getAlarm(id);
+    editNotasController.alarmaCreadaNota = alarm;
+  }
+
+// searchIdAlarma() {
+//   AddNotasController adNotasController = Get.find();
+//   for (var alarm in alarms.value) {
+//     if (alarm.id == adNotasController.idGenerated) {
+//       adNotasController.alarmaCreadaNota = alarm;
+//     }
+//   }
+// }
+}

@@ -20,10 +20,9 @@ class AddNotasView extends GetView<AddNotasController> {
     var theme = Theme.of(context);
 
     AlarmasController alarmasController = AlarmasController();
-    alarmasController.loadAlarms();
-    print(
-        'AddNotasView  build alarms length ${alarmasController.alarms.value.length}');
-    print('AddNotasView  build  ${alarmasController.alarmaActivada}');
+    // print(
+    //     'AddNotasView  build alarms length ${alarmasController.alarms.value.length}');
+    // print('AddNotasView  build  ${controller.alarmaCreadaNota.id}');
 
     return Scaffold(
       appBar: AppBar(
@@ -178,17 +177,115 @@ class AddNotasView extends GetView<AddNotasController> {
                 LineWidget(),
                 TextButton(
                     onPressed: () async {
-                      print(controller.idGenerated);
-                      Get.toNamed(
-                        '/alarmas',
-                        arguments: {
-                          'id': controller.idGenerated!,
-                          'startTime': controller.startTime.value,
-                          'notes': controller.notes.value,
-                          'title': controller.title.value
-                        },
-                      );
-                      alarmasController.refresh();
+                      controller.alarmaCreadaNota != null
+                          ? Get.dialog(Align(
+                              alignment: Alignment.center,
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 10.w),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Container(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 10.w),
+                                      decoration: BoxDecoration(
+                                        color: theme.scaffoldBackgroundColor,
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(5.r),
+                                        ),
+                                      ),
+                                      child: Column(
+                                        children: [
+                                          Padding(
+                                            padding: EdgeInsets.all(8.h),
+                                            child: Icon(
+                                              Icons.info,
+                                              color: Colors.redAccent,
+                                              size: 38.sp,
+                                            ),
+                                          ),
+                                          Container(
+                                            padding: EdgeInsets.all(6.h),
+                                            color:
+                                                theme.scaffoldBackgroundColor,
+                                            height: 100.h,
+                                            child: Padding(
+                                              padding: EdgeInsets.all(4.h),
+                                              child: Text(
+                                                'Si continuas se borrara la esta alarma preestablecida para las: ${TimeOfDay(
+                                                  hour: controller
+                                                      .alarmaCreadaNota!
+                                                      .dateTime
+                                                      .hour,
+                                                  minute: controller
+                                                      .alarmaCreadaNota!
+                                                      .dateTime
+                                                      .minute,
+                                                ).format(context)}',
+                                                style: Theme.of(context)
+                                                    .textTheme
+                                                    .headlineMedium,
+                                              ),
+                                            ),
+                                          ),
+                                          Row(
+                                            children: [
+                                              Expanded(
+                                                child: ElevatedButton(
+                                                  onPressed: () {
+                                                    Get.back();
+                                                    // Get.toNamed('/add-notas', arguments: selectedDate);
+                                                  },
+                                                  child: const Text("Cancelar"),
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                width: 8.w,
+                                              ),
+                                              Expanded(
+                                                  child: ElevatedButton(
+                                                onPressed: () {
+                                                  Alarm.stop(controller
+                                                          .alarmaCreadaNota!.id)
+                                                      .then((_) =>
+                                                          alarmasController
+                                                              .loadAlarms());
+                                                  controller.alarmaCreadaNota =
+                                                      null;
+                                                  Get.toNamed('/alarmas',
+                                                      arguments: {
+                                                        'id': controller
+                                                            .idGenerated!,
+                                                        'startTime': controller
+                                                            .startTime.value,
+                                                        'notes': controller
+                                                            .notes.value,
+                                                        'title': controller
+                                                            .title.value
+                                                      });
+                                                },
+                                                child: const Text("Borrar"),
+                                              )),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ))
+                          : Get.toNamed(
+                              '/alarmas',
+                              arguments: {
+                                'isEditing': false,
+                                'id': controller.idGenerated!,
+                                'startTime': controller.startTime.value,
+                                'notes': controller.notes.value,
+                                'title': controller.title.value
+                              },
+                            );
+                      // alarmasController.refresh();
                       // Get.to(AlarmasPage());
                     },
                     child: Row(
@@ -205,7 +302,7 @@ class AddNotasView extends GetView<AddNotasController> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
                               Text(
-                                controller.alarmaActivada,
+                                controller.alarmaActivadaString,
                                 style: TextStyle(
                                     color: MyColors.textButtom,
                                     fontSize: 14.sp),
@@ -219,77 +316,79 @@ class AddNotasView extends GetView<AddNotasController> {
                           )
                         ])),
 
-                /// Todo recorrer la lista para encontar id igual
-                Container(
-                  height: 200.h,
-                  child: alarmasController.alarms.value.isNotEmpty
-                      ? Column(
-                          children: [
-                            Row(
-                              children: [
-                                Text('alarmas:  '),
-                                Text(alarmasController.alarms.value.length
-                                    .toString()),
-                                Text(' idgenerated:'),
-                                Text(controller.idGenerated.toString()),
-                                Text('alarma id:'),
-                                Text(alarmasController.alarms[4].dateTime.toString()),
-                                // Text(alarmasController.alarms.value.length.toString()),
-                              ],
-                            ),
-                            ListView.builder(
-                              physics: const NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              itemCount: alarmasController.alarms.value.length,
-                              itemBuilder: (context, index) {
-                                return Column(
-                                  children: [
-                                    alarmasController.alarms[index].id ==
-                                            controller.idGenerated
-                                        ? ExampleAlarmTile(
-                                            key: Key(alarmasController
-                                                .alarms.value[index].id
-                                                .toString()),
-                                            title: TimeOfDay(
-                                              hour: alarmasController.alarms
-                                                  .value[index].dateTime.hour,
-                                              minute: alarmasController.alarms
-                                                  .value[index].dateTime.minute,
-                                            ).format(context),
-                                            onPressed: () => alarmasController
-                                                .navigateToAlarmScreen(
-                                                    alarmasController
-                                                        .alarms.value[index]),
-                                            onDismissed: () {
-                                              Alarm.stop(alarmasController
-                                                      .alarms.value[index].id)
-                                                  .then((_) => alarmasController
-                                                      .loadAlarms());
-                                            },
-                                          )
-                                        : Container()
-                                  ],
-                                );
-                              },
-                              // Center(
-                              //     child: Text(
-                              //       "No alarms set",
-                              //       style: Theme
-                              //           .of(context)
-                              //           .textTheme
-                              //           .titleMedium,
-                              //     ));
-                              // },
-                            ),
-                          ],
-                        )
-                      : Center(
-                          child: Text(
-                          "No alarms set",
-                          style: Theme.of(context).textTheme.titleMedium,
-                        )),
-                ),
-
+                // Container(
+                //   height: 200.h,
+                //   child: alarmasController.alarms.value.isNotEmpty
+                //       ? ListView.builder(
+                //         physics: const NeverScrollableScrollPhysics(),
+                //         shrinkWrap: true,
+                //         itemCount: alarmasController.alarms.value.length,
+                //         itemBuilder: (context, index) {
+                //           return Column(
+                //             mainAxisSize: MainAxisSize.max,
+                //             children: [
+                //               alarmasController.alarms[index].id ==
+                //                       controller.idGenerated
+                //                   ? ExampleAlarmTile(
+                //                       key: Key(alarmasController
+                //                           .alarms.value[index].id
+                //                           .toString()),
+                //                       title: TimeOfDay(
+                //                         hour: alarmasController.alarms
+                //                             .value[index].dateTime.hour,
+                //                         minute: alarmasController.alarms
+                //                             .value[index].dateTime.minute,
+                //                       ).format(context),
+                //                       onPressed: () => alarmasController
+                //                           .navigateToAlarmScreen(
+                //                               alarmasController
+                //                                   .alarms.value[index]),
+                //                       onDismissed: () {
+                //                         Alarm.stop(alarmasController
+                //                                 .alarms.value[index].id)
+                //                             .then((_) => alarmasController
+                //                                 .loadAlarms());
+                //                       },
+                //                     )
+                //                   : Container()
+                //             ],
+                //           );
+                //         },
+                //         // Center(
+                //         //     child: Text(
+                //         //       "No alarms set",
+                //         //       style: Theme
+                //         //           .of(context)
+                //         //           .textTheme
+                //         //           .titleMedium,
+                //         //     ));
+                //         // },
+                //       )
+                //       : Center(
+                //           child: Text(
+                //           "No alarms set",
+                //           style: Theme.of(context).textTheme.titleMedium,
+                //         )),
+                // ),
+                controller.alarmaCreadaNota != null
+                    ? ExampleAlarmTile(
+                        key: Key(controller.alarmaCreadaNota!.id.toString()),
+                        title: TimeOfDay(
+                          hour: controller.alarmaCreadaNota!.dateTime.hour,
+                          minute: controller.alarmaCreadaNota!.dateTime.minute,
+                        ).format(context),
+                        onPressed: () {
+                          alarmasController.navigateToAlarmScreen(
+                              controller.alarmaCreadaNota, context);
+                        },
+                        // onDismissed: () {
+                        //   Alarm.stop(alarmasController
+                        //       .alarmaCreada!.id)
+                        //       .then((_) => alarmasController
+                        //       .loadAlarms());
+                        // },
+                      )
+                    : Container(),
                 LineWidget(),
                 SizedBox(
                   height: 2.h,
@@ -343,11 +442,30 @@ class AddNotasView extends GetView<AddNotasController> {
                         icon: const Icon(Icons.info, color: Colors.redAccent),
                         tooltip: '',
                         onPressed: () {
-                          // showTutorial(context: context);
+                          print(
+                              'var _alarmaCreada  ${controller.alarmaCreada}');
                         },
                       ),
                     ],
                   ),
+                ),
+
+                /// Todo REMOVE
+
+                Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text('Solo para test¡¡¡¡¡¡¡¡¡¡¡:'),
+                    ),
+                    Text('alarmas:'),
+                    // Text(alarmasController.alarms.value.length.toString()),
+                    Text(' idgenerated:'),
+                    Text(controller.idGenerated.toString()),
+                    Text(' alarma id:'),
+                    // Text(alarmasController.alarms[4].dateTime.toString()),
+                    // Text(alarmasController.alarms.value.length.toString()),
+                  ],
                 ),
               ],
             );
