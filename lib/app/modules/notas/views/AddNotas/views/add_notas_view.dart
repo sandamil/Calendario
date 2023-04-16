@@ -281,8 +281,8 @@ class AddNotasView extends GetView<AddNotasController> {
                                 'isEditing': false,
                                 'id': controller.idGenerated!,
                                 'startTime': controller.startTime.value,
-                                'notes': controller.notes.value,
-                                'title': controller.title.value
+                                'notes': controller.notes.value.text,
+                                'title': controller.title.value.text
                               },
                             );
                       // alarmasController.refresh();
@@ -448,24 +448,6 @@ class AddNotasView extends GetView<AddNotasController> {
                       ),
                     ],
                   ),
-                ),
-
-                /// Todo REMOVE
-
-                Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text('Solo para test¡¡¡¡¡¡¡¡¡¡¡:'),
-                    ),
-                    Text('alarmas:'),
-                    // Text(alarmasController.alarms.value.length.toString()),
-                    Text(' idgenerated:'),
-                    Text(controller.idGenerated.toString()),
-                    Text(' alarma id:'),
-                    // Text(alarmasController.alarms[4].dateTime.toString()),
-                    // Text(alarmasController.alarms.value.length.toString()),
-                  ],
                 ),
               ],
             );

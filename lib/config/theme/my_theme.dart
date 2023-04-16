@@ -81,25 +81,8 @@ class MyTheme {
 
 
       // timePicker theme
-      timePickerTheme: TimePickerThemeData(
-          // inputDecorationTheme:
-          // backgroundColor: Colors.green.shade200,
-          hourMinuteColor: MaterialStateColor.resolveWith((states) =>
-          states.contains(MaterialState.selected)
-              ? LightThemeColors.primaryColor50
-              : Colors.blue.withOpacity(0.2)),
-          hourMinuteTextColor: MaterialStateColor.resolveWith((states) =>
-          states.contains(MaterialState.selected)
-              ? Colors.white
-              : Colors.white30),
-          dialHandColor: LightThemeColors.primaryColor50,
-          // dialBackgroundColor: Colors.purple.withOpacity(0.5),
-          // dialTextColor: MaterialStateColor.resolveWith((states) =>
-          // states.contains(MaterialState.selected)
-          //     ? Colors.green
-          //     : Colors.black),
-          // entryModeIconColor: Colors.yellow
-          ),
+        timePickerTheme: MyStyles.getTimePickerTheme(isLightTheme: isLight),
+
 
 
     );

@@ -98,7 +98,7 @@ class MyStyles {
             color: isLightTheme
                 ? LightThemeColors.headlinesTextColor
                 : DarkThemeColors.headlinesTextColor),
-         headlineMedium: (MyFonts.headlineTextStyle).copyWith(
+        headlineMedium: (MyFonts.headlineTextStyle).copyWith(
             fontSize: MyFonts.headline4TextSize,
             fontWeight: FontWeight.bold,
             color: isLightTheme
@@ -137,8 +137,6 @@ class MyStyles {
       secondarySelectedColor: Colors.purple,
     );
   }
-
-
 
   ///Chips text style
   static TextStyle getChipTextStyle({required bool isLightTheme}) {
@@ -183,8 +181,6 @@ class MyStyles {
     );
   }
 
-
-
   //elevated button theme data
   static ElevatedButtonThemeData getElevatedButtonTheme(
           {required bool isLightTheme}) =>
@@ -219,10 +215,83 @@ class MyStyles {
         ),
       );
 
+  //timepicker theme data
+  static TimePickerThemeData getTimePickerTheme({required bool isLightTheme}) =>
+      TimePickerThemeData(
+        backgroundColor: isLightTheme
+            ? LightThemeColors.cardColor
+            : DarkThemeColors.cardColor,
+        hourMinuteShape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(5)),
+          side: BorderSide(color: Colors.orange, width: 1),
+        ),
+        dayPeriodBorderSide: const BorderSide(color: Colors.orange, width: 1),
+        dayPeriodColor: Colors.blueGrey.shade600,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(5)),
+          side: BorderSide(color: Colors.orange, width: 1),
+        ),
+        dayPeriodTextColor: Colors.white,
+        dayPeriodShape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(5)),
+          side: BorderSide(color: Colors.orange, width: 1),
+        ),
+        hourMinuteColor: MaterialStateColor.resolveWith(
+            (states) => states.contains(MaterialState.selected)
+                ? Colors.orange
+                : isLightTheme
+                    ? LightThemeColors.scaffoldBackgroundColor
+                    : DarkThemeColors.scaffoldBackgroundColor),
+        hourMinuteTextColor: MaterialStateColor.resolveWith((states) =>
+            states.contains(MaterialState.selected)
+                ? Colors.white
+                : Colors.orange),
+        dialHandColor: isLightTheme
+            ? LightThemeColors.dividerColor
+            : DarkThemeColors.dividerColor,
+        dialBackgroundColor: isLightTheme
+            ? LightThemeColors.scaffoldBackgroundColor
+            : DarkThemeColors.scaffoldBackgroundColor,
+        hourMinuteTextStyle:
+            const TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+        dayPeriodTextStyle:
+            const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+        helpTextStyle: TextStyle(
+            fontSize: 16.sp, fontWeight: FontWeight.bold, color: Colors.white),
 
+        inputDecorationTheme: InputDecorationTheme(
+          errorBorder: const UnderlineInputBorder(
+              borderSide: BorderSide(width: 0.7, color: Colors.red)),
+          focusedErrorBorder: const UnderlineInputBorder(
+              borderSide: BorderSide(width: 3, color: Colors.redAccent)),
+          focusedBorder: const UnderlineInputBorder(
+              borderSide: BorderSide(width: 4, color: Colors.orange)),
+          enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(
+            width: 4.0,
+            color: isLightTheme
+                ? LightThemeColors.dividerColor
+                : DarkThemeColors.dividerColor,
+          )),
+          border: const UnderlineInputBorder(
+              borderSide: BorderSide(width: 2.0, color: Colors.redAccent)),
+          disabledBorder: const UnderlineInputBorder(
+              borderSide: BorderSide(
+                  width: 2.0,
+                  color:
+                      Colors.redAccent)), // contentPadding: EdgeInsets.all(14),
+        ),
+        dialTextColor: MaterialStateColor.resolveWith(
+            (states) => states.contains(MaterialState.selected)
+                ? Colors.orange
+                : isLightTheme
+                    ? LightThemeColors.bodyTextColor
+                    : DarkThemeColors.bodyTextColor),
+        entryModeIconColor: Colors.orange,
+      );
 
   static InputDecorationTheme getInputDecorationTheme(
-      {required bool isLightTheme}) =>
+          {required bool isLightTheme}) =>
       const InputDecorationTheme(
         // focusedErrorBorder: UnderlineInputBorder(
         //     borderSide: BorderSide(width: 0.7, color: errorColor)),
@@ -237,13 +306,11 @@ class MyStyles {
       );
 
   static InputDecorationTheme getInputDecorationTheme2(
-      {required bool isLightTheme}) =>
+          {required bool isLightTheme}) =>
       const InputDecorationTheme(
-        // border: OutlineInputBorder(
-        //   borderRadius: BorderRadius.circular(28),
-        //   borderSide: BorderSide(color: textColor),
-        // ),
-      );
-
-
+          // border: OutlineInputBorder(
+          //   borderRadius: BorderRadius.circular(28),
+          //   borderSide: BorderSide(color: textColor),
+          // ),
+          );
 }

@@ -23,20 +23,20 @@ class AddTurnoView extends GetView<CrearTurnoController> {
             icon: const Icon(
               Icons.arrow_back_ios,
             ),
-            // color: Theme.of(context).textTheme.titleLarge!.color,
+              color: controller.turnoColor.value.computeLuminance() > 0.5 ? Colors.black : Colors.white,
             tooltip: "Color",
             onPressed: () {
               Get.to(() => const TurnoView());
             },
           ),
           elevation: 0.0,
+
           backgroundColor: controller.turnoColor.value,
           title: Text(
             'Crear Turno',
             style: TextStyle(
               fontSize: 25.sp,
-              // color: Theme.of(context).textTheme.titleLarge?.color
-            ),
+                color: controller.turnoColor.value.computeLuminance() > 0.5 ? Colors.black : Colors.white            ),
           ),
         ),
         body: SingleChildScrollView(

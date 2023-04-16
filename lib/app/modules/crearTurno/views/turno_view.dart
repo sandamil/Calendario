@@ -19,17 +19,12 @@ class TurnoView extends GetView<CrearTurnoController> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(
-            Icons.home,
+            icon: Icon(Icons.home,
+                size: 24.sp, color: Theme.of(context).primaryColor),
             color: theme.primaryColor,
-          ),
-          color: theme.primaryColor,
-          onPressed: () {
-            Get.offAll(const HomeView(),
-                duration: const Duration(milliseconds: 100),
-                transition: Transition.leftToRight);
-          },
-        ),
+            onPressed: () {
+              Get.offAllNamed('/home');
+            }),
         elevation: 0.0,
         backgroundColor: Colors.transparent,
         title: Text(
@@ -63,8 +58,8 @@ class TurnoView extends GetView<CrearTurnoController> {
                             offset: Offset(0, 1),
                             blurRadius: 3),
                       ]),
-                  margin: const EdgeInsets.only(
-                      top: 4.0, left: 5.0, right: 5.0),
+                  margin:
+                      const EdgeInsets.only(top: 4.0, left: 5.0, right: 5.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
@@ -76,8 +71,7 @@ class TurnoView extends GetView<CrearTurnoController> {
                             style: TextStyle(
                                 fontSize: 19,
                                 fontWeight: FontWeight.bold,
-                                color: Theme
-                                    .of(context)
+                                color: Theme.of(context)
                                     .primaryTextTheme
                                     .titleLarge
                                     ?.color),
@@ -86,28 +80,24 @@ class TurnoView extends GetView<CrearTurnoController> {
                             height: 5,
                           ),
                           controller.turnoType[index].startHour != null &&
-                              controller.turnoType[index].endHour != null &&
-                              controller.turnoType[index].startHour != '' &&
-                              controller.turnoType[index].endHour != ''
+                                  controller.turnoType[index].endHour != null &&
+                                  controller.turnoType[index].startHour != '' &&
+                                  controller.turnoType[index].endHour != ''
                               ? Text(
-                            'De ${controller.turnoType[index].startHour
-                                .toString()} a ${controller.turnoType[index]
-                                .endHour.toString()}',
-                            style: TextStyle(
-                                fontSize: 15,
-                                color: Theme
-                                    .of(context)
-                                    .primaryTextTheme
-                                    .titleLarge
-                                    ?.color),
-                          )
+                                  'De ${controller.turnoType[index].startHour.toString()} a ${controller.turnoType[index].endHour.toString()}',
+                                  style: TextStyle(
+                                      fontSize: 15,
+                                      color: Theme.of(context)
+                                          .primaryTextTheme
+                                          .titleLarge
+                                          ?.color),
+                                )
                               : Container()
                         ],
                       ),
                       IconButton(
                         icon: Icon(Icons.delete,
-                            color: Theme
-                                .of(context)
+                            color: Theme.of(context)
                                 .primaryTextTheme
                                 .titleLarge!
                                 .color),
@@ -130,12 +120,9 @@ class TurnoView extends GetView<CrearTurnoController> {
         },
         icon: const Icon(Icons.add),
         label: const Text('Añadir'),
-        backgroundColor: Theme
-            .of(context)
-            .primaryColor,
+        backgroundColor: Theme.of(context).primaryColor,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
-
 }

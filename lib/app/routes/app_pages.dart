@@ -6,6 +6,8 @@ import '../modules/CrearTurno/bindings/crear_turno_binding.dart';
 import '../modules/CrearTurno/views/turno_view.dart';
 import '../modules/ajustes/bindings/ajustes_binding.dart';
 import '../modules/ajustes/views/ajustes_view.dart';
+import '../modules/ayuda/bindings/ayuda_binding.dart';
+import '../modules/ayuda/views/ayuda_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/menu/bindings/menu_binding.dart';
@@ -17,9 +19,9 @@ import '../modules/notas/views/EditNotas/bindings/edit_notas_binding.dart';
 import '../modules/notas/views/EditNotas/views/edit_notas_view.dart';
 import '../modules/notas/views/NotasView/bindings/notas_view_binding.dart';
 import '../modules/notas/views/NotasView/views/notas_view.dart';
+import '../modules/notas/views/alarmas/bindings/alarmas_binding.dart';
+import '../modules/notas/views/alarmas/views/alarmas_view.dart';
 import '../modules/notas/views/notas_list_view.dart';
-import 'package:calendario2/app/modules/notas/views/alarmas/bindings/alarmas_binding.dart';
-import 'package:calendario2/app/modules/notas/views/alarmas/views/alarmas_view.dart';
 
 part 'app_routes.dart';
 
@@ -79,6 +81,11 @@ class AppPages {
       name: _Paths.ALARMAS,
       page: () => const AlarmasView(),
       binding: AlarmasBinding(),
+    ),
+    GetPage(
+      name: _Paths.AYUDA,
+      page: () => const AyudaView(),
+      binding: AyudaBinding(),
     ),
   ];
 }

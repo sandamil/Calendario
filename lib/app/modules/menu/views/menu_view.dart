@@ -27,9 +27,9 @@ class MenuView extends GetView<MenuAppController> {
         backgroundColor: Colors.transparent,
         centerTitle: false,
         leading: IconButton(
-          icon: const Icon(
+          icon: Icon(
             Icons.home,
-            // size: 30.0,
+            size: 24.sp,
           ),
           color: theme.primaryColor,
           onPressed: () {
@@ -181,7 +181,8 @@ class MenuView extends GetView<MenuAppController> {
                   ],
                 ),
                 onPressed: () {
-                  Get.to(() => const TurnoView());
+                  Get.toNamed('/crear-turno');
+                  // Get.to(() => const TurnoView());
                 },
                 //splashColor: AAThemeData.buttonColor,
               ),
@@ -224,7 +225,7 @@ class MenuView extends GetView<MenuAppController> {
                   ],
                 ),
                 onPressed: () {
-                  Navigator.pushNamed(context, "/ajustes");
+                  Get.toNamed('/ajustes');
                 },
                 //splashColor: AAThemeData.buttonColor,
               ),
@@ -267,13 +268,13 @@ class MenuView extends GetView<MenuAppController> {
                   ],
                 ),
                 onPressed: () {
-                  Navigator.pushNamed(context, "/ayuda");
+                  Get.toNamed('/ayuda');
                 },
                 //splashColor: AAThemeData.buttonColor,
               ),
             ),
             SizedBox(
-              height: 2.h,
+              height: 30.h,
             ),
           ],
         ),
