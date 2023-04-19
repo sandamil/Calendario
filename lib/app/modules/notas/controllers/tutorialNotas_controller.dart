@@ -14,6 +14,12 @@ class TutorialNotasController extends GetxController {
     firstInstall();
   }
 
+  @override
+  void onClose() {
+    // TODO: implement onClose
+    super.onClose();
+  }
+
   ///Tutorial
   ///
 

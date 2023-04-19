@@ -31,12 +31,12 @@ class InicioListTarget {
   InicioListTarget();
 
   List<TargetFocus> createTargets(
-      keyButton6, keyButton7, keyButton8, keyButton9) {
+      calKeys1, calKeys2, calKeys3, calKeys4) {
     List<TargetFocus> targets = [];
     targets.add(
       TargetFocus(
         identify: "Target 6",
-        keyTarget: keyButton6,
+        keyTarget: calKeys1,
         shape: ShapeLightFocus.Circle,
         contents: [
           TargetContent(
@@ -96,7 +96,7 @@ class InicioListTarget {
     );
     targets.add(TargetFocus(
       identify: "Target 2",
-      keyTarget: keyButton7,
+      keyTarget: calKeys2,
       contents: [
         TargetContent(
           align: ContentAlign.bottom,
@@ -147,7 +147,7 @@ class InicioListTarget {
     ));
     targets.add(TargetFocus(
       identify: "Target 3",
-      keyTarget: keyButton8,
+      keyTarget: calKeys3,
       contents: [
         TargetContent(
             align: ContentAlign.top,
@@ -179,7 +179,7 @@ class InicioListTarget {
     ));
     targets.add(TargetFocus(
       identify: "Target 4",
-      keyTarget: keyButton9,
+      keyTarget: calKeys4,
       contents: [
         TargetContent(
             align: ContentAlign.top,

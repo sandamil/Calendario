@@ -1,6 +1,7 @@
 import 'package:calendario2/app/components/custom_dialog.dart';
 import 'package:calendario2/app/data/model/taskModel.dart';
 import 'package:calendario2/app/data/model/cuadranteDay.dart';
+import 'package:calendario2/app/modules/home/controllers/tutorialHome_controller.dart';
 import 'package:calendario2/app/modules/notas/views/widgets/taskCard.dart';
 import 'package:calendario2/app/modules/home/controllers/calendar_controller.dart';
 import 'package:calendario2/app/modules/home/widgets/calendar/table_calendar.dart';
@@ -27,6 +28,7 @@ class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
+    // final tutorialHomeController = Get.put(TutorialHomeController());
 
     return Scaffold(
         appBar: AppBar(
@@ -36,7 +38,7 @@ class HomeView extends GetView<HomeController> {
           leading: Builder(
             builder: (BuildContext context) {
               return IconButton(
-                key: controller.keyButton6,
+                // key: tutorialHomeController.keyButton6,
                 icon: Icon(
                   Icons.menu,
                   color: theme.primaryColor,
@@ -53,7 +55,7 @@ class HomeView extends GetView<HomeController> {
           title: SelectedDayWidget(),
           actions: [
             IconButton(
-              key: controller.keyButton7,
+              // key: tutorialHomeController.keyButton7,
               color: theme.primaryColor,
               icon: const Icon(
                 Icons.today,
@@ -79,7 +81,8 @@ class HomeView extends GetView<HomeController> {
         // ),
         body: Column(
           children: [
-            CalendarWidget(        key: controller.keyButton8,
+            CalendarWidget(
+              // key: tutorialHomeController.keyButton8,
             ),
             SizedBox(height: 5.h),
             Padding(
@@ -91,7 +94,9 @@ class HomeView extends GetView<HomeController> {
             SizedBox(height: 2.h),
             Obx(() {
 
-              return Expanded(child: _buildListEvent(),key: controller.keyButton9);
+              return Expanded(child: _buildListEvent(),
+                  // key: tutorialHomeController.keyButton9
+              );
             }),
           ],
         ));
