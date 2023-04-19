@@ -14,6 +14,7 @@ import '../widgets/calendar/widget/customAlertDialogTurnoList.dart';
 import '../widgets/calendar/widget/customAlertDialogDaySelected.dart';
 
 class CalendarController extends GetxController {
+
   var logguer = Logger();
   Rx<CalendarFormat> _calendarFormat = CalendarFormat.month.obs;
   Rx<CalendarFormat> get calendarFormat => _calendarFormat;

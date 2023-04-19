@@ -16,7 +16,7 @@ class CrearCuadranteView extends GetView<CrearCuadranteController> {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(CrearCuadranteController());
+    // Get.put(CrearCuadranteController());
     var theme = Theme.of(context);
 
     return Obx(
@@ -62,7 +62,7 @@ class CrearCuadranteView extends GetView<CrearCuadranteController> {
                         Icons.done_outline,
                         color: Theme.of(context).iconTheme.color,
                       ),
-                // key: keyButton5,
+                key: controller.keyButton5,
               )
             ],
           ),
@@ -94,7 +94,7 @@ class CrearCuadranteView extends GetView<CrearCuadranteController> {
                                   color: Colors.redAccent),
                               tooltip: '',
                               onPressed: () {
-                                // showTutorial();
+                                controller.showTutorial(context);
                               },
                             ),
                           ],
@@ -159,7 +159,10 @@ class CrearCuadranteView extends GetView<CrearCuadranteController> {
                                         .add(const Duration(days: 364))),
                               )!;
                             },
-                            icon: const Icon(Icons.calendar_today_outlined),
+                            icon: Icon(
+                              Icons.calendar_today_outlined,
+                              key: controller.keyButton,
+                            ),
                           ),
                         ),
                       ),
@@ -174,6 +177,7 @@ class CrearCuadranteView extends GetView<CrearCuadranteController> {
                               .toIso8601String()
                               .substring(0, 10),
                           widget: IconButton(
+                            key: controller.keyButton2,
                             onPressed: () async {
                               controller.endDate(await showDatePicker(
                                   context: context,
@@ -192,6 +196,7 @@ class CrearCuadranteView extends GetView<CrearCuadranteController> {
               ),
               SizedBox(
                 height: 1.h,
+                key: controller.keyButton3,
               ),
               Container(
                 padding: const EdgeInsets.all(8.0),
@@ -259,7 +264,7 @@ class CrearCuadranteView extends GetView<CrearCuadranteController> {
               await controller.showPopUp(context);
             },
             child: const Icon(Icons.add),
-            // key: keyButton4,
+            key: controller.keyButton4,
           ),
         );
       },

@@ -1,6 +1,10 @@
 
 import 'dart:math';
 
+
+const String APP_FIRST_TIME_OPEN = 'app_first_time_open';
+
+
 class ConstantData {
   ///icons
   static const BASEIMAGEURL = "assets/images/";

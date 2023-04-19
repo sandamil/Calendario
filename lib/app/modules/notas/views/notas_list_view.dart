@@ -1,5 +1,6 @@
 import 'package:calendario2/app/modules/notas/controllers/notas_controller.dart';
 import 'package:calendario2/app/modules/home/views/home_view.dart';
+import 'package:calendario2/app/modules/notas/controllers/tutorialNotas_controller.dart';
 import 'package:calendario2/app/modules/notas/views/widgets/important_indicator_text_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -15,6 +16,7 @@ class NotasListView extends GetView<NotasListController> {
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
+    final tutorialNotasController = Get.find<TutorialNotasController>();
 
     return Obx(() {
       return Scaffold(
@@ -44,23 +46,27 @@ class NotasListView extends GetView<NotasListController> {
           ),
           actions: <Widget>[
             IconButton(
+              key: tutorialNotasController.keyNotasListAyuda,
+
               icon: const Icon(Icons.info_rounded, color: Colors.redAccent),
               tooltip: '',
               onPressed: () {
-                // showTutorial();
+                tutorialNotasController.showTutorial(context);
               },
             ),
             // add your custom action widget
           ], //Action icon search as search icon, notification icon
         ),
         floatingActionButton: FloatingActionButton.extended(
+          // key: controller.keyButton10,
+
           backgroundColor: theme.primaryColor,
           onPressed: () {
             controller.gotoEditNote();
           },
           label: Text('Añade Nota'.toUpperCase()),
           icon: Icon(Icons.add),
-          // key: keyButton10,
+          key: tutorialNotasController.keyButton10,
         ),
         body: AnimatedContainer(
           duration: Duration(milliseconds: 200),

@@ -31,6 +31,12 @@ class MyColors {
       ? const Color(0xff444444)
       : const Color(0xFFefeeee);
 
+///Text COLOR
+
+  static Color get textColor => MyTheme().getThemeIsLight
+      ? const Color.fromRGBO(0, 0, 0, 1)
+      : const Color.fromRGBO(255, 255, 255, 1);
+
   //Todo cellTextColor color
 
   static Color get cellTextColor => MyTheme().getThemeIsLight
@@ -49,6 +55,7 @@ const Color PRIMARY_COLOR = Color.fromRGBO(255, 152, 0, 1.0);
 const Color ACCENT_COLOR = Color(0xff005AFF);
 const Color PRIMARY_COLOR_TRANSPARENTE = Color.fromRGBO(
     255, 152, 0, 0.15);
+const Color PRIMARY_COLOR_DARK = Color.fromRGBO(215, 129, 0, 1.0);
 
 
 

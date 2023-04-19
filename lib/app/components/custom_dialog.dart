@@ -1,6 +1,8 @@
 import 'package:calendario2/app/data/model/taskModel.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
+import 'package:calendario2/config/theme/styles.dart';
 import 'package:calendario2/config/util/dateUtils.dart';
+import 'package:calendario2/widgets/buttons/button_primary.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -87,6 +89,52 @@ class CustomDialog {
       Get.back();
     });
   }
+
+
+
+  static showPopUpInfo({
+    String? title,
+    String? description,
+    String? labelButton,
+    Function()? onPress,
+  }) {
+    Get.dialog(
+      Dialog(
+        backgroundColor: Colors.transparent,
+        insetPadding: EdgeInsets.symmetric(horizontal: 24.w),
+        child: Container(
+          padding: EdgeInsets.fromLTRB(20.w.w, 20.w, 20.w, 4.w),
+          decoration:
+          BoxDecoration(borderRadius: Corners.smBorder, color: MyColors.cellColor),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                title ?? '',
+                style: TextStyles.title.copyWith(fontSize: 16.w),
+                textAlign: TextAlign.center,
+              ),
+              verticalSpace(Insets.med),
+              Text(
+                description ?? '',
+                style: TextStyles.text,
+                textAlign: TextAlign.center,
+              ),
+              verticalSpace(Insets.xl),
+              ButtonPrimary(
+                onTap: onPress ?? Get.back,
+                label: labelButton ?? 'OK',
+              ),
+              SizedBox(height: 20.h),
+            ],
+          ),
+        ),
+      ),
+      barrierDismissible: false,
+    );
+  }
+
+
 
   static mostrarTask(Task nota) {
     showDialog(

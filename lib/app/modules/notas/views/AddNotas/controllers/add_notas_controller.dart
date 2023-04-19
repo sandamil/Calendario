@@ -3,9 +3,13 @@ import 'package:calendario2/app/data/local/taskDatabase.dart';
 import 'package:calendario2/app/data/model/taskModel.dart';
 import 'package:calendario2/app/modules/notas/views/alarmas/controllers/alarmas_controller.dart';
 import 'package:calendario2/app/modules/notas/views/alarmas/views/edit_alarm.dart';
+import 'package:calendario2/config/theme/my_colors.dart';
+import 'package:calendario2/config/tutorial/tutorialAddTask.dart';
 import 'package:calendario2/config/util/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 class AddNotasController extends GetxController {
   // AlarmasController alarmasController = AlarmasController();
@@ -54,6 +58,8 @@ class AddNotasController extends GetxController {
       endTime.value = dateTimeCalendar;
     }
     super.onInit();
+    firstInstall();
+
     // textController.addListener(() {
     //   subtractTimeString.value = textController.text;
     // });
@@ -173,83 +179,61 @@ class AddNotasController extends GetxController {
   ///
 
   String alarmaActivadaString = 'Sin recordatorio';
-  //
-  // String sinRecordatorio = 'Sin recordatorio';
-  // RxBool noRemind = false.obs;
-  //
-  // RxBool masOpcionesAlarma = false.obs;
-  //
-  // String alPrincipioString = 'Al Principio';
-  // RxBool alPrincipio = false.obs;
-  // String minutos5String = '5 minutos de anticipación';
-  // RxBool minutos5 = false.obs;
-  // String minutos30String = '30 minutos de anticipación';
-  // RxBool minutos30 = false.obs;
-  // String horas1String = '1 hora de anticipación';
-  // RxBool horas1 = false.obs;
-  // String dias1String = '1 día de antelación';
-  // RxBool dias1 = false.obs;
-  //
-  // late DateTime alarmTime;
-  // final textController = TextEditingController();
-  // RxString subtractTimeString = ''.obs;
-  // // RxInt subtractTime = 0.obs;
-  //
-  // RxString assetAudioPathAddNotas = ConstantData.nokiaAlarm.obs;
-  //
-  // bool showNotifOnRing = true;
-  // bool showNotifOnKill = true;
-  // bool isRinging = false;
-  // bool loopAudio = false;
-  // bool fadeVolume = false;
-  //
-  // late Duration duracion;
-  //
-  // setAlarmTime([bool enableNotif = true]) async {
-  //   alarmTime = startTime.value.subtract(duracion);
-  //   final alarmSettings = AlarmSettings(
-  //     id: idGenerated,
-  //     dateTime: alarmTime,
-  //     assetAudioPath: assetAudioPathAddNotas.value,
-  //     loopAudio: loopAudio,
-  //     fadeDuration: fadeVolume ? 5.0 : 0.0,
-  //     notificationTitle:
-  //         showNotifOnRing && enableNotif ? 'Nota: ${title.text}' : null,
-  //     notificationBody:
-  //         showNotifOnRing && enableNotif ? 'Mensaje: ${notes.text}' : null,
-  //     enableNotificationOnKill: showNotifOnKill,
-  //   );
-  //
-  //   Alarm.set(alarmSettings: alarmSettings);
-  //   // await Alarm.setNotificationOnAppKillContent(
-  //   //     title.text, notes.text);
-  // }
-  //
-  // String? selectedHMD;
-  //
-  // var duracionHMD = <String>['Minutos', 'Horas', 'Dias'];
-  //
-  // void onSelected(String value) {
-  //   selectedHMD = value;
-  //   update();
-  //   print(selectedHMD);
-  //   changeHMD(selectedHMD);
-  // }
-  //
-  // changeHMD(String? selectedHMD) {
-  //   switch (selectedHMD) {
-  //     case 'Minutos':
-  //       duracion = Duration(minutes: int.parse(subtractTimeString.value));
-  //       break;
-  //     case 'Horas':
-  //       duracion = Duration(hours: int.parse(subtractTimeString.value));
-  //       break;
-  //     case 'Dias':
-  //       duracion = Duration(days: int.parse(subtractTimeString.value));
-  //       break;
-  //     default:
-  //       duracion = Duration(minutes: 0);
-  //       break;
-  //   }
-  // }
+
+
+
+///Tutorial
+///
+
+  TutorialCoachMark? tutorialCoachMark;
+  // final ListTargetAddTask targetAddTask= new ListTargetAddTask();
+  List<TargetFocus> targets = [];
+  GlobalKey keyButton13 = GlobalKey();
+  GlobalKey keyButton14 = GlobalKey();
+  GlobalKey keyButton15 = GlobalKey();
+  GlobalKey keyButton16 = GlobalKey();
+  GlobalKey keyButton17 = GlobalKey();
+  GlobalKey keyNotasAyuda = GlobalKey();
+
+
+  firstInstall() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    if (pref.getBool('tutoAddTask') == null ) {
+      showTutorial(Get.overlayContext);
+      pref.setBool('tutoAddTask', true);
+    }
+  }
+
+  void showTutorial(context) {
+    createTutorial();
+    tutorialCoachMark?.show(context: context);
+  }
+
+  void createTutorial() {
+    tutorialCoachMark = TutorialCoachMark(
+      targets: ListTargetAddTask().createTargets(keyButton13, keyButton14, keyButton15,keyButton16,keyButton17,keyNotasAyuda),
+      colorShadow: PRIMARY_COLOR_DARK,
+      textSkip: "Finalizar",
+      paddingFocus: 2,
+      opacityShadow: 0.92,
+      onFinish: () {
+        print("finish");
+      },
+      onClickTarget: (target) {
+        print('onClickTarget: $target');
+      },
+      onClickTargetWithTapPosition: (target, tapDetails) {
+        print("target: $target");
+        print(
+            "clicked at position local: ${tapDetails.localPosition} - global: ${tapDetails.globalPosition}");
+      },
+      onClickOverlay: (target) {
+        print('onClickOverlay: $target');
+      },
+      onSkip: () {
+        print("skip");
+      },
+    );
+  }
+
 }

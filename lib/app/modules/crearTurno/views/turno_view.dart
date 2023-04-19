@@ -114,9 +114,15 @@ class TurnoView extends GetView<CrearTurnoController> {
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
-        heroTag: "botonAddTurno",
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(5.r),
+        ),        heroTag: "botonAddTurno",
         onPressed: () {
-          Get.to(() => AddTurnoView());
+          Get.to(
+            () => const AddTurnoView(),
+            transition: Transition.fadeIn,
+            duration: const Duration(milliseconds: 100),
+          );
         },
         icon: const Icon(Icons.add),
         label: const Text('Añadir'),

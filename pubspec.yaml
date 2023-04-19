@@ -14,12 +14,15 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.5
   flutter_screenutil: ^5.7.0
+  google_fonts: ^4.0.3
 
   get: ^4.6.5
 
   table_calendar: ^3.0.9
 
   shared_preferences: ^2.1.0
+  get_storage: ^2.1.0
+
   sqflite: ^2.2.6
   path_provider: ^2.0.14
 
@@ -34,6 +37,9 @@ dependencies:
   url_launcher: ^6.1.10
 
   rive: ^0.10.3
+
+  package_info_plus: ^3.0.1
+  tutorial_coach_mark: ^1.2.8
 
 
   # log events in clear way insted of (print)     ¡¡¡¡¡¡¡¡¡¡¡¡¡¡REMOVE¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡¡
@@ -53,8 +59,10 @@ flutter:
   assets:
     - assets/
     - assets/images/
+    - assets/images/iconos/
+    - assets/images/tutorial/
     - assets/animaciones/
     - assets/alarmas/
-    - assets/images/iconos/
+    - assets/logos/
     - assets/other/
 

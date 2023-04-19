@@ -1,22 +1,82 @@
 import 'package:calendario2/app/modules/notas/controllers/notas_controller.dart';
+import 'package:calendario2/config/theme/my_colors.dart';
+import 'package:calendario2/config/tutorial/tutorialInicio.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 
 class HomeController extends GetxController {
   NotasListController notasController = NotasListController();
 
+
   void onInit() async {
+    firstInstall();
     super.onInit();
   }
 
   void onReady() {
-    // TODO: implement onReady
     super.onReady();
   }
 
   @override
   void onClose() {
-    // TODO: implement onClose
     super.onClose();
+  }
+
+
+  ///Tutorial
+  ///
+  TutorialCoachMark? tutorialCoachMark;
+  List<TargetFocus> targets = [];
+//
+  GlobalKey? keyButton6 = GlobalKey();
+  GlobalKey? keyButton7 = GlobalKey();
+  GlobalKey? keyButton8 = GlobalKey();
+  GlobalKey? keyButton9 = GlobalKey();
+//
+  firstInstall() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    if (pref.getBool('tutoHome') == null) {
+      showTutorial(Get.overlayContext);
+      pref.setBool('tutoHome', true);
+    }
+  }
+
+//
+  void showTutorial(context) {
+    print('showTutorial');
+    createTutorial();
+    tutorialCoachMark?.show(context: context);
+  }
+
+  void createTutorial() {
+    tutorialCoachMark = TutorialCoachMark(
+      alignSkip: Alignment.bottomRight,
+      targets:
+      InicioListTarget().createTargets(keyButton6, keyButton7, keyButton8, keyButton9),
+      colorShadow: PRIMARY_COLOR_DARK,
+      textSkip: "Finalizar",
+      paddingFocus: 2,
+      opacityShadow: 0.92,
+      onFinish: () {
+        print("finish");
+      },
+      onClickTarget: (target) {
+        print('onClickTarget: $target');
+      },
+      onClickTargetWithTapPosition: (target, tapDetails) {
+        print("target: $target");
+        print(
+            "clicked at position local: ${tapDetails.localPosition} - global: ${tapDetails.globalPosition}");
+      },
+      onClickOverlay: (target) {
+        print('onClickOverlay: $target');
+      },
+      onSkip: () {
+        print("skip");
+      },
+    );
   }
 }

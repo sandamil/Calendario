@@ -14,6 +14,8 @@ abstract class Routes {
   static const EDIT_NOTAS = _Paths.EDIT_NOTAS;
   static const ALARMAS = _Paths.ALARMAS;
   static const AYUDA = _Paths.AYUDA;
+  static const BOARDING = _Paths.BOARDING;
+  static const INICIO = _Paths.INICIO;
 }
 
 abstract class _Paths {
@@ -29,4 +31,6 @@ abstract class _Paths {
   static const EDIT_NOTAS = '/edit-notas';
   static const ALARMAS = '/alarmas';
   static const AYUDA = '/ayuda';
+  static const BOARDING = '/boarding';
+  static const INICIO = '/inicio';
 }

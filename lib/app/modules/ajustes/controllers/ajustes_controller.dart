@@ -104,7 +104,10 @@ class AjustesController extends GetxController {
   }
 
   void goToLanguageScreen() {
-    Get.to(LanguageScreen());
+    Get.to(() => LanguageScreen(),
+      transition: Transition.fadeIn,
+      duration: const Duration(milliseconds: 100),
+    );
   }
 
   setSelectedShippingTypeIndex(String languageCode) {

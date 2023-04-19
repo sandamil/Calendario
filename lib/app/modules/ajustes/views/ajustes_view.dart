@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:calendario2/config/translations/localization_service.dart';
 import 'package:calendario2/config/util/constant.dart';
-import 'package:calendario2/config/util/icons.dart';
+import 'package:calendario2/config/util/assets.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -83,16 +83,17 @@ class AjustesView extends GetView<AjustesController> {
               ),
               SettingTile(
                 icon: const ImageIcon(AssetImage(MyIcon.solIcon)),
-                btnText: "Recordatorio".tr,
+                btnText: "Ajustes alarma".tr,
                 //   trailing: KSwitch(),
               ),
-              buildTitle("Ayuda".tr),
+              buildTitle("Otros ajustes".tr),
               SettingTile(
                 icon: const ImageIcon(AssetImage(MyIcon.solIcon)),
-                btnText: "Sugerencias".tr,
+                btnText: "onboarding".tr,
                 trailing: const Text(""),
                 onPressed: () {
                   controller.launchGmail();
+                  Get.toNamed('/boarding');
                 },
               ),
               SettingTile(

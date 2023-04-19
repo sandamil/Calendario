@@ -1,7 +1,11 @@
 import 'package:calendario2/app/data/local/taskDatabase.dart';
 import 'package:calendario2/app/modules/home/controllers/calendar_controller.dart';
+import 'package:calendario2/config/theme/my_colors.dart';
+import 'package:calendario2/config/tutorial/tutorialTask.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 import '../../../data/model/taskModel.dart';
 import '../views/widgets/taskCard.dart';
@@ -17,11 +21,14 @@ class NotasListController extends GetxController {
 
   Rx<TextEditingController> searchController = TextEditingController().obs;
 
+
+
   @override
   void onInit() {
     setNotesFromDB();
     print('notesList.length =========' '${notesList.value.length}');
     super.onInit();
+
   }
 
   @override
@@ -35,7 +42,7 @@ class NotasListController extends GetxController {
     super.onClose();
   }
 
-  ///todo update notes sin cargar toda la base de datos
+  ///Todo update notes sin cargar toda la base de datos
   setNotesFromDB() async {
     notesList.value = await DbProvider.instance.getNotesFromDB();
     update();
@@ -117,4 +124,7 @@ class NotasListController extends GetxController {
     }
     return noteComponentsList;
   }
+
+
+
 }

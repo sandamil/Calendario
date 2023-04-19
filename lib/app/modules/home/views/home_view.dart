@@ -1,3 +1,4 @@
+import 'package:calendario2/app/components/custom_dialog.dart';
 import 'package:calendario2/app/data/model/taskModel.dart';
 import 'package:calendario2/app/data/model/cuadranteDay.dart';
 import 'package:calendario2/app/modules/notas/views/widgets/taskCard.dart';
@@ -35,6 +36,7 @@ class HomeView extends GetView<HomeController> {
           leading: Builder(
             builder: (BuildContext context) {
               return IconButton(
+                key: controller.keyButton6,
                 icon: Icon(
                   Icons.menu,
                   color: theme.primaryColor,
@@ -51,14 +53,19 @@ class HomeView extends GetView<HomeController> {
           title: SelectedDayWidget(),
           actions: [
             IconButton(
+              key: controller.keyButton7,
               color: theme.primaryColor,
               icon: const Icon(
                 Icons.today,
               ),
               tooltip: 'today',
               onPressed: () async {
-                // await Get.deleteAll(force: true); //deleting all controllers
-                // Get.reset();
+                CustomDialog.showPopUpInfo(
+                  title: 'Titulo',
+                    description: 'descripcion',
+                  labelButton: 'label',
+                  // onPress: (){}
+                );
               },
             ),
           ],
@@ -72,7 +79,8 @@ class HomeView extends GetView<HomeController> {
         // ),
         body: Column(
           children: [
-            CalendarWidget(),
+            CalendarWidget(        key: controller.keyButton8,
+            ),
             SizedBox(height: 5.h),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 8.w),
@@ -82,7 +90,8 @@ class HomeView extends GetView<HomeController> {
             // Obx(() => _buildSelectedDay()),
             SizedBox(height: 2.h),
             Obx(() {
-              return Expanded(child: _buildListEvent());
+
+              return Expanded(child: _buildListEvent(),key: controller.keyButton9);
             }),
           ],
         ));

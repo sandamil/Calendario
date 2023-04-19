@@ -1,6 +1,7 @@
 import 'package:calendario2/app/modules/CrearCuadrante/views/crear_cuadrante_view.dart';
 import 'package:calendario2/app/modules/CrearTurno/views/turno_view.dart';
 import 'package:calendario2/app/modules/home/views/home_view.dart';
+import 'package:calendario2/config/theme/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -16,10 +17,9 @@ class MenuView extends GetView<MenuAppController> {
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
-    var logger = Logger();
 
-    double _qaButtonHeight = 200.h;
-    double _qaButtonWidth = 120.w;
+    double qaButtonHeight = 200.h;
+    double qaButtonWidth = 120.w;
 
     return Scaffold(
       appBar: AppBar(
@@ -34,14 +34,14 @@ class MenuView extends GetView<MenuAppController> {
           color: theme.primaryColor,
           onPressed: () {
             Get.to(() => const HomeView(),
-                duration: const Duration(milliseconds: 100),
+                duration: const Duration(microseconds: 700),
                 transition: Transition.rightToLeft);
 
           },
         ),
         title: Text(
           'Menu',
-          style: TextStyle(
+          style: TextStyles.titleLarge.copyWith(
             fontSize: MyFonts.headline3TextSize,
             color: theme.primaryColor,
             fontWeight: FontWeight.bold,
@@ -58,17 +58,17 @@ class MenuView extends GetView<MenuAppController> {
               flex: 20,
               child: MaterialButton(
                 elevation: 10,
-                padding: EdgeInsets.all(0),
+                padding: const EdgeInsets.all(0),
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5.r)),
-                height: _qaButtonHeight,
-                minWidth: _qaButtonWidth,
+                    borderRadius: Corners.xmBorder),
+                height: qaButtonHeight,
+                minWidth: qaButtonWidth,
                 color: Theme.of(context).hintColor,
                 child: Stack(
                   children: <Widget>[
                     Container(
-                      padding: EdgeInsets.only(left: 12),
-                      height: 100.h,
+                      padding: EdgeInsets.only(right: 10.w, bottom: 15.h),
+                      height: 120.h,
                       alignment: AlignmentDirectional.topStart,
                       child: Image.asset(
                         "assets/images/notas.png",
@@ -76,13 +76,12 @@ class MenuView extends GetView<MenuAppController> {
                       ),
                     ),
                     Positioned(
-                      right: 25,
-                      bottom: 2,
+                      right: 25.w,
+                      bottom: 2.h,
                       child: Padding(
-                          padding: EdgeInsets.all(0),
+                          padding: const EdgeInsets.all(0),
                           child: Text("Notas",
-                              style: TextStyle(
-                                fontSize: 55.sp,
+                              style: TextStyles.titleLarge.copyWith(
                                 color: Colors.orange,
                               ))),
                     ),
@@ -107,17 +106,17 @@ class MenuView extends GetView<MenuAppController> {
               flex: 20,
               child: MaterialButton(
                 elevation: 10,
-                padding: EdgeInsets.all(0),
+                padding: const EdgeInsets.all(0),
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5.r)),
-                height: _qaButtonHeight,
-                minWidth: _qaButtonWidth,
+                    borderRadius: Corners.xmBorder),
+                height: qaButtonHeight,
+                minWidth: qaButtonWidth,
                 color: Theme.of(context).hintColor,
                 child: Stack(
                   children: <Widget>[
                     Container(
-                      padding: EdgeInsets.only(left: 0, bottom: 0),
-                      height: 100.h,
+                      padding: EdgeInsets.only(right: 10.w, bottom: 15.h),
+                      height: 120.h,
                       alignment: AlignmentDirectional.topStart,
                       child: Image.asset(
                         "assets/images/cuadrante.png",
@@ -125,21 +124,20 @@ class MenuView extends GetView<MenuAppController> {
                       ),
                     ),
                     Positioned(
-                      right: 25,
-                      bottom: 2,
+                      right: 25.w,
+                      bottom: 2.h,
                       child: Padding(
-                          padding: EdgeInsets.all(0),
+                          padding: const EdgeInsets.all(0),
                           child: Text("Cuadrante",
-                              style: TextStyle(
-                                fontSize: 55.sp,
+                              style: TextStyles.titleLarge.copyWith(
                                 color: Colors.orange,
                               ))),
                     ),
                   ],
                 ),
                 onPressed: () {
-                  Get.offAll(() => CrearCuadranteView());
-                },
+                  Get.toNamed('/crear-cuadrante');
+                  },
                 //splashColor: AAThemeData.buttonColor,
               ),
             ),
@@ -150,17 +148,17 @@ class MenuView extends GetView<MenuAppController> {
               flex: 20,
               child: MaterialButton(
                 elevation: 10,
-                padding: EdgeInsets.all(0),
+                padding: const EdgeInsets.all(0),
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5.r)),
-                height: _qaButtonHeight,
-                minWidth: _qaButtonWidth,
+                    borderRadius: Corners.xmBorder),
+                height: qaButtonHeight,
+                minWidth: qaButtonWidth,
                 color: Theme.of(context).hintColor,
                 child: Stack(
                   children: <Widget>[
                     Container(
-                      padding: EdgeInsets.only(left: 0, bottom: 0),
-                      height: 150.h,
+                      padding: EdgeInsets.only(right: 10.w, bottom: 15.h),
+                      height: 120.h,
                       alignment: AlignmentDirectional.topStart,
                       child: Image.asset(
                         "assets/images/turnos.png",
@@ -168,13 +166,12 @@ class MenuView extends GetView<MenuAppController> {
                       ),
                     ),
                     Positioned(
-                      right: 20,
-                      bottom: 0,
+                      right: 25.w,
+                      bottom: 2.h,
                       child: Padding(
-                          padding: EdgeInsets.all(0),
+                          padding: const EdgeInsets.all(0),
                           child: Text("Turnos",
-                              style: TextStyle(
-                                fontSize: 55.sp,
+                              style: TextStyles.titleLarge.copyWith(
                                 color: Colors.orange,
                               ))),
                     ),
@@ -194,17 +191,17 @@ class MenuView extends GetView<MenuAppController> {
               flex: 20,
               child: MaterialButton(
                 elevation: 10,
-                padding: EdgeInsets.all(0),
+                padding: const EdgeInsets.all(0),
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5.h)),
-                height: _qaButtonHeight,
-                minWidth: _qaButtonWidth,
+                    borderRadius: Corners.xmBorder),
+                height: qaButtonHeight,
+                minWidth: qaButtonWidth,
                 color: Theme.of(context).hintColor,
                 child: Stack(
                   children: <Widget>[
                     Container(
-                      padding: EdgeInsets.only(left: 12),
-                      height: 100.h,
+                      padding: EdgeInsets.only(right: 10.w, bottom: 15.h),
+                      height: 120.h,
                       alignment: AlignmentDirectional.topStart,
                       child: Image.asset(
                         "assets/images/ajustes.png",
@@ -212,13 +209,13 @@ class MenuView extends GetView<MenuAppController> {
                       ),
                     ),
                     Positioned(
-                      right: 25,
-                      bottom: 2,
+                      right: 25.w,
+                      bottom: 2.h,
                       child: Padding(
-                          padding: EdgeInsets.all(0),
+                          padding: const EdgeInsets.all(0),
                           child: Text("Ajustes",
-                              style: TextStyle(
-                                fontSize: 55.sp,
+                              style: TextStyles.titleLarge.copyWith(
+                                fontWeight: FontWeight.bold,
                                 color: Colors.orange,
                               ))),
                     ),
@@ -237,17 +234,17 @@ class MenuView extends GetView<MenuAppController> {
               flex: 20,
               child: MaterialButton(
                 elevation: 10,
-                padding: EdgeInsets.all(0),
+                padding: const EdgeInsets.all(0),
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(5.r)),
-                height: _qaButtonHeight,
-                minWidth: _qaButtonWidth,
+                    borderRadius: Corners.xmBorder),
+                height: qaButtonHeight,
+                minWidth: qaButtonWidth,
                 color: Theme.of(context).hintColor,
                 child: Stack(
                   children: <Widget>[
                     Container(
-                      padding: EdgeInsets.only(left: 12),
-                      height: 100.h,
+                      padding: EdgeInsets.only(right: 10.w, bottom: 15.h),
+                      height: 120.h,
                       alignment: AlignmentDirectional.topStart,
                       child: Image.asset(
                         "assets/images/ajustes.png",
@@ -258,10 +255,9 @@ class MenuView extends GetView<MenuAppController> {
                       right: 25,
                       bottom: 2,
                       child: Padding(
-                          padding: EdgeInsets.all(0),
+                          padding: const EdgeInsets.all(0),
                           child: Text("Ayuda",
-                              style: TextStyle(
-                                fontSize: 55.sp,
+                              style: TextStyles.titleLarge.copyWith(
                                 color: Colors.orange,
                               ))),
                     ),

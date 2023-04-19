@@ -1,4 +1,5 @@
 import 'package:calendario2/app/modules/notas/controllers/notas_controller.dart';
+import 'package:calendario2/app/modules/notas/controllers/tutorialNotas_controller.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -6,10 +7,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 class ButtonRowView extends StatelessWidget {
-  const ButtonRowView({Key? key}) : super(key: key);
+
+  const ButtonRowView( {Key? key} ) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final tutorialNotasController = Get.find<TutorialNotasController>();
     return GetX<NotasListController>(
       init: NotasListController(),
       builder: (controller) {
@@ -41,7 +44,7 @@ class ButtonRowView extends StatelessWidget {
                             : MyColors.borderAccentLine,
                       ),
                       borderRadius: BorderRadius.all(Radius.circular(10.r))),
-                  // key: keyButton11,
+                  key: tutorialNotasController.keyButton11,
 
                   child: Icon(
                     controller.isFlagOn.value
@@ -54,6 +57,7 @@ class ButtonRowView extends StatelessWidget {
                 ),
               ),
               Expanded(
+                key: tutorialNotasController.keyButton12,
                 child: Container(
                   alignment: Alignment.center,
                   margin: EdgeInsets.only(left: 4.w),
@@ -71,8 +75,6 @@ class ButtonRowView extends StatelessWidget {
                           child: TextField(
                             controller: controller.searchController.value,
                             maxLines: 1,
-                            // key: keyButton12,
-
                             onChanged: (value) {
                               controller.handleSearch(value);
                             },
