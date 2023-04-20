@@ -1,3 +1,4 @@
+import 'package:calendario2/app/controllers/tutorialController.dart';
 import 'package:calendario2/app/data/local/taskDatabase.dart';
 import 'package:calendario2/app/modules/home/controllers/calendar_controller.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
@@ -12,6 +13,7 @@ import '../views/widgets/taskCard.dart';
 
 class NotasListController extends GetxController {
   CalendarController calendarController = CalendarController();
+  TutorialController tutorialController = TutorialController();
 
   bool headerShouldHide = false;
   RxBool isFlagOn = false.obs;
@@ -21,14 +23,21 @@ class NotasListController extends GetxController {
 
   Rx<TextEditingController> searchController = TextEditingController().obs;
 
+  RxBool firstTime = false.obs;
 
 
   @override
-  void onInit() {
-    setNotesFromDB();
-    print('notesList.length =========' '${notesList.value.length}');
-    super.onInit();
+  void onInit() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
 
+    setNotesFromDB();
+    super.onInit();
+    // pref.setBool('tutoTask', true);
+
+    if (pref.getBool('tutoTask') == true) {
+      firstTime.value = true;
+      tutorialController.firstInstall('task');
+    }
   }
 
   @override

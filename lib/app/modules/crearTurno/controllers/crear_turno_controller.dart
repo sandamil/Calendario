@@ -1,18 +1,15 @@
 import 'package:calendario2/app/modules/home/controllers/calendar_controller.dart';
 import 'package:calendario2/config/util/dateUtils.dart';
 import 'package:flex_color_picker/flex_color_picker.dart';
-// import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import 'package:logger/logger.dart';
+
 
 import '../../../data/local/calendarDatabase.dart';
 import '../../../data/model/turnoType.dart';
 
 class CrearTurnoController extends GetxController {
-  var logger = Logger();
 
   RxList<TurnoType> turnoType = <TurnoType>[].obs;
 
@@ -45,8 +42,6 @@ class CrearTurnoController extends GetxController {
     endDate = DateTime.now().add(const Duration(hours: 1)).formatDateTime24H.obs;
     titleValueController = TextEditingController();
     descriptionValueController = TextEditingController();
-    logger.i(turnoType.value.length);
-
     super.onInit();
   }
 

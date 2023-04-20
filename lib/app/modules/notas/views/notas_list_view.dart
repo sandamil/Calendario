@@ -1,6 +1,4 @@
 import 'package:calendario2/app/modules/notas/controllers/notas_controller.dart';
-import 'package:calendario2/app/modules/home/views/home_view.dart';
-import 'package:calendario2/app/modules/notas/controllers/tutorialNotas_controller.dart';
 import 'package:calendario2/app/modules/notas/views/widgets/important_indicator_text_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -8,7 +6,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import 'widgets/button_row_view.dart';
-import 'widgets/taskCard.dart';
 
 class NotasListView extends GetView<NotasListController> {
   const NotasListView({Key? key}) : super(key: key);
@@ -16,8 +13,6 @@ class NotasListView extends GetView<NotasListController> {
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
-    final tutorialNotasController = Get.find<TutorialNotasController>();
-
     return Obx(() {
       return Scaffold(
         appBar: AppBar(
@@ -46,12 +41,15 @@ class NotasListView extends GetView<NotasListController> {
           ),
           actions: <Widget>[
             IconButton(
-              key: tutorialNotasController.keyNotasListAyuda,
+              key: controller.firstTime.value ? controller
+                  .tutorialController.keyNotasListAyuda : key,
 
               icon: const Icon(Icons.info_rounded, color: Colors.redAccent),
               tooltip: '',
               onPressed: () {
-                tutorialNotasController.showTutorial(context);
+                controller.firstTime.value = true;
+                controller
+                    .tutorialController.showTutorial(context, 'task');
               },
             ),
             // add your custom action widget
@@ -66,7 +64,8 @@ class NotasListView extends GetView<NotasListController> {
           },
           label: Text('Añade Nota'.toUpperCase()),
           icon: Icon(Icons.add),
-          key: tutorialNotasController.keyButton10,
+          key: controller.firstTime.value ? controller
+              .tutorialController.keyButton10 : key,
         ),
         body: AnimatedContainer(
           duration: Duration(milliseconds: 200),

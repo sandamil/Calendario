@@ -70,14 +70,19 @@ class AddNotasView extends GetView<AddNotasController> {
                     height: 10.h,
                   ),
                   Container(
+                    key: controller.firstTime.value
+                        ? controller.tutorialController.keyButton13
+                        : key,
                     child: _buildGeneralFormField(
-                        controller.title, 'Titulo del evento', 1),key: controller.keyButton13,
+                        controller.title, 'Titulo del evento', 1),
                   ),
                   SizedBox(
                     height: 4.h,
                   ),
                   Column(
-                    key: controller.keyButton14,
+                    key: controller.firstTime.value
+                        ? controller.tutorialController.keyButton14
+                        : key,
                     children: <Widget>[
                       Container(
                           child: TextButton(
@@ -85,8 +90,8 @@ class AddNotasView extends GetView<AddNotasController> {
                                 dp.DatePicker.showDateTimePicker(Get.context!,
                                     showTitleActions: true,
                                     onChanged: (DateTime date) {
-                                  if (controller
-                                          .endTime.value.millisecondsSinceEpoch <
+                                  if (controller.endTime.value
+                                          .millisecondsSinceEpoch <
                                       date.millisecondsSinceEpoch) {
                                     controller.endTime.value = date;
                                   }
@@ -145,7 +150,8 @@ class AddNotasView extends GetView<AddNotasController> {
                                   locale: dp.LocaleType.es);
                             },
                             child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: <Widget>[
                                   Text(
@@ -157,7 +163,8 @@ class AddNotasView extends GetView<AddNotasController> {
                                   Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                     children: <Widget>[
                                       Text(
                                         '${controller.endTime.value.formatDateYMD} ${controller.endTime.value.formatDateTime24H}',
@@ -187,7 +194,8 @@ class AddNotasView extends GetView<AddNotasController> {
                             ? Get.dialog(Align(
                                 alignment: Alignment.center,
                                 child: Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 10.w),
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 10.w),
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
@@ -242,7 +250,8 @@ class AddNotasView extends GetView<AddNotasController> {
                                                       Get.back();
                                                       // Get.toNamed('/add-notas', arguments: selectedDate);
                                                     },
-                                                    child: const Text("Cancelar"),
+                                                    child:
+                                                        const Text("Cancelar"),
                                                   ),
                                                 ),
                                                 SizedBox(
@@ -252,18 +261,22 @@ class AddNotasView extends GetView<AddNotasController> {
                                                     child: ElevatedButton(
                                                   onPressed: () {
                                                     Alarm.stop(controller
-                                                            .alarmaCreadaNota!.id)
+                                                            .alarmaCreadaNota!
+                                                            .id)
                                                         .then((_) =>
                                                             alarmasController
                                                                 .loadAlarms());
-                                                    controller.alarmaCreadaNota =
+                                                    controller
+                                                            .alarmaCreadaNota =
                                                         null;
                                                     Get.toNamed('/alarmas',
                                                         arguments: {
                                                           'id': controller
                                                               .idGenerated!,
-                                                          'startTime': controller
-                                                              .startTime.value,
+                                                          'startTime':
+                                                              controller
+                                                                  .startTime
+                                                                  .value,
                                                           'notes': controller
                                                               .notes.value,
                                                           'title': controller
@@ -294,7 +307,9 @@ class AddNotasView extends GetView<AddNotasController> {
                         // alarmasController.refresh();
                         // Get.to(AlarmasPage());
                       },
-                      child: Row(key: controller.keyButton15,
+                      child: Row(
+                          key: controller.firstTime.value ? controller
+                              .tutorialController.keyButton15 : key,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
@@ -303,7 +318,6 @@ class AddNotasView extends GetView<AddNotasController> {
                               style: TextStyle(
                                   color: MyColors.textButtom, fontSize: 14.sp),
                             ),
-
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -382,7 +396,8 @@ class AddNotasView extends GetView<AddNotasController> {
                           key: Key(controller.alarmaCreadaNota!.id.toString()),
                           title: TimeOfDay(
                             hour: controller.alarmaCreadaNota!.dateTime.hour,
-                            minute: controller.alarmaCreadaNota!.dateTime.minute,
+                            minute:
+                                controller.alarmaCreadaNota!.dateTime.minute,
                           ).format(context),
                           onPressed: () {
                             alarmasController.navigateToAlarmScreen(
@@ -401,7 +416,8 @@ class AddNotasView extends GetView<AddNotasController> {
                     height: 2.h,
                   ),
                   TextButton(
-                      key: controller.keyButton16,
+                      key: controller.firstTime.value ? controller
+                          .tutorialController.keyButton16 : key,
                       onPressed: controller.markImportantAsDirty,
                       child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -431,15 +447,16 @@ class AddNotasView extends GetView<AddNotasController> {
                     height: 4.h,
                   ),
                   Column(
-                    key: controller.keyButton17,
-
+                    key: controller.firstTime.value ? controller
+                        .tutorialController.keyButton17 : key,
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       _buildGeneralFormField(controller.site, 'Ubicación', 2),
                       SizedBox(
                         height: 4.h,
                       ),
-                      _buildGeneralFormField(controller.notes, 'Observaciones', 8),
+                      _buildGeneralFormField(
+                          controller.notes, 'Observaciones', 8),
                     ],
                   ),
 
@@ -454,12 +471,14 @@ class AddNotasView extends GetView<AddNotasController> {
                           ),
                         ),
                         IconButton(
-                          key: controller.keyNotasAyuda,
+                          key: controller.firstTime.value ? controller
+                              .tutorialController.keyNotasAyuda : key,
                           icon: const Icon(Icons.info, color: Colors.redAccent),
                           tooltip: '',
                           onPressed: () {
-                            controller.showTutorial(context);
-
+                            controller.firstTime.value = true;
+                            controller
+                                .tutorialController.showTutorial(context, 'taskAdd');
                           },
                         ),
                       ],

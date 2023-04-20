@@ -9,8 +9,7 @@ import 'package:get_storage/get_storage.dart';
 import 'app/bindings/initial_bindings.dart';
 import 'app/controllers/utility_controller.dart';
 import 'app/data/local/my_shared_pref.dart';
-import 'app/modules/CrearCuadrante/controllers/crear_cuadrante_controller.dart';
-import 'app/modules/inicio/bindings/inicio_binding.dart';
+
 import 'app/routes/app_pages.dart';
 import 'config/theme/my_theme.dart';
 import 'config/translations/localization_service.dart';

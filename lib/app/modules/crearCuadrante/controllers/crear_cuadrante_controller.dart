@@ -1,4 +1,5 @@
 
+import 'package:calendario2/app/controllers/tutorialController.dart';
 import 'package:calendario2/app/data/local/calendarDatabase.dart';
 import 'package:calendario2/app/data/model/cuadranteDay.dart';
 import 'package:calendario2/app/data/model/turnoType.dart';
@@ -13,6 +14,7 @@ import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 import '../../../../config/tutorial/tutorialCuadrantes.dart';
 
 class CrearCuadranteController extends GetxController {
+  TutorialController tutorialController = TutorialController();
 
   late Rxn<DateTime> inicialDate;
   late Rxn<DateTime> endDate;
@@ -24,13 +26,25 @@ class CrearCuadranteController extends GetxController {
 
   RxBool cuadranteLoading = true.obs;
 
+  RxBool firstTime = false.obs;
+
   @override
-  void onInit() {
-    fetchTurnosType();
+  void onInit() async {
     inicialDate = Rxn(DateTime.now());
     endDate = Rxn(DateTime.now().add(const Duration(days: 365)));
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    print('onInit showTutorialcuadrante');
+
+    // pref.setBool('tutoCuadrante', true);
+    if (pref.getBool('tutoCuadrante') == true) {
+      print('onInit showTutorialcuadrante2');
+
+      firstTime.value = true;
+      tutorialController.firstInstall('cuadrante');
+    }
+    fetchTurnosType();
+
     super.onInit();
-    firstInstall();
   }
 
   @override
@@ -187,59 +201,7 @@ class CrearCuadranteController extends GetxController {
   }
 
 
-  ///Tutorial
-  ///
 
-  TutorialCoachMark? tutorialCoachMark;
-  List<TargetFocus> targets = [];
-
-  GlobalKey keyButton = GlobalKey();
-  GlobalKey keyButton1 = GlobalKey();
-  GlobalKey keyButton2 = GlobalKey();
-  GlobalKey keyButton3 = GlobalKey();
-  GlobalKey keyButton4 = GlobalKey();
-  GlobalKey keyButton5 = GlobalKey();
-
-
-  firstInstall() async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    if (pref.getBool('tutoCuadrante') == null ) {
-      showTutorial(Get.overlayContext);
-      pref.setBool('tutoCuadrante', true);
-    }
-  }
-
-  void showTutorial(context) {
-    createTutorial();
-    tutorialCoachMark?.show(context: context);
-  }
-
-  void createTutorial() {
-    tutorialCoachMark = TutorialCoachMark(
-      targets: ListTargetCuadrantes().createTargets(keyButton,keyButton2,keyButton3,keyButton4,keyButton5,),
-      colorShadow: PRIMARY_COLOR_DARK,
-      textSkip: "Finalizar",
-      paddingFocus: 2,
-      opacityShadow: 0.92,
-      onFinish: () {
-        print("finish");
-      },
-      onClickTarget: (target) {
-        print('onClickTarget: $target');
-      },
-      onClickTargetWithTapPosition: (target, tapDetails) {
-        print("target: $target");
-        print(
-            "clicked at position local: ${tapDetails.localPosition} - global: ${tapDetails.globalPosition}");
-      },
-      onClickOverlay: (target) {
-        print('onClickOverlay: $target');
-      },
-      onSkip: () {
-        print("skip");
-      },
-    );
-  }
 
 
 

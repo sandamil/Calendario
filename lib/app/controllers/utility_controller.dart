@@ -9,6 +9,8 @@ class UtilityController extends GetxController {
   // Rx<AppLanguageModel> appLanguage = AppLanguageModel().obs;
   // RxList<AppLanguageModel> appLanguageOptions = <AppLanguageModel>[].obs;
 
+
+
   @override
   void onInit() {
     // initData();

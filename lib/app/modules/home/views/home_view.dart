@@ -28,78 +28,85 @@ class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
-    // final tutorialHomeController = Get.put(TutorialHomeController());
-
-    return Scaffold(
-        appBar: AppBar(
-          centerTitle: false,
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-          leading: Builder(
-            builder: (BuildContext context) {
-              return IconButton(
-                // key: tutorialHomeController.keyButton6,
-                icon: Icon(
-                  Icons.menu,
-                  color: theme.primaryColor,
-                ),
-                onPressed: () {
-                  Get.to(() => const MenuView(),
-                      duration: const Duration(milliseconds: 100),
-                      transition: Transition.leftToRight);
-                },
-                tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
-              );
-            },
-          ),
-          title: SelectedDayWidget(),
-          actions: [
-            IconButton(
-              // key: tutorialHomeController.keyButton7,
-              color: theme.primaryColor,
-              icon: const Icon(
-                Icons.today,
-              ),
-              tooltip: 'today',
-              onPressed: () async {
-                CustomDialog.showPopUpInfo(
-                  title: 'Titulo',
-                    description: 'descripcion',
-                  labelButton: 'label',
-                  // onPress: (){}
+    return Obx(() {
+      return Scaffold(
+          appBar: AppBar(
+            centerTitle: false,
+            elevation: 0,
+            backgroundColor: Colors.transparent,
+            leading: Builder(
+              builder: (BuildContext context) {
+                return IconButton(
+                  key: controller.firstTime.value ? controller
+                      .tutorialController.keyButton6 : key,
+                  icon: Icon(
+                    Icons.menu,
+                    color: theme.primaryColor,
+                  ),
+                  onPressed: () {
+                    Get.to(() => const MenuView(),
+                        duration: const Duration(milliseconds: 100),
+                        transition: Transition.leftToRight);
+                  },
+                  tooltip: MaterialLocalizations
+                      .of(context)
+                      .openAppDrawerTooltip,
                 );
               },
             ),
-          ],
-        ),
-        // floatingActionButton: FloatingActionButton(
-        //   elevation: 0,
-        //   onPressed: () {
-        //     // MyTheme.changeTheme();
-        //   },
-        //   child: const Icon(Icons.icecream_rounded),
-        // ),
-        body: Column(
-          children: [
-            CalendarWidget(
-              // key: tutorialHomeController.keyButton8,
-            ),
-            SizedBox(height: 5.h),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8.w),
-              child: LineWidget(),
-            ),
-            // SizedBox(height: 2.h),
-            // Obx(() => _buildSelectedDay()),
-            SizedBox(height: 2.h),
-            Obx(() {
+            title: SelectedDayWidget(),
+            actions: [
+              IconButton(
+                key: controller.firstTime.value ? controller.tutorialController
+                    .keyButton7 : key,
 
-              return Expanded(child: _buildListEvent(),
-                  // key: tutorialHomeController.keyButton9
-              );
-            }),
-          ],
-        ));
+
+                color: theme.primaryColor,
+                icon: const Icon(
+                  Icons.today,
+                ),
+                tooltip: 'today',
+                onPressed: () async {
+                  CustomDialog.showPopUpInfo(
+                    title: 'Titulo',
+                    description: 'descripcion',
+                    labelButton: 'label',
+                    // onPress: (){}
+                  );
+                },
+              ),
+            ],
+          ),
+          // floatingActionButton: FloatingActionButton(
+          //   elevation: 0,
+          //   onPressed: () {
+          //     // MyTheme.changeTheme();
+          //   },
+          //   child: const Icon(Icons.icecream_rounded),
+          // ),
+          body: Column(
+            children: [
+              CalendarWidget(
+                key: controller.firstTime.value ? controller.tutorialController
+                    .keyButton8 : key,
+              ),
+              SizedBox(height: 5.h),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8.w),
+                child: LineWidget(),
+              ),
+              // SizedBox(height: 2.h),
+              // Obx(() => _buildSelectedDay()),
+              SizedBox(height: 2.h),
+              Obx(() {
+                return Expanded(child: _buildListEvent(),
+                  key: controller.firstTime.value ? controller
+                      .tutorialController.keyButton9 : key,
+                );
+              }),
+            ],
+          ));
+    });
   }
 
   Widget _buildListEvent() {
@@ -155,50 +162,52 @@ class HomeView extends GetView<HomeController> {
           //       ),
           SingleChildScrollView(
               child: Column(
-            children: events
-                .map(
-                  (event) => Column(
-                    children: [
-                      // CardEvent(event: event),
-                      TaskCard(
-                          noteData: event,
-                          onTapAction: controller.notasController.openNoteToRead)
-                    ],
-                  ),
+                children: events
+                    .map(
+                      (event) =>
+                      Column(
+                        children: [
+                          // CardEvent(event: event),
+                          TaskCard(
+                              noteData: event,
+                              onTapAction: controller.notasController
+                                  .openNoteToRead)
+                        ],
+                      ),
                 )
-                .toList(),
-          )),
+                    .toList(),
+              )),
         ],
       ),
     );
   }
 
-  // Widget _buildSelectedDay() {
-  //   final calendarVM = Get.find<CalendarController>();
-  //
-  //   final selectedDay = calendarVM.selectedDay.value;
-  //   String formattedDate =
-  //       '${selectedDay.day} / ${selectedDay.month} / ${selectedDay.year}';
-  //
-  //   return Row(
-  //     crossAxisAlignment: CrossAxisAlignment.start,
-  //     children: [
-  //       Container(
-  //         margin: const EdgeInsets.only(left: 10),
-  //         child: const Text(
-  //           'Notas para el dia:',
-  //           // style: AppTextStyle.titleTextStyle(),
-  //         ),
-  //       ),
-  //       const SizedBox(height: 5),
-  //       Container(
-  //         margin: const EdgeInsets.only(left: 10),
-  //         child: Text(
-  //           formattedDate + ':',
-  //           // style: AppTextStyle.disableTextStyle(),
-  //         ),
-  //       ),
-  //     ],
-  //   );
-  // }
+// Widget _buildSelectedDay() {
+//   final calendarVM = Get.find<CalendarController>();
+//
+//   final selectedDay = calendarVM.selectedDay.value;
+//   String formattedDate =
+//       '${selectedDay.day} / ${selectedDay.month} / ${selectedDay.year}';
+//
+//   return Row(
+//     crossAxisAlignment: CrossAxisAlignment.start,
+//     children: [
+//       Container(
+//         margin: const EdgeInsets.only(left: 10),
+//         child: const Text(
+//           'Notas para el dia:',
+//           // style: AppTextStyle.titleTextStyle(),
+//         ),
+//       ),
+//       const SizedBox(height: 5),
+//       Container(
+//         margin: const EdgeInsets.only(left: 10),
+//         child: Text(
+//           formattedDate + ':',
+//           // style: AppTextStyle.disableTextStyle(),
+//         ),
+//       ),
+//     ],
+//   );
+// }
 }

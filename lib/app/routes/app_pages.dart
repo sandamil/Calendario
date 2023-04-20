@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 
-import '../modules/CrearCuadrante/bindings/crear_cuadrante_binding.dart';
-import '../modules/CrearCuadrante/views/crear_cuadrante_view.dart';
+import '../modules/crearCuadrante/bindings/crear_cuadrante_binding.dart';
+import '../modules/crearCuadrante/views/crear_cuadrante_view.dart';
 import '../modules/CrearTurno/bindings/crear_turno_binding.dart';
 import '../modules/CrearTurno/views/turno_view.dart';
 import '../modules/ajustes/bindings/ajustes_binding.dart';

@@ -14,9 +14,11 @@ const _info =
 const _info2 =
     'Pulsa aqui para selecionar la fecha en la que acaba el cuadrante.';
 const _info3 =
-    'Se usa para marcar en el calendario,dias que finalizan en una fecha concreta, como podrian ser dias de vacaciones, bajas, permisos...';
+    'Se usa para marcar en el calendario,dias que finalizan en una fecha concreta, como podrian ser dias de vacaciones, bajas, permisos...'
+    '\n\nPor defecto se estable un año de cuadrante pero puedes elegir la fecha en que se deja de marcar este listado en el calendario';
 const _info4 =
-    'Activa esta opcion siempre que quieras añadir a todo el calendario un cuadrante o turno de trabajo que se repiten todo el año.\nAl activarlo, se desactiva la fecha de fin, por que automaticamente se marca en el calendario los dias por un periodo de un año.';
+    'Si tu turno fuese Mañana-Tarde y dos dias libres, por ejemplo, añadirias aquí una mañana una tarde y dos días libres, nada más, si siempre se repite ese turno'
+    '\nLa fecha de inicio deberias poner cualquiera en la que trabajes o hayas trabajado de mañana, y apartir de ahi se marcarian todos los días, durante un año, si no cambias fecha de fin';
 const _info5 =
     'El cuadrante que crees en esta pantalla se repetirá durante todo el calendario.';
 const _info6 =
@@ -26,7 +28,8 @@ const _info7 =
 const _info8 =
     'Pulsa este botón para enviar el cuadrante creado al calendario y que se marquen los dias de la forma asignada.';
 const _info9 =
-    'Con el ejemplo dado eneste tutorial, asi se vería nuestro calendario:';
+    'Con el ejemplo dado en este tutorial, asi se vería nuestro calendario, si empezásemos, el dia 1 del mes, la primera mañana:';
+
 
 class ListTargetCuadrantes {
   ListTargetCuadrantes();
@@ -104,7 +107,7 @@ class ListTargetCuadrantes {
                 Padding(
                   padding: EdgeInsets.all(1.h),
                   child: Text(
-                    " Fin de Cuadrante",
+                    "Fin de Cuadrante",
                     style: TextStyle(
                       color: Colors.white.withOpacity(0.90),
                       fontSize: 26.sp,
@@ -157,7 +160,7 @@ class ListTargetCuadrantes {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   Text(
-                    "Botón Turnos de trabajo",
+                    "Turnos de trabajo",
                     style: TextStyle(
                       color: Colors.white.withOpacity(0.90),
                       fontSize: 26.sp,
@@ -205,7 +208,7 @@ class ListTargetCuadrantes {
                     padding: const EdgeInsets.only(top: 0.0),
                     child: CustomTextWidget(
                       data:
-                      "Activa esta opción, siempre que añadas turnos de trabajo o tipos de dias a todo el calendario",
+                      "Si creas un cuadrante para tu turno de trabajo, pon la fecha de inicio el dia que empiezas el ciclo o los turnos, no dejes la de hoy",
                       style: GoogleFonts.lato(),
                       color: Colors.white,
                       textAlign: TextAlign.center,
@@ -226,7 +229,7 @@ class ListTargetCuadrantes {
             align: ContentAlign.top,
             child: Container(
               padding: EdgeInsets.only(top: 10.h),
-              height: 400.h,
+              height: 700.h,
               child: SingleChildScrollView(
                 child: Column(
                   children: <Widget>[
@@ -238,7 +241,7 @@ class ListTargetCuadrantes {
                           child: Image.asset(
                             'assets/images/cuadranteTuto.png',
                             fit: BoxFit.fill,
-                            width: 80.w,
+                            width: 140.w,
                           ),
                         ),
                         Column(
@@ -249,7 +252,7 @@ class ListTargetCuadrantes {
                                 "Ejemplo",
                                 style: TextStyle(
                                   color: Colors.white.withOpacity(0.90),
-                                  fontSize: 26.sp,
+                                  fontSize: 20.sp,
                                   fontWeight: FontWeight.bold,
                                 ),
                                 textAlign: TextAlign.center,
@@ -257,13 +260,13 @@ class ListTargetCuadrantes {
                             ),
                             Container(
                               padding: const EdgeInsets.all(2.0),
-                              width: 450.w,
+                              width: 200.w,
                               child: CustomTextWidget(
                                 data: _info6,
                                 style: GoogleFonts.lato(),
                                 color: Colors.white,
                                 textAlign: TextAlign.center,
-                                fontSize: 20.sp,
+                                fontSize: 16.sp,
                               ),
                             ),
                           ],
@@ -290,7 +293,7 @@ class ListTargetCuadrantes {
                       style: GoogleFonts.lato(),
                       color: Colors.white,
                       textAlign: TextAlign.center,
-                      fontSize: 20.sp,
+                      fontSize: 18.sp,
                     ),
                   ],
                 ),
@@ -362,9 +365,12 @@ class ListTargetCuadrantes {
                         textAlign: TextAlign.center,
                         fontSize: 20.sp,
                       ),
-                      Container(
-                        child: Image.asset(
-                          'assets/images/mesTuto.png',
+                      Padding(
+                        padding:  EdgeInsets.only(top: 8.h),
+                        child: Container(
+                          child: Image.asset(
+                            'assets/images/mesTuto.png',
+                          ),
                         ),
                       ),
                     ],
@@ -375,7 +381,7 @@ class ListTargetCuadrantes {
           ),
         ),
       ],
-      shape: ShapeLightFocus.RRect,
+      shape: ShapeLightFocus.Circle,
     ));
     return targets;
   }

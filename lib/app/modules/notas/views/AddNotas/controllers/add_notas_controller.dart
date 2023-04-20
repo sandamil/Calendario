@@ -1,4 +1,5 @@
 import 'package:alarm/alarm.dart';
+import 'package:calendario2/app/controllers/tutorialController.dart';
 import 'package:calendario2/app/data/local/taskDatabase.dart';
 import 'package:calendario2/app/data/model/taskModel.dart';
 import 'package:calendario2/app/modules/notas/views/alarmas/controllers/alarmas_controller.dart';
@@ -12,7 +13,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 class AddNotasController extends GetxController {
-  // AlarmasController alarmasController = AlarmasController();
+  TutorialController tutorialController = TutorialController();
 
   Map<DateTime, List<Task>> events = <DateTime, List<Task>>{}.obs;
 
@@ -48,8 +49,10 @@ class AddNotasController extends GetxController {
     _alarmaCreada.value = value;
   }
 
+  RxBool firstTime = false.obs;
+
   @override
-  void onInit() {
+  void onInit() async {
     idGenerated = int.parse(randomIdGenerator());
     print(idGenerated);
     var dateTimeCalendar = Get.arguments;
@@ -58,12 +61,15 @@ class AddNotasController extends GetxController {
       endTime.value = dateTimeCalendar;
     }
     super.onInit();
-    firstInstall();
-
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    // pref.setBool('tutoHomeFirst', true);
+    if (pref.getBool('tutoAddTask') == true) {
+      firstTime.value = true;
+      tutorialController.firstInstall('taskAdd');
+    }
     // textController.addListener(() {
     //   subtractTimeString.value = textController.text;
     // });
-    print('var _alarmaCreada  ${_alarmaCreada.value}');
 
   }
 
@@ -182,58 +188,6 @@ class AddNotasController extends GetxController {
 
 
 
-///Tutorial
-///
 
-  TutorialCoachMark? tutorialCoachMark;
-  // final ListTargetAddTask targetAddTask= new ListTargetAddTask();
-  List<TargetFocus> targets = [];
-  GlobalKey keyButton13 = GlobalKey();
-  GlobalKey keyButton14 = GlobalKey();
-  GlobalKey keyButton15 = GlobalKey();
-  GlobalKey keyButton16 = GlobalKey();
-  GlobalKey keyButton17 = GlobalKey();
-  GlobalKey keyNotasAyuda = GlobalKey();
-
-
-  firstInstall() async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    if (pref.getBool('tutoAddTask') == null ) {
-      showTutorial(Get.overlayContext);
-      pref.setBool('tutoAddTask', true);
-    }
-  }
-
-  void showTutorial(context) {
-    createTutorial();
-    tutorialCoachMark?.show(context: context);
-  }
-
-  void createTutorial() {
-    tutorialCoachMark = TutorialCoachMark(
-      targets: ListTargetAddTask().createTargets(keyButton13, keyButton14, keyButton15,keyButton16,keyButton17,keyNotasAyuda),
-      colorShadow: PRIMARY_COLOR_DARK,
-      textSkip: "Finalizar",
-      paddingFocus: 2,
-      opacityShadow: 0.92,
-      onFinish: () {
-        print("finish");
-      },
-      onClickTarget: (target) {
-        print('onClickTarget: $target');
-      },
-      onClickTargetWithTapPosition: (target, tapDetails) {
-        print("target: $target");
-        print(
-            "clicked at position local: ${tapDetails.localPosition} - global: ${tapDetails.globalPosition}");
-      },
-      onClickOverlay: (target) {
-        print('onClickOverlay: $target');
-      },
-      onSkip: () {
-        print("skip");
-      },
-    );
-  }
 
 }
