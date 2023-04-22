@@ -118,7 +118,7 @@ class DaySelecetedTurnoWidget extends StatelessWidget {
                                 vertical: 1.h, horizontal: 2.w),
                             child: GestureDetector(
                               onTap: () {
-                                CustomDialog.mostrarTask(nota);
+                                CustomDialog.mostrarTask(nota, context);
                               },
                               child: Container(
                                   padding:

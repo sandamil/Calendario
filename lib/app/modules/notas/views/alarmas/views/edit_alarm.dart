@@ -58,8 +58,15 @@ class _ExampleAlarmEditScreenState extends State<ExampleAlarmEditScreen> {
 
   Future<void> pickTime() async {
     final res = await showTimePicker(
+
       initialTime: selectedTime,
       context: context,
+      errorInvalidText: 'Formato no válido',
+      helpText: "SELECCIONA HORA",
+      confirmText: "OK",
+      cancelText: "CANCELAR",
+      hourLabelText: 'Horas',
+      minuteLabelText: 'Minutos'
     );
     if (res != null) setState(() => selectedTime = res);
   }

@@ -1,6 +1,8 @@
 import 'package:get_storage/get_storage.dart';
 
 class AppStorage {
+
+
   static Future write({required String key, required String value}) async {
     await GetStorage().write(key, value);
   }
@@ -17,5 +19,13 @@ class AppStorage {
   static Future<bool> isContain({required String key}) async {
     final s = GetStorage().hasData(key);
     return s;
+  }
+
+  static Future setBool() async{
+    await GetStorage().write('bool', true);
+  }
+
+  static bool? hasBool() {
+    return GetStorage().read('bool');
   }
 }

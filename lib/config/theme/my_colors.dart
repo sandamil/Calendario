@@ -44,8 +44,16 @@ class MyColors {
       : const Color.fromRGBO(255, 255, 255, 1);
 
   static Color get textButtom => MyTheme().getThemeIsLight
+      ? const Color(0xFFefeeee)
+      : const Color(0xFF2b2b2b);
+
+  static Color get textButtomBlack => MyTheme().getThemeIsLight
       ? const Color(0xFF2b2b2b)
       : const Color(0xFFefeeee);
+
+  static Color get textColorPrimary => MyTheme().getThemeIsLight
+      ? const Color.fromRGBO(21, 16, 0, 1.0)
+      : const Color.fromRGBO(252, 169, 57, 1.0);
 
 
 }

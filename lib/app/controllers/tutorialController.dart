@@ -1,4 +1,5 @@
 import 'package:calendario2/app/controllers/utility_controller.dart';
+import 'package:calendario2/app/data/local/my_shared_pref.dart';
 import 'package:calendario2/app/modules/crearCuadrante/controllers/crear_cuadrante_controller.dart';
 import 'package:calendario2/app/modules/home/controllers/home_controller.dart';
 import 'package:calendario2/app/modules/notas/controllers/notas_controller.dart';
@@ -26,33 +27,29 @@ class TutorialController extends GetxController {
   List<TargetFocus> targets = [];
 
   firstInstall(String view) async {
-    print(view);
-
-    SharedPreferences pref = await SharedPreferences.getInstance();
-
     switch (view) {
       case 'home':
-        if (pref.getBool('tutoHomeFirst') == true) {
+        if (MySharedPref.getTutoHomeFirst()) {
           showTutorial(Get.overlayContext, view);
-          pref.setBool('tutoHomeFirst', false);
+          MySharedPref.setTutoHomeFirst(false);
         }
         break;
       case 'task':
-        if (pref.getBool('tutoTask') == true) {
+        if (MySharedPref.getTutoTaskFirst()) {
           showTutorial(Get.overlayContext, view);
-          pref.setBool('tutoTask', false);
+          MySharedPref.setTutoTaskFirst(false);
         }
         break;
       case 'taskAdd':
-        if (pref.getBool('tutoAddTask') == true) {
+        if (MySharedPref.getTutoAddTaskFirst()) {
           showTutorial(Get.overlayContext, view);
-          pref.setBool('tutoAddTask', false);
+          MySharedPref.setTutoAddTaskFirst(false);
         }
         break;
       case 'cuadrante':
-        if (pref.getBool('tutoCuadrante') == true) {
+        if (MySharedPref.getTutoCuadranteFirst()) {
           showTutorial(Get.overlayContext, view);
-          pref.setBool('tutoCuadrante', false);
+          MySharedPref.setTutoCuadranteFirst(false);
         }
         break;
       default:

@@ -1,5 +1,6 @@
 import 'package:alarm/alarm.dart';
 import 'package:calendario2/app/controllers/tutorialController.dart';
+import 'package:calendario2/app/data/local/my_shared_pref.dart';
 import 'package:calendario2/app/data/local/taskDatabase.dart';
 import 'package:calendario2/app/data/model/taskModel.dart';
 import 'package:calendario2/app/modules/notas/views/alarmas/controllers/alarmas_controller.dart';
@@ -61,9 +62,8 @@ class AddNotasController extends GetxController {
       endTime.value = dateTimeCalendar;
     }
     super.onInit();
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    // pref.setBool('tutoHomeFirst', true);
-    if (pref.getBool('tutoAddTask') == true) {
+
+    if (MySharedPref.getTutoAddTaskFirst()) {
       firstTime.value = true;
       tutorialController.firstInstall('taskAdd');
     }
@@ -84,11 +84,6 @@ class AddNotasController extends GetxController {
     site.clear();
     notes.clear();
     super.onClose();
-    // alPrincipio(false);
-    // minutos5(false);
-    // minutos30(false);
-    // horas1(false);
-    // dias1(false);
   }
 
   void addTravelEvent() {

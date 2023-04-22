@@ -1,9 +1,11 @@
 import 'package:calendario2/app/modules/CrearTurno/views/widgets/input_field.dart';
 import 'package:calendario2/app/modules/crearCuadrante/widgets/beautifulAlertDialog.dart';
 import 'package:calendario2/app/modules/home/controllers/home_controller.dart';
+import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/config/theme/my_fonts.dart';
 import 'package:calendario2/config/util/hexColor.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
@@ -153,15 +155,20 @@ class CrearCuadranteView extends GetView<CrearCuadranteController> {
                               .toIso8601String()
                               .substring(0, 10),
                           widget: IconButton(
-                            onPressed: () async {
-                              controller.inicialDate(
-                                await showDatePicker(
-                                    context: context,
-                                    initialDate: DateTime.now(),
-                                    firstDate: DateTime.now(),
-                                    lastDate: DateTime.now()
-                                        .add(const Duration(days: 364))),
-                              )!;
+                            onPressed: () {
+                              DatePicker.showDatePicker(context,
+                                  theme: DatePickerTheme(
+                                      cancelStyle :  TextStyle(color: Colors.redAccent.shade200, fontSize: 16.sp,fontWeight: FontWeight.bold),
+                                      doneStyle : TextStyle(color: MyColors.textColorPrimary, fontSize: 16.sp, fontWeight: FontWeight.bold),
+                                      itemStyle :  TextStyle(color: MyColors.textColorPrimary, fontSize: 16.sp, fontWeight: FontWeight.bold),
+                                      backgroundColor: MyColors.cellColor),
+                                  showTitleActions: true,
+                                  minTime: DateTime(2020),
+                                  maxTime: DateTime(2050), onChanged: (date) {
+                                    controller.inicialDate.value = date;
+                                  }, onConfirm: (date) {
+                                    controller.inicialDate.value = date;
+                                  }, currentTime: DateTime.now(), locale: LocaleType.es);
                             },
                             icon: Icon(
                               Icons.calendar_today_outlined,
@@ -184,13 +191,21 @@ class CrearCuadranteView extends GetView<CrearCuadranteController> {
                           widget: IconButton(
                             key: controller.firstTime.value ? controller
                                 .tutorialController.keyButton2 : key,
-                            onPressed: () async {
-                              controller.endDate(await showDatePicker(
-                                  context: context,
-                                  initialDate: DateTime.now(),
-                                  firstDate: DateTime.now(),
-                                  lastDate: DateTime.now()
-                                      .add(const Duration(days: 364))))!;
+                            onPressed: () {
+                              DatePicker.showDatePicker(
+                                  theme: DatePickerTheme(
+                                      cancelStyle :  TextStyle(color: Colors.redAccent.shade200, fontSize: 16.sp,fontWeight: FontWeight.bold),
+                                      doneStyle : TextStyle(color: MyColors.textColorPrimary, fontSize: 16.sp, fontWeight: FontWeight.bold),
+                                      itemStyle :  TextStyle(color: MyColors.textColorPrimary, fontSize: 16.sp, fontWeight: FontWeight.bold),
+                                      backgroundColor: MyColors.cellColor),
+                                  context,
+                                  showTitleActions: true,
+                                  minTime: DateTime(2020),
+                                  maxTime: DateTime(2050), onChanged: (date) {
+                                    controller.endDate.value = date;
+                                  }, onConfirm: (date) {
+                                    controller.endDate.value = date;
+                                  }, currentTime: DateTime.now(), locale: LocaleType.es);
                             },
                             icon: const Icon(Icons.calendar_today_outlined),
                           ),

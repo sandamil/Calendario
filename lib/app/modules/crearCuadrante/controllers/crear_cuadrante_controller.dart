@@ -1,6 +1,7 @@
 
 import 'package:calendario2/app/controllers/tutorialController.dart';
 import 'package:calendario2/app/data/local/calendarDatabase.dart';
+import 'package:calendario2/app/data/local/my_shared_pref.dart';
 import 'package:calendario2/app/data/model/cuadranteDay.dart';
 import 'package:calendario2/app/data/model/turnoType.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
@@ -16,8 +17,10 @@ import '../../../../config/tutorial/tutorialCuadrantes.dart';
 class CrearCuadranteController extends GetxController {
   TutorialController tutorialController = TutorialController();
 
-  late Rxn<DateTime> inicialDate;
-  late Rxn<DateTime> endDate;
+
+  Rx<DateTime> inicialDate = DateTime.now().obs;
+  Rx<DateTime> endDate = DateTime.now().add(const Duration(days: 365)).obs;
+  // late Rxn<DateTime> endDate;
 
   RxList<TurnoType> list = <TurnoType>[].obs;
   RxList<TurnoType> turnoType = <TurnoType>[].obs;
@@ -30,20 +33,15 @@ class CrearCuadranteController extends GetxController {
 
   @override
   void onInit() async {
-    inicialDate = Rxn(DateTime.now());
-    endDate = Rxn(DateTime.now().add(const Duration(days: 365)));
-    SharedPreferences pref = await SharedPreferences.getInstance();
-    print('onInit showTutorialcuadrante');
+    // inicialDate = Rxn(DateTime.now());
+    // endDate = Rxn(DateTime.now().add(const Duration(days: 365)));
 
-    // pref.setBool('tutoCuadrante', true);
-    if (pref.getBool('tutoCuadrante') == true) {
-      print('onInit showTutorialcuadrante2');
-
+    if (MySharedPref.getTutoCuadranteFirst()) {
       firstTime.value = true;
       tutorialController.firstInstall('cuadrante');
     }
-    fetchTurnosType();
 
+    fetchTurnosType();
     super.onInit();
   }
 
@@ -59,12 +57,12 @@ class CrearCuadranteController extends GetxController {
 
   bool submit() {
     return list.length != 0 &&
-        endDate.value!.toString() != "" &&
-        endDate.value!.toString().isNotEmpty &&
-        inicialDate.value!.toString() != "" &&
-        inicialDate.value!.toString().isNotEmpty &&
-        DateTime.parse(endDate.value!.toString())
-                .difference(DateTime.parse(inicialDate.value!.toString()))
+        endDate.value.toString() != "" &&
+        endDate.value.toString().isNotEmpty &&
+        inicialDate.value.toString() != "" &&
+        inicialDate.value.toString().isNotEmpty &&
+        DateTime.parse(endDate.value.toString())
+                .difference(DateTime.parse(inicialDate.value.toString()))
                 .inDays >
             0;
   }
@@ -73,8 +71,8 @@ class CrearCuadranteController extends GetxController {
     print(cuadranteLoading.value);
     print('Future cuadranteLoad()=======================1================ ${cuadranteLoading.value}');
     await Rotation(
-        DateTime.parse(inicialDate.value!.toString().substring(0, 10)),
-        DateTime.parse(endDate.value!.toString().substring(0, 10)));
+        DateTime.parse(inicialDate.value.toString().substring(0, 10)),
+        DateTime.parse(endDate.value.toString().substring(0, 10)));
     cuadranteLoading.value = false;
     print('Future cuadranteLoad()=======================2================  ${cuadranteLoading.value}');
 

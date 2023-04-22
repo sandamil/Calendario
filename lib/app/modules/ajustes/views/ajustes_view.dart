@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/config/translations/localization_service.dart';
 import 'package:calendario2/config/util/constant.dart';
 import 'package:calendario2/config/util/assets.dart';
@@ -78,18 +79,41 @@ class AjustesView extends GetView<AjustesController> {
               buildTitle("Notificationes".tr),
               SettingTile(
                 icon: const ImageIcon(AssetImage(MyIcon.notificationIcon)),
-                btnText: "Notificaciones".tr,
-                //   trailing: KSwitch(),
-              ),
-              SettingTile(
-                icon: const ImageIcon(AssetImage(MyIcon.solIcon)),
                 btnText: "Ajustes alarma".tr,
                 //   trailing: KSwitch(),
               ),
-              buildTitle("Otros ajustes".tr),
+              // SettingTile(
+              //   icon: const ImageIcon(AssetImage(MyIcon.solIcon)),
+              //   btnText: "Ajustes alarma".tr,
+              //   //   trailing: KSwitch(),
+              // ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  buildTitle("Version Pro".tr),
+                  Padding(
+                    padding: EdgeInsets.only(right: 12.w),
+                    child:  ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: Size.zero, // Set this
+                        padding: EdgeInsets.all(1),
+                        elevation: 10,
+                        disabledBackgroundColor: Colors.green,
+                        backgroundColor: Colors.green, // background (button) color
+                        foregroundColor: Colors.green, // foreground (text) color
+                      ),
+                      onPressed: (){},
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 8.w),
+                        child: Text('Obtener version pro',style: TextStyle(color: MyColors.textButtom),),
+                      ),
+                    ),
+                  )
+                ],
+              ),
               SettingTile(
-                icon: const ImageIcon(AssetImage(MyIcon.solIcon)),
-                btnText: "onboarding".tr,
+                icon: const ImageIcon(AssetImage(MyIcon.candadoIcon)),
+                btnText: "Login".tr,
                 trailing: const Text(""),
                 onPressed: () {
                   controller.launchGmail();
@@ -97,8 +121,8 @@ class AjustesView extends GetView<AjustesController> {
                 },
               ),
               SettingTile(
-                icon: const ImageIcon(AssetImage(MyIcon.solIcon)),
-                btnText: "Errores".tr,
+                icon: const ImageIcon(AssetImage(MyIcon.candadoIcon)),
+                btnText: "Registro".tr,
                 trailing: const Text(""),
                 onPressed: () {
                   controller.reportProblem();
@@ -106,17 +130,17 @@ class AjustesView extends GetView<AjustesController> {
               ),
               //
               SettingTile(
-                icon: const ImageIcon(AssetImage(MyIcon.solIcon)),
-                btnText: "FeedBack".tr,
-                trailing: Text(""),
+                icon: const ImageIcon(AssetImage(MyIcon.candadoIcon)),
+                btnText: "Exportar Pdf".tr,
+                trailing: const Text(""),
                 onPressed: () {
                   // controller.showFeedback(context);
                 },
               ),
               SettingTile(
-                icon: const ImageIcon(AssetImage(MyIcon.solIcon)),
-                btnText: "Twitter".tr,
-                trailing: const Text(""),
+                icon: const ImageIcon(AssetImage(MyIcon.candadoIcon)),
+                btnText: "Backup".tr,
+                trailing: const Text("Online"),
                 onPressed: () {
                   controller.launchTwitter();
                 },
@@ -279,8 +303,9 @@ class AjustesView extends GetView<AjustesController> {
       child: Text(
         text,
         style: TextStyle(
-          fontFamily: ConstantData.abelFont,
-          fontSize: 16.sp,
+          fontWeight: FontWeight.w900,
+          fontFamily: ConstantData.ralewayFont,
+          fontSize: 20.sp,
           color: Colors.blueAccent,
         ),
       ),

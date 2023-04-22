@@ -9,6 +9,7 @@ class MyIcon {
   static const lunaIcon = "$baseICONURL/luna.png";
   static const languageIcon2 = "$baseICONURL/language.png";
   static const notificationIcon = "$baseICONURL/notification.png";
+  static const candadoIcon = "$baseICONURL/candado.png";
 
 }
 

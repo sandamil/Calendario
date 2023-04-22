@@ -27,7 +27,6 @@ class ConstantData {
 
 
 ///fonts
-  static final abelFont = "MADType";
   static final ralewayFont = 'Raleway';
 
 ///duration

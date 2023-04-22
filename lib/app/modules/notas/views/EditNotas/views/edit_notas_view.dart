@@ -1,9 +1,10 @@
 import 'package:calendario2/app/modules/notas/views/alarmas/controllers/alarmas_controller.dart';
 import 'package:calendario2/app/modules/notas/views/alarmas/views/widget/alarmTile.dart';
 import 'package:calendario2/app/modules/notas/views/widgets/generalLineBetween.dart';
+import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/config/util/dateUtils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart' as dp;
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import '../controllers/edit_notas_controller.dart';
@@ -63,8 +64,14 @@ class EditNotasView extends GetView<EditNotasController> {
               GeneralLineBetween(),
               TextButton(
                   onPressed: () {
-                    dp.DatePicker.showDateTimePicker(Get.context!,
-                        showTitleActions: true, onChanged: (DateTime date) {
+                    DatePicker.showDateTimePicker(Get.context!,
+                        theme: DatePickerTheme(
+                            cancelStyle :  TextStyle(color: Colors.redAccent.shade200, fontSize: 16.sp,fontWeight: FontWeight.bold),
+                            doneStyle : TextStyle(color: MyColors.textColorPrimary, fontSize: 16.sp, fontWeight: FontWeight.bold),
+                            itemStyle :  TextStyle(color: MyColors.textColorPrimary, fontSize: 16.sp, fontWeight: FontWeight.bold),
+                            backgroundColor: MyColors.cellColor),
+                        showTitleActions: true,
+                        onChanged: (DateTime date) {
                       if (controller.endTime.value.millisecondsSinceEpoch <
                           date.millisecondsSinceEpoch) {
                         controller.endTime.value = date;
@@ -73,7 +80,7 @@ class EditNotasView extends GetView<EditNotasController> {
                     },
                         onConfirm: (DateTime date) {},
                         currentTime: controller.startTime.value,
-                        locale: dp.LocaleType.es);
+                        locale: LocaleType.es);
                   },
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -101,7 +108,12 @@ class EditNotasView extends GetView<EditNotasController> {
                       ])),
               TextButton(
                   onPressed: () {
-                    dp.DatePicker.showDateTimePicker(Get.context!,
+                    DatePicker.showDateTimePicker(Get.context!,
+                        theme: DatePickerTheme(
+                            cancelStyle :  TextStyle(color: Colors.redAccent.shade200, fontSize: 16.sp,fontWeight: FontWeight.bold),
+                            doneStyle : TextStyle(color: MyColors.textColorPrimary, fontSize: 16.sp, fontWeight: FontWeight.bold),
+                            itemStyle :  TextStyle(color: MyColors.textColorPrimary, fontSize: 16.sp, fontWeight: FontWeight.bold),
+                            backgroundColor: MyColors.cellColor),
                         showTitleActions: true, onChanged: (DateTime date) {
                       if (controller.endTime.value.millisecondsSinceEpoch <=
                           date.millisecondsSinceEpoch) {
@@ -110,7 +122,7 @@ class EditNotasView extends GetView<EditNotasController> {
                     },
                         onConfirm: (DateTime date) {},
                         currentTime: controller.endTime.value,
-                        locale: dp.LocaleType.es);
+                        locale: LocaleType.es);
                   },
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,

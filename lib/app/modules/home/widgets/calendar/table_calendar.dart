@@ -130,7 +130,7 @@ class CalendarWidget extends StatelessWidget {
                             vertical: 0.5.h, horizontal: 3.w),
                         child: GestureDetector(
                           onTap: () {
-                            CustomDialog.mostrarTask(nota);
+                            CustomDialog.mostrarTask(nota, context);
                           },
                           child: Container(
                               decoration: BoxDecoration(

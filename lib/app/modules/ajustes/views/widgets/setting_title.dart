@@ -1,3 +1,4 @@
+import 'package:calendario2/config/util/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -30,7 +31,8 @@ class SettingTile extends StatelessWidget {
               SizedBox(width: 20.w),
               Text(
                 btnText!,
-                style: theme.textTheme.headline5,
+                style: theme.textTheme.headlineSmall?.copyWith(  fontFamily: ConstantData.ralewayFont,
+                ),
               ),
               const Spacer(),
               Container(

@@ -257,30 +257,76 @@ class MyStyles {
         dayPeriodTextStyle:
             const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
         helpTextStyle: TextStyle(
-            fontSize: 16.sp, fontWeight: FontWeight.bold, color: Colors.white),
+            fontSize: 14.sp, fontWeight: FontWeight.bold, color: isLightTheme
+            ? LightThemeColors.bodyTextColor
+            : DarkThemeColors.bodyTextColor,),
+        // helpTextStyle: TextStyle(
+        //   fontSize: 16.sp, fontWeight: FontWeight.bold, color: isLightTheme
+        //     ? LightThemeColors.bodyTextColor
+        //     : DarkThemeColors.bodyTextColor,),
 
         inputDecorationTheme: InputDecorationTheme(
+          errorStyle: TextStyle(
+            color: Colors.blue
+          ),
+          prefixIconColor: isLightTheme
+                  ? LightThemeColors.darkTextColor
+                  : DarkThemeColors.lightTextColor,
+          suffixIconColor: isLightTheme
+              ? LightThemeColors.darkTextColor
+              : DarkThemeColors.lightTextColor,
+          labelStyle: TextStyle(
+            color: isLightTheme
+                ? LightThemeColors.darkTextColor
+                : DarkThemeColors.lightTextColor,
+          ),
+          hintStyle: TextStyle(color: isLightTheme
+              ? LightThemeColors.darkTextColor.withOpacity(0.8)
+              : DarkThemeColors.lightTextColor.withOpacity(0.8), fontSize: 18, fontWeight: FontWeight.w200),
+          enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(
+                width: 4.0,
+                color: isLightTheme
+                    ? LightThemeColors.dividerColor
+                    : DarkThemeColors.dividerColor,
+              )),
+
           errorBorder: const UnderlineInputBorder(
               borderSide: BorderSide(width: 0.7, color: Colors.red)),
           focusedErrorBorder: const UnderlineInputBorder(
               borderSide: BorderSide(width: 3, color: Colors.redAccent)),
           focusedBorder: const UnderlineInputBorder(
               borderSide: BorderSide(width: 4, color: Colors.orange)),
-          enabledBorder: UnderlineInputBorder(
-              borderSide: BorderSide(
-            width: 4.0,
-            color: isLightTheme
-                ? LightThemeColors.dividerColor
-                : DarkThemeColors.dividerColor,
-          )),
           border: const UnderlineInputBorder(
               borderSide: BorderSide(width: 2.0, color: Colors.redAccent)),
           disabledBorder: const UnderlineInputBorder(
               borderSide: BorderSide(
                   width: 2.0,
                   color:
-                      Colors.redAccent)), // contentPadding: EdgeInsets.all(14),
+                  Colors.redAccent)),
         ),
+        // inputDecorationTheme: InputDecorationTheme(
+        //   errorBorder: const UnderlineInputBorder(
+        //       borderSide: BorderSide(width: 0.7, color: Colors.red)),
+        //   focusedErrorBorder: const UnderlineInputBorder(
+        //       borderSide: BorderSide(width: 3, color: Colors.redAccent)),
+        //   focusedBorder: const UnderlineInputBorder(
+        //       borderSide: BorderSide(width: 4, color: Colors.orange)),
+        //   enabledBorder: UnderlineInputBorder(
+        //       borderSide: BorderSide(
+        //     width: 4.0,
+        //     color: isLightTheme
+        //         ? LightThemeColors.dividerColor
+        //         : DarkThemeColors.dividerColor,
+        //   )),
+        //   border: const UnderlineInputBorder(
+        //       borderSide: BorderSide(width: 2.0, color: Colors.redAccent)),
+        //   disabledBorder: const UnderlineInputBorder(
+        //       borderSide: BorderSide(
+        //           width: 2.0,
+        //           color:
+        //               Colors.redAccent)), // contentPadding: EdgeInsets.all(14),
+        // ),
         dialTextColor: MaterialStateColor.resolveWith(
             (states) => states.contains(MaterialState.selected)
                 ? Colors.orange
@@ -290,27 +336,29 @@ class MyStyles {
         entryModeIconColor: Colors.orange,
       );
 
-  static InputDecorationTheme getInputDecorationTheme(
-          {required bool isLightTheme}) =>
-      const InputDecorationTheme(
-        // focusedErrorBorder: UnderlineInputBorder(
-        //     borderSide: BorderSide(width: 0.7, color: errorColor)),
-        // focusedBorder: UnderlineInputBorder(
-        //     borderSide: BorderSide(width: 0.5, color: primaryColor)),
-        enabledBorder: UnderlineInputBorder(
-            borderSide: BorderSide(width: 2.0, color: Colors.redAccent)),
-        border: UnderlineInputBorder(
-            borderSide: BorderSide(width: 2.0, color: Colors.redAccent)),
-        // disabledBorder: UnderlineInputBorder(
-        //     borderSide: BorderSide(width: 2.0, color: disabledColor)),
-      );
+  // static InputDecorationTheme getInputDecorationTheme(
+  //         {required bool isLightTheme}) =>
+  //     const InputDecorationTheme(
+  //       // focusedErrorBorder: UnderlineInputBorder(
+  //       //     borderSide: BorderSide(width: 0.7, color: errorColor)),
+  //       // focusedBorder: UnderlineInputBorder(
+  //       //     borderSide: BorderSide(width: 0.5, color: primaryColor)),
+  //       enabledBorder: UnderlineInputBorder(
+  //           borderSide: BorderSide(width: 2.0, color: Colors.redAccent)),
+  //       border: UnderlineInputBorder(
+  //           borderSide: BorderSide(width: 2.0, color: Colors.redAccent)),
+  //       // disabledBorder: UnderlineInputBorder(
+  //       //     borderSide: BorderSide(width: 2.0, color: disabledColor)),
+  //     );
 
-  static InputDecorationTheme getInputDecorationTheme2(
-          {required bool isLightTheme}) =>
-      const InputDecorationTheme(
-          // border: OutlineInputBorder(
-          //   borderRadius: BorderRadius.circular(28),
-          //   borderSide: BorderSide(color: textColor),
-          // ),
-          );
+  // static InputDecorationTheme getInputDecorationTheme2(
+  //         {required bool isLightTheme}) =>
+  //      InputDecorationTheme(
+  //         border: OutlineInputBorder(
+  //           borderRadius: BorderRadius.circular(28),
+  //           borderSide: BorderSide(color: isLightTheme
+  //               ? LightThemeColors.dividerColor
+  //               : DarkThemeColors.dividerColor,),
+  //         ),
+  //         );
 }

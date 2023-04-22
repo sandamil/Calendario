@@ -45,6 +45,36 @@ class MySharedPref {
       return LocalizationService.supportedLanguages[langCode]!;
   }
 
+  static Future<void> setTutoHomeFirst(bool first) =>
+      _sharedPreferences.setBool('tutoHomeFirst', first);
+
+  static bool getTutoHomeFirst() =>
+      _sharedPreferences.getBool("tutoHomeFirst") ?? false;
+
+  static Future<void> setTutoTaskFirst(bool first) =>
+      _sharedPreferences.setBool('tutoTask', first);
+
+  static bool getTutoTaskFirst() =>
+      _sharedPreferences.getBool("tutoTask") ?? false;
+
+  static Future<void> setTutoAddTaskFirst(bool first) =>
+      _sharedPreferences.setBool('tutoAddTask', first);
+
+  static bool getTutoAddTaskFirst() =>
+      _sharedPreferences.getBool("tutoAddTask") ?? false;
+
+  static Future<void> setTutoCuadranteFirst(bool first) =>
+      _sharedPreferences.setBool('tutoCuadrante', first);
+
+  static bool getTutoCuadranteFirst() =>
+      _sharedPreferences.getBool("tutoCuadrante") ?? false;
+
+
+
+
+
+
+
 
 
   /// clear all data from shared pref

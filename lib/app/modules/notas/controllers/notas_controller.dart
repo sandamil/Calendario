@@ -1,4 +1,5 @@
 import 'package:calendario2/app/controllers/tutorialController.dart';
+import 'package:calendario2/app/data/local/my_shared_pref.dart';
 import 'package:calendario2/app/data/local/taskDatabase.dart';
 import 'package:calendario2/app/modules/home/controllers/calendar_controller.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
@@ -28,13 +29,9 @@ class NotasListController extends GetxController {
 
   @override
   void onInit() async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-
     setNotesFromDB();
     super.onInit();
-    // pref.setBool('tutoTask', true);
-
-    if (pref.getBool('tutoTask') == true) {
+    if (MySharedPref.getTutoTaskFirst()) {
       firstTime.value = true;
       tutorialController.firstInstall('task');
     }

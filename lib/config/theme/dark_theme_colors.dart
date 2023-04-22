@@ -36,6 +36,8 @@ class DarkThemeColors
   static const Color headlinesTextColor =  Color(0xe5ffffff);
   static const Color captionTextColor = Colors.grey;
   static const Color hintTextColor = Color(0xff686868);
+  static const Color lightTextColor = Color(0x9E9E9E80);
+  // static const Color lightTextColor = Colors.grey;
 
   //chip
   static const Color chipBackground = primaryColor;

@@ -1,5 +1,6 @@
 import 'package:calendario2/app/controllers/tutorialController.dart';
 import 'package:calendario2/app/controllers/utility_controller.dart';
+import 'package:calendario2/app/data/local/my_shared_pref.dart';
 import 'package:calendario2/app/modules/notas/controllers/notas_controller.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/config/tutorial/tutorialInicio.dart';
@@ -16,10 +17,7 @@ class HomeController extends GetxController {
   RxBool firstTime = false.obs;
 
   void onInit() async {
-    SharedPreferences pref = await SharedPreferences.getInstance();
-
-    // pref.setBool('tutoHomeFirst', true);
-    if (pref.getBool('tutoHomeFirst') == true) {
+    if (MySharedPref.getTutoHomeFirst()) {
       firstTime.value = true;
       tutorialController.firstInstall('home');
     }

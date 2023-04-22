@@ -136,9 +136,9 @@ class CustomDialog {
 
 
 
-  static mostrarTask(Task nota) {
+  static mostrarTask(Task nota, context) {
     showDialog(
-        context: Get.context!,
+        context: context,
         builder: (BuildContext context) {
           return AlertDialog(
             elevation: 5,
@@ -159,6 +159,8 @@ class CustomDialog {
               ),
             ),
             content: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text.rich(
