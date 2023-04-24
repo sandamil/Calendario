@@ -1,3 +1,4 @@
+import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/config/util/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -31,7 +32,11 @@ class SettingTile extends StatelessWidget {
               SizedBox(width: 20.w),
               Text(
                 btnText!,
-                style: theme.textTheme.headlineSmall?.copyWith(  fontFamily: ConstantData.ralewayFont,
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  // fontFamily: ConstantData.ralewayFont,
+                  fontSize: 20.sp,
+                  color: MyColors.textColor,
                 ),
               ),
               const Spacer(),

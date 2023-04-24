@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import 'dark_theme_colors.dart';
 import 'my_fonts.dart';
@@ -94,7 +95,6 @@ class MyStyles {
         headlineLarge: (MyFonts.headlineTextStyle).copyWith(
             fontSize: MyFonts.headline2TextSize,
             fontWeight: FontWeight.bold,
-            fontFamily: ConstantData.ralewayFont,
             color: isLightTheme
                 ? LightThemeColors.headlinesTextColor
                 : DarkThemeColors.headlinesTextColor),

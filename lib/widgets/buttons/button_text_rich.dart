@@ -1,5 +1,6 @@
 
 import 'package:calendario2/config/theme/my_colors.dart';
+import 'package:calendario2/config/theme/my_fonts.dart';
 import 'package:calendario2/config/theme/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -28,11 +29,11 @@ class ButtonTextRich extends StatelessWidget {
       child: RichText(
         text: TextSpan(
           text: label1,
-          style: TextStyles.text.copyWith(color: Colors.grey),
+          style: CustomTextStyle.text.copyWith(color: Colors.grey),
           children: <TextSpan>[
             TextSpan(
               text: label2,
-              style: TextStyles.title
+              style: CustomTextStyle.title
                   .copyWith(color: PRIMARY_COLOR, fontSize: 14.w),
             ),
           ],

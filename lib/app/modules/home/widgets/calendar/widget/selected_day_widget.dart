@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class SelectedDayWidget extends StatelessWidget {
-  SelectedDayWidget({super.key});
+  const SelectedDayWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -15,11 +15,7 @@ class SelectedDayWidget extends StatelessWidget {
           builder: (controller) {
             return Text(
               DateFormat.MMMM('es').add_y().format(controller.focusedDay.value).toUpperCase(),
-              style: TextStyle(
-                fontSize: MyFonts.headline3TextSize,
-                fontWeight: FontWeight.bold,
-                color: Colors.orange
-              ),
+              style: CustomTextStyle.appBarTitle(context: context),
             );
           },
         ));

@@ -74,7 +74,7 @@ class ListTargetCuadrantes {
                         ),
                         CustomTextWidget(
                           data: _info,
-                          style: GoogleFonts.lato(),
+                          // style: GoogleFonts.lato(),
                           color: Colors.white,
                           textAlign: TextAlign.center,
                           fontSize: 20.sp,
@@ -126,14 +126,14 @@ class ListTargetCuadrantes {
                       ),
                       CustomTextWidget(
                         data: _info2,
-                        style: GoogleFonts.lato(),
+                        // style: GoogleFonts.lato(),
                         color: Colors.white,
                         textAlign: TextAlign.center,
                         fontSize: 20.sp,
                       ),
                       CustomTextWidget(
                         data: _info3,
-                        style: GoogleFonts.lato(),
+                        // style: GoogleFonts.lato(),
                         color: Colors.white,
                         textAlign: TextAlign.center,
                         fontSize: 20.sp,
@@ -172,7 +172,7 @@ class ListTargetCuadrantes {
                     padding: const EdgeInsets.only(top: 10.0),
                     child: CustomTextWidget(
                       data: _info4,
-                      style: GoogleFonts.lato(),
+                      // style: GoogleFonts.lato(),
                       color: Colors.white,
                       textAlign: TextAlign.center,
                       fontSize: 20.sp,
@@ -180,7 +180,7 @@ class ListTargetCuadrantes {
                   ),
                   CustomTextWidget(
                     data: _info5,
-                    style: GoogleFonts.lato(),
+                    // style: GoogleFonts.lato(),
                     color: Colors.white,
                     textAlign: TextAlign.center,
                     fontSize: 20.sp,
@@ -209,7 +209,7 @@ class ListTargetCuadrantes {
                     child: CustomTextWidget(
                       data:
                       "Si creas un cuadrante para tu turno de trabajo, pon la fecha de inicio el dia que empiezas el ciclo o los turnos, no dejes la de hoy",
-                      style: GoogleFonts.lato(),
+                      // style: GoogleFonts.lato(),
                       color: Colors.white,
                       textAlign: TextAlign.center,
                       fontSize: 20.sp,
@@ -263,7 +263,7 @@ class ListTargetCuadrantes {
                               width: 200.w,
                               child: CustomTextWidget(
                                 data: _info6,
-                                style: GoogleFonts.lato(),
+                                // style: GoogleFonts.lato(),
                                 color: Colors.white,
                                 textAlign: TextAlign.center,
                                 fontSize: 16.sp,
@@ -290,7 +290,7 @@ class ListTargetCuadrantes {
                     ),
                     CustomTextWidget(
                       data: _info7,
-                      style: GoogleFonts.lato(),
+                      // style: GoogleFonts.lato(),
                       color: Colors.white,
                       textAlign: TextAlign.center,
                       fontSize: 18.sp,
@@ -330,7 +330,7 @@ class ListTargetCuadrantes {
                 ),
                 CustomTextWidget(
                   data: _info8,
-                  style: GoogleFonts.lato(),
+                  // style: GoogleFonts.lato(),
                   color: Colors.white,
                   textAlign: TextAlign.center,
                   fontSize: 20.sp,
@@ -360,7 +360,7 @@ class ListTargetCuadrantes {
                       ),
                       CustomTextWidget(
                         data: _info9,
-                        style: GoogleFonts.lato(),
+                        // style: GoogleFonts.lato(),
                         color: Colors.white,
                         textAlign: TextAlign.center,
                         fontSize: 20.sp,

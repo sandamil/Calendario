@@ -1,3 +1,4 @@
+import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/config/util/app_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -5,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 
+import '../../../../config/theme/my_fonts.dart';
 import '../../CrearTurno/views/turno_view.dart';
 import '../controllers/crear_turno_controller.dart';
 import 'widgets/input_field.dart';
@@ -24,31 +26,38 @@ class AddTurnoView extends GetView<CrearTurnoController> {
         return Scaffold(
           appBar: AppBar(
             leading: IconButton(
-              icon: const Icon(
+              icon: Icon(
                 Icons.arrow_back_ios,
+                size: 26.sp,
+                color: controller.turnoColor.value.computeLuminance() > 0.5
+                    ? Colors.black
+                    : Colors.white,
               ),
-                color: controller.turnoColor.value.computeLuminance() > 0.5 ? Colors.black : Colors.white,
-              tooltip: "Color",
               onPressed: () {
-                Get.to(() => const TurnoView(),
+                Get.to(
+                  () => const TurnoView(),
                   transition: Transition.fadeIn,
                   duration: const Duration(milliseconds: 100),
                 );
               },
             ),
-            elevation: 0.0,
-
+            elevation: 0,
+            centerTitle: false,
             backgroundColor: controller.turnoColor.value,
             title: Text(
               'Crear Turno',
-              style: TextStyle(
-                fontSize: 25.sp,
-                  color: controller.turnoColor.value.computeLuminance() > 0.5 ? Colors.black : Colors.white            ),
+              style: CustomTextStyle.appBarTitle(
+                context: context,
+              ).copyWith(
+                color: controller.turnoColor.value.computeLuminance() > 0.5
+                    ? Colors.black
+                    : Colors.white,
+              ),
             ),
           ),
           body: SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.only(top: 50, left: 15, right: 15),
+              padding: EdgeInsets.only(top: 50.h, left: 15.w, right: 15.w),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: <Widget>[
@@ -58,14 +67,17 @@ class AddTurnoView extends GetView<CrearTurnoController> {
                       const Spacer(),
                       Container(
                         alignment: Alignment.centerLeft,
-                        width: 40.w,
+                        width: 60.w,
                         child: TextField(
                           maxLength: 3,
                           controller: controller.titleValueController,
                           onChanged: (value) => controller.setTitle(value),
-                          decoration: const InputDecoration(
-                            hintText:
-                                'Letras que muestra el dia marcado en el calendario',
+                          decoration: InputDecoration(
+                            hintMaxLines: 2,
+                            hintStyle: TextStyle(
+                              fontSize: 6.sp,
+                            ),
+                            hintText: 'Abreviatura',
                             labelText: 'Abreviatura',
                             border: OutlineInputBorder(
                                 borderRadius:
@@ -80,35 +92,49 @@ class AddTurnoView extends GetView<CrearTurnoController> {
                           Container(
                               decoration: BoxDecoration(
                                   border: Border.all(
-                                      color: controller.turnoColor.value,
+                                      color: MyColors.borderCellColor,
                                       width: 2),
-                                  color:
-                                      controller.turnoColor.value.withAlpha(600),
+                                  color: MyColors.cellColor,
                                   borderRadius: BorderRadius.circular(5.r)),
                               child: SizedBox(
-                                width: 70,
-                                height: 60,
+                                width: 50,
+                                height: 90,
                                 child: Column(
                                   children: <Widget>[
                                     Container(
                                       padding: const EdgeInsets.all(4),
-                                      child: Text(
+                                      child: const Text(
                                         '15',
                                         style: TextStyle(
                                           fontSize: 18,
-                                          color: Theme.of(context)
-                                              .textTheme
-                                              .titleLarge!
-                                              .color,
                                         ),
                                       ),
                                     ),
                                     Container(
-                                      padding: const EdgeInsets.all(2),
-                                      child: Text(
+                                      decoration: BoxDecoration(
+                                          border: Border.all(
+                                              color:
+                                                  controller.turnoColor.value,
+                                              width: 2),
+                                          color: controller.turnoColor.value
+                                              .withAlpha(600),
+                                          borderRadius:
+                                              BorderRadius.circular(5.r)),
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 5.w),
+                                      child:
+                                      controller.title.value.isEmpty ?
+                                      Text(
+                                        '        ',
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            color: controller.turnoColor.value,
+                                            fontWeight: FontWeight.w700),
+                                      )
+                                          : Text(
                                         controller.title.value.toUpperCase(),
                                         style: TextStyle(
-                                            fontSize: 17,
+                                            fontSize: 16,
                                             color: controller.turnoColor.value,
                                             fontWeight: FontWeight.w700),
                                       ),
@@ -119,8 +145,10 @@ class AddTurnoView extends GetView<CrearTurnoController> {
                           Container(
                             padding: const EdgeInsets.only(top: 5.0),
                             child: Text(
-                              "VISTA PREVIA",
-                              style: Theme.of(context).primaryTextTheme.caption,
+                              "VISTA PREVIA"
+                              "\nEN CALENDARIO",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontSize: 12.sp, color: MyColors.textDisable),
                             ),
                           )
                         ],
@@ -222,15 +250,14 @@ class AddTurnoView extends GetView<CrearTurnoController> {
                     tag: "botonAddTurno",
                     child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 4.h),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 16.w, vertical: 4.h),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5.r),
                           ),
                         ),
-                        child: const Text('Añadir'),
+                        child: Text('Añadir',style: CustomTextStyle.button,),
                         onPressed: () {
-                          logger.w("Warning log");
-
                           controller.addTurno();
                           Get.back(closeOverlays: true);
                         }),

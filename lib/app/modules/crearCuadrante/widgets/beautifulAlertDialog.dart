@@ -1,3 +1,5 @@
+import 'package:calendario2/config/theme/my_colors.dart';
+import 'package:calendario2/widgets/buttons/button_primary.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -14,7 +16,7 @@ class BeautifulAlertDialog extends StatelessWidget {
           padding: const EdgeInsets.only(right: 16.0),
           height: 250.h,
           decoration: BoxDecoration(
-              color: Colors.white,
+              color: MyColors.backgroundColor,
               borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(100.r),
                   bottomLeft: Radius.circular(100.r),
@@ -25,7 +27,7 @@ class BeautifulAlertDialog extends StatelessWidget {
               SizedBox(width: 20.w),
               CircleAvatar(
                 radius: 55.r,
-                backgroundColor: Colors.grey.shade200,
+                backgroundColor: MyColors.cellColor,
                 child: Icon(
                   Icons.do_not_disturb,
                   color: Colors.red,
@@ -39,7 +41,10 @@ class BeautifulAlertDialog extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text("Atención!",
-                        style: TextStyle(color: Colors.red, fontSize: 25.sp,fontWeight: FontWeight.bold)),
+                        style: TextStyle(
+                            color: Colors.red,
+                            fontSize: 25.sp,
+                            fontWeight: FontWeight.bold)),
                     SizedBox(height: 10.h),
                     Flexible(
                       child: Text(
@@ -51,20 +56,16 @@ class BeautifulAlertDialog extends StatelessWidget {
                     Row(
                       children: <Widget>[
                         Expanded(
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.green,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5.r)),
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 10.w, vertical: 10.h),
-                                textStyle: TextStyle(
-                                    fontSize: 30.sp, fontWeight: FontWeight.bold)),
-                            // colorBrightness: Brightness.dark,
-                            onPressed: () {
+                          child: ButtonPrimary(
+                            label: 'OK',
+                            isOutline: true,
+                            radius: 5.r,
+                            textStyle: TextStyle(
+                                fontSize: 26.sp, fontWeight: FontWeight.bold),
+                            onTap: () {
                               Navigator.pop(context);
                             },
-                            child: const Text("OK"),
+                            // child: const Text("OK"),
                           ),
                         ),
                       ],

@@ -24,7 +24,7 @@ class NotasView extends GetView<NotasViewController> {
               'Notas',
               style: TextStyle(
                 color: theme.primaryColor,
-                fontFamily: 'ZillaSlab',
+                // fontFamily: 'ZillaSlab',
                 fontWeight: FontWeight.w700,
                 fontSize: 32.sp,
               ),
@@ -93,7 +93,7 @@ class NotasView extends GetView<NotasViewController> {
                       child: Text(
                         controller.currentNote.value.title!,
                         style: TextStyle(
-                          fontFamily: 'ZillaSlab',
+                          // fontFamily: 'ZillaSlab',
                           fontWeight: FontWeight.w700,
                           fontSize: 36.sp,
                         ),

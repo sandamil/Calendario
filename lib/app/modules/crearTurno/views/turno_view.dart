@@ -1,3 +1,4 @@
+import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -18,22 +19,23 @@ class TurnoView extends GetView<CrearTurnoController> {
 
     return Scaffold(
       appBar: AppBar(
+        elevation: 0.0,
+        backgroundColor: Colors.transparent,
+        centerTitle: false,
         leading: IconButton(
-            icon: Icon(Icons.home,
-                size: 24.sp, color: Theme.of(context).primaryColor),
-            color: theme.primaryColor,
+            icon: Icon(
+              Icons.home,
+              color: PRIMARY_COLOR,
+              size: 26.sp,
+            ),
             onPressed: () {
               Get.offAllNamed('/home');
             }),
-        elevation: 0.0,
-        backgroundColor: Colors.transparent,
+
         title: Text(
           'Tipos de Días',
-          style: TextStyle(
-            fontSize: MyFonts.headline3TextSize,
-            color: theme.primaryColor,
-            fontWeight: FontWeight.bold,
-          ),
+          style: CustomTextStyle.appBarTitle(context: context),
+
         ),
       ),
       body: Column(
@@ -79,11 +81,12 @@ class TurnoView extends GetView<CrearTurnoController> {
                           const SizedBox(
                             height: 5,
                           ),
-                          controller.turnoType[index].startHour != null &&
-                                  controller.turnoType[index].endHour != null &&
-                                  controller.turnoType[index].startHour != '' &&
-                                  controller.turnoType[index].endHour != ''
-                              ? Text(
+                          // controller.turnoType[index].startHour != null &&
+                          //         controller.turnoType[index].endHour != null &&
+                          //         controller.turnoType[index].startHour != '' &&
+                          //         controller.turnoType[index].endHour != ''
+                          //     ?
+                          Text(
                                   'De ${controller.turnoType[index].startHour.toString()} a ${controller.turnoType[index].endHour.toString()}',
                                   style: TextStyle(
                                       fontSize: 15,
@@ -92,7 +95,7 @@ class TurnoView extends GetView<CrearTurnoController> {
                                           .titleLarge
                                           ?.color),
                                 )
-                              : Container()
+                              // : Container()
                         ],
                       ),
                       IconButton(

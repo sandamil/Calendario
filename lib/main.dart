@@ -3,6 +3,8 @@ import 'package:calendario2/app/modules/boarding/controllers/boarding_controller
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import 'package:mixpanel_flutter/mixpanel_flutter.dart';
+
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
@@ -15,6 +17,9 @@ import 'config/theme/my_theme.dart';
 import 'config/translations/localization_service.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
+
+late Mixpanel mixPanel;
+
 Future<void> main() async {
   print('=====================================================');
   print('                     INICIO                          ');
@@ -23,6 +28,7 @@ Future<void> main() async {
   Get.put(UtilityController());
   await Alarm.init(showDebugLogs: true);
   await initMemory();
+  initMixpanel();
 
   initializeDateFormatting().then(
     (_) async => runApp(
@@ -30,6 +36,14 @@ Future<void> main() async {
     ),
   );
 }
+
+Future<void> initMixpanel() async {
+  String mixPanelToken = "7393b8c55d34833deaff8da840c887b2";
+  mixPanel = await Mixpanel.init(mixPanelToken, trackAutomaticEvents: true);
+  var distinctId = await mixPanel.getDistinctId();
+  mixPanel.identify(distinctId);
+}
+
 
 Future<void> initMemory() async {
   await MySharedPref.init();

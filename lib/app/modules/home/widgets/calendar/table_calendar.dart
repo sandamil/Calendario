@@ -37,7 +37,7 @@ class CalendarWidget extends StatelessWidget {
               return calendarController.isReady.value
                   ? TableCalendar(
                       locale: 'es_ES',
-                      daysOfWeekHeight: 18.h,
+                      daysOfWeekHeight: 25.h,
                       rowHeight: 90.h,
                       headerVisible: Platform.isMacOS ? true : false,
                       calendarStyle: const CalendarStyle(
@@ -53,10 +53,8 @@ class CalendarWidget extends StatelessWidget {
                       //   return (date.weekday != DateTime.sunday &&
                       //       date.weekday != DateTime.saturday);
                       // },
-                      firstDay: DateTime.now()
-                          .subtract(const Duration(days: 200, hours: 23)),
-                      lastDay: DateTime.now()
-                          .add(const Duration(days: 600, hours: 23)),
+                      firstDay: DateTime(2000),
+                      lastDay: DateTime(2050),
                       focusedDay: calendarController.focusedDay.value,
                       // calendarFormat: controller.calendarFormat,
                       eventLoader: calendarController.getEventForDay,

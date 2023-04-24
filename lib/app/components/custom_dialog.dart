@@ -1,11 +1,13 @@
 import 'package:calendario2/app/data/model/taskModel.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
+import 'package:calendario2/config/theme/my_fonts.dart';
 import 'package:calendario2/config/theme/styles.dart';
 import 'package:calendario2/config/util/dateUtils.dart';
 import 'package:calendario2/widgets/buttons/button_primary.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class CustomDialog {
   static alertaInfo(String msj) {
@@ -111,13 +113,13 @@ class CustomDialog {
             children: [
               Text(
                 title ?? '',
-                style: TextStyles.title.copyWith(fontSize: 16.w),
+                style: CustomTextStyle.title.copyWith(fontSize: 16.w),
                 textAlign: TextAlign.center,
               ),
               verticalSpace(Insets.med),
               Text(
                 description ?? '',
-                style: TextStyles.text,
+                style: CustomTextStyle.text,
                 textAlign: TextAlign.center,
               ),
               verticalSpace(Insets.xl),
@@ -150,7 +152,7 @@ class CustomDialog {
                   TextSpan(
                     text:
                         '  ${DateTime.fromMillisecondsSinceEpoch(nota.startTimeMilliseconds!).formatDateTime24H} h.',
-                    style: const TextStyle(
+                    style: GoogleFonts.titilliumWeb(
                       fontWeight: FontWeight.bold,
                       color: ACCENT_COLOR,
                     ),
@@ -169,7 +171,7 @@ class CustomDialog {
 
                   TextSpan(
                     text: nota.title,
-                    style: TextStyle(
+                    style: GoogleFonts.titilliumWeb(
                       fontSize: 18.sp,
                       fontWeight: FontWeight.bold,
                     ),
@@ -181,7 +183,7 @@ class CustomDialog {
                 Text.rich(
                   TextSpan(
                     text: nota.notes,
-                    style: TextStyle(
+                    style: GoogleFonts.titilliumWeb(
                       fontSize: 14.sp,
                       fontWeight: FontWeight.normal,
                     ),

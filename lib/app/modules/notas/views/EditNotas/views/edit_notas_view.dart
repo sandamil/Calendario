@@ -26,7 +26,7 @@ class EditNotasView extends GetView<EditNotasController> {
           title: Text(
             'Editar Nota',
             style: TextStyle(
-                fontFamily: 'ZillaSlab',
+                // fontFamily: 'ZillaSlab',
                 fontWeight: FontWeight.w700,
                 fontSize: 24.sp,
                 color: theme.primaryColor),

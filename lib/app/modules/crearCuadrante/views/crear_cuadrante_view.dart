@@ -25,25 +25,22 @@ class CrearCuadranteView extends GetView<CrearCuadranteController> {
       () {
         return Scaffold(
           appBar: AppBar(
+            elevation: 0,
+            backgroundColor: Colors.transparent,
+            centerTitle: false,
             leading: IconButton(
               icon: Icon(
                 Icons.home,
-                color: theme.primaryColor,
+                color: PRIMARY_COLOR,
+                size: 26.sp,
               ),
-              color: theme.primaryColor,
               onPressed: () {
                 Get.offAllNamed('/home');
               },
             ),
-            elevation: 0.0,
-            backgroundColor: Colors.transparent,
             title: Text(
               'Crear Cuadrante',
-              style: TextStyle(
-                fontSize: MyFonts.headline3TextSize,
-                color: theme.primaryColor,
-                fontWeight: FontWeight.bold,
-              ),
+              style: CustomTextStyle.appBarTitle(context: context),
             ),
             actions: <Widget>[
               IconButton(
@@ -56,16 +53,19 @@ class CrearCuadranteView extends GetView<CrearCuadranteController> {
                       }
                     : () => alertDialog(context),
                 icon: controller.submit()
-                    ? const Icon(
+                    ? Icon(
                         Icons.done,
                         color: Colors.green,
+                        size: 24.sp,
                       )
                     : Icon(
                         Icons.done_outline,
-                        color: Theme.of(context).iconTheme.color,
+                        color: PRIMARY_COLOR.withOpacity(0.4),
+                        size: 24.sp,
                       ),
-                key: controller.firstTime.value ? controller
-                    .tutorialController.keyButton5 : key,
+                key: controller.firstTime.value
+                    ? controller.tutorialController.keyButton5
+                    : key,
               )
             ],
           ),
@@ -77,71 +77,28 @@ class CrearCuadranteView extends GetView<CrearCuadranteController> {
               ),
               Column(
                 children: <Widget>[
-                  Container(
-                    // width: 280.w,
-                    padding: const EdgeInsets.all(1.0),
-                    child: Column(
-                      children: <Widget>[
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: <Widget>[
-                            Container(
-                                child: Text(
-                              "Pulsa aqui para ver como crear cuadrante.",
-                              style: TextStyle(
-                                fontSize: 12.sp,
-                              ),
-                            )),
-                            IconButton(
-                              icon: const Icon(Icons.info,
-                                  color: Colors.redAccent),
-                              tooltip: '',
-                              onPressed: () {
-                                controller.firstTime.value = true;
-
-                                controller
-                                    .tutorialController.showTutorial(context, 'cuadrante');
-                              },
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      Container(
+                          child: Text(
+                            "Pulsa aqui para ver como crear cuadrante.",
+                            style: TextStyle(
+                              fontSize: 12.sp,
                             ),
-                          ],
-                        ),
-                        // Row(
-                        //   children: <Widget>[
-                        //     Text(
-                        //       "Repetir cuadrante en todo el calendario",
-                        //       style: TextStyle(
-                        //         fontSize: 12.sp,
-                        //       ),
-                        //     ),
-                        //     Switch(
-                        //         value: controller.isSwitched.value,
-                        //         onChanged: (value) {
-                        //           controller.addYear();
-                        //           controller.isSwitched.value = value;
-                        //         },
-                        //       // key: keyButton3,
-                        //       // value: controller.bol,
-                        //       // onChanged: (value) {
-                        //       //   if (controller.isSwitched = value) {
-                        //       //     controller.bol = false;
-                        //       //     print(controller.bol);
-                        //       //     controller.endDate.value!
-                        //       //           .add(const Duration(days: 365))
-                        //       //           .subtract(const Duration(hours: 2))
-                        //       //           .toIso8601String()
-                        //       //           .substring(0, 10);
-                        //       //     } else {
-                        //       //       controller.bol = true;
-                        //       //   }
-                        //       // },
-                        //
-                        //       activeTrackColor: Colors.lightGreenAccent,
-                        //       activeColor: Colors.green,
-                        //     ),
-                        //   ],
-                        // ),
-                      ],
-                    ),
+                          )),
+                      IconButton(
+                        icon: const Icon(Icons.info,
+                            color: Colors.redAccent),
+                        tooltip: '',
+                        onPressed: () {
+                          controller.firstTime.value = true;
+
+                          controller.tutorialController
+                              .showTutorial(context, 'cuadrante');
+                        },
+                      ),
+                    ],
                   ),
                   Row(
                     mainAxisSize: MainAxisSize.min,
@@ -151,29 +108,41 @@ class CrearCuadranteView extends GetView<CrearCuadranteController> {
                         width: (MediaQuery.of(context).size.width) / 2.2,
                         child: InputField(
                           label: 'Inicio',
-                          hintText: controller.inicialDate.value!
+                          hintText: controller.inicialDate.value
                               .toIso8601String()
                               .substring(0, 10),
                           widget: IconButton(
                             onPressed: () {
                               DatePicker.showDatePicker(context,
                                   theme: DatePickerTheme(
-                                      cancelStyle :  TextStyle(color: Colors.redAccent.shade200, fontSize: 16.sp,fontWeight: FontWeight.bold),
-                                      doneStyle : TextStyle(color: MyColors.textColorPrimary, fontSize: 16.sp, fontWeight: FontWeight.bold),
-                                      itemStyle :  TextStyle(color: MyColors.textColorPrimary, fontSize: 16.sp, fontWeight: FontWeight.bold),
+                                      cancelStyle: TextStyle(
+                                          color: Colors.redAccent.shade200,
+                                          fontSize: 16.sp,
+                                          fontWeight: FontWeight.bold),
+                                      doneStyle: TextStyle(
+                                          color: MyColors.textColorPrimary,
+                                          fontSize: 16.sp,
+                                          fontWeight: FontWeight.bold),
+                                      itemStyle: TextStyle(
+                                          color: MyColors.textColorPrimary,
+                                          fontSize: 16.sp,
+                                          fontWeight: FontWeight.bold),
                                       backgroundColor: MyColors.cellColor),
                                   showTitleActions: true,
                                   minTime: DateTime(2020),
                                   maxTime: DateTime(2050), onChanged: (date) {
-                                    controller.inicialDate.value = date;
-                                  }, onConfirm: (date) {
-                                    controller.inicialDate.value = date;
-                                  }, currentTime: DateTime.now(), locale: LocaleType.es);
+                                controller.inicialDate.value = date;
+                              }, onConfirm: (date) {
+                                controller.inicialDate.value = date;
+                              },
+                                  currentTime: DateTime.now(),
+                                  locale: LocaleType.es);
                             },
                             icon: Icon(
                               Icons.calendar_today_outlined,
-                              key: controller.firstTime.value ? controller
-                                  .tutorialController.keyButton : key,
+                              key: controller.firstTime.value
+                                  ? controller.tutorialController.keyButton
+                                  : key,
                             ),
                           ),
                         ),
@@ -189,23 +158,35 @@ class CrearCuadranteView extends GetView<CrearCuadranteController> {
                               .toIso8601String()
                               .substring(0, 10),
                           widget: IconButton(
-                            key: controller.firstTime.value ? controller
-                                .tutorialController.keyButton2 : key,
+                            key: controller.firstTime.value
+                                ? controller.tutorialController.keyButton2
+                                : key,
                             onPressed: () {
                               DatePicker.showDatePicker(
                                   theme: DatePickerTheme(
-                                      cancelStyle :  TextStyle(color: Colors.redAccent.shade200, fontSize: 16.sp,fontWeight: FontWeight.bold),
-                                      doneStyle : TextStyle(color: MyColors.textColorPrimary, fontSize: 16.sp, fontWeight: FontWeight.bold),
-                                      itemStyle :  TextStyle(color: MyColors.textColorPrimary, fontSize: 16.sp, fontWeight: FontWeight.bold),
+                                      cancelStyle: TextStyle(
+                                          color: Colors.redAccent.shade200,
+                                          fontSize: 16.sp,
+                                          fontWeight: FontWeight.bold),
+                                      doneStyle: TextStyle(
+                                          color: MyColors.textColorPrimary,
+                                          fontSize: 16.sp,
+                                          fontWeight: FontWeight.bold),
+                                      itemStyle: TextStyle(
+                                          color: MyColors.textColorPrimary,
+                                          fontSize: 16.sp,
+                                          fontWeight: FontWeight.bold),
                                       backgroundColor: MyColors.cellColor),
                                   context,
                                   showTitleActions: true,
                                   minTime: DateTime(2020),
                                   maxTime: DateTime(2050), onChanged: (date) {
-                                    controller.endDate.value = date;
-                                  }, onConfirm: (date) {
-                                    controller.endDate.value = date;
-                                  }, currentTime: DateTime.now(), locale: LocaleType.es);
+                                controller.endDate.value = date;
+                              }, onConfirm: (date) {
+                                controller.endDate.value = date;
+                              },
+                                  currentTime: DateTime.now(),
+                                  locale: LocaleType.es);
                             },
                             icon: const Icon(Icons.calendar_today_outlined),
                           ),
@@ -217,11 +198,13 @@ class CrearCuadranteView extends GetView<CrearCuadranteController> {
               ),
               SizedBox(
                 height: 1.h,
-                key: controller.firstTime.value ? controller
-                    .tutorialController.keyButton3 : key,
+
               ),
               Container(
-                padding: const EdgeInsets.all(8.0),
+                key: controller.firstTime.value
+                    ? controller.tutorialController.keyButton3
+                    : key,
+                padding: EdgeInsets.all(8.w),
                 child: GridView.builder(
                   shrinkWrap: true,
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -285,9 +268,10 @@ class CrearCuadranteView extends GetView<CrearCuadranteController> {
             onPressed: () async {
               await controller.showPopUp(context);
             },
+            key: controller.firstTime.value
+                ? controller.tutorialController.keyButton4
+                : key,
             child: const Icon(Icons.add),
-            key: controller.firstTime.value ? controller
-                .tutorialController.keyButton4 : key,
           ),
         );
       },
@@ -314,9 +298,7 @@ class CrearCuadranteView extends GetView<CrearCuadranteController> {
               )
             : Text('Calendario'),
         onPressed: () async {
-
           Get.offAllNamed('/home');
-
         },
       );
     });

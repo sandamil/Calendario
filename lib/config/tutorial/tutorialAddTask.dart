@@ -84,7 +84,7 @@ class ListTargetAddTask {
                         ),
                         CustomTextWidget(
                           data: _info2,
-                          style: GoogleFonts.lato(),
+                          // style: GoogleFonts.lato(),
                           color: Colors.white,
                           textAlign: TextAlign.center,
                           fontSize: 20.sp,
@@ -136,14 +136,14 @@ class ListTargetAddTask {
                       ),
                       CustomTextWidget(
                         data: _info4,
-                        style: GoogleFonts.lato(),
+                        // style: GoogleFonts.lato(),
                         color: Colors.white,
                         textAlign: TextAlign.center,
                         fontSize: 20.sp,
                       ),
                       CustomTextWidget(
                         data: _info5,
-                        style: GoogleFonts.lato(),
+                        // style: GoogleFonts.lato(),
                         color: Colors.white,
                         textAlign: TextAlign.center,
                         fontSize: 20.sp,
@@ -182,7 +182,7 @@ class ListTargetAddTask {
                     padding: const EdgeInsets.only(top: 10.0),
                     child: CustomTextWidget(
                       data: _info7,
-                      style: GoogleFonts.lato(),
+                      // style: GoogleFonts.lato(),
                       color: Colors.white,
                       textAlign: TextAlign.center,
                       fontSize: 20.sp,
@@ -211,7 +211,7 @@ class ListTargetAddTask {
                     padding: const EdgeInsets.only(top: 0.0),
                     child: CustomTextWidget(
                       data: _info9,
-                      style: GoogleFonts.lato(),
+                      // style: GoogleFonts.lato(),
                       color: Colors.white,
                       textAlign: TextAlign.center,
                       fontSize: 20.sp,
@@ -249,7 +249,7 @@ class ListTargetAddTask {
                     ),
                     CustomTextWidget(
                       data: _info11,
-                      style: GoogleFonts.lato(),
+                      // style: GoogleFonts.lato(),
                       color: Colors.white,
                       textAlign: TextAlign.center,
                       fontSize: 20.sp,
@@ -289,7 +289,7 @@ class ListTargetAddTask {
                 ),
                 CustomTextWidget(
                   data: _info13,
-                  style: GoogleFonts.lato(),
+                  // style: GoogleFonts.lato(),
                   color: Colors.white,
                   textAlign: TextAlign.center,
                   fontSize: 20.sp,
@@ -308,7 +308,7 @@ class ListTargetAddTask {
                   padding: const EdgeInsets.only(top: 10.0),
                   child: CustomTextWidget(
                     data: _info14,
-                    style: GoogleFonts.lato(),
+                    // style: GoogleFonts.lato(),
                     color: Colors.white,
                     textAlign: TextAlign.center,
                     fontSize: 20.sp,
@@ -349,7 +349,7 @@ class ListTargetAddTask {
                 ),
                 CustomTextWidget(
                   data: _info16,
-                  style: GoogleFonts.lato(),
+                  // style: GoogleFonts.lato(),
                   color: Colors.white,
                   textAlign: TextAlign.center,
                   fontSize: 20.sp,
@@ -363,7 +363,7 @@ class ListTargetAddTask {
           child: Container(
             child: CustomTextWidget(
               data: _info17,
-              style: GoogleFonts.lato(),
+              // style: GoogleFonts.lato(),
               color: Colors.white,
               textAlign: TextAlign.center,
               fontSize: 20.sp,

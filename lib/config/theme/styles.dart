@@ -1,13 +1,14 @@
 import 'package:calendario2/config/theme/my_colors.dart';
+import 'package:calendario2/config/theme/my_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-enum TextFieldState { focus, error, disabled, none }
-
-enum InputStyle { box, line, outline }
-
-enum ShimmerStyle { rectangle, circle }
+// enum TextFieldState { focus, error, disabled, none }
+//
+// enum InputStyle { box, line, outline }
+//
+// enum ShimmerStyle { rectangle, circle }
 
 Widget verticalSpace(double v) {
   return SizedBox(height: v.h);
@@ -19,28 +20,7 @@ Widget horizontalSpace(double v) {
 
 
 
-class TextStyles {
-  static TextStyle text = GoogleFonts.raleway(
-    fontWeight: FontWeight.w400,
-    fontSize: 14.w,
-    color: MyColors.textColor,
-  );
 
-  static TextStyle title = GoogleFonts.raleway(
-    fontWeight: FontWeight.w700, fontSize: 25.w,
-    color: MyColors.textColor,
-  );
-
-  static TextStyle titleLarge = GoogleFonts.raleway(
-    fontWeight: FontWeight.w900, fontSize: 50.sp,
-    color: MyColors.textColor,
-  );
-
-  static TextStyle get desc => text.copyWith(fontSize: 12.w);
-
-  static TextStyle get button =>
-      text.copyWith(fontWeight: FontWeight.w600, fontSize: 18.w);
-}
 
 class Insets {
   static double offsetScale = 1;
@@ -143,6 +123,6 @@ InputDecoration inputDecoration({
     suffixIconConstraints: BoxConstraints(minHeight: 24.w, minWidth: 24.w),
     suffixIcon: suffixIcon,
     hintStyle: hintStyle ??
-        TextStyles.text.copyWith(color: hintColor ?? const Color(0xFFC1BABA)),
+        CustomTextStyle.text.copyWith(color: hintColor ?? const Color(0xFFC1BABA)),
   );
 }

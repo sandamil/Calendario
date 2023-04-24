@@ -71,7 +71,7 @@ class InicioListTarget {
                         ),
                         CustomTextWidget(
                           data: _info2,
-                          style: GoogleFonts.lato(),
+                          // style: GoogleFonts.lato(),
                           color: Colors.white,
                           textAlign: TextAlign.center,
                           fontSize: 20.sp,
@@ -130,7 +130,7 @@ class InicioListTarget {
                       ),
                       CustomTextWidget(
                         data: _info4,
-                        style: GoogleFonts.lato(),
+                        // style: GoogleFonts.lato(),
                         color: Colors.white,
                         textAlign: TextAlign.center,
                         fontSize: 20.sp,
@@ -167,7 +167,7 @@ class InicioListTarget {
                 height: 200.h,
                 child: CustomTextWidget(
                   data: _info6,
-                  style: GoogleFonts.lato(),
+                  // style: GoogleFonts.lato(),
                   color: Colors.white,
                   textAlign: TextAlign.center,
                   fontSize: 18.sp,
@@ -202,14 +202,14 @@ class InicioListTarget {
                   ),
                   CustomTextWidget(
                     data: _info8,
-                    style: GoogleFonts.lato(),
+                    // style: GoogleFonts.lato(),
                     color: Colors.white,
                     textAlign: TextAlign.center,
                     fontSize: 20.sp,
                   ),
                   CustomTextWidget(
                     data: _info9,
-                    style: GoogleFonts.lato(),
+                    // style: GoogleFonts.lato(),
                     color: Colors.white,
                     textAlign: TextAlign.center,
                     fontSize: 20.sp,

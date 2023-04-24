@@ -8,6 +8,7 @@ import 'package:calendario2/app/modules/home/widgets/calendar/table_calendar.dar
 import 'package:calendario2/app/modules/home/widgets/calendar/widget/day_selected_turno_widget.dart';
 import 'package:calendario2/app/modules/home/widgets/calendar/widget/line.dart';
 import 'package:calendario2/app/modules/home/widgets/calendar/widget/selected_day_widget.dart';
+import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/config/util/dateUtils.dart';
 import 'package:calendario2/config/util/hexColor.dart';
 import 'package:flutter/material.dart';
@@ -27,7 +28,6 @@ class HomeView extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    var theme = Theme.of(context);
     return Obx(() {
       return Scaffold(
           appBar: AppBar(
@@ -41,7 +41,8 @@ class HomeView extends GetView<HomeController> {
                       .tutorialController.keyButton6 : key,
                   icon: Icon(
                     Icons.menu,
-                    color: theme.primaryColor,
+                    color: PRIMARY_COLOR,
+                    size: 26.sp,
                   ),
                   onPressed: () {
                     Get.to(() => const MenuView(),
@@ -59,18 +60,16 @@ class HomeView extends GetView<HomeController> {
               IconButton(
                 key: controller.firstTime.value ? controller.tutorialController
                     .keyButton7 : key,
-
-
-                color: theme.primaryColor,
+                color: PRIMARY_COLOR,
                 icon: const Icon(
                   Icons.today,
                 ),
                 tooltip: 'today',
                 onPressed: () async {
                   CustomDialog.showPopUpInfo(
-                    title: 'Titulo',
-                    description: 'descripcion',
-                    labelButton: 'label',
+                    title: 'Volver a HOY',
+                    description: 'Selecciona Mes al que quieres ir',
+                    labelButton: 'Volver',
                     // onPress: (){}
                   );
                 },
@@ -86,6 +85,7 @@ class HomeView extends GetView<HomeController> {
           // ),
           body: Column(
             children: [
+              SizedBox(height: 2.h),
               CalendarWidget(
                 key: controller.firstTime.value ? controller.tutorialController
                     .keyButton8 : key,

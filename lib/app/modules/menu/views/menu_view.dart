@@ -1,5 +1,6 @@
 
 import 'package:calendario2/app/modules/home/views/home_view.dart';
+import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/config/theme/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -15,8 +16,6 @@ class MenuView extends GetView<MenuAppController> {
 
   @override
   Widget build(BuildContext context) {
-    var theme = Theme.of(context);
-
     double qaButtonHeight = 200.h;
     double qaButtonWidth = 120.w;
 
@@ -28,9 +27,9 @@ class MenuView extends GetView<MenuAppController> {
         leading: IconButton(
           icon: Icon(
             Icons.home,
-            size: 24.sp,
+            color: PRIMARY_COLOR,
+            size: 26.sp,
           ),
-          color: theme.primaryColor,
           onPressed: () {
             Get.to(() => const HomeView(),
                 duration: const Duration(microseconds: 700),
@@ -40,11 +39,7 @@ class MenuView extends GetView<MenuAppController> {
         ),
         title: Text(
           'Menu',
-          style: TextStyles.titleLarge.copyWith(
-            fontSize: MyFonts.headline3TextSize,
-            color: theme.primaryColor,
-            fontWeight: FontWeight.bold,
-          ),
+          style: CustomTextStyle.appBarTitle(context: context),
         ),
       ),
       body: Padding(
@@ -80,7 +75,7 @@ class MenuView extends GetView<MenuAppController> {
                       child: Padding(
                           padding: const EdgeInsets.all(0),
                           child: Text("Notas",
-                              style: TextStyles.titleLarge.copyWith(
+                              style: CustomTextStyle.titleLarge.copyWith(
                                 color: Colors.orange,
                               ))),
                     ),
@@ -129,7 +124,7 @@ class MenuView extends GetView<MenuAppController> {
                       child: Padding(
                           padding: const EdgeInsets.all(0),
                           child: Text("Cuadrante",
-                              style: TextStyles.titleLarge.copyWith(
+                              style: CustomTextStyle.titleLarge.copyWith(
                                 color: Colors.orange,
                               ))),
                     ),
@@ -173,7 +168,7 @@ class MenuView extends GetView<MenuAppController> {
                       child: Padding(
                           padding: const EdgeInsets.all(0),
                           child: Text("Turnos",
-                              style: TextStyles.titleLarge.copyWith(
+                              style: CustomTextStyle.titleLarge.copyWith(
                                 color: Colors.orange,
                               ))),
                     ),
@@ -218,7 +213,7 @@ class MenuView extends GetView<MenuAppController> {
                       child: Padding(
                           padding: const EdgeInsets.all(0),
                           child: Text("Ajustes",
-                              style: TextStyles.titleLarge.copyWith(
+                              style: CustomTextStyle.titleLarge.copyWith(
                                 fontWeight: FontWeight.bold,
                                 color: Colors.orange,
                               ))),
@@ -261,7 +256,7 @@ class MenuView extends GetView<MenuAppController> {
                       child: Padding(
                           padding: const EdgeInsets.all(0),
                           child: Text("Ayuda",
-                              style: TextStyles.titleLarge.copyWith(
+                              style: CustomTextStyle.titleLarge.copyWith(
                                 color: Colors.orange,
                               ))),
                     ),

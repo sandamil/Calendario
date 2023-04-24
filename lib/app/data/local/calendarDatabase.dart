@@ -160,6 +160,7 @@ class DBHelper {
   Future<List<TurnoType>> getTypeModels() async {
     final dbClient = await database;
     List<Map<String, dynamic>> result = await dbClient!.query(_turnos);
+   print(result.last.toString());
     return result.map((m) => TurnoType.fromMap(m)).toList();
   }
 

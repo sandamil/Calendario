@@ -34,7 +34,7 @@ class CustomTextWidget extends StatelessWidget {
         height: height,
         child: Text(
           ' ',
-          style:  GoogleFonts.lato(
+          style:  TextStyle(
             color: color,
             fontWeight: fontWeight,
             fontSize: fontSize,
@@ -49,7 +49,7 @@ class CustomTextWidget extends StatelessWidget {
         height: height,
         child: Text(
           data!,
-          style:  GoogleFonts.lato(
+          style:  TextStyle(
               color: color,
               fontWeight: fontWeight,
               fontSize: fontSize,

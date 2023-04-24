@@ -37,7 +37,7 @@ class AddNotasView extends GetView<AddNotasController> {
           title: Text(
             'Añadir Nota',
             style: TextStyle(
-                fontFamily: 'ZillaSlab',
+                // fontFamily: 'ZillaSlab',
                 fontWeight: FontWeight.w700,
                 fontSize: 24.sp,
                 color: theme.primaryColor),

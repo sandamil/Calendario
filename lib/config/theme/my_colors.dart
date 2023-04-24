@@ -8,9 +8,19 @@ import '../translations/localization_service.dart';
 // todo configure text family and size
 class MyColors {
 
+  static Color get backgroundColor => MyTheme().getThemeIsLight
+      ? const Color(0xffebeaea)
+      :  const Color(0xff303030);
+
+
+
+
+
+  static Color get disableBgColorBtn => MyTheme().getThemeIsLight
+      ? const Color(0xFFEBEAEF)
+      :  const Color(0xff525252);
 
   // Color Cell Calendar
-
   static Color get cellColor => MyTheme().getThemeIsLight
       ? const Color(0xFFefeeee)
       : const Color(0xFF2b2b2b);
@@ -54,6 +64,11 @@ class MyColors {
   static Color get textColorPrimary => MyTheme().getThemeIsLight
       ? const Color.fromRGBO(21, 16, 0, 1.0)
       : const Color.fromRGBO(252, 169, 57, 1.0);
+
+
+  static Color get textDisable => MyTheme().getThemeIsLight
+      ? const Color(0xffa2a2a2)
+      : const Color(0xff676767);
 
 
 }

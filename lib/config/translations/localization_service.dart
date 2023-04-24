@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../app/data/local/my_shared_pref.dart';
 import 'ar_AR/ar_ar_translation.dart';
@@ -30,13 +31,13 @@ class LocalizationService extends Translations {
 
 
 
-  // todo add font
+  // add font
   //  supported languages fonts family (must be in assets & pubspec yaml) or you can use google fonts
   static Map<String,TextStyle> supportedLanguagesFontsFamilies = {
-    // todo add your English font families (add to assets/fonts, pubspec and name it here) default is poppins for english and cairo for arabic
-    'es' : const TextStyle(fontFamily: 'Raleway-Black'),
-    'en' : const TextStyle(fontFamily: 'Raleway-Black'),
-    'ar': const TextStyle(fontFamily: 'cairo'),
+    //add your English font families (add to assets/fonts, pubspec and name it here) default is poppins for english and cairo for arabic
+    'es' : GoogleFonts.titilliumWeb(),
+    'en' : GoogleFonts.titilliumWeb(),
+    'ar': GoogleFonts.cairo(),
   };
 
   @override

@@ -67,6 +67,7 @@ class CrearTurnoController extends GetxController {
   }
 
   addTurno() async {
+    print(startDate.value);
     TurnoType eventType = TurnoType(
       title: title.value,
       description: description.value,

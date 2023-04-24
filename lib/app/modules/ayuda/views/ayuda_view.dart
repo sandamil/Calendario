@@ -1,4 +1,11 @@
+import 'package:calendario2/app/modules/ayuda/views/widgets/ayuda_group_widget.dart';
+import 'package:calendario2/app/modules/ayuda/views/widgets/ayuda_row_widget.dart';
+import 'package:calendario2/config/theme/my_colors.dart';
+import 'package:calendario2/config/util/assets.dart';
+import 'package:calendario2/config/util/constant.dart';
 import 'package:calendario2/widgets/customText.dart';
+import 'package:calendario2/widgets/setting_title.dart';
+import 'package:calendario2/widgets/setting_title_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -13,90 +20,70 @@ class AyudaView extends GetView<AyudaController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('AyudaView'),
+        title: const Text('Ayuda'),
         centerTitle: true,
       ),
-      body:  Container(
-        padding: EdgeInsets.only(top: 10.h),
-        height: 700.h,
+      body: Container(
+        padding: EdgeInsets.symmetric(horizontal: 10.w),
         child: SingleChildScrollView(
           child: Column(
-            children: <Widget>[
-              Row(
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.only(
-                        top: 30.h, left: 2.w, right: 2.w),
-                    child: Image.asset(
-                      'assets/images/cuadranteTuto.png',
-                      fit: BoxFit.fill,
-                      width: 160.w,
-                    ),
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SettingsGroup(
+                title: "Tutorial",
+                children: [
+                  AyudaRowWidget(
+                    title: "Resumen",
+                    subtitle:
+                    "Presiona aquí para ver el resumen que aparece la primera vez que instalas la aplicacion.",
+                    onTap: () => controller.reportProblem(),
                   ),
-                  Column(
-                    children: <Widget>[
-                      Padding(
-                        padding:  EdgeInsets.only(top: 10.h),
-                        child: Text(
-                          "Ejemplo",
-                          style: TextStyle(
-                            color: Colors.white.withOpacity(0.90),
-                            fontSize: 20.sp,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.all(2.0),
-                        width: 200.w,
-                        child: CustomTextWidget(
-                          data: _info6,
-                          style: GoogleFonts.lato(),
-                          color: Colors.white,
-                          textAlign: TextAlign.center,
-                          fontSize: 16.sp,
-                        ),
-                      ),
-                    ],
+                  AyudaRowWidget(
+                    title: "Videotutoriales",
+                    subtitle: "Aquí podrás ver videotutoriales para ver ejemplos de uso de la aplicación.",
+                    onTap:  () => controller.launchTwitter(),
                   ),
                 ],
               ),
-              SizedBox(
-                height: 10,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 8.0),
-                child: Text(
-                  "Como crear cuadrante",
-                  style: TextStyle(
-                    color: Colors.white.withOpacity(0.90),
-                    fontSize: 26.sp,
-                    fontWeight: FontWeight.bold,
+              SizedBox(height: 20.h),
+
+              SettingsGroup(
+                title: "Contacto",
+                children: [
+                  AyudaRowWidget(
+                    title: "Email",
+                    subtitle:
+                    "Contacta con nosotros por email para cualquier duda, sugerencia o reportar algun error.",
+                    onTap: () => controller.reportProblem(),
                   ),
-                  textAlign: TextAlign.center,
-                ),
+                  AyudaRowWidget(
+                    title: "Twitter",
+                    subtitle: "Síguenos para conocer todas las novedades o comunícate con nosotros a través de Twitter",
+                    onTap:  () => controller.launchTwitter(),
+                  ),
+                ],
               ),
-              CustomTextWidget(
-                data: _info7,
-                style: GoogleFonts.lato(),
-                color: Colors.white,
-                textAlign: TextAlign.center,
-                fontSize: 20.sp,
-              ),
+              SizedBox(height: 20.h),
+              SettingsGroup(
+                title: "Feedback",
+                children: [
+                  AyudaRowWidget(
+                    title: "Enviar Feedback",
+                    subtitle:
+                    "Sugiera sus comentarios y solicitudes para que esta aplicación sea imprescindible para usted",
+                    onTap: () => controller.giveFeedbackClicked(context),
+                  ),
+                  AyudaRowWidget(
+                    title: "Califica app",
+                    subtitle: "Comparte tu experiencia en Play Store",
+                    onTap: controller.rateAppClicked,
+                  ),
+                ],
+              )
             ],
           ),
         ),
-      )
+      ),
     );
   }
 }
-
-const _info6 =
-    'Este es un ejemplo de un Cuadrante para una persona que trabaje: \n 2 mañanas,\n 2 tardes,\n 2 noches y\n 6 dias libres.\nRecuerda que es necesario añadir los dias libres.';
-const _info7 =
-    'Pulsa en este botón para crear tu propio cuadrante con los dias o turnos, que tienes creados, en la pantalla Turnos.\nEste ejemplo se repetira en todo el calendario hasta la fecha que ponga en la casilla de fin. \nPuedes crear un cuadrante con los dias que quieras no hay minimo ni máximo \nVolverá a empezar por el primer día de forma automatica, el dia siguiente al ultimo de la serie que aqui se cree.\n\n CONSEJO: Puedes añadir, por ejemplo, una semana de vacaciones añadiendo aqui un solo dia de vacaciones y marcara todos los dias entre la fecha de inicio y fin que indiques.';
-const _info8 =
-    'Pulsa este botón para enviar el cuadrante creado al calendario y que se marquen los dias de la forma asignada.';
-const _info9 =
-    'Con el ejemplo dado eneste tutorial, asi se vería nuestro calendario:';

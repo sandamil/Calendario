@@ -34,7 +34,8 @@ class BoardingPage extends StatelessWidget {
                       style: TextStyle(
                           fontSize: 25.sp,
                           color: Colors.white.withOpacity(0.60),
-                          fontFamily: 'Bebas'),
+                          // fontFamily: 'Bebas'
+                      ),
                     ),
                     SizedBox(
                       height: 8.h,
@@ -44,7 +45,8 @@ class BoardingPage extends StatelessWidget {
                       style: TextStyle(
                           fontSize: 50.sp,
                           color: Colors.white.withOpacity(0.60),
-                          fontFamily: 'Bebas'),
+                          // fontFamily: 'Bebas'
+                      ),
                     ),
                     SizedBox(
                       height: 20.h,
@@ -56,7 +58,8 @@ class BoardingPage extends StatelessWidget {
                         style: TextStyle(
                             fontSize: 16.sp,
                             color: Colors.white.withOpacity(0.80),
-                            fontFamily: 'Lato'),
+                            // fontFamily: 'Lato'
+                        ),
                       ),
                     ),
                   ],

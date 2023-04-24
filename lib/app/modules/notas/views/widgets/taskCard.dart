@@ -91,7 +91,7 @@ class TaskCard extends StatelessWidget {
               ]),
           child: Container(
               margin: EdgeInsets.symmetric(vertical: 2.h, horizontal: 2.w),
-              height: 52.h,
+              height: 56.h,
               decoration: BoxDecoration(
 
                 borderRadius: BorderRadius.circular(5.r),
@@ -120,7 +120,7 @@ class TaskCard extends StatelessWidget {
                                   ? noteData.title!.trim()
                                   : '${noteData.title!.trim().substring(0, 20)}...',
                               style:  TextStyle(
-                                  fontFamily: 'ZillaSlab',
+                                  // fontFamily: 'ZillaSlab',
                                   fontSize: 18.sp,
                                   fontWeight: FontWeight.w800),
                             ),

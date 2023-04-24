@@ -1,5 +1,7 @@
+import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../app/data/local/my_shared_pref.dart';
 import '../translations/localization_service.dart';
@@ -48,5 +50,57 @@ class MyFonts
 
   //chip font size
   static double get chipTextSize => 10.sp;
+}
+
+
+
+
+class CustomTextStyle {
+
+  static TextStyle emojiStyle(
+      {required BuildContext context,
+        double fontSize = 14,
+        Color? color,
+        FontWeight fontWeight = FontWeight.w400}) {
+    color = color ?? PRIMARY_COLOR;
+    // return TextStyle(fontSize: fontSize, color: color);
+    return GoogleFonts.notoEmoji(
+        fontSize: fontSize, color: color, fontWeight: fontWeight);
+  }
+
+
+  static TextStyle appBarTitle(
+      {required BuildContext context,
+        double fontSize = 14,
+        Color? color,
+        FontWeight fontWeight = FontWeight.w400}) {
+    color = color ?? PRIMARY_COLOR;
+    // return TextStyle(fontSize: fontSize, color: color);
+    return GoogleFonts.firaSansCondensed(
+        fontSize: 30.sp, color: PRIMARY_COLOR, fontWeight: FontWeight.w800);
+  }
+  
+  
+  
+  static TextStyle text = TextStyle(
+    fontWeight: FontWeight.w400,
+    fontSize: 14.w,
+    color: MyColors.textColor,
+  );
+
+  static TextStyle title = TextStyle(
+    fontWeight: FontWeight.w700, fontSize: 25.w,
+    color: MyColors.textColor,
+  );
+
+  static TextStyle titleLarge = TextStyle(
+    fontWeight: FontWeight.w900, fontSize: 50.sp,
+    color: MyColors.textColor,
+  );
+
+  static TextStyle get desc => text.copyWith(fontSize: 12.w);
+
+  static TextStyle get button =>
+      text.copyWith(fontWeight: FontWeight.w600, fontSize: 18.w, color: MyColors.textButtom);
 }
 

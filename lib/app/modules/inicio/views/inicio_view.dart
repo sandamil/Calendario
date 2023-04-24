@@ -25,7 +25,8 @@ class InicioView extends GetView<InicioController> {
               textStyle: TextStyle(
                   fontSize: 20.sp,
                   fontWeight: FontWeight.bold,
-                  fontFamily: 'Montserrat'),
+                  // fontFamily: 'Montserrat'
+              ),
             ),
           ],
         ),

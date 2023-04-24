@@ -26,8 +26,12 @@ class ConstantData {
   static final starwarsAlarm = BASEALARMURL + "star_wars.mp3";
 
 
-///fonts
-  static final ralewayFont = 'Raleway';
+// ///fonts
+//   static const ralewayFont = 'Raleway';
+//   static const bebasNeueFont = 'BebasNeue.ttf';
+//   static const latoFont = 'Lato-Regular';
+//   static const montserratFont = 'Montserrat-Medium';
+//   static const nunitoFont = 'Nunito-Regular';
 
 ///duration
   static final kDuration = Duration(milliseconds: 300);
