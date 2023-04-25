@@ -1,4 +1,5 @@
 import 'package:calendario2/app/components/custom_dialog.dart';
+import 'package:calendario2/app/data/local/previusTaskDatabase.dart';
 import 'package:calendario2/app/modules/notas/views/widgets/taskCard.dart';
 import 'package:calendario2/app/modules/home/controllers/calendar_controller.dart';
 import 'package:calendario2/app/modules/home/widgets/calendar/table_calendar.dart';
@@ -54,12 +55,18 @@ class HomeView extends GetView<HomeController> {
                 ),
                 tooltip: 'today',
                 onPressed: () async {
-                  CustomDialog.showPopUpInfo(
-                    title: 'Volver a HOY',
-                    description: 'Selecciona Mes al que quieres ir',
-                    labelButton: 'Volver',
-                    // onPress: (){}
-                  );
+                  // CustomDialog.showPopUpInfo(
+                  //   title: 'Volver a HOY',
+                  //   description: 'Selecciona Mes al que quieres ir',
+                  //   labelButton: 'Volver',
+                  //   // onPress: (){}
+                  // );adb backup -noapk ajat.calendario.turnos
+
+
+
+                 // / data/data/ ajat.calendario.turnos/app_flutter/ DBC4A.db
+                  var notesList = await PreviusDbProvider.instance.getNotesFromDB();
+                  print(notesList.asMap());
                 },
               ),
             ],
