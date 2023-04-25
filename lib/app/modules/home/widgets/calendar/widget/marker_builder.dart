@@ -17,9 +17,6 @@ class MarkerBuilderWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('MarkerBuilderWidget');
-    // return events.isNotEmpty
-    //     ?
     return Container(
       margin: EdgeInsets.only(top: 12.h),
       child: ListView.builder(

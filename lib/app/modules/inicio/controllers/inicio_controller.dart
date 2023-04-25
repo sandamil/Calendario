@@ -10,10 +10,7 @@ class InicioController extends GetxController {
 
   @override
   void onInit() {
-    // AppStorage.delete(key: APP_FIRST_TIME_OPEN);
     calendarController.onInit();
-
-    print('InicioController onInit');
     startAnimation();
     checkRoute();
     super.onInit();

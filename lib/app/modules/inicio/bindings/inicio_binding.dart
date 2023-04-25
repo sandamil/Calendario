@@ -8,7 +8,6 @@ import '../controllers/inicio_controller.dart';
 class InicioBinding extends Bindings {
   @override
   void dependencies() {
-    print('InicioBinding');
     Get.lazyPut<InicioController>(() => InicioController());
     Get.lazyPut<CalendarController>(() => CalendarController());
   }

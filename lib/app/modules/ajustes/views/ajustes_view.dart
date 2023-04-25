@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:calendario2/config/theme/my_colors.dart';
+import 'package:calendario2/config/theme/my_fonts.dart';
 import 'package:calendario2/config/translations/localization_service.dart';
 import 'package:calendario2/config/util/constant.dart';
 import 'package:calendario2/config/util/assets.dart';
@@ -23,12 +24,22 @@ class AjustesView extends GetView<AjustesController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: false,
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back_ios,
+              color: PRIMARY_COLOR,
+              size: 26.sp,
+            ),
+            onPressed: () {
+              Get.back();
+            }),
         title: Text(
           'Settings'.tr,
-          style: Theme.of(context).textTheme.headlineLarge,
+          style: CustomTextStyle.appBarTitle(context: context),
         ),
-        elevation: 0,
-        centerTitle: true,
       ),
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 10.w),

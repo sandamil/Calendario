@@ -64,11 +64,9 @@ class NotasViewController extends GetxController {
   }
 
   void markImportantAsDirty() async {
-    print(currentNote.value.isImportant);
     important.value = !important.value;
     currentNote.value.isImportant = !currentNote.value.isImportant!;
     handleSave();
-    print(currentNote.value.isImportant);
   }
 
   void handleEdit() {

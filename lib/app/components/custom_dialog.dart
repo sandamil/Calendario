@@ -51,7 +51,7 @@ class CustomDialog {
     });
   }
 
-  static alertaError(String msj) {
+  static alertaError(String msj, {duracion}) {
     showDialog(
       context: Get.context!,
       builder: (BuildContext context) {
@@ -87,7 +87,7 @@ class CustomDialog {
         );
       },
     );
-    Future.delayed(const Duration(seconds: 1), () {
+    Future.delayed(Duration(seconds: duracion ?? 1), () {
       Get.back();
     });
   }
@@ -143,6 +143,7 @@ class CustomDialog {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
+            shape: RoundedRectangleBorder(borderRadius: Corners.smBorder),
             elevation: 5,
             title: Text.rich(
               TextSpan(
@@ -154,7 +155,7 @@ class CustomDialog {
                         '  ${DateTime.fromMillisecondsSinceEpoch(nota.startTimeMilliseconds!).formatDateTime24H} h.',
                     style: GoogleFonts.titilliumWeb(
                       fontWeight: FontWeight.bold,
-                      color: ACCENT_COLOR,
+                      color: PRIMARY_COLOR,
                     ),
                   ),
                 ],

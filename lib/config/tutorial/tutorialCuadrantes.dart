@@ -236,18 +236,18 @@ class ListTargetCuadrantes {
                     Row(
                       children: <Widget>[
                         Padding(
-                          padding: EdgeInsets.only(
-                              top: 30.h, left: 2.w, right: 2.w),
+                          padding:
+                              EdgeInsets.only(top: 50.h, left: 2.w, right: 2.w),
                           child: Image.asset(
                             'assets/images/cuadranteTuto.png',
                             fit: BoxFit.fill,
-                            width: 140.w,
+                            width: 130.w,
                           ),
                         ),
                         Column(
                           children: <Widget>[
                             Padding(
-                              padding:  EdgeInsets.only(top: 10.h),
+                              padding: EdgeInsets.only(top: 40.h),
                               child: Text(
                                 "Ejemplo",
                                 style: TextStyle(
@@ -300,7 +300,7 @@ class ListTargetCuadrantes {
               ),
             ))
       ],
-      shape: ShapeLightFocus.RRect,
+      shape: ShapeLightFocus.Circle,
     ));
     targets.add(TargetFocus(
       identify: "Target 5",

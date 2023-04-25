@@ -62,7 +62,6 @@ class NotasListController extends GetxController {
 
   void refetchNotesFromDB() async {
     await setNotesFromDB();
-    print("Refetched notes");
   }
 
   openNoteToRead(Task noteData) async {

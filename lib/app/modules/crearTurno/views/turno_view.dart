@@ -87,14 +87,14 @@ class TurnoView extends GetView<CrearTurnoController> {
                           //         controller.turnoType[index].endHour != ''
                           //     ?
                           Text(
-                                  'De ${controller.turnoType[index].startHour.toString()} a ${controller.turnoType[index].endHour.toString()}',
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      color: Theme.of(context)
-                                          .primaryTextTheme
-                                          .titleLarge
-                                          ?.color),
-                                )
+                                  'De ${controller.turnoType[index].startHour} a ${controller.turnoType[index].endHour}',
+                            style: TextStyle(
+                                fontSize: 15,
+                                color: Theme.of(context)
+                                    .primaryTextTheme
+                                    .titleLarge
+                                    ?.color),
+                          )
                               // : Container()
                         ],
                       ),

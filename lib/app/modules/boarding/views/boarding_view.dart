@@ -55,8 +55,8 @@ class BoardingView extends GetView<BoardingController> {
                       color: Colors.white.withOpacity(0.0),
                     ),
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 40.0, horizontal: 30.0),
+                      padding: EdgeInsets.symmetric(
+                          vertical: 30.h, horizontal: 30.w),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -64,7 +64,7 @@ class BoardingView extends GetView<BoardingController> {
                           SmoothPageIndicator(
                             controller: controller.pageController,
                             count: 7,
-                            effect:  WormEffect(
+                            effect: WormEffect(
                               activeDotColor: PRIMARY_COLOR,
                               dotWidth: 10.w,
                               dotHeight: 10.h,

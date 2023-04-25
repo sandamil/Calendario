@@ -21,18 +21,18 @@ class DaySelecetedTurnoWidget extends StatelessWidget {
       body: GetX<CalendarController>(
         init: CalendarController(),
         builder: (c) {
-          return c.selectedEvents.value.isEmpty
-              ? Container()
-              : SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      ListView.builder(
+          return SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                c.selectedEvents.value.isEmpty
+                    ? Container()
+                    : ListView.builder(
                         shrinkWrap: true,
                         itemCount: c.selectedEvents.value.length,
                         itemBuilder: (context, index) {
                           return Container(
-                            height: 20.h,
+                            height: 22.h,
                             padding: EdgeInsets.symmetric(
                                 vertical: 1.h, horizontal: 2.w),
                             decoration: BoxDecoration(
@@ -66,7 +66,8 @@ class DaySelecetedTurnoWidget extends StatelessWidget {
                                   child: Text(
                                     c.selectedEvents.value[index].description!,
                                     style: TextStyle(
-                                        fontSize: 16.sp,
+                                        height: 1.2.h,
+                                        fontSize: 14.sp,
                                         fontWeight: FontWeight.bold,
                                         color: HexColor(c.selectedEvents
                                                         .value[index].color!)
@@ -84,12 +85,12 @@ class DaySelecetedTurnoWidget extends StatelessWidget {
                                         c.selectedEvents.value[index].endHour !=
                                             null
                                     ? Padding(
-                                      padding:  EdgeInsets.only(left: 15.w),
-                                      child: FittedBox(
+                                        padding: EdgeInsets.only(left: 15.w),
+                                        child: FittedBox(
                                           child: Text(
-                                            '${c.selectedEvents.value[index].startHour.toString()} a ${c.selectedEvents.value[index].endHour.toString()}',
+                                            'de ${c.selectedEvents.value[index].startHour.toString()} a ${c.selectedEvents.value[index].endHour.toString()}',
                                             style: TextStyle(
-                                                height: 1.h,
+                                                height: 1.2.h,
                                                 fontSize: 14.sp,
                                                 color: HexColor(c
                                                                 .selectedEvents
@@ -101,7 +102,7 @@ class DaySelecetedTurnoWidget extends StatelessWidget {
                                                     : Colors.white),
                                           ),
                                         ),
-                                    )
+                                      )
                                     : Container(
                                         padding: EdgeInsets.only(right: 20.w),
                                       )
@@ -110,61 +111,69 @@ class DaySelecetedTurnoWidget extends StatelessWidget {
                           );
                         },
                       ),
-                      SizedBox(
-                        height: 3.h,
-                      ),
-                      ...c.selectedNotas.value.map((nota) => Padding(
-                            padding: EdgeInsets.symmetric(
-                                vertical: 1.h, horizontal: 2.w),
-                            child: GestureDetector(
-                              onTap: () {
-                                CustomDialog.mostrarTask(nota, context);
-                              },
-                              child: Container(
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: 4.w),
-                                  decoration: BoxDecoration(
-                                    color: MyColors.cellSelectedColor,
-                                    border: Border.all(
-                                        color: MyColors.borderAccentLine,
-                                        width: 1),
-                                    borderRadius: BorderRadius.circular(3.r),
-                                  ),
-                                  height: 15.h,
-                                  child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        '${DateTime.fromMillisecondsSinceEpoch(nota.startTimeMilliseconds!).formatDateTime24H}',
-                                        style: TextStyle(
-                                            fontSize: 11.sp,
-                                            fontWeight: FontWeight.w600),
-                                      ),
-                                      SizedBox(width: 4.w,),
-                                      Text(
-                                        nota.title!.toUpperCase(),
-                                        style: TextStyle(
-                                            fontSize: 11.sp,
-                                            fontWeight: FontWeight.w600),
-                                      ),
-                                      SizedBox(width: 4.w,),
-                                      Container(
-                                        width: 150.w,
-                                        child: Text(
-                                          nota.notes!,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                              fontSize: 11.sp,
-                                              fontWeight: FontWeight.w600),
-                                        ),
-                                      ),
-                                    ],
-                                  )),
+                SizedBox(
+                  height: 3.h,
+                ),
+                ...c.selectedNotas.value.map((nota) => Padding(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 1.h, horizontal: 2.w),
+                      child: GestureDetector(
+                        onTap: () {
+                          CustomDialog.mostrarTask(nota, context);
+                        },
+                        child: Container(
+                            padding: EdgeInsets.symmetric(horizontal: 4.w),
+                            decoration: BoxDecoration(
+                              color: MyColors.cellSelectedColor,
+                              border: Border.all(
+                                  color: MyColors.borderAccentLine, width: 1),
+                              borderRadius: BorderRadius.circular(3.r),
                             ),
-                          )),
-                    ],
-                  ),
-                );
+                            height: 22.h,
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                SizedBox(
+                                  width: 4.w,
+                                ),
+                                Text(
+                                  '${DateTime.fromMillisecondsSinceEpoch(nota.startTimeMilliseconds!).formatDateTime24H}',
+                                  style: TextStyle(
+                                      height: 1.2.h,
+                                      fontSize: 14.sp,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                                SizedBox(
+                                  width: 4.w,
+                                ),
+                                Text(
+                                  nota.title!.toUpperCase(),
+                                  style: TextStyle(
+                                      height: 1.2.h,
+                                      fontSize: 14.sp,
+                                      fontWeight: FontWeight.w600),
+                                ),
+                                SizedBox(
+                                  width: 4.w,
+                                ),
+                                Container(
+                                  width: 150.w,
+                                  child: Text(
+                                    nota.notes!,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                        height: 1.2.h,
+                                        fontSize: 14.sp,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                ),
+                              ],
+                            )),
+                      ),
+                    )),
+              ],
+            ),
+          );
         },
       ),
     );

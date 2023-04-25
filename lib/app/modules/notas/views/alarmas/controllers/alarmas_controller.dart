@@ -27,7 +27,6 @@ class AlarmasController extends GetxController {
 
   @override
   void onInit() {
-    print(isEditing);
     if (Get.arguments != null) {
       if (Get.arguments['isEditing'] == true) {
         currentNote.value = Get.arguments['currentNote'];
@@ -37,7 +36,6 @@ class AlarmasController extends GetxController {
         title = currentNote.value.title;
         notes = currentNote.value.notes;
         id = currentNote.value.id!;
-        print(currentNote.value.id!);
       } else {
         startTime = Get.arguments['startTime'];
         title = Get.arguments['title'];
@@ -108,11 +106,6 @@ class AlarmasController extends GetxController {
     }
      }
 
-  // updatealarmaActivada() {
-  //   AddNotasController adNotasController = Get.find();
-  //   print('updatealarmaActivada() ${id} == ${adNotasController.idGenerated}');
-  //   adNotasController.alarmaCreadaNota = alarmaCreada;
-  // }
   String sinRecordatorio = 'Sin recordatorio';
   RxBool noRemind = false.obs;
 

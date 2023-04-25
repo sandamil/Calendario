@@ -21,7 +21,6 @@ class CustomAlertDilogDaySelected extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var theme = Theme.of(context);
 
     return Align(
       alignment: Alignment.center,
@@ -33,7 +32,7 @@ class CustomAlertDilogDaySelected extends StatelessWidget {
             Container(
               padding: EdgeInsets.symmetric(horizontal: 10.w),
               decoration: BoxDecoration(
-                color: theme.scaffoldBackgroundColor,
+                color: MyColors.backgroundColor,
                 borderRadius: BorderRadius.all(
                   Radius.circular(5.r),
                 ),
@@ -41,39 +40,14 @@ class CustomAlertDilogDaySelected extends StatelessWidget {
               child: Column(
                 children: [
                   SizedBox(height: 2.h),
-                  getContent(theme),
+                  getContent(),
                   SizedBox(height: 2.h),
                   Row(
                     children: [
                       Expanded(
                         child: turnoBtn(context, selectedDate),
                       ),
-                       SizedBox(width: 4.w),
-                      Container(
-                        width: 75.w,
-                        height: 35.h,
-                        decoration: BoxDecoration(
-                          border: Border.all(width: 2.w, color: PRIMARY_COLOR),
-                          borderRadius: BorderRadius.circular(5.r),
-                        ),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              child: Text(selectedDate.formatDateD,
-                                style: Theme.of(context).textTheme.titleSmall!.copyWith(fontSize: 12.sp)
-                              ),
-                            ),
-                            Container(
-                              child: Text(selectedDate.formatDateMMM,
-                                  style: Theme.of(context).textTheme.titleSmall!.copyWith(fontSize: 12.sp)
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-
-                      SizedBox(width: 4.w),
+                      SizedBox(width: 2.w),
                       Expanded(
                         child: eventoBtn(context, selectedDate),
                       ),
@@ -88,9 +62,9 @@ class CustomAlertDilogDaySelected extends StatelessWidget {
     );
   }
 
-  Widget getContent(theme) {
+  Widget getContent() {
     return Container(
-      color: theme.scaffoldBackgroundColor,
+      color: MyColors.backgroundColor,
       height: 150,
       child: const DaySelecetedTurnoWidget(),
     );

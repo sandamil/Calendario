@@ -55,7 +55,6 @@ class AddNotasController extends GetxController {
   @override
   void onInit() async {
     idGenerated = int.parse(randomIdGenerator());
-    print(idGenerated);
     var dateTimeCalendar = Get.arguments;
     if (dateTimeCalendar != null) {
       startTime.value = dateTimeCalendar;
@@ -120,7 +119,6 @@ class AddNotasController extends GetxController {
   void setTravelEvent(DateTime time, String title, String site,
       DateTime startTime, DateTime endTime, bool isImportant) async {
     if (events[time] != null) {
-      print('if (events 1 =========' '${title}');
       events[time]?.add(Task(
         id: idGenerated,
         title: title,
@@ -130,7 +128,6 @@ class AddNotasController extends GetxController {
         isImportant: isImportant,
       ));
     } else {
-      print('if (events 2 =========' '${title}');
       events[time] = [
         Task(
           id: idGenerated,

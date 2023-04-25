@@ -6,7 +6,6 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../app/data/local/my_shared_pref.dart';
 import '../translations/localization_service.dart';
 
-// todo configure text family and size
 class MyFonts
 {
   // return the right font depending on app language
@@ -68,20 +67,23 @@ class CustomTextStyle {
         fontSize: fontSize, color: color, fontWeight: fontWeight);
   }
 
-
   static TextStyle appBarTitle(
       {required BuildContext context,
-        double fontSize = 14,
-        Color? color,
-        FontWeight fontWeight = FontWeight.w400}) {
+      double fontSize = 14,
+      Color? color,
+      FontWeight fontWeight = FontWeight.w400}) {
     color = color ?? PRIMARY_COLOR;
     // return TextStyle(fontSize: fontSize, color: color);
-    return GoogleFonts.firaSansCondensed(
+    return GoogleFonts.firaSans(
         fontSize: 30.sp, color: PRIMARY_COLOR, fontWeight: FontWeight.w800);
   }
-  
-  
-  
+
+  static TextStyle textMenu = GoogleFonts.firaSans(
+    fontWeight: FontWeight.w900,
+    fontSize: 50.w,
+    color: PRIMARY_COLOR,
+  );
+
   static TextStyle text = TextStyle(
     fontWeight: FontWeight.w400,
     fontSize: 14.w,
@@ -89,18 +91,31 @@ class CustomTextStyle {
   );
 
   static TextStyle title = TextStyle(
-    fontWeight: FontWeight.w700, fontSize: 25.w,
+    fontWeight: FontWeight.w700,
+    fontSize: 25.w,
     color: MyColors.textColor,
   );
 
   static TextStyle titleLarge = TextStyle(
-    fontWeight: FontWeight.w900, fontSize: 50.sp,
+    fontWeight: FontWeight.w900,
+    fontSize: 50.sp,
     color: MyColors.textColor,
   );
 
   static TextStyle get desc => text.copyWith(fontSize: 12.w);
 
-  static TextStyle get button =>
-      text.copyWith(fontWeight: FontWeight.w600, fontSize: 18.w, color: MyColors.textButtom);
-}
+  static TextStyle get button => text.copyWith(
+      fontWeight: FontWeight.w600, fontSize: 18.w, color: MyColors.textButtom);
 
+  static TextStyle hintText = TextStyle(
+    fontWeight: FontWeight.w400,
+    fontSize: 16.w,
+    color: MyColors.textDisable,
+  );
+
+  static TextStyle rowButomText = TextStyle(
+    fontWeight: FontWeight.w500,
+    fontSize: 16.w,
+    color: MyColors.textColor,
+  );
+}

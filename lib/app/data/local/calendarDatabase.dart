@@ -23,7 +23,6 @@ class DBHelper {
 
   Future<Database> initDb() async {
     Directory doucumentDirectory = await getApplicationDocumentsDirectory();
-    print(doucumentDirectory.path);
     String path = join(doucumentDirectory.path, 'CalendarioAjatsoft.db');
     return await openDatabase(
       path,
@@ -51,8 +50,8 @@ class DBHelper {
         id INTEGER PRIMARY KEY,
         description TEXT,
         title TEXT,
-        starthour  TEXT,
-        endhour TEXT,
+        startHour  TEXT,
+        endHour TEXT,
         color TEXT,
         status TEXT
       )
@@ -62,11 +61,18 @@ class DBHelper {
         "id INTEGER NOT NULL"
         ")");
 
-    db.execute("INSERT into $_turnos(id, title, description, color) "   ' VALUES(1, "M", "Mañana", "4287f5") ');
-    db.execute("INSERT into $_turnos(id, title, description, color) "   ' VALUES(2, "T", "Tarde", "71bd48")  ');
-    db.execute("INSERT into $_turnos(id, title, description, color) "   ' VALUES(3, "N", "Noche", "bd9648")  ');
-    db.execute("INSERT into $_turnos(id, title, description, color) "   ' VALUES(4, "L", "Libre", "ffffff")  ');
-
+    db.execute(
+        "INSERT into $_turnos(id, title, description, color, startHour, endHour) "
+        ' VALUES(1, "M", "Mañana", "4287f5", "07:00", "15:00") ');
+    db.execute(
+        "INSERT into $_turnos(id, title, description, color, startHour, endHour) "
+        ' VALUES(2, "T", "Tarde", "71bd48", "15:00", "22:00")  ');
+    db.execute(
+        "INSERT into $_turnos(id, title, description, color, startHour, endHour) "
+        ' VALUES(3, "N", "Noche", "bd9648", "22:00", "07:00")  ');
+    db.execute(
+        "INSERT into $_turnos(id, title, description, color, startHour, endHour) "
+        ' VALUES(4, "L", "Libre", "ffffff", "00:00", "23:59")  ');
 
     print("Database was Created!");
   }
@@ -144,7 +150,6 @@ class DBHelper {
     Database? dbClient = await database;
     await dbClient!
         .delete(_cuadrantes, where: "datetime = ?", whereArgs: [dateTime]);
-    print('deleted');
   }
 
   Future<void> deleteItemID(int id) async {
@@ -154,13 +159,11 @@ class DBHelper {
         _cuadrantes,
         where: "id = ?",
         whereArgs: [id]);
-    print('deleted');
   }
 
   Future<List<TurnoType>> getTypeModels() async {
     final dbClient = await database;
     List<Map<String, dynamic>> result = await dbClient!.query(_turnos);
-   print(result.last.toString());
     return result.map((m) => TurnoType.fromMap(m)).toList();
   }
 
@@ -175,7 +178,6 @@ class DBHelper {
     final dbClient = await database;
     await dbClient!
         .delete(_turnos, where: "id = ?", whereArgs: [id]);
-    print('deleted');
   }
 
   Future closeDb() async {

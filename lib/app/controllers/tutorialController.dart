@@ -60,7 +60,6 @@ class TutorialController extends GetxController {
   void showTutorial(context, String view) {
     switch (view) {
       case 'home':
-        print('showTutorialHome');
         createTutorialHome();
         tutorialCoachMark?.show(context: context);
         break;
@@ -111,23 +110,12 @@ class TutorialController extends GetxController {
       paddingFocus: 2,
       opacityShadow: 0.92,
       onFinish: () {
-        print(
-            "finish createTutorialHome homeController.firstTime.value = false !!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         homeController.firstTime.value = false;
       },
-      onClickTarget: (target) {
-        print('onClickTarget: $target');
-      },
-      onClickTargetWithTapPosition: (target, tapDetails) {
-        print("target: $target");
-        print(
-            "clicked at position local: ${tapDetails.localPosition} - global: ${tapDetails.globalPosition}");
-      },
-      onClickOverlay: (target) {
-        print('onClickOverlay: $target');
-      },
+      onClickTarget: (target) {},
+      onClickTargetWithTapPosition: (target, tapDetails) {},
+      onClickOverlay: (target) {},
       onSkip: () {
-        print("skip");
         homeController.firstTime.value = false;
       },
     );
@@ -154,31 +142,18 @@ class TutorialController extends GetxController {
         keyButton5,
       ),
       alignSkip: Alignment.bottomLeft,
-
       colorShadow: PRIMARY_COLOR_DARK,
       textSkip: "Finalizar",
       paddingFocus: 2,
       opacityShadow: 0.92,
       onFinish: () {
         cuadranteController.firstTime.value = false;
-
-        print("finish");
       },
-      onClickTarget: (target) {
-        print('onClickTarget: $target');
-      },
-      onClickTargetWithTapPosition: (target, tapDetails) {
-        print("target: $target");
-        print(
-            "clicked at position local: ${tapDetails.localPosition} - global: ${tapDetails.globalPosition}");
-      },
-      onClickOverlay: (target) {
-        print('onClickOverlay: $target');
-      },
+      onClickTarget: (target) {},
+      onClickTargetWithTapPosition: (target, tapDetails) {},
+      onClickOverlay: (target) {},
       onSkip: () {
         cuadranteController.firstTime.value = false;
-
-        print("skip");
       },
     );
   }
@@ -208,24 +183,12 @@ class TutorialController extends GetxController {
       opacityShadow: 0.92,
       onFinish: () {
         notasController.firstTime.value = false;
-
-        print("finish");
       },
-      onClickTarget: (target) {
-        print('onClickTarget: $target');
-      },
-      onClickTargetWithTapPosition: (target, tapDetails) {
-        print("target: $target");
-        print(
-            "clicked at position local: ${tapDetails.localPosition} - global: ${tapDetails.globalPosition}");
-      },
-      onClickOverlay: (target) {
-        print('onClickOverlay: $target');
-      },
+      onClickTarget: (target) {},
+      onClickTargetWithTapPosition: (target, tapDetails) {},
+      onClickOverlay: (target) {},
       onSkip: () {
         notasController.firstTime.value = false;
-
-        print("skip");
       },
     );
   }
@@ -258,24 +221,12 @@ class TutorialController extends GetxController {
       opacityShadow: 0.92,
       onFinish: () {
         addNotasController.firstTime.value = false;
-
-        print("finish");
       },
-      onClickTarget: (target) {
-        print('onClickTarget: $target');
-      },
-      onClickTargetWithTapPosition: (target, tapDetails) {
-        print("target: $target");
-        print(
-            "clicked at position local: ${tapDetails.localPosition} - global: ${tapDetails.globalPosition}");
-      },
-      onClickOverlay: (target) {
-        print('onClickOverlay: $target');
-      },
+      onClickTarget: (target) {},
+      onClickTargetWithTapPosition: (target, tapDetails) {},
+      onClickOverlay: (target) {},
       onSkip: () {
         addNotasController.firstTime.value = false;
-
-        print("skip");
       },
     );
   }

@@ -44,7 +44,6 @@ class TutorialHomeController extends GetxController {
 
 //
   void showTutorial(context) {
-    print('showTutorial');
     createTutorial();
     tutorialCoachMark?.show(context: context);
   }
@@ -59,21 +58,14 @@ class TutorialHomeController extends GetxController {
       paddingFocus: 2,
       opacityShadow: 0.92,
       onFinish: () {
-        print("finish");
       },
       onClickTarget: (target) {
-        print('onClickTarget: $target');
       },
       onClickTargetWithTapPosition: (target, tapDetails) {
-        print("target: $target");
-        print(
-            "clicked at position local: ${tapDetails.localPosition} - global: ${tapDetails.globalPosition}");
       },
       onClickOverlay: (target) {
-        print('onClickOverlay: $target');
       },
       onSkip: () {
-        print("skip");
       },
     );
   }

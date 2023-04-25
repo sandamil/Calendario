@@ -46,7 +46,7 @@ class TaskCard extends StatelessWidget {
     colorList.elementAt(Random().nextInt(colorList.length));
 
     return Container(
-      padding: EdgeInsets.only(left: 4.w, right: 4.w),
+      // padding: EdgeInsets.only(left: 4.w, right: 4.w),
       decoration: BoxDecoration(
 
         borderRadius: BorderRadius.circular(5.r),
@@ -108,68 +108,78 @@ class TaskCard extends StatelessWidget {
                   },
                   splashColor: color.withAlpha(20),
                   highlightColor: color.withAlpha(10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          Container(
-                            margin: EdgeInsets.only(top: 6.h, left: 6.w),
-                            child: Text(
-                              noteData.title!.trim().length <= 20
-                                  ? noteData.title!.trim()
-                                  : '${noteData.title!.trim().substring(0, 20)}...',
-                              style:  TextStyle(
-                                  // fontFamily: 'ZillaSlab',
-                                  fontSize: 18.sp,
-                                  fontWeight: FontWeight.w800),
-                            ),
-                          ),
-                          const Spacer(),
-                          Padding(
-                            padding: EdgeInsets.only(right: 4.w),
-                            child: Icon(
-                              noteData.isImportant!
-                                  ? Icons.flag
-                                  : Icons.flag_outlined,
-                              color:
-                                  noteData.isImportant! ? Colors.red : Colors.grey,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const Spacer(),
-                      Container(
-                        alignment: Alignment.centerRight,
-                        child: Row(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8.w),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Row(
                           children: <Widget>[
                             Container(
-                              margin: EdgeInsets.only(bottom: 4.h, left: 6.w),
+                              margin: EdgeInsets.only(top: 6.h, left: 6.w),
                               child: Text(
-                                noteData.notes!.trim().split('\n').first.length <=
-                                        30
-                                    ? noteData.notes!.trim().split('\n').first
-                                    : '${noteData.notes!.trim().split('\n').first.substring(0, 30)}...',
+                                noteData.title!.trim().length <= 20
+                                    ? noteData.title!.trim()
+                                    : '${noteData.title!.trim().substring(0, 20)}...',
                                 style: TextStyle(
-                                    fontSize: 12.sp,),
+                                    // fontFamily: 'ZillaSlab',
+                                    fontSize: 18.sp,
+                                    fontWeight: FontWeight.w800),
                               ),
                             ),
                             const Spacer(),
-                            Container(
-                              margin: EdgeInsets.only(bottom: 3.h, right: 4.w),
-                              child: Text(
-                                neatDate,
-                                textAlign: TextAlign.right,
-                                style: TextStyle(
-                                    fontSize: 11.sp,
-                                    // color: Colors.grey.shade300,
-                                    fontWeight: FontWeight.w500),
+                            Padding(
+                              padding: EdgeInsets.only(right: 4.w),
+                              child: Icon(
+                                noteData.isImportant!
+                                    ? Icons.flag
+                                    : Icons.flag_outlined,
+                                color: noteData.isImportant!
+                                    ? Colors.red
+                                    : Colors.grey,
                               ),
                             ),
                           ],
                         ),
-                      )
-                    ],
+                        const Spacer(),
+                        Container(
+                          alignment: Alignment.centerRight,
+                          child: Row(
+                            children: <Widget>[
+                              Container(
+                                margin: EdgeInsets.only(bottom: 4.h, left: 6.w),
+                                child: Text(
+                                  noteData.notes!
+                                              .trim()
+                                              .split('\n')
+                                              .first
+                                              .length <=
+                                          30
+                                      ? noteData.notes!.trim().split('\n').first
+                                      : '${noteData.notes!.trim().split('\n').first.substring(0, 30)}...',
+                                  style: TextStyle(
+                                    fontSize: 12.sp,
+                                  ),
+                                ),
+                              ),
+                              const Spacer(),
+                              Container(
+                                margin:
+                                    EdgeInsets.only(bottom: 3.h, right: 4.w),
+                                child: Text(
+                                  neatDate,
+                                  textAlign: TextAlign.right,
+                                  style: TextStyle(
+                                      fontSize: 11.sp,
+                                      // color: Colors.grey.shade300,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ),
               )),

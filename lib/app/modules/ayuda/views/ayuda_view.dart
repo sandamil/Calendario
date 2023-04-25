@@ -1,6 +1,7 @@
 import 'package:calendario2/app/modules/ayuda/views/widgets/ayuda_group_widget.dart';
 import 'package:calendario2/app/modules/ayuda/views/widgets/ayuda_row_widget.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
+import 'package:calendario2/config/theme/my_fonts.dart';
 import 'package:calendario2/config/util/assets.dart';
 import 'package:calendario2/config/util/constant.dart';
 import 'package:calendario2/widgets/customText.dart';
@@ -20,8 +21,22 @@ class AyudaView extends GetView<AyudaController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Ayuda'),
-        centerTitle: true,
+        leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back_ios,
+              color: PRIMARY_COLOR,
+              size: 26.sp,
+            ),
+            onPressed: () {
+              Get.back();
+            }),
+        title: Text(
+          'Ayuda',
+          style: CustomTextStyle.appBarTitle(context: context),
+        ),
+        centerTitle: false,
+        elevation: 0,
+        backgroundColor: Colors.transparent,
       ),
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 10.w),

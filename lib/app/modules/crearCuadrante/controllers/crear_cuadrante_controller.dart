@@ -68,15 +68,10 @@ class CrearCuadranteController extends GetxController {
   }
 
   Future cuadranteLoad() async {
-    print(cuadranteLoading.value);
-    print('Future cuadranteLoad()=======================1================ ${cuadranteLoading.value}');
     await Rotation(
         DateTime.parse(inicialDate.value.toString().substring(0, 10)),
         DateTime.parse(endDate.value.toString().substring(0, 10)));
     cuadranteLoading.value = false;
-    print('Future cuadranteLoad()=======================2================  ${cuadranteLoading.value}');
-
-
   }
 
   Rotation(DateTime start, DateTime end) async {
@@ -116,15 +111,9 @@ class CrearCuadranteController extends GetxController {
           .toIso8601String()
           .substring(0, 10);
       endDate.refresh();
-
-      print('isswitched true');
-      print(endDate.value);
     } else {
       await endDate.value == DateTime.now();
       endDate.refresh();
-
-      print('isswitched false');
-      print(endDate.value);
     }
   }
 

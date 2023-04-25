@@ -1,3 +1,5 @@
+import 'package:calendario2/app/components/custom_dialog.dart';
+import 'package:calendario2/app/components/toast.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/config/util/app_utils.dart';
 import 'package:flutter/material.dart';
@@ -16,9 +18,6 @@ class AddTurnoView extends GetView<CrearTurnoController> {
 
   @override
   Widget build(BuildContext context) {
-    var theme = Theme.of(context);
-    var logger = Logger();
-
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: AppUtils.dismissKeyboard,
@@ -35,7 +34,7 @@ class AddTurnoView extends GetView<CrearTurnoController> {
               ),
               onPressed: () {
                 Get.to(
-                  () => const TurnoView(),
+                      () => const TurnoView(),
                   transition: Transition.fadeIn,
                   duration: const Duration(milliseconds: 100),
                 );
@@ -81,7 +80,7 @@ class AddTurnoView extends GetView<CrearTurnoController> {
                             labelText: 'Abreviatura',
                             border: OutlineInputBorder(
                                 borderRadius:
-                                    BorderRadius.all(Radius.circular(15))),
+                                BorderRadius.all(Radius.circular(15))),
                           ),
                         ),
                       ),
@@ -122,22 +121,24 @@ class AddTurnoView extends GetView<CrearTurnoController> {
                                               BorderRadius.circular(5.r)),
                                       padding:
                                           EdgeInsets.symmetric(horizontal: 5.w),
-                                      child:
-                                      controller.title.value.isEmpty ?
-                                      Text(
-                                        '        ',
-                                        style: TextStyle(
-                                            fontSize: 16,
-                                            color: controller.turnoColor.value,
-                                            fontWeight: FontWeight.w700),
-                                      )
+                                      child: controller.title.value.isEmpty
+                                          ? Text(
+                                              '        ',
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  color: controller
+                                                      .turnoColor.value,
+                                                  fontWeight: FontWeight.w700),
+                                            )
                                           : Text(
-                                        controller.title.value.toUpperCase(),
-                                        style: TextStyle(
-                                            fontSize: 16,
-                                            color: controller.turnoColor.value,
-                                            fontWeight: FontWeight.w700),
-                                      ),
+                                              controller.title.value
+                                                  .toUpperCase(),
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  color: controller
+                                                      .turnoColor.value,
+                                                  fontWeight: FontWeight.w700),
+                                            ),
                                     ),
                                   ],
                                 ),
@@ -148,7 +149,8 @@ class AddTurnoView extends GetView<CrearTurnoController> {
                               "VISTA PREVIA"
                               "\nEN CALENDARIO",
                               textAlign: TextAlign.center,
-                              style: TextStyle(fontSize: 12.sp, color: MyColors.textDisable),
+                              style: TextStyle(
+                                  fontSize: 12.sp, color: MyColors.textDisable),
                             ),
                           )
                         ],
@@ -256,11 +258,22 @@ class AddTurnoView extends GetView<CrearTurnoController> {
                             borderRadius: BorderRadius.circular(5.r),
                           ),
                         ),
-                        child: Text('Añadir',style: CustomTextStyle.button,),
-                        onPressed: () {
-                          controller.addTurno();
-                          Get.back(closeOverlays: true);
-                        }),
+                        onPressed: controller.isValidResponse()
+                            ? () {
+                                controller.addTurno();
+                                Get.back(closeOverlays: true);
+                              }
+                            : () {
+                                CustomDialog.alertaError(
+                                  duracion: 3,
+                                  'Necesitas añadir un Título valido.'
+                                  '\nAbreviatura puede ir vacio si no quieres mostrarla en el calendario',
+                                );
+                              },
+                        child: Text(
+                          'Añadir',
+                          style: CustomTextStyle.button,
+                        )),
                   ),
                 ],
               ),

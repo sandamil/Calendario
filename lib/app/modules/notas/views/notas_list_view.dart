@@ -52,14 +52,16 @@ class NotasListView extends GetView<NotasListController> {
           ], //Action icon search as search icon, notification icon
         ),
         floatingActionButton: FloatingActionButton.extended(
-          key: controller.firstTime.value
-              ? controller.tutorialController.keyButton10
-              : key,
           backgroundColor: PRIMARY_COLOR,
           onPressed: () {
             controller.gotoEditNote();
           },
-          label: Text('Añade Nota'.toUpperCase()),
+          label: Text(
+            'Añade Nota'.toUpperCase(),
+            key: controller.firstTime.value
+                ? controller.tutorialController.keyButton10
+                : key,
+          ),
           icon: const Icon(Icons.add),
         ),
         body: AnimatedContainer(
@@ -82,6 +84,4 @@ class NotasListView extends GetView<NotasListController> {
       );
     });
   }
-
-  /// todo rehacer esto por que esta continuo cargando, ver prints activados
 }

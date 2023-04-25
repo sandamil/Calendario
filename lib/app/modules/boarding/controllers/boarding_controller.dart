@@ -125,7 +125,6 @@ class BoardingController extends GetxController {
     tController.next();
     pageController.nextPage(
         duration: Duration(milliseconds: 900), curve: Curves.easeOut);
-    print(_currentPage);
     // _currentPage.value = _currentPage.value +1;
 
   }

@@ -21,9 +21,6 @@ import 'package:intl/date_symbol_data_local.dart';
 late Mixpanel mixPanel;
 
 Future<void> main() async {
-  print('=====================================================');
-  print('                     INICIO                          ');
-  print('=====================================================');
   WidgetsFlutterBinding.ensureInitialized();
   Get.put(UtilityController());
   await Alarm.init(showDebugLogs: true);
@@ -53,7 +50,6 @@ Future<void> initMemory() async {
 buildApp() {
 
   return ScreenUtilInit(
-    // todo add your (Xd / Figma) artboard size
     designSize: const Size(375, 812),
     minTextAdapt: true,
     splitScreenMode: true,

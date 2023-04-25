@@ -26,7 +26,6 @@ class DataConvert {
       'Dec',
     ];
     final month = date.month;
-    print(month);
     return months[month - 1];
   }
 }

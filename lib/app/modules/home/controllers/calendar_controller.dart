@@ -57,7 +57,6 @@ class CalendarController extends GetxController {
     await fetchCuadrante();
     await fetchTurno();
     await getListEvent();
-    print(listEvent.length);
     super.onInit();
   }
 
@@ -72,10 +71,12 @@ class CalendarController extends GetxController {
     //     selectedDate: selectedDate, turno: turno.value));
   }
   onDaySelectedLongPress(DateTime selectedDate, DateTime focusedDate) async {
-    if (!isSameDay(selectedDate, selectedDay.value)) await {
-      selectedDay.value = selectedDate,
-      _focusedDay.value = focusedDate,
-    };
+    if (!isSameDay(selectedDate, selectedDay.value)) {
+      await {
+        selectedDay.value = selectedDate,
+        _focusedDay.value = focusedDate,
+      };
+    }
     selectedEvents.value = await getEventForDay(selectedDay.value);
     selectedNotas.value = getEventsOfDay(selectedDay.value);
 
@@ -110,7 +111,6 @@ class CalendarController extends GetxController {
   Future<Map<DateTime, List<CuadranteDay>>> fetchCuadrante() async {
     cuadrante.value = await DBHelper.db.getItemModels();
     for (CuadranteDay turno in cuadrante) {
-      // print(turno.dateTime);
     }
     cuadranteMap.value.clear();
     for (var turno in cuadrante) {

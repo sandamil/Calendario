@@ -25,7 +25,6 @@ class DbProvider {
 
   Future<Database> init() async {
     Directory doucumentDirectory = await getApplicationDocumentsDirectory();
-    print(doucumentDirectory.path);
     String path = join(doucumentDirectory.path, 'notas_database.db');
     return await openDatabase(
       path,

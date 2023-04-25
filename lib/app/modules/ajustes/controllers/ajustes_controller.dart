@@ -172,9 +172,4 @@ class AjustesController extends GetxController {
     }
   }
 
-  // void showFeedback(context) {
-  //   BetterFeedback.of(context).show((UserFeedback feedback) {
-  //     print(feedback.text);
-  //   });
-  // }
 }

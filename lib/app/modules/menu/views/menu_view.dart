@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
-import 'package:logger/logger.dart';
 
 import '../../../../config/theme/my_fonts.dart';
 import '../controllers/menu_controller.dart';
@@ -73,11 +72,9 @@ class MenuView extends GetView<MenuAppController> {
                       right: 25.w,
                       bottom: 2.h,
                       child: Padding(
-                          padding: const EdgeInsets.all(0),
-                          child: Text("Notas",
-                              style: CustomTextStyle.titleLarge.copyWith(
-                                color: Colors.orange,
-                              ))),
+                        padding: const EdgeInsets.all(0),
+                        child: Text("Notas", style: CustomTextStyle.textMenu),
+                      ),
                     ),
                   ],
                 ),
@@ -124,9 +121,7 @@ class MenuView extends GetView<MenuAppController> {
                       child: Padding(
                           padding: const EdgeInsets.all(0),
                           child: Text("Cuadrante",
-                              style: CustomTextStyle.titleLarge.copyWith(
-                                color: Colors.orange,
-                              ))),
+                              style: CustomTextStyle.textMenu)),
                     ),
                   ],
                 ),
@@ -167,10 +162,8 @@ class MenuView extends GetView<MenuAppController> {
                       bottom: 2.h,
                       child: Padding(
                           padding: const EdgeInsets.all(0),
-                          child: Text("Turnos",
-                              style: CustomTextStyle.titleLarge.copyWith(
-                                color: Colors.orange,
-                              ))),
+                          child:
+                              Text("Turnos", style: CustomTextStyle.textMenu)),
                     ),
                   ],
                 ),
@@ -212,11 +205,8 @@ class MenuView extends GetView<MenuAppController> {
                       bottom: 2.h,
                       child: Padding(
                           padding: const EdgeInsets.all(0),
-                          child: Text("Ajustes",
-                              style: CustomTextStyle.titleLarge.copyWith(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.orange,
-                              ))),
+                          child:
+                              Text("Ajustes", style: CustomTextStyle.textMenu)),
                     ),
                   ],
                 ),
@@ -255,10 +245,8 @@ class MenuView extends GetView<MenuAppController> {
                       bottom: 2,
                       child: Padding(
                           padding: const EdgeInsets.all(0),
-                          child: Text("Ayuda",
-                              style: CustomTextStyle.titleLarge.copyWith(
-                                color: Colors.orange,
-                              ))),
+                          child:
+                              Text("Ayuda", style: CustomTextStyle.textMenu)),
                     ),
                   ],
                 ),

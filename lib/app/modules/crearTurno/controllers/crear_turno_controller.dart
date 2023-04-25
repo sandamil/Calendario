@@ -1,5 +1,6 @@
 import 'package:calendario2/app/modules/home/controllers/calendar_controller.dart';
 import 'package:calendario2/config/util/dateUtils.dart';
+import 'package:calendario2/config/util/validation_utils.dart';
 import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -55,6 +56,10 @@ class CrearTurnoController extends GetxController {
   //   super.onClose();
   // }
 
+  bool isValidResponse() {
+    return ValidationUtils.isValidString(description.value);
+  }
+
   Future<List<TurnoType>> fetchEventsType() async {
     turnoType.value = await DBHelper.db.getTypeModels();
     return turnoType;
@@ -67,7 +72,6 @@ class CrearTurnoController extends GetxController {
   }
 
   addTurno() async {
-    print(startDate.value);
     TurnoType eventType = TurnoType(
       title: title.value,
       description: description.value,
