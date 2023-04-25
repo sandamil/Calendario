@@ -34,12 +34,12 @@ class AyudaController extends GetxController {
   void launchTwitter() {}
 
   void giveFeedbackClicked(context) {
-    AnalyticsHelper.logEvent(
-        event: AnalyticsHelper.ayudaGiveFeedbackClicked);
+    AnalyticsHelper.logEvent(event: AnalyticsHelper.ayudaGiveFeedbackClicked);
     showBarModalBottomSheet(
         context: context,
         backgroundColor: Colors.transparent,
-        builder: (context) => Container( height: 600.h, child: const FeedbackScreen()));
+        builder: (context) =>
+            SizedBox(height: 600.h, child: const FeedbackScreen()));
   }
 
   void rateAppClicked() {

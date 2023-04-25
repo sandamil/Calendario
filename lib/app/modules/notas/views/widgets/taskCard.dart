@@ -1,15 +1,11 @@
 import 'dart:math';
 
 import 'package:calendario2/app/data/model/taskModel.dart';
-import 'package:calendario2/app/data/model/cuadranteDay.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
 
 import '../../../notas/views/NotasView/controllers/notas_view_controller.dart';
 

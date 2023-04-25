@@ -127,7 +127,7 @@ class DeepthPageTransformer extends PageTransformer {
       return Opacity(
         opacity: 1.0,
         child: Transform.translate(
-          offset: Offset(0.0, 0.0),
+          offset: const Offset(0.0, 0.0),
           child: Transform.scale(
             scale: 1.0,
             child: child,

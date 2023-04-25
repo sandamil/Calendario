@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 
 import '../../../../config/theme/my_fonts.dart';
 import '../../../../config/util/hexColor.dart';
-import '../../home/views/home_view.dart';
 import '../controllers/crear_turno_controller.dart';
 import 'add_turno_view.dart';
 
@@ -15,8 +14,6 @@ class TurnoView extends GetView<CrearTurnoController> {
 
   @override
   Widget build(BuildContext context) {
-    var theme = Theme.of(context);
-
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,

@@ -101,10 +101,10 @@ class DbProvider {
       'alarmaActivadaString',
       'isAlarmaCreated'
     ]);
-    if (maps.length > 0) {
-      maps.forEach((map) {
+    if (maps.isNotEmpty) {
+      for (var map in maps) {
         notesList.add(Task.fromMap(map));
-      });
+      }
     }
     return notesList;
   }

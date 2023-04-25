@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:calendario2/app/data/local/app_storage.dart';
-import 'package:calendario2/app/modules/home/controllers/calendar_controller.dart';
 import 'package:calendario2/config/util/app_utils.dart';
 import 'package:calendario2/config/util/constant.dart';
 import 'package:get/get.dart';

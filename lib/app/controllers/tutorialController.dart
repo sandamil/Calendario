@@ -11,17 +11,10 @@ import 'package:calendario2/config/tutorial/tutorialInicio.dart';
 import 'package:calendario2/config/tutorial/tutorialTask.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:meta/meta.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 class TutorialController extends GetxController {
   UtilityController utilityController = UtilityController();
-
-  @override
-  void onClose() {
-    super.onClose();
-  }
 
   TutorialCoachMark? tutorialCoachMark;
   List<TargetFocus> targets = [];

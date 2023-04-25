@@ -1,5 +1,4 @@
 import 'package:alarm/alarm.dart';
-import 'package:calendario2/app/modules/boarding/controllers/boarding_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 

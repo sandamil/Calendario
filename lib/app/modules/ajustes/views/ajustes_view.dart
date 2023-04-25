@@ -1,10 +1,5 @@
-import 'dart:developer';
-import 'dart:io';
-
 import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/config/theme/my_fonts.dart';
-import 'package:calendario2/config/translations/localization_service.dart';
-import 'package:calendario2/config/util/constant.dart';
 import 'package:calendario2/config/util/assets.dart';
 import 'package:calendario2/widgets/setting_title_tile.dart';
 import 'package:flutter/cupertino.dart';
@@ -115,12 +110,15 @@ class AjustesView extends GetView<AjustesController> {
                     padding: EdgeInsets.only(right: 12.w),
                     child:  ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        minimumSize: Size.zero, // Set this
-                        padding: EdgeInsets.all(1),
+                        minimumSize: Size.zero,
+                        // Set this
+                        padding: const EdgeInsets.all(1),
                         elevation: 10,
                         disabledBackgroundColor: Colors.green,
-                        backgroundColor: Colors.green, // background (button) color
-                        foregroundColor: Colors.green, // foreground (text) color
+                        backgroundColor: Colors.green,
+                        // background (button) color
+                        foregroundColor:
+                            Colors.green, // foreground (text) color
                       ),
                       onPressed: (){},
                       child: Padding(

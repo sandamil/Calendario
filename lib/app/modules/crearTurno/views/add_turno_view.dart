@@ -1,12 +1,10 @@
 import 'package:calendario2/app/components/custom_dialog.dart';
-import 'package:calendario2/app/components/toast.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/config/util/app_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
-import 'package:logger/logger.dart';
 
 import '../../../../config/theme/my_fonts.dart';
 import '../../CrearTurno/views/turno_view.dart';
@@ -78,9 +76,9 @@ class AddTurnoView extends GetView<CrearTurnoController> {
                             ),
                             hintText: 'Abreviatura',
                             labelText: 'Abreviatura',
-                            border: OutlineInputBorder(
+                            border: const OutlineInputBorder(
                                 borderRadius:
-                                BorderRadius.all(Radius.circular(15))),
+                                    BorderRadius.all(Radius.circular(15))),
                           ),
                         ),
                       ),

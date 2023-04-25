@@ -8,7 +8,6 @@ import 'package:calendario2/config/translations/localization_service.dart';
 import 'package:calendario2/config/util/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 import 'package:rive/rive.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -104,7 +103,8 @@ class AjustesController extends GetxController {
   }
 
   void goToLanguageScreen() {
-    Get.to(() => LanguageScreen(),
+    Get.to(
+      () => const LanguageScreen(),
       transition: Transition.fadeIn,
       duration: const Duration(milliseconds: 100),
     );
@@ -164,7 +164,7 @@ class AjustesController extends GetxController {
   }
 
   void launchTwitter() async {
-    final String url = 'https://www.twitter.com/@ajatsoft';
+    const String url = 'https://www.twitter.com/@ajatsoft';
     if (await canLaunch(url)) {
       await launch(url);
     } else {

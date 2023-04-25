@@ -2,10 +2,7 @@ import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/widgets/customText.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/rendering.dart';
 // import 'package:tutorial_coach_mark/animated_focus_light.dart';
 
 
@@ -44,59 +41,6 @@ class ListTargetCuadrantes {
         contents: [
           TargetContent(
             align: ContentAlign.bottom,
-            child: Container(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  SizedBox(
-                    height: 2.h,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(1.h),
-                    child: Text(
-                      " Inicio de Cuadrante",
-                      style: TextStyle(
-                        color: Colors.white.withOpacity(0.90),
-                        fontSize: 26.sp,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(2.h),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: <Widget>[
-                        SizedBox(
-                          height: 2.h,
-                        ),
-                        CustomTextWidget(
-                          data: _info,
-                          // style: GoogleFonts.lato(),
-                          color: Colors.white,
-                          textAlign: TextAlign.center,
-                          fontSize: 20.sp,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-        shape: ShapeLightFocus.RRect,
-      ),
-    );
-    targets.add(TargetFocus(
-      identify: "Target 2",
-      keyTarget: keyButton2,
-      contents: [
-        TargetContent(
-          align: ContentAlign.bottom,
-          child: Container(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -107,7 +51,7 @@ class ListTargetCuadrantes {
                 Padding(
                   padding: EdgeInsets.all(1.h),
                   child: Text(
-                    "Fin de Cuadrante",
+                    " Inicio de Cuadrante",
                     style: TextStyle(
                       color: Colors.white.withOpacity(0.90),
                       fontSize: 26.sp,
@@ -125,14 +69,7 @@ class ListTargetCuadrantes {
                         height: 2.h,
                       ),
                       CustomTextWidget(
-                        data: _info2,
-                        // style: GoogleFonts.lato(),
-                        color: Colors.white,
-                        textAlign: TextAlign.center,
-                        fontSize: 20.sp,
-                      ),
-                      CustomTextWidget(
-                        data: _info3,
+                        data: _info,
                         // style: GoogleFonts.lato(),
                         color: Colors.white,
                         textAlign: TextAlign.center,
@@ -144,6 +81,62 @@ class ListTargetCuadrantes {
               ],
             ),
           ),
+        ],
+        shape: ShapeLightFocus.RRect,
+      ),
+    );
+    targets.add(TargetFocus(
+      identify: "Target 2",
+      keyTarget: keyButton2,
+      contents: [
+        TargetContent(
+          align: ContentAlign.bottom,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              SizedBox(
+                height: 2.h,
+              ),
+              Padding(
+                padding: EdgeInsets.all(1.h),
+                child: Text(
+                  "Fin de Cuadrante",
+                  style: TextStyle(
+                    color: Colors.white.withOpacity(0.90),
+                    fontSize: 26.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.all(2.h),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    SizedBox(
+                      height: 2.h,
+                    ),
+                    CustomTextWidget(
+                      data: _info2,
+                      // style: GoogleFonts.lato(),
+                      color: Colors.white,
+                      textAlign: TextAlign.center,
+                      fontSize: 20.sp,
+                    ),
+                    CustomTextWidget(
+                      data: _info3,
+                      // style: GoogleFonts.lato(),
+                      color: Colors.white,
+                      textAlign: TextAlign.center,
+                      fontSize: 20.sp,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ],
       shape: ShapeLightFocus.RRect,
@@ -154,69 +147,65 @@ class ListTargetCuadrantes {
       contents: [
         TargetContent(
             align: ContentAlign.bottom,
-            child: Container(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    "Turnos de trabajo",
-                    style: TextStyle(
-                      color: Colors.white.withOpacity(0.90),
-                      fontSize: 26.sp,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    textAlign: TextAlign.center,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  "Turnos de trabajo",
+                  style: TextStyle(
+                    color: Colors.white.withOpacity(0.90),
+                    fontSize: 26.sp,
+                    fontWeight: FontWeight.bold,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10.0),
-                    child: CustomTextWidget(
-                      data: _info4,
-                      // style: GoogleFonts.lato(),
-                      color: Colors.white,
-                      textAlign: TextAlign.center,
-                      fontSize: 20.sp,
-                    ),
-                  ),
-                  CustomTextWidget(
-                    data: _info5,
+                  textAlign: TextAlign.center,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 10.0),
+                  child: CustomTextWidget(
+                    data: _info4,
                     // style: GoogleFonts.lato(),
                     color: Colors.white,
                     textAlign: TextAlign.center,
                     fontSize: 20.sp,
                   ),
-                ],
-              ),
+                ),
+                CustomTextWidget(
+                  data: _info5,
+                  // style: GoogleFonts.lato(),
+                  color: Colors.white,
+                  textAlign: TextAlign.center,
+                  fontSize: 20.sp,
+                ),
+              ],
             )),
         TargetContent(
             align: ContentAlign.top,
-            child: Container(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    "Recomendación",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: ACCENT_COLOR,
-                      fontSize: 26.sp,
-                    ),
-                    textAlign: TextAlign.start,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  "Recomendación",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: ACCENT_COLOR,
+                    fontSize: 26.sp,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 0.0),
-                    child: CustomTextWidget(
-                      data:
-                      "Si creas un cuadrante para tu turno de trabajo, pon la fecha de inicio el dia que empiezas el ciclo o los turnos, no dejes la de hoy",
-                      // style: GoogleFonts.lato(),
-                      color: Colors.white,
-                      textAlign: TextAlign.center,
-                      fontSize: 20.sp,
-                    ),
-                  )
-                ],
-              ),
+                  textAlign: TextAlign.start,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 0.0),
+                  child: CustomTextWidget(
+                    data:
+                        "Si creas un cuadrante para tu turno de trabajo, pon la fecha de inicio el dia que empiezas el ciclo o los turnos, no dejes la de hoy",
+                    // style: GoogleFonts.lato(),
+                    color: Colors.white,
+                    textAlign: TextAlign.center,
+                    fontSize: 20.sp,
+                  ),
+                )
+              ],
             ))
       ],
       shape: ShapeLightFocus.RRect,
@@ -273,7 +262,7 @@ class ListTargetCuadrantes {
                         ),
                       ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 10,
                     ),
                     Padding(
@@ -308,76 +297,70 @@ class ListTargetCuadrantes {
       contents: [
         TargetContent(
           align: ContentAlign.left,
-          child: Container(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                SizedBox(
-                  height: 25,
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    "Publicar Cuadrante",
-                    style: TextStyle(
-                      color: Colors.white.withOpacity(0.90),
-                      fontSize: 26.sp,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    textAlign: TextAlign.center,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              const SizedBox(
+                height: 25,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "Publicar Cuadrante",
+                  style: TextStyle(
+                    color: Colors.white.withOpacity(0.90),
+                    fontSize: 26.sp,
+                    fontWeight: FontWeight.bold,
                   ),
-                ),
-                CustomTextWidget(
-                  data: _info8,
-                  // style: GoogleFonts.lato(),
-                  color: Colors.white,
                   textAlign: TextAlign.center,
-                  fontSize: 20.sp,
                 ),
-              ],
-            ),
+              ),
+              CustomTextWidget(
+                data: _info8,
+                // style: GoogleFonts.lato(),
+                color: Colors.white,
+                textAlign: TextAlign.center,
+                fontSize: 20.sp,
+              ),
+            ],
           ),
         ),
         TargetContent(
           align: ContentAlign.bottom,
-          child: Container(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(top: 100.0),
-                  child: Column(
-                    children: <Widget>[
-                      Text(
-                        "Resultado",
-                        style: TextStyle(
-                          color: Colors.white.withOpacity(0.90),
-                          fontSize: 26.sp,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        textAlign: TextAlign.center,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(top: 100.0),
+                child: Column(
+                  children: <Widget>[
+                    Text(
+                      "Resultado",
+                      style: TextStyle(
+                        color: Colors.white.withOpacity(0.90),
+                        fontSize: 26.sp,
+                        fontWeight: FontWeight.bold,
                       ),
-                      CustomTextWidget(
-                        data: _info9,
-                        // style: GoogleFonts.lato(),
-                        color: Colors.white,
-                        textAlign: TextAlign.center,
-                        fontSize: 20.sp,
+                      textAlign: TextAlign.center,
+                    ),
+                    CustomTextWidget(
+                      data: _info9,
+                      // style: GoogleFonts.lato(),
+                      color: Colors.white,
+                      textAlign: TextAlign.center,
+                      fontSize: 20.sp,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 8.h),
+                      child: Image.asset(
+                        'assets/images/mesTuto.png',
                       ),
-                      Padding(
-                        padding:  EdgeInsets.only(top: 8.h),
-                        child: Container(
-                          child: Image.asset(
-                            'assets/images/mesTuto.png',
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ],

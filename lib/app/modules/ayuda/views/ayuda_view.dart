@@ -2,16 +2,10 @@ import 'package:calendario2/app/modules/ayuda/views/widgets/ayuda_group_widget.d
 import 'package:calendario2/app/modules/ayuda/views/widgets/ayuda_row_widget.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/config/theme/my_fonts.dart';
-import 'package:calendario2/config/util/assets.dart';
-import 'package:calendario2/config/util/constant.dart';
-import 'package:calendario2/widgets/customText.dart';
-import 'package:calendario2/widgets/setting_title.dart';
-import 'package:calendario2/widgets/setting_title_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../controllers/ayuda_controller.dart';
 

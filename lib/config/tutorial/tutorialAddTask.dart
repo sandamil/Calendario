@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:calendario2/config/theme/my_colors.dart';
@@ -54,46 +52,44 @@ class ListTargetAddTask {
         contents: [
           TargetContent(
             align: ContentAlign.bottom,
-            child: Container(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  SizedBox(
-                    height: 2.h,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                SizedBox(
+                  height: 2.h,
+                ),
+                Padding(
+                  padding: EdgeInsets.all(1.h),
+                  child: Text(
+                    _info,
+                    style: TextStyle(
+                      color: Colors.white.withOpacity(0.90),
+                      fontSize: 26.sp,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  Padding(
-                    padding: EdgeInsets.all(1.h),
-                    child: Text(
-                      _info,
-                      style: TextStyle(
-                        color: Colors.white.withOpacity(0.90),
-                        fontSize: 26.sp,
-                        fontWeight: FontWeight.bold,
+                ),
+                Padding(
+                  padding: EdgeInsets.all(2.w),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      SizedBox(
+                        height: 2.h,
                       ),
-                      textAlign: TextAlign.center,
-                    ),
+                      CustomTextWidget(
+                        data: _info2,
+                        // style: GoogleFonts.lato(),
+                        color: Colors.white,
+                        textAlign: TextAlign.center,
+                        fontSize: 20.sp,
+                      ),
+                    ],
                   ),
-                  Padding(
-                    padding: EdgeInsets.all(2.w),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: <Widget>[
-                        SizedBox(
-                          height: 2.h,
-                        ),
-                        CustomTextWidget(
-                          data: _info2,
-                          // style: GoogleFonts.lato(),
-                          color: Colors.white,
-                          textAlign: TextAlign.center,
-                          fontSize: 20.sp,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ],
@@ -106,53 +102,51 @@ class ListTargetAddTask {
       contents: [
         TargetContent(
           align: ContentAlign.bottom,
-          child: Container(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                SizedBox(
-                  height: 2.h,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              SizedBox(
+                height: 2.h,
+              ),
+              Padding(
+                padding: EdgeInsets.all(1.h),
+                child: Text(
+                  _info3,
+                  style: TextStyle(
+                    color: Colors.white.withOpacity(0.90),
+                    fontSize: 26.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
                 ),
-                Padding(
-                  padding: EdgeInsets.all(1.h),
-                  child: Text(
-                    _info3,
-                    style: TextStyle(
-                      color: Colors.white.withOpacity(0.90),
-                      fontSize: 26.sp,
-                      fontWeight: FontWeight.bold,
+              ),
+              Padding(
+                padding: EdgeInsets.all(2.h),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    SizedBox(
+                      height: 2.h,
                     ),
-                    textAlign: TextAlign.center,
-                  ),
+                    CustomTextWidget(
+                      data: _info4,
+                      // style: GoogleFonts.lato(),
+                      color: Colors.white,
+                      textAlign: TextAlign.center,
+                      fontSize: 20.sp,
+                    ),
+                    CustomTextWidget(
+                      data: _info5,
+                      // style: GoogleFonts.lato(),
+                      color: Colors.white,
+                      textAlign: TextAlign.center,
+                      fontSize: 20.sp,
+                    ),
+                  ],
                 ),
-                Padding(
-                  padding: EdgeInsets.all(2.h),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: <Widget>[
-                      SizedBox(
-                        height: 2.h,
-                      ),
-                      CustomTextWidget(
-                        data: _info4,
-                        // style: GoogleFonts.lato(),
-                        color: Colors.white,
-                        textAlign: TextAlign.center,
-                        fontSize: 20.sp,
-                      ),
-                      CustomTextWidget(
-                        data: _info5,
-                        // style: GoogleFonts.lato(),
-                        color: Colors.white,
-                        textAlign: TextAlign.center,
-                        fontSize: 20.sp,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ],
@@ -164,61 +158,57 @@ class ListTargetAddTask {
       contents: [
         TargetContent(
             align: ContentAlign.top,
-            child: Container(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    _info6,
-                    style: TextStyle(
-                      color: Colors.white.withOpacity(0.90),
-                      fontSize: 26.sp,
-                      fontWeight: FontWeight.bold,
-                    ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  _info6,
+                  style: TextStyle(
+                    color: Colors.white.withOpacity(0.90),
+                    fontSize: 26.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 10.0),
+                  child: CustomTextWidget(
+                    data: _info7,
+                    // style: GoogleFonts.lato(),
+                    color: Colors.white,
                     textAlign: TextAlign.center,
+                    fontSize: 20.sp,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10.0),
-                    child: CustomTextWidget(
-                      data: _info7,
-                      // style: GoogleFonts.lato(),
-                      color: Colors.white,
-                      textAlign: TextAlign.center,
-                      fontSize: 20.sp,
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             )),
         TargetContent(
             align: ContentAlign.bottom,
-            child: Container(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    _info8,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: ACCENT_COLOR,
-                      fontSize: 26.sp,
-                    ),
-                    textAlign: TextAlign.start,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  _info8,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: ACCENT_COLOR,
+                    fontSize: 26.sp,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 0.0),
-                    child: CustomTextWidget(
-                      data: _info9,
-                      // style: GoogleFonts.lato(),
-                      color: Colors.white,
-                      textAlign: TextAlign.center,
-                      fontSize: 20.sp,
-                    ),
-                  )
-                ],
-              ),
+                  textAlign: TextAlign.start,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 0.0),
+                  child: CustomTextWidget(
+                    data: _info9,
+                    // style: GoogleFonts.lato(),
+                    color: Colors.white,
+                    textAlign: TextAlign.center,
+                    fontSize: 20.sp,
+                  ),
+                )
+              ],
             ))
       ],
       shape: ShapeLightFocus.RRect,
@@ -230,7 +220,7 @@ class ListTargetAddTask {
         TargetContent(
             align: ContentAlign.bottom,
             child: Container(
-              padding: EdgeInsets.only(top: 10.0),
+              padding: const EdgeInsets.only(top: 10.0),
               height: 290.h,
               child: SingleChildScrollView(
                 child: Column(
@@ -267,55 +257,51 @@ class ListTargetAddTask {
       contents: [
         TargetContent(
           align: ContentAlign.top,
-          child: Container(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                SizedBox(
-                  height: 25,
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    _info12,
-                    style: TextStyle(
-                      color: Colors.white.withOpacity(0.90),
-                      fontSize: 26.sp,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    textAlign: TextAlign.center,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              const SizedBox(
+                height: 25,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  _info12,
+                  style: TextStyle(
+                    color: Colors.white.withOpacity(0.90),
+                    fontSize: 26.sp,
+                    fontWeight: FontWeight.bold,
                   ),
+                  textAlign: TextAlign.center,
                 ),
-                CustomTextWidget(
-                  data: _info13,
+              ),
+              CustomTextWidget(
+                data: _info13,
+                // style: GoogleFonts.lato(),
+                color: Colors.white,
+                textAlign: TextAlign.center,
+                fontSize: 20.sp,
+              ),
+            ],
+          ),
+        ),
+        TargetContent(
+          align: ContentAlign.bottom,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(top: 10.0),
+                child: CustomTextWidget(
+                  data: _info14,
                   // style: GoogleFonts.lato(),
                   color: Colors.white,
                   textAlign: TextAlign.center,
                   fontSize: 20.sp,
                 ),
-              ],
-            ),
-          ),
-        ),
-        TargetContent(
-          align: ContentAlign.bottom,
-          child: Container(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.only(top: 10.0),
-                  child: CustomTextWidget(
-                    data: _info14,
-                    // style: GoogleFonts.lato(),
-                    color: Colors.white,
-                    textAlign: TextAlign.center,
-                    fontSize: 20.sp,
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ],
@@ -327,47 +313,43 @@ class ListTargetAddTask {
       contents: [
         TargetContent(
           align: ContentAlign.top,
-          child: Container(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                SizedBox(
-                  height: 25,
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    _info15,
-                    style: TextStyle(
-                      color: Colors.white.withOpacity(0.90),
-                      fontSize: 26.sp,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    textAlign: TextAlign.center,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              const SizedBox(
+                height: 25,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  _info15,
+                  style: TextStyle(
+                    color: Colors.white.withOpacity(0.90),
+                    fontSize: 26.sp,
+                    fontWeight: FontWeight.bold,
                   ),
-                ),
-                CustomTextWidget(
-                  data: _info16,
-                  // style: GoogleFonts.lato(),
-                  color: Colors.white,
                   textAlign: TextAlign.center,
-                  fontSize: 20.sp,
                 ),
-              ],
-            ),
+              ),
+              CustomTextWidget(
+                data: _info16,
+                // style: GoogleFonts.lato(),
+                color: Colors.white,
+                textAlign: TextAlign.center,
+                fontSize: 20.sp,
+              ),
+            ],
           ),
         ),
         TargetContent(
           align: ContentAlign.left,
-          child: Container(
-            child: CustomTextWidget(
-              data: _info17,
-              // style: GoogleFonts.lato(),
-              color: Colors.white,
-              textAlign: TextAlign.center,
-              fontSize: 20.sp,
-            ),
+          child: CustomTextWidget(
+            data: _info17,
+            // style: GoogleFonts.lato(),
+            color: Colors.white,
+            textAlign: TextAlign.center,
+            fontSize: 20.sp,
           ),
         ),
       ],

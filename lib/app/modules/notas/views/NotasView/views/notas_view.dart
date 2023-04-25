@@ -1,10 +1,8 @@
-import 'package:calendario2/app/data/model/taskModel.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/config/theme/my_fonts.dart';
 import 'package:calendario2/config/util/dateUtils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:intl/intl.dart';
 
 import 'package:get/get.dart';
 
@@ -15,8 +13,6 @@ class NotasView extends GetView<NotasViewController> {
 
   @override
   Widget build(BuildContext context) {
-    var theme = Theme.of(context);
-
     return Obx(() {
       return Scaffold(
           appBar: AppBar(

@@ -1,6 +1,5 @@
 import 'package:alarm/alarm.dart';
 import 'package:calendario2/app/modules/notas/views/AddNotas/controllers/add_notas_controller.dart';
-import 'package:calendario2/app/modules/notas/views/AddNotas/views/add_notas_view.dart';
 import 'package:calendario2/app/modules/notas/views/EditNotas/controllers/edit_notas_controller.dart';
 import 'package:calendario2/config/util/constant.dart';
 import 'package:flutter/material.dart';
@@ -225,7 +224,7 @@ class _ExampleAlarmEditScreenState extends State<ExampleAlarmEditScreen> {
               ),
               DropdownButton(
                 value: assetAudio,
-                items: [
+                items: const [
                   DropdownMenuItem<String>(
                     value: ConstantData.mozartAlarm,
                     child: Text('Mozart'),

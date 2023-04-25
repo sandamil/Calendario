@@ -1,5 +1,4 @@
 import 'package:calendario2/app/components/custom_dialog.dart';
-import 'package:calendario2/app/data/model/cuadranteDay.dart';
 import 'package:calendario2/app/modules/home/controllers/calendar_controller.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/config/util/dateUtils.dart';
@@ -7,7 +6,6 @@ import 'package:calendario2/config/util/hexColor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:logger/logger.dart';
 
 class DaySelecetedTurnoWidget extends StatelessWidget {
   const DaySelecetedTurnoWidget({super.key});

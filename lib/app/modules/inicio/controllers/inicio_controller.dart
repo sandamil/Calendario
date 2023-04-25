@@ -1,7 +1,5 @@
-import 'package:calendario2/app/data/local/app_storage.dart';
 import 'package:calendario2/app/modules/home/controllers/calendar_controller.dart';
 import 'package:calendario2/app/services/app_cycle_service.dart';
-import 'package:calendario2/config/util/constant.dart';
 import 'package:get/get.dart';
 
 class InicioController extends GetxController {

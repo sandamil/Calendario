@@ -1,4 +1,3 @@
-import 'package:calendario2/config/translations/es_ES/es_es_translation.dart';
 import 'package:intl/intl.dart';
 
 extension Date on DateTime {

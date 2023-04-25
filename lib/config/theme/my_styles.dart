@@ -1,9 +1,7 @@
-import 'package:calendario2/config/util/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import 'dark_theme_colors.dart';
 import 'my_fonts.dart';
@@ -46,7 +44,7 @@ class MyStyles {
             : SystemUiOverlayStyle.light,
         elevation: 0,
         titleTextStyle:
-            getTextTheme(isLightTheme: isLightTheme).bodyText1!.copyWith(
+            getTextTheme(isLightTheme: isLightTheme).bodyLarge!.copyWith(
                   color: Colors.white,
                   fontSize: MyFonts.appBarTittleSize,
                 ),
@@ -266,12 +264,10 @@ class MyStyles {
         //     : DarkThemeColors.bodyTextColor,),
 
         inputDecorationTheme: InputDecorationTheme(
-          errorStyle: TextStyle(
-            color: Colors.blue
-          ),
+          errorStyle: const TextStyle(color: Colors.blue),
           prefixIconColor: isLightTheme
-                  ? LightThemeColors.darkTextColor
-                  : DarkThemeColors.lightTextColor,
+              ? LightThemeColors.darkTextColor
+              : DarkThemeColors.lightTextColor,
           suffixIconColor: isLightTheme
               ? LightThemeColors.darkTextColor
               : DarkThemeColors.lightTextColor,

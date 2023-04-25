@@ -87,124 +87,116 @@ class AddNotasView extends GetView<AddNotasController> {
                         ? controller.tutorialController.keyButton14
                         : key,
                     children: <Widget>[
-                      Container(
-                          child: TextButton(
-                              onPressed: () {
-                                DatePicker.showDateTimePicker(Get.context!,
-                                    theme: DatePickerTheme(
-                                        cancelStyle: TextStyle(
-                                            color: Colors.redAccent.shade200,
-                                            fontSize: 16.sp,
-                                            fontWeight: FontWeight.bold),
-                                        doneStyle: TextStyle(
-                                            color: MyColors.textColorPrimary,
-                                            fontSize: 16.sp,
-                                            fontWeight: FontWeight.bold),
-                                        itemStyle: TextStyle(
-                                            color: MyColors.textColorPrimary,
-                                            fontSize: 16.sp,
-                                            fontWeight: FontWeight.bold),
-                                        backgroundColor: MyColors.cellColor),
-                                    showTitleActions: true,
-                                    onChanged: (DateTime date) {
-                                  if (controller.endTime.value
-                                          .millisecondsSinceEpoch <
-                                      date.millisecondsSinceEpoch) {
-                                    controller.endTime.value = date;
-                                  }
-                                  controller.startTime.value = date;
-                                }, onConfirm: (DateTime date) {
-                                  controller.setStartTime(date);
-                                },
-                                    currentTime: controller.startTime.value,
-                                    locale: LocaleType.es);
-                              },
-                              child: Row(
+                      TextButton(
+                          onPressed: () {
+                            DatePicker.showDateTimePicker(Get.context!,
+                                theme: DatePickerTheme(
+                                    cancelStyle: TextStyle(
+                                        color: Colors.redAccent.shade200,
+                                        fontSize: 16.sp,
+                                        fontWeight: FontWeight.bold),
+                                    doneStyle: TextStyle(
+                                        color: MyColors.textColorPrimary,
+                                        fontSize: 16.sp,
+                                        fontWeight: FontWeight.bold),
+                                    itemStyle: TextStyle(
+                                        color: MyColors.textColorPrimary,
+                                        fontSize: 16.sp,
+                                        fontWeight: FontWeight.bold),
+                                    backgroundColor: MyColors.cellColor),
+                                showTitleActions: true,
+                                onChanged: (DateTime date) {
+                              if (controller
+                                      .endTime.value.millisecondsSinceEpoch <
+                                  date.millisecondsSinceEpoch) {
+                                controller.endTime.value = date;
+                              }
+                              controller.startTime.value = date;
+                            }, onConfirm: (DateTime date) {
+                              controller.setStartTime(date);
+                            },
+                                currentTime: controller.startTime.value,
+                                locale: LocaleType.es);
+                          },
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                Text('Hora de inicio',
+                                    style: CustomTextStyle.rowButomText),
+                                Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: <Widget>[
                                     Text(
-                                      'Hora de inicio',
-                                        style: CustomTextStyle.rowButomText),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: <Widget>[
-                                        Text(
-                                          '${controller.startTime.value.formatDateYMD} ${controller.startTime.value.formatDateTime24H}',
-                                          style: TextStyle(
-                                              color: MyColors.textButtomBlack,
-                                              fontSize: 16.sp),
-                                        ),
-                                        Icon(
-                                          Icons.arrow_forward_ios,
-                                          size: 16.sp,
-                                          color: PRIMARY_COLOR,
-                                        )
-                                      ],
+                                      '${controller.startTime.value.formatDateYMD} ${controller.startTime.value.formatDateTime24H}',
+                                      style: TextStyle(
+                                          color: MyColors.textButtomBlack,
+                                          fontSize: 16.sp),
+                                    ),
+                                    Icon(
+                                      Icons.arrow_forward_ios,
+                                      size: 16.sp,
+                                      color: PRIMARY_COLOR,
                                     )
-                                  ]))),
-                      Container(
-                        child: TextButton(
-                            onPressed: () {
-                              DatePicker.showDateTimePicker(Get.context!,
-                                  theme: DatePickerTheme(
-                                      cancelStyle: TextStyle(
-                                          color: Colors.redAccent.shade200,
-                                          fontSize: 16.sp,
-                                          fontWeight: FontWeight.bold),
-                                      doneStyle: TextStyle(
-                                          color: MyColors.textColorPrimary,
-                                          fontSize: 16.sp,
-                                          fontWeight: FontWeight.bold),
-                                      itemStyle: TextStyle(
-                                          color: MyColors.textColorPrimary,
-                                          fontSize: 16.sp,
-                                          fontWeight: FontWeight.bold),
-                                      backgroundColor: MyColors.cellColor),
-                                  showTitleActions: true,
-                                  onChanged: (DateTime date) {
-                                if (controller
-                                        .endTime.value.millisecondsSinceEpoch <=
-                                    date.millisecondsSinceEpoch) {
-                                  controller.endTime.value = date;
-                                }
-                              },
-                                  onConfirm: (DateTime date) {},
-                                  currentTime: controller.endTime.value,
-                                  locale: LocaleType.es);
+                                  ],
+                                )
+                              ])),
+                      TextButton(
+                          onPressed: () {
+                            DatePicker.showDateTimePicker(Get.context!,
+                                theme: DatePickerTheme(
+                                    cancelStyle: TextStyle(
+                                        color: Colors.redAccent.shade200,
+                                        fontSize: 16.sp,
+                                        fontWeight: FontWeight.bold),
+                                    doneStyle: TextStyle(
+                                        color: MyColors.textColorPrimary,
+                                        fontSize: 16.sp,
+                                        fontWeight: FontWeight.bold),
+                                    itemStyle: TextStyle(
+                                        color: MyColors.textColorPrimary,
+                                        fontSize: 16.sp,
+                                        fontWeight: FontWeight.bold),
+                                    backgroundColor: MyColors.cellColor),
+                                showTitleActions: true,
+                                onChanged: (DateTime date) {
+                              if (controller
+                                      .endTime.value.millisecondsSinceEpoch <=
+                                  date.millisecondsSinceEpoch) {
+                                controller.endTime.value = date;
+                              }
                             },
-                            child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  Text('Hora final',
-                                      style: CustomTextStyle.rowButomText),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: <Widget>[
-                                      Text(
-                                        '${controller.endTime.value.formatDateYMD} ${controller.endTime.value.formatDateTime24H}',
-                                        style: TextStyle(
-                                            color: MyColors.textButtomBlack,
-                                            fontSize: 16.sp),
-                                      ),
-                                      Icon(
-                                        Icons.arrow_forward_ios,
-                                        size: 16.sp,
-                                        color: PRIMARY_COLOR,
-                                      )
-                                    ],
-                                  )
-                                ])),
-                      ),
+                                onConfirm: (DateTime date) {},
+                                currentTime: controller.endTime.value,
+                                locale: LocaleType.es);
+                          },
+                          child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                Text('Hora final',
+                                    style: CustomTextStyle.rowButomText),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[
+                                    Text(
+                                      '${controller.endTime.value.formatDateYMD} ${controller.endTime.value.formatDateTime24H}',
+                                      style: TextStyle(
+                                          color: MyColors.textButtomBlack,
+                                          fontSize: 16.sp),
+                                    ),
+                                    Icon(
+                                      Icons.arrow_forward_ios,
+                                      size: 16.sp,
+                                      color: PRIMARY_COLOR,
+                                    )
+                                  ],
+                                )
+                              ])),
                     ],
                   ),
 

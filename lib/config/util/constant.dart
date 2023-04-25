@@ -9,22 +9,21 @@ class ConstantData {
   ///icons
   static const BASEIMAGEURL = "assets/images/";
 
-  static final appIcon = BASEIMAGEURL + "todey.png";
+  static const appIcon = "${BASEIMAGEURL}todey.png";
 
   ///animaciones
   static const BASEANIMATIONURL = "assets/animaciones/";
 
-  static final darklightswitch = BASEANIMATIONURL + "darklightswitch.riv";
-  static final lightdark_theme = BASEANIMATIONURL + "lightdark_theme.riv";
+  static const darklightswitch = "${BASEANIMATIONURL}darklightswitch.riv";
+  static const lightdark_theme = "${BASEANIMATIONURL}lightdark_theme.riv";
 
   ///alarmas
   static const BASEALARMURL = "assets/alarmas/";
 
-  static final nokiaAlarm = BASEALARMURL + "nokia.mp3";
-  static final mozartAlarm = BASEALARMURL + "mozart.mp3";
-  static final onepieceAlarm = BASEALARMURL + "one_piece.mp3";
-  static final starwarsAlarm = BASEALARMURL + "star_wars.mp3";
-
+  static const nokiaAlarm = "${BASEALARMURL}nokia.mp3";
+  static const mozartAlarm = "${BASEALARMURL}mozart.mp3";
+  static const onepieceAlarm = "${BASEALARMURL}one_piece.mp3";
+  static const starwarsAlarm = "${BASEALARMURL}star_wars.mp3";
 
 // ///fonts
 //   static const ralewayFont = 'Raleway';
@@ -33,14 +32,11 @@ class ConstantData {
 //   static const montserratFont = 'Montserrat-Medium';
 //   static const nunitoFont = 'Nunito-Regular';
 
-///duration
-  static final kDuration = Duration(milliseconds: 300);
+  ///duration
+  static const kDuration = Duration(milliseconds: 300);
 
-/// error message
+  /// error message
   static const error = "An error has occcured";
-
-
-
 }
 
 /// notas

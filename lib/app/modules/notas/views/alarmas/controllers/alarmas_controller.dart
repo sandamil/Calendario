@@ -179,7 +179,7 @@ class AlarmasController extends GetxController {
         duracion = Duration(days: int.parse(subtractTimeString.value));
         break;
       default:
-        duracion = Duration(minutes: 0);
+        duracion = const Duration(minutes: 0);
         break;
     }
   }
@@ -189,15 +189,14 @@ class AlarmasController extends GetxController {
     noRemind.value
         ? await setAlarmTime()
         : CustomSnackBar.showCustomSnackBar(
-        title: 'No has añadido Alarma',
-        message: ' Vuelve a entrar si queires añadir recordatorio');
+            title: 'No has añadido Alarma',
+            message: ' Vuelve a entrar si queires añadir recordatorio');
     // await loadAlarmCreada();
     await updatealarmaActivadaString();
     await loadAlarmCreadaEdit();
 
     editNotasController.setAlarmaCreada(noRemind.value);
-    await Get.to(() => EditNotasView());
-
+    await Get.to(() => const EditNotasView());
   }
 
   goToAddNotas() async {
@@ -211,7 +210,7 @@ class AlarmasController extends GetxController {
     await loadAlarmCreada();
     await updatealarmaActivadaString();
     addNotasController.setAlarmaCreada(noRemind.value);
-    await Get.to(() => AddNotasView());
+    await Get.to(() => const AddNotasView());
   }
 
   loadAlarmCreada() {

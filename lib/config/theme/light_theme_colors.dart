@@ -5,12 +5,12 @@ import 'package:flutter/cupertino.dart';
 class LightThemeColors
 {
   //dark swatch
-  static const Color primaryColor = const Color(0xFFFFA500);
-  static const Color primaryColor50 = const Color(0x80FFA500);
+  static const Color primaryColor = Color(0xFFFFA500);
+  static const Color primaryColor50 = Color(0x80FFA500);
   static Color accentColor = const Color(0xff005AFF);
 
   //APPBAR
-  static const Color appBarColor = const Color(0xFFA500);
+  static const Color appBarColor = Color(0xFFA500);
 
   //SCAFFOLD
   static const Color scaffoldBackgroundColor = Color(0xffebeaea);

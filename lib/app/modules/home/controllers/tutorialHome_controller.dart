@@ -1,11 +1,9 @@
 import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/config/tutorial/tutorialInicio.dart';
-import 'package:calendario2/config/tutorial/tutorialTask.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
-import 'package:calendario2/config/theme/my_colors.dart' as mc;
 
 class TutorialHomeController extends GetxController {
   @override

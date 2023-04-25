@@ -13,7 +13,7 @@ class ImportantIndicatorTextView extends GetView {
 
     return Obx(() {
       return AnimatedCrossFade(
-        duration: Duration(milliseconds: 200),
+        duration: const Duration(milliseconds: 200),
         firstChild: Padding(
           padding: const EdgeInsets.only(top: 12),
           child: Text(

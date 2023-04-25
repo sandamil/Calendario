@@ -1,5 +1,4 @@
 import 'package:calendario2/config/theme/my_colors.dart';
-import 'package:calendario2/config/util/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -14,21 +13,18 @@ class SettingTile extends StatelessWidget {
       : super(key: key);
   @override
   Widget build(BuildContext context) {
-    var theme = Theme.of(context);
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 7.h, horizontal: 15.w),
       child: GestureDetector(
         onTap: onPressed,
-        child: Container(
+        child: SizedBox(
           height: 50.h,
           width: 325.w,
           child: Row(
             children: [
-              Container(
+              SizedBox(
                   height: 40.h,
-                  child: FittedBox(
-                      fit: BoxFit.cover,
-                      child: icon)),
+                  child: FittedBox(fit: BoxFit.cover, child: icon)),
               SizedBox(width: 20.w),
               Text(
                 btnText!,

@@ -1,25 +1,13 @@
 import 'package:calendario2/app/components/custom_dialog.dart';
-import 'package:calendario2/app/data/model/taskModel.dart';
-import 'package:calendario2/app/data/model/cuadranteDay.dart';
-import 'package:calendario2/app/modules/home/controllers/tutorialHome_controller.dart';
 import 'package:calendario2/app/modules/notas/views/widgets/taskCard.dart';
 import 'package:calendario2/app/modules/home/controllers/calendar_controller.dart';
 import 'package:calendario2/app/modules/home/widgets/calendar/table_calendar.dart';
-import 'package:calendario2/app/modules/home/widgets/calendar/widget/day_selected_turno_widget.dart';
 import 'package:calendario2/app/modules/home/widgets/calendar/widget/line.dart';
 import 'package:calendario2/app/modules/home/widgets/calendar/widget/selected_day_widget.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
-import 'package:calendario2/config/util/dateUtils.dart';
-import 'package:calendario2/config/util/hexColor.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import 'package:get/get.dart';
-import 'package:table_calendar/table_calendar.dart';
-import '../../../../config/theme/my_fonts.dart';
-import '../../../../config/theme/my_theme.dart';
 import '../../menu/views/menu_view.dart';
 import '../controllers/home_controller.dart';
 
@@ -49,17 +37,17 @@ class HomeView extends GetView<HomeController> {
                         duration: const Duration(milliseconds: 100),
                         transition: Transition.leftToRight);
                   },
-                  tooltip: MaterialLocalizations
-                      .of(context)
-                      .openAppDrawerTooltip,
+                  tooltip:
+                      MaterialLocalizations.of(context).openAppDrawerTooltip,
                 );
               },
             ),
-            title: SelectedDayWidget(),
+            title: const SelectedDayWidget(),
             actions: [
               IconButton(
-                key: controller.firstTime.value ? controller.tutorialController
-                    .keyButton7 : key,
+                key: controller.firstTime.value
+                    ? controller.tutorialController.keyButton7
+                    : key,
                 color: PRIMARY_COLOR,
                 icon: const Icon(
                   Icons.today,

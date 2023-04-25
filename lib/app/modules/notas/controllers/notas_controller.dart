@@ -2,12 +2,8 @@ import 'package:calendario2/app/controllers/tutorialController.dart';
 import 'package:calendario2/app/data/local/my_shared_pref.dart';
 import 'package:calendario2/app/data/local/taskDatabase.dart';
 import 'package:calendario2/app/modules/home/controllers/calendar_controller.dart';
-import 'package:calendario2/config/theme/my_colors.dart';
-import 'package:calendario2/config/tutorial/tutorialTask.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 import '../../../data/model/taskModel.dart';
 import '../views/widgets/taskCard.dart';

@@ -1,6 +1,5 @@
 import 'package:calendario2/app/modules/CrearTurno/views/widgets/input_field.dart';
 import 'package:calendario2/app/modules/crearCuadrante/widgets/beautifulAlertDialog.dart';
-import 'package:calendario2/app/modules/home/controllers/home_controller.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/config/theme/my_fonts.dart';
 import 'package:calendario2/config/util/hexColor.dart';
@@ -10,7 +9,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
 
-import '../../home/views/home_view.dart';
 import '../controllers/crear_cuadrante_controller.dart';
 
 class CrearCuadranteView extends GetView<CrearCuadranteController> {
@@ -18,9 +16,6 @@ class CrearCuadranteView extends GetView<CrearCuadranteController> {
 
   @override
   Widget build(BuildContext context) {
-    // Get.put(CrearCuadranteController());
-    var theme = Theme.of(context);
-
     return Obx(
       () {
         return Scaffold(
@@ -80,16 +75,14 @@ class CrearCuadranteView extends GetView<CrearCuadranteController> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
-                      Container(
-                          child: Text(
-                            "Pulsa aqui para ver como crear cuadrante.",
-                            style: TextStyle(
-                              fontSize: 12.sp,
-                            ),
-                          )),
+                      Text(
+                        "Pulsa aqui para ver como crear cuadrante.",
+                        style: TextStyle(
+                          fontSize: 12.sp,
+                        ),
+                      ),
                       IconButton(
-                        icon: const Icon(Icons.info,
-                            color: Colors.redAccent),
+                        icon: const Icon(Icons.info, color: Colors.redAccent),
                         tooltip: '',
                         onPressed: () {
                           controller.firstTime.value = true;
@@ -154,7 +147,7 @@ class CrearCuadranteView extends GetView<CrearCuadranteController> {
                         width: (MediaQuery.of(context).size.width) / 2.2,
                         child: InputField(
                           label: 'Fin',
-                          hintText: controller.endDate.value!
+                          hintText: controller.endDate.value
                               .toIso8601String()
                               .substring(0, 10),
                           widget: IconButton(
@@ -282,7 +275,7 @@ class CrearCuadranteView extends GetView<CrearCuadranteController> {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return BeautifulAlertDialog();
+        return const BeautifulAlertDialog();
       },
     );
   }
@@ -296,7 +289,7 @@ class CrearCuadranteView extends GetView<CrearCuadranteController> {
                 width: 25,
                 child: CircularProgressIndicator(),
               )
-            : Text('Calendario'),
+            : const Text('Calendario'),
         onPressed: () async {
           Get.offAllNamed('/home');
         },
@@ -304,8 +297,8 @@ class CrearCuadranteView extends GetView<CrearCuadranteController> {
     });
     // set up the AlertDialog
     AlertDialog alert = AlertDialog(
-      title: Text("Espera a que cargue el cuadrante"),
-      content: Text(
+      title: const Text("Espera a que cargue el cuadrante"),
+      content: const Text(
           "Cuando se haya cargado el cuadrante el boton se habilitara para llevarte a la pagina de calendario"),
       actions: [
         okButton,

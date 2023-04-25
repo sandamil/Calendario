@@ -1,25 +1,14 @@
-import 'dart:developer';
 import 'dart:io';
-import 'dart:math';
-import 'package:calendario2/app/components/custom_snackbar.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
-
 import 'package:calendario2/app/data/model/cuadranteDay.dart';
 import 'package:calendario2/app/modules/home/controllers/calendar_controller.dart';
-import 'package:calendario2/app/modules/home/controllers/home_controller.dart';
 import 'package:calendario2/config/util/hexColor.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:table_calendar/table_calendar.dart';
-
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-
 import '../../../../components/custom_dialog.dart';
-import 'widget/day_builder.dart';
-import 'widget/marker_builder.dart';
 
 class CalendarWidget extends StatelessWidget {
   final calendarController = Get.put(CalendarController());

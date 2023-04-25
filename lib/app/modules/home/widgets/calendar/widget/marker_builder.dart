@@ -1,6 +1,3 @@
-import 'package:calendario2/app/data/model/cuadranteDay.dart';
-import 'package:calendario2/app/modules/home/controllers/calendar_controller.dart';
-import 'package:calendario2/config/theme/my_theme.dart';
 import 'package:calendario2/config/util/hexColor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -31,30 +28,28 @@ class MarkerBuilderWidget extends StatelessWidget {
                   // margin: const EdgeInsets.all(1.0),
                   //   padding: const EdgeInsets.all(1.0),
                   decoration: BoxDecoration(
-                    color: HexColor(events[index].color!).withAlpha(600),
-                    border: Border.all(
-                        color: HexColor(events[index].color), width: 1),
-                    borderRadius: BorderRadius.circular(5.r),
-                  ),
-                  height: 18.h,
-                  //  padding: EdgeInsets.symmetric(horizontal: 3.0, vertical: 0.0),
-                  child: Container(
-                      child: Stack(
-                    children: <Widget>[
-                      Positioned.fill(
-                        bottom: 0.0,
-                        child: Align(
-                          alignment: Alignment.center,
-                          child: Text(events[index].title!.toUpperCase(),
-                              style: TextStyle(
-                                  fontSize: 14.sp,
-                                  color: HexColor(events[index].color!),
-
-                                  fontWeight: FontWeight.w900)),
-                        ),
-                      )
-                    ],
-                  )),
+                  color: HexColor(events[index].color!).withAlpha(600),
+                  border: Border.all(
+                      color: HexColor(events[index].color), width: 1),
+                  borderRadius: BorderRadius.circular(5.r),
+                ),
+                height: 18.h,
+                //  padding: EdgeInsets.symmetric(horizontal: 3.0, vertical: 0.0),
+                child: Stack(
+                  children: <Widget>[
+                    Positioned.fill(
+                      bottom: 0.0,
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: Text(events[index].title!.toUpperCase(),
+                            style: TextStyle(
+                                fontSize: 14.sp,
+                                color: HexColor(events[index].color!),
+                                fontWeight: FontWeight.w900)),
+                      ),
+                    )
+                  ],
+                ),
               ),
             );
           }),

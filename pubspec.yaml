@@ -24,19 +24,19 @@ dependencies:
   table_calendar: ^3.0.9
 
   shared_preferences: ^2.1.0
-  get_storage: ^2.1.0
+  get_storage: ^2.1.1
 
-  sqflite: ^2.2.6
+  sqflite: ^2.2.7
   path_provider: ^2.0.14
 
-  alarm: ^1.0.2
+  alarm: ^1.0.3
 #    path: /Users/imac/StudioProjects/alarm
 
   flutter_datetime_picker: ^1.5.1
 
   flex_color_picker: ^3.2.0
 
-  flutter_slidable: ^2.0.0
+  flutter_slidable: ^3.0.0
 
   url_launcher: ^6.1.10
 
@@ -57,11 +57,7 @@ dev_dependencies:
     sdk: flutter
 
   flutter_lints: ^2.0.1
-  modal_bottom_sheet:
-    git:
-      url: https://github.com/bayysp/modal_bottom_sheet.git
-      path: modal_bottom_sheet
-      ref: 3.0.0-pre+1-idn_version
+
 
 flutter:
   uses-material-design: true

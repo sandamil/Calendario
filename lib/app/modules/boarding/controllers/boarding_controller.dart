@@ -1,11 +1,9 @@
 import 'package:calendario2/app/data/local/app_storage.dart';
 import 'package:calendario2/app/data/model/boarding_model.dart';
-import 'package:calendario2/app/modules/home/controllers/calendar_controller.dart';
 import 'package:calendario2/config/util/constant.dart';
 import 'package:calendario2/config/util/transformer_page_view/index_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 
 class BoardingController extends GetxController {
   // CalendarController calendarController = Get.put(CalendarController());
@@ -124,7 +122,7 @@ class BoardingController extends GetxController {
     }
     tController.next();
     pageController.nextPage(
-        duration: Duration(milliseconds: 900), curve: Curves.easeOut);
+        duration: const Duration(milliseconds: 900), curve: Curves.easeOut);
     // _currentPage.value = _currentPage.value +1;
 
   }

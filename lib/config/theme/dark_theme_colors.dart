@@ -1,10 +1,11 @@
+// ignore_for_file: unused_import, unnecessary_import, unnecessary_const
+
 import 'package:calendario2/config/util/hexColor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
 // TODO add your dark theme colors palette
-class DarkThemeColors
-{
+class DarkThemeColors {
   //dark swatch
   static const Color primaryColor = const Color(0xFFFFA500);
   static const Color primaryColor50 = const Color(0x80FFA500);
@@ -37,6 +38,7 @@ class DarkThemeColors
   static const Color captionTextColor = Colors.grey;
   static const Color hintTextColor = Color(0xff686868);
   static const Color lightTextColor = Color(0x9E9E9E80);
+
   // static const Color lightTextColor = Colors.grey;
 
   //chip

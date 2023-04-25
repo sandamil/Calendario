@@ -74,7 +74,6 @@ class DBHelper {
         "INSERT into $_turnos(id, title, description, color, startHour, endHour) "
         ' VALUES(4, "L", "Libre", "ffffff", "00:00", "23:59")  ');
 
-    print("Database was Created!");
   }
 
 
@@ -99,13 +98,11 @@ class DBHelper {
     final dbClient = await database;
 
     var day = DateTime.now();
-    DateTime dayStart = day.subtract(Duration(days: 60));
-    DateTime dayEnd = day.add(Duration(days: 300));
+    DateTime dayStart = day.subtract(const Duration(days: 60));
+    DateTime dayEnd = day.add(const Duration(days: 300));
 
-    List<Map<String, dynamic>> result =
-    await dbClient!.rawQuery(
+    List<Map<String, dynamic>> result = await dbClient!.rawQuery(
         "SELECT * FROM $_cuadrantes WHERE datetime BETWEEN '${dayStart.toString()}' AND '${dayEnd.toString()}'");
-
 
     return result.map((m) => CuadranteDay.fromMap(m)).toList();
   }

@@ -23,22 +23,24 @@ class ExampleAlarmTile extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-             Text(
-             ' Alarma creada para las:',
+            Text(
+              ' Alarma creada para las:',
               style: TextStyle(
                 fontSize: 14.sp,
                 fontWeight: FontWeight.w500,
               ),
             ),
-            SizedBox(width: 8.w,),
+            SizedBox(
+              width: 8.w,
+            ),
             Text(
               title,
-              style:  TextStyle(
+              style: TextStyle(
                 fontSize: 16.sp,
                 fontWeight: FontWeight.w500,
               ),
             ),
-            Spacer(),
+            const Spacer(),
             const Icon(Icons.keyboard_arrow_right_rounded, size: 35),
           ],
         ),

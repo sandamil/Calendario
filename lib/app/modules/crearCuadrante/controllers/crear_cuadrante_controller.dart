@@ -4,15 +4,11 @@ import 'package:calendario2/app/data/local/calendarDatabase.dart';
 import 'package:calendario2/app/data/local/my_shared_pref.dart';
 import 'package:calendario2/app/data/model/cuadranteDay.dart';
 import 'package:calendario2/app/data/model/turnoType.dart';
-import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/config/util/hexColor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
-import '../../../../config/tutorial/tutorialCuadrantes.dart';
 
 class CrearCuadranteController extends GetxController {
   TutorialController tutorialController = TutorialController();
@@ -80,7 +76,7 @@ class CrearCuadranteController extends GetxController {
     var difference = end.difference(start).inDays;
 
     for (int i = 0; i <= difference; i++) {
-      date = start.add(Duration(days: i)).add(Duration(hours: 6));
+      date = start.add(Duration(days: i)).add(const Duration(hours: 6));
       if (x >= list.length) {
         x = 0;
       }
@@ -105,14 +101,14 @@ class CrearCuadranteController extends GetxController {
 
   void addYear() async {
     if (isSwitched.value == false) {
-      await endDate.value!
+      endDate.value
           .add(const Duration(days: 365))
           .subtract(const Duration(hours: 2))
           .toIso8601String()
           .substring(0, 10);
       endDate.refresh();
     } else {
-      await endDate.value == DateTime.now();
+      endDate.value == DateTime.now();
       endDate.refresh();
     }
   }

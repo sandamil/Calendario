@@ -14,8 +14,7 @@ class ColorPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     int index = info.fromIndex;
     _paint.color = colors[index];
-    canvas.drawRect(
-        new Rect.fromLTWH(0.0, 0.0, size.width, size.height), _paint);
+    canvas.drawRect(Rect.fromLTWH(0.0, 0.0, size.width, size.height), _paint);
     if (info.done) {
       return;
     }
@@ -37,9 +36,9 @@ class ColorPainter extends CustomPainter {
         }
         alpha = (0xff * opacity).toInt();
 
-        _paint.color = new Color((alpha << 24) | color);
+        _paint.color = Color((alpha << 24) | color);
         canvas.drawRect(
-            new Rect.fromLTWH(0.0, 0.0, size.width, size.height), _paint);
+            Rect.fromLTWH(0.0, 0.0, size.width, size.height), _paint);
       }
     } else {
       if (index > 0) {
@@ -55,9 +54,9 @@ class ColorPainter extends CustomPainter {
         }
         alpha = (0xff * opacity).toInt();
 
-        _paint.color = new Color((alpha << 24) | color);
+        _paint.color = Color((alpha << 24) | color);
         canvas.drawRect(
-            new Rect.fromLTWH(0.0, 0.0, size.width, size.height), _paint);
+            Rect.fromLTWH(0.0, 0.0, size.width, size.height), _paint);
       }
     }
   }
@@ -69,12 +68,12 @@ class ColorPainter extends CustomPainter {
 }
 
 class _ParallaxColorState extends State<ParallaxColor> {
-  Paint paint = new Paint();
+  Paint paint = Paint();
 
   @override
   Widget build(BuildContext context) {
-    return new CustomPaint(
-      painter: new ColorPainter(paint, widget.info, widget.colors),
+    return CustomPaint(
+      painter: ColorPainter(paint, widget.info, widget.colors),
       child: widget.child,
     );
   }
@@ -88,6 +87,7 @@ class ParallaxColor extends StatefulWidget {
   final TransformInfo info;
 
   ParallaxColor({
+    super.key,
     required this.colors,
     required this.info,
     required this.child,
@@ -95,7 +95,7 @@ class ParallaxColor extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return new _ParallaxColorState();
+    return _ParallaxColorState();
   }
 }
 
@@ -105,18 +105,19 @@ class ParallaxContainer extends StatelessWidget {
   final double translationFactor;
   final double opacityFactor;
 
-  ParallaxContainer(
-      {required this.child,
+  const ParallaxContainer(
+      {super.key,
+      required this.child,
       required this.position,
-      this.translationFactor: 100.0,
-      this.opacityFactor: 1.0});
+      this.translationFactor = 100.0,
+      this.opacityFactor = 1.0});
 
   @override
   Widget build(BuildContext context) {
     return Opacity(
       opacity: (1 - position.abs()).clamp(0.0, 1.0) * opacityFactor,
-      child: new Transform.translate(
-        offset: new Offset(position * translationFactor, 0.0),
+      child: Transform.translate(
+        offset: Offset(position * translationFactor, 0.0),
         child: child,
       ),
     );
@@ -128,7 +129,7 @@ class ParallaxImage extends StatelessWidget {
   final double imageFactor;
 
   ParallaxImage.asset(String name,
-      {required double position, this.imageFactor: 0.3})
+      {super.key, required double position, this.imageFactor = 0.3})
       : image = Image.asset(name,
             fit: BoxFit.cover,
             alignment: FractionalOffset(

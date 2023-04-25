@@ -1,6 +1,4 @@
 import 'package:alarm/alarm.dart';
-import 'package:alarm/service/storage.dart';
-import 'package:calendario2/app/components/toast.dart';
 import 'package:calendario2/app/data/local/taskDatabase.dart';
 import 'package:calendario2/app/data/model/taskModel.dart';
 import 'package:calendario2/app/modules/notas/views/alarmas/controllers/alarmas_controller.dart';

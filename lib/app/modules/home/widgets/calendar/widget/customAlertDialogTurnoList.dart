@@ -5,7 +5,6 @@ import 'package:calendario2/config/util/hexColor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:logger/logger.dart';
 
 class CustomAlertDialogTurnoList extends StatelessWidget {
   CustomAlertDialogTurnoList(
