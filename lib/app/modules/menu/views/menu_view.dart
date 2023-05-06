@@ -30,7 +30,7 @@ class MenuView extends GetView<MenuAppController> {
             size: 26.sp,
           ),
           onPressed: () {
-            Get.to(() => const HomeView(),
+            Get.to(() => HomeView(),
                 duration: const Duration(microseconds: 700),
                 transition: Transition.rightToLeft);
 

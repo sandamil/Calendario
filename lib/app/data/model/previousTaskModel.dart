@@ -37,7 +37,7 @@ class PreviousTask {
 
   @override
   String toString() {
-    return 'Travel '
+    return 'NotasBkp '
         '{id: $id, '
         'day: $day, '
         'month: $month, '

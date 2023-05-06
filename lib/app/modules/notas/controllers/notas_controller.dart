@@ -28,7 +28,7 @@ class NotasListController extends GetxController {
 
   @override
   void onInit() async {
-    await setNotesFromDB2();
+    // await setNotesFromDB2();
 
     setNotesFromDB();
     super.onInit();
@@ -57,17 +57,17 @@ class NotasListController extends GetxController {
     return notesList.value;
   }
 
-  ///Todo update notes sin cargar toda la base de datos
-  setNotesFromDB2() async {
-    notesList2.value = await PreviusDbProvider.instance.getNotesFromDB();
-    print(notesList2.value.length);
-
-    print(notesList2[0].day);
-
-    update();
-
-    return notesList2;
-  }
+  // ///Todo update notes sin cargar toda la base de datos
+  // setNotesFromDB2() async {
+  //   notesList2.value = await PreviusDbProvider.instance.getNotesFromDB();
+  //   print(notesList2.value.length);
+  //
+  //   print(notesList2[0].day);
+  //
+  //   update();
+  //
+  //   return notesList2;
+  // }
 
   void gotoEditNote() {
     Get.toNamed('/add-notas');

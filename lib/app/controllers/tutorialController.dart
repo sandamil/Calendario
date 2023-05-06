@@ -1,4 +1,4 @@
-import 'package:calendario2/app/controllers/utility_controller.dart';
+import 'package:calendario2/app/controllers/app_controller.dart';
 import 'package:calendario2/app/data/local/my_shared_pref.dart';
 import 'package:calendario2/app/modules/crearCuadrante/controllers/crear_cuadrante_controller.dart';
 import 'package:calendario2/app/modules/home/controllers/home_controller.dart';
@@ -14,7 +14,6 @@ import 'package:get/get.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 class TutorialController extends GetxController {
-  UtilityController utilityController = UtilityController();
 
   TutorialCoachMark? tutorialCoachMark;
   List<TargetFocus> targets = [];

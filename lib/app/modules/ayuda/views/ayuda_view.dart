@@ -54,8 +54,7 @@ class AyudaView extends GetView<AyudaController> {
                   ),
                 ],
               ),
-              SizedBox(height: 20.h),
-
+              SizedBox(height: 10.h),
               SettingsGroup(
                 title: "Contacto",
                 children: [
@@ -72,7 +71,7 @@ class AyudaView extends GetView<AyudaController> {
                   ),
                 ],
               ),
-              SizedBox(height: 20.h),
+              SizedBox(height: 10.h),
               SettingsGroup(
                 title: "Feedback",
                 children: [
@@ -86,6 +85,19 @@ class AyudaView extends GetView<AyudaController> {
                     title: "Califica app",
                     subtitle: "Comparte tu experiencia en Play Store",
                     onTap: controller.rateAppClicked,
+                  ),
+                ],
+              ),
+              SizedBox(height: 10.h),
+
+              SettingsGroup(
+                title: "Version Anterior",
+                children: [
+                  AyudaRowWidget(
+                    title: "Datos Guardados",
+                    subtitle:
+                    "Consulta aquí, los datos guardados de tu versión anterior a Calendario 2.0, o Mayo 2023.",
+                    onTap: () => controller.goToVersionAnteriorScreen(),
                   ),
                 ],
               )

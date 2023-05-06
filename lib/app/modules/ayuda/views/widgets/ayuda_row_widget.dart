@@ -19,7 +19,7 @@ class AyudaRowWidget extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
-        padding: EdgeInsets.only(left: 12.w, right: 12.w, top: 6.h),
+        padding: EdgeInsets.only(left: 12.w, right: 12.w, top: 2.h),
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text(
             title,
@@ -37,7 +37,7 @@ class AyudaRowWidget extends StatelessWidget {
           ),
           SizedBox(height: 6.h),
           const Divider(height: 0.5, thickness: 0),
-          SizedBox(height: 6.h),
+          SizedBox(height: 2.h),
         ]),
       ),
     );

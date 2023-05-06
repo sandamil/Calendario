@@ -2,7 +2,7 @@
 import 'package:calendario2/config/util/app_utils.dart';
 import 'package:get/get.dart';
 
-class UtilityController extends GetxController {
+class AppController extends GetxController {
   String appVersion = 'version 1.0.0';
   // RxBool isShowLog = true.obs;
   // RxString currentPage = ''.obs;
