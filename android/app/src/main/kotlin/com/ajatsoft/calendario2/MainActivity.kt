@@ -1,4 +1,4 @@
-package com.ajatsoft.calendario2
+package ajat.calendario.turnos
 
 import io.flutter.embedding.android.FlutterActivity
 

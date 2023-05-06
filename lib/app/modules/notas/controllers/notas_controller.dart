@@ -1,6 +1,8 @@
 import 'package:calendario2/app/controllers/tutorialController.dart';
 import 'package:calendario2/app/data/local/my_shared_pref.dart';
+import 'package:calendario2/app/data/local/previusTaskDatabase.dart';
 import 'package:calendario2/app/data/local/taskDatabase.dart';
+import 'package:calendario2/app/data/model/previousTaskModel.dart';
 import 'package:calendario2/app/modules/home/controllers/calendar_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -17,6 +19,7 @@ class NotasListController extends GetxController {
   RxBool isSearchEmpty = true.obs;
 
   RxList<Task> notesList = <Task>[].obs;
+  RxList<PreviousTask> notesList2 = <PreviousTask>[].obs;
 
   Rx<TextEditingController> searchController = TextEditingController().obs;
 
@@ -25,6 +28,8 @@ class NotasListController extends GetxController {
 
   @override
   void onInit() async {
+    // await setNotesFromDB2();
+
     setNotesFromDB();
     super.onInit();
     if (MySharedPref.getTutoTaskFirst()) {
@@ -35,6 +40,7 @@ class NotasListController extends GetxController {
 
   @override
   void onReady() {
+    print(notesList2.value.length);
     super.onReady();
   }
 
@@ -48,9 +54,20 @@ class NotasListController extends GetxController {
   setNotesFromDB() async {
     notesList.value = await DbProvider.instance.getNotesFromDB();
     update();
-
     return notesList.value;
   }
+
+  // ///Todo update notes sin cargar toda la base de datos
+  // setNotesFromDB2() async {
+  //   notesList2.value = await PreviusDbProvider.instance.getNotesFromDB();
+  //   print(notesList2.value.length);
+  //
+  //   print(notesList2[0].day);
+  //
+  //   update();
+  //
+  //   return notesList2;
+  // }
 
   void gotoEditNote() {
     Get.toNamed('/add-notas');

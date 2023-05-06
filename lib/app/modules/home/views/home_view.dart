@@ -1,4 +1,5 @@
 import 'package:calendario2/app/components/custom_dialog.dart';
+import 'package:calendario2/app/data/local/previusTaskDatabase.dart';
 import 'package:calendario2/app/modules/notas/views/widgets/taskCard.dart';
 import 'package:calendario2/app/modules/home/controllers/calendar_controller.dart';
 import 'package:calendario2/app/modules/home/widgets/calendar/table_calendar.dart';
@@ -8,11 +9,14 @@ import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import '../../../controllers/ads_controller.dart';
 import '../../menu/views/menu_view.dart';
 import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
-  const HomeView({Key? key}) : super(key: key);
+  HomeView({Key? key}) : super(key: key);
+  final adcontroller = Get.find<AdsController>();
 
   @override
   Widget build(BuildContext context) {
@@ -54,23 +58,43 @@ class HomeView extends GetView<HomeController> {
                 ),
                 tooltip: 'today',
                 onPressed: () async {
-                  CustomDialog.showPopUpInfo(
-                    title: 'Volver a HOY',
-                    description: 'Selecciona Mes al que quieres ir',
-                    labelButton: 'Volver',
-                    // onPress: (){}
-                  );
+                  // CustomDialog.showPopUpInfo(
+                  //   title: 'Volver a HOY',
+                  //   description: 'Selecciona Mes al que quieres ir',
+                  //   labelButton: 'Volver',
+                  //   // onPress: (){}
+                  // );adb backup -noapk ajat.calendario.turnos
+
+
+
+                 // / data/data/ ajat.calendario.turnos/app_flutter/ DBC4A.db
+                  await PreviusDbProvider.instance.getPreviousTaskFromDB();
+                  // print(notesList.asMap());
                 },
               ),
             ],
           ),
-          // floatingActionButton: FloatingActionButton(
-          //   elevation: 0,
-          //   onPressed: () {
-          //     // MyTheme.changeTheme();
-          //   },
-          //   child: const Icon(Icons.icecream_rounded),
-          // ),
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+          floatingActionButton: FloatingActionButton.extended(
+
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            onPressed: () {
+              // MyTheme.changeTheme();
+            },
+            label: adcontroller.staticAdLoaded.value
+                ? Container(
+              color: Colors.transparent,
+              width:adcontroller.staticAd.size.width.toDouble(),
+              height: adcontroller.staticAd.size.height.toDouble(),
+              alignment: Alignment.bottomCenter,
+              child: AdWidget(
+                ad: adcontroller.staticAd,
+              ),
+            )
+                : const SizedBox(),
+          ),
+
           body: Column(
             children: [
               SizedBox(height: 2.h),
@@ -91,6 +115,7 @@ class HomeView extends GetView<HomeController> {
                   key: controller.firstTime.value ? controller
                       .tutorialController.keyButton9 : key,
                 );
+
               }),
             ],
           ));
@@ -107,6 +132,7 @@ class HomeView extends GetView<HomeController> {
     return SingleChildScrollView(
       child: Column(
         children: [
+
           // events.isNotEmpty
           //     ? Row(
           //         crossAxisAlignment: CrossAxisAlignment.start,
@@ -155,6 +181,7 @@ class HomeView extends GetView<HomeController> {
                       (event) =>
                       Column(
                         children: [
+
                           // CardEvent(event: event),
                           TaskCard(
                               noteData: event,
@@ -165,7 +192,8 @@ class HomeView extends GetView<HomeController> {
                 )
                     .toList(),
               )),
-        ],
+
+           ],
       ),
     );
   }

@@ -32,7 +32,7 @@ class SettingTile extends StatelessWidget {
                   fontWeight: FontWeight.w500,
                   // fontFamily: ConstantData.ralewayFont,
                   fontSize: 20.sp,
-                  color: MyColors.textColor,
+                  // color: MyColors.textColor,
                 ),
               ),
               const Spacer(),

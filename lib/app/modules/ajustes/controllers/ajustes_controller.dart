@@ -20,8 +20,10 @@ class AjustesController extends GetxController {
 
   late RiveAnimationController? _controller;
   late RiveAnimationController? _controller2;
-  late RuntimeArtboard artboard;
-  late RuntimeArtboard artboard2;
+
+  final artboard = Rxn<RuntimeArtboard>();
+  final artboard2 = Rxn<RuntimeArtboard>();
+
 
   // var islight = true;
   // var enable = true;
@@ -40,24 +42,24 @@ class AjustesController extends GetxController {
     }  else {
       isDark.value = false;
     }
-    artboard = RuntimeArtboard();
+    artboard.value = RuntimeArtboard();
     rootBundle.load(ConstantData.lightdark_theme).then((data) async {
       final file = RiveFile.import(data);
       final _artboard = file.mainArtboard as RuntimeArtboard;
       _artboard.addController(_controller = (!isDark.value)
           ? SimpleAnimation('to light')
           : SimpleAnimation('to dark'));
-      artboard = _artboard;
+      artboard.value = _artboard;
     });
 
-    artboard2 = RuntimeArtboard();
+    artboard2.value = RuntimeArtboard();
     rootBundle.load(ConstantData.darklightswitch).then((data) async {
       final file = RiveFile.import(data);
       final _artboard2 = file.mainArtboard as RuntimeArtboard;
       _artboard2.addController(_controller2 = (!isDark.value)
           ? SimpleAnimation('ltr')
           : SimpleAnimation('rtl'));
-      artboard2 = _artboard2;
+      artboard2.value = _artboard2;
     });
 
     super.onInit();
@@ -80,20 +82,20 @@ class AjustesController extends GetxController {
 
   Future<void> changeTheme(bool value) async {
     if (value) {
-      artboard.removeController(_controller!);
-      artboard.addController(_controller = SimpleAnimation('to dark'));
-      artboard2.removeController(_controller2!);
-      artboard2.addController(_controller2 = SimpleAnimation('rtl'));
+      artboard.value?.removeController(_controller!);
+      artboard.value?.addController(_controller = SimpleAnimation('to dark'));
+      artboard2.value?.removeController(_controller2!);
+      artboard2.value?.addController(_controller2 = SimpleAnimation('rtl'));
       Get.snackbar("Tema oscuro", "Modo oscuro activado",
           colorText: Colors.white, snackPosition: SnackPosition.BOTTOM);
       update();
       isDark.value = true;
       MyTheme.changeTheme();
     } else {
-      artboard.removeController(_controller!);
-      artboard.addController(_controller = SimpleAnimation('to light'));
-      artboard2.removeController(_controller2!);
-      artboard2.addController(_controller2 = SimpleAnimation('ltr'));
+      artboard.value?.removeController(_controller!);
+      artboard.value?.addController(_controller = SimpleAnimation('to light'));
+      artboard2.value?.removeController(_controller2!);
+      artboard2.value?.addController(_controller2 = SimpleAnimation('ltr'));
       Get.snackbar("Tema claro", "Modo brillante activado",
           colorText: Colors.white, snackPosition: SnackPosition.BOTTOM);
       update();

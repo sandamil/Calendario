@@ -44,30 +44,31 @@ class AjustesView extends GetView<AjustesController> {
             children: [
               const SettingTitleTile('General'),
 
-              SettingTile(
-                  icon: ConstrainedBox(
-                    constraints:
-                        const BoxConstraints.expand(height: 50, width: 50),
-                    child: Rive(
-                      artboard: controller.artboard,
-                      fit: BoxFit.fill,
-                      useArtboardSize: true,
-                    ),
-                  ),
-                  btnText: "Theme".tr,
-                  trailing: GestureDetector(
-                      child: ConstrainedBox(
-                        constraints:
-                            const BoxConstraints.expand(height: 40, width: 80),
-                        child: Rive(
-                          artboard: controller.artboard2,
-                          fit: BoxFit.fill,
-                          useArtboardSize: true,
-                        ),
+              Obx(() {
+                return SettingTile(
+                    icon: ConstrainedBox(
+                      constraints:
+                      const BoxConstraints.expand(height: 50, width: 50),
+                      child: Rive(
+                        artboard: controller.artboard.value!,
+                        fit: BoxFit.fill,
+                        useArtboardSize: true,
                       ),
-                      onTap: () async {
-                        controller.cambioModo();
-                      })
+                    ),
+                    btnText: "Theme".tr,
+                    trailing: GestureDetector(
+                        child: ConstrainedBox(
+                          constraints:
+                          const BoxConstraints.expand(height: 40, width: 80),
+                          child: Rive(
+                            artboard: controller.artboard2.value!,
+                            fit: BoxFit.fill,
+                            useArtboardSize: true,
+                          ),
+                        ),
+                        onTap: () async {
+                          controller.cambioModo();
+                        })
 
                   // CupertinoSwitch(
                   //   value: controller.isDark.value,
@@ -76,7 +77,8 @@ class AjustesView extends GetView<AjustesController> {
                   //     await controller.changeTheme(val);
                   //   },
                   // ),
-                  ),
+                );
+              }),
 
               SettingTile(
                   icon: const ImageIcon(AssetImage(MyIcon.languageIcon)),
@@ -108,7 +110,7 @@ class AjustesView extends GetView<AjustesController> {
                   SettingTitleTile("Version Pro".tr),
                   Padding(
                     padding: EdgeInsets.only(right: 12.w),
-                    child:  ElevatedButton(
+                    child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         minimumSize: Size.zero,
                         // Set this
@@ -118,12 +120,13 @@ class AjustesView extends GetView<AjustesController> {
                         backgroundColor: Colors.green,
                         // background (button) color
                         foregroundColor:
-                            Colors.green, // foreground (text) color
+                        Colors.green, // foreground (text) color
                       ),
-                      onPressed: (){},
+                      onPressed: () {},
                       child: Padding(
                         padding: EdgeInsets.symmetric(horizontal: 8.w),
-                        child: Text('Obtener version pro',style: TextStyle(color: MyColors.textButtom),),
+                        child: Text('Obtener version pro', style: TextStyle(
+                            color: MyColors.textButtom),),
                       ),
                     ),
                   )
