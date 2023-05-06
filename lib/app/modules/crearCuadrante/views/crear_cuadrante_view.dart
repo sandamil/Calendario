@@ -191,7 +191,6 @@ class CrearCuadranteView extends GetView<CrearCuadranteController> {
               ),
               SizedBox(
                 height: 1.h,
-
               ),
               Container(
                 key: controller.firstTime.value
@@ -221,7 +220,7 @@ class CrearCuadranteView extends GetView<CrearCuadranteController> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
                           Padding(
-                            padding: const EdgeInsets.all(5.0),
+                            padding: EdgeInsets.all(2.h),
                             child: Text(
                               controller.list[index].title!,
                               style: TextStyle(
@@ -236,9 +235,20 @@ class CrearCuadranteView extends GetView<CrearCuadranteController> {
                           ),
                           GestureDetector(
                             child: Container(
-                              padding: const EdgeInsets.only(bottom: 2.0),
+                              padding: EdgeInsets.only(bottom: 2.h),
                               child: Icon(
-                                Icons.delete,
+                                shadows: const <Shadow>[
+                                  BoxShadow(
+                                      color: Colors.redAccent,
+                                      blurRadius: 15.0,
+                                      // offset: Offset(1, 0)
+                                      ),
+                                  BoxShadow(
+                                    blurRadius: 12.0,
+                                    color: Colors.red,
+                                  ),
+                                ],
+                                Icons.delete_forever,
                                 color: Theme.of(context)
                                     .textTheme
                                     .titleLarge!

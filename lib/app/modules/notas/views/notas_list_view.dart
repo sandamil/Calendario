@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:calendario2/app/controllers/ads_controller.dart';
 import 'package:calendario2/app/modules/notas/controllers/notas_controller.dart';
 import 'package:calendario2/app/modules/notas/views/widgets/important_indicator_text_view.dart';
@@ -68,7 +70,10 @@ class NotasListView extends GetView<NotasListController> {
           ),
           icon: const Icon(Icons.add),
         ),
-        bottomNavigationBar: adcontroller.staticAdNotesListLoaded.value
+        bottomNavigationBar: Platform.isAndroid
+            ?
+
+        adcontroller.staticAdNotesListLoaded.value
             ? Container(
                 color: Colors.transparent,
                 width: adcontroller.staticNotesListAd.size.width.toDouble(),
@@ -79,9 +84,7 @@ class NotasListView extends GetView<NotasListController> {
                 ),
               )
             : const SizedBox(
-                height: 20,
-                child: Text('data'),
-              ),
+              ): null,
         body: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
           margin: EdgeInsets.only(top: 6.h),

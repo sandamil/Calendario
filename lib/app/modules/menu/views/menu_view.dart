@@ -56,7 +56,7 @@ class MenuView extends GetView<MenuAppController> {
                     borderRadius: Corners.xmBorder),
                 height: qaButtonHeight,
                 minWidth: qaButtonWidth,
-                color: Theme.of(context).hintColor,
+                color: MyColors.cellSelectedColor,
                 child: Stack(
                   children: <Widget>[
                     Container(
@@ -103,7 +103,7 @@ class MenuView extends GetView<MenuAppController> {
                     borderRadius: Corners.xmBorder),
                 height: qaButtonHeight,
                 minWidth: qaButtonWidth,
-                color: Theme.of(context).hintColor,
+                color: MyColors.cellSelectedColor,
                 child: Stack(
                   children: <Widget>[
                     Container(
@@ -145,7 +145,7 @@ class MenuView extends GetView<MenuAppController> {
                     borderRadius: Corners.xmBorder),
                 height: qaButtonHeight,
                 minWidth: qaButtonWidth,
-                color: Theme.of(context).hintColor,
+                color: MyColors.cellSelectedColor,
                 child: Stack(
                   children: <Widget>[
                     Container(
@@ -188,7 +188,7 @@ class MenuView extends GetView<MenuAppController> {
                     borderRadius: Corners.xmBorder),
                 height: qaButtonHeight,
                 minWidth: qaButtonWidth,
-                color: Theme.of(context).hintColor,
+                color: MyColors.cellSelectedColor,
                 child: Stack(
                   children: <Widget>[
                     Container(
@@ -230,7 +230,7 @@ class MenuView extends GetView<MenuAppController> {
                     borderRadius: Corners.xmBorder),
                 height: qaButtonHeight,
                 minWidth: qaButtonWidth,
-                color: Theme.of(context).hintColor,
+                color: MyColors.cellSelectedColor,
                 child: Stack(
                   children: <Widget>[
                     Container(

@@ -278,6 +278,7 @@ class MyStyles {
 
         inputDecorationTheme: InputDecorationTheme(
           errorStyle: const TextStyle(color: Colors.blue),
+
           prefixIconColor: isLightTheme
               ? LightThemeColors.darkTextColor
               : DarkThemeColors.lightTextColor,
@@ -313,6 +314,7 @@ class MyStyles {
                   width: 2.0,
                   color:
                   Colors.redAccent)),
+
         ),
         // inputDecorationTheme: InputDecorationTheme(
         //   errorBorder: const UnderlineInputBorder(

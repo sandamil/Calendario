@@ -77,6 +77,8 @@ class AddTurnoView extends GetView<CrearTurnoController> {
                             hintText: 'Abreviatura',
                             labelText: 'Abreviatura',
                             border: const OutlineInputBorder(
+                                // borderSide: BorderSide(color: Colors.yellow),
+
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(15))),
                           ),

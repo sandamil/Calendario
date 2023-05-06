@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:calendario2/app/components/custom_dialog.dart';
 import 'package:calendario2/app/data/local/previusTaskDatabase.dart';
 import 'package:calendario2/app/modules/notas/views/widgets/taskCard.dart';
@@ -29,8 +31,9 @@ class HomeView extends GetView<HomeController> {
             leading: Builder(
               builder: (BuildContext context) {
                 return IconButton(
-                  key: controller.firstTime.value ? controller
-                      .tutorialController.keyButton6 : key,
+                  key: controller.firstTime.value
+                      ? controller.tutorialController.keyButton6
+                      : key,
                   icon: Icon(
                     Icons.menu,
                     color: PRIMARY_COLOR,
@@ -65,42 +68,44 @@ class HomeView extends GetView<HomeController> {
                   //   // onPress: (){}
                   // );adb backup -noapk ajat.calendario.turnos
 
-
-
-                 // / data/data/ ajat.calendario.turnos/app_flutter/ DBC4A.db
+                  // / data/data/ ajat.calendario.turnos/app_flutter/ DBC4A.db
                   await PreviusDbProvider.instance.getPreviousTaskFromDB();
                   // print(notesList.asMap());
                 },
               ),
             ],
           ),
-          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-          floatingActionButton: FloatingActionButton.extended(
-
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            onPressed: () {
-              // MyTheme.changeTheme();
-            },
-            label: adcontroller.staticAdHomeLoaded.value
-                ? Container(
-              color: Colors.transparent,
-              width:adcontroller.staticHomeAd.size.width.toDouble(),
-              height: adcontroller.staticHomeAd.size.height.toDouble(),
-              alignment: Alignment.bottomCenter,
-              child: AdWidget(
-                ad: adcontroller.staticHomeAd,
-              ),
-            )
-                : const SizedBox(),
-          ),
-
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked,
+          floatingActionButton: Platform.isAndroid
+              ? FloatingActionButton.extended(
+                  backgroundColor: Colors.transparent,
+                  elevation: 0,
+                  onPressed: () {
+                    // MyTheme.changeTheme();
+                  },
+                  label: adcontroller.staticAdHomeLoaded.value
+                      ? Container(
+                          color: Colors.transparent,
+                          width:
+                              adcontroller.staticHomeAd.size.width.toDouble(),
+                          height:
+                              adcontroller.staticHomeAd.size.height.toDouble(),
+                          alignment: Alignment.bottomCenter,
+                          child: AdWidget(
+                            ad: adcontroller.staticHomeAd,
+                          ),
+                        )
+                      : const SizedBox(),
+                )
+              : null,
           body: Column(
             children: [
               SizedBox(height: 2.h),
               CalendarWidget(
-                key: controller.firstTime.value ? controller.tutorialController
-                    .keyButton8 : key,
+                key: controller.firstTime.value
+                    ? controller.tutorialController.keyButton8
+                    : key,
               ),
               SizedBox(height: 5.h),
               Padding(
@@ -111,11 +116,12 @@ class HomeView extends GetView<HomeController> {
               // Obx(() => _buildSelectedDay()),
               SizedBox(height: 2.h),
               Obx(() {
-                return Expanded(child: _buildListEvent(),
-                  key: controller.firstTime.value ? controller
-                      .tutorialController.keyButton9 : key,
+                return Expanded(
+                  child: _buildListEvent(),
+                  key: controller.firstTime.value
+                      ? controller.tutorialController.keyButton9
+                      : key,
                 );
-
               }),
             ],
           ));
@@ -132,7 +138,6 @@ class HomeView extends GetView<HomeController> {
     return SingleChildScrollView(
       child: Column(
         children: [
-
           // events.isNotEmpty
           //     ? Row(
           //         crossAxisAlignment: CrossAxisAlignment.start,
@@ -176,24 +181,21 @@ class HomeView extends GetView<HomeController> {
           //       ),
           SingleChildScrollView(
               child: Column(
-                children: events
-                    .map(
-                      (event) =>
-                      Column(
-                        children: [
-
-                          // CardEvent(event: event),
-                          TaskCard(
-                              noteData: event,
-                              onTapAction: controller.notasController
-                                  .openNoteToRead)
-                        ],
-                      ),
+            children: events
+                .map(
+                  (event) => Column(
+                    children: [
+                      // CardEvent(event: event),
+                      TaskCard(
+                          noteData: event,
+                          onTapAction:
+                              controller.notasController.openNoteToRead)
+                    ],
+                  ),
                 )
-                    .toList(),
-              )),
-
-           ],
+                .toList(),
+          )),
+        ],
       ),
     );
   }

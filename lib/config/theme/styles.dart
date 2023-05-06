@@ -100,27 +100,27 @@ class Shadows {
       ];
 }
 
-InputDecoration inputDecoration({
-  required String hintText,
-  Widget? prefixIcon,
-  Widget? suffixIcon,
-  TextStyle? hintStyle,
-  EdgeInsets? padding,
-  Color? hintColor,
-}) {
-  return InputDecoration(
-    isDense: true,
-    // filled: true,
-    contentPadding:
-        padding ?? EdgeInsets.symmetric(horizontal: 12.w, vertical: 16.w),
-    hintText: hintText,
-    border: InputBorder.none,
-    errorMaxLines: 5,
-    prefixIcon: prefixIcon,
-    prefixIconConstraints: BoxConstraints(minHeight: 24.w, minWidth: 24.w),
-    suffixIconConstraints: BoxConstraints(minHeight: 24.w, minWidth: 24.w),
-    suffixIcon: suffixIcon,
-    hintStyle: hintStyle ??
-        CustomTextStyle.text.copyWith(color: hintColor ?? const Color(0xFFC1BABA)),
-  );
-}
+// InputDecoration inputDecoration({
+//   required String hintText,
+//   Widget? prefixIcon,
+//   Widget? suffixIcon,
+//   TextStyle? hintStyle,
+//   EdgeInsets? padding,
+//   Color? hintColor,
+// }) {
+//   return InputDecoration(
+//     isDense: true,
+//     // filled: true,
+//     contentPadding:
+//         padding ?? EdgeInsets.symmetric(horizontal: 12.w, vertical: 16.w),
+//     hintText: hintText,
+//     border: InputBorder.none,
+//     errorMaxLines: 5,
+//     prefixIcon: prefixIcon,
+//     prefixIconConstraints: BoxConstraints(minHeight: 24.w, minWidth: 24.w),
+//     suffixIconConstraints: BoxConstraints(minHeight: 24.w, minWidth: 24.w),
+//     suffixIcon: suffixIcon,
+//     hintStyle: hintStyle ??
+//         CustomTextStyle.text.copyWith(color: hintColor ?? const Color(0xFFC1BABA)),
+//   );
+// }
