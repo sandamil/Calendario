@@ -1,3 +1,4 @@
+import 'package:calendario2/app/controllers/ads_controller.dart';
 import 'package:calendario2/app/modules/notas/controllers/notas_controller.dart';
 import 'package:calendario2/app/modules/notas/views/widgets/important_indicator_text_view.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
@@ -6,11 +7,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import 'widgets/button_row_view.dart';
 
 class NotasListView extends GetView<NotasListController> {
-  const NotasListView({Key? key}) : super(key: key);
+  NotasListView({Key? key}) : super(key: key);
+  final adcontroller = Get.find<AdsController>();
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +58,7 @@ class NotasListView extends GetView<NotasListController> {
           backgroundColor: PRIMARY_COLOR,
           onPressed: () {
             controller.gotoEditNote();
+            adcontroller.staticNotesListAd.dispose();
           },
           label: Text(
             'Añade Nota'.toUpperCase(),
@@ -64,6 +68,20 @@ class NotasListView extends GetView<NotasListController> {
           ),
           icon: const Icon(Icons.add),
         ),
+        bottomNavigationBar: adcontroller.staticAdNotesListLoaded.value
+            ? Container(
+                color: Colors.transparent,
+                width: adcontroller.staticNotesListAd.size.width.toDouble(),
+                height: adcontroller.staticNotesListAd.size.height.toDouble(),
+                alignment: Alignment.bottomCenter,
+                child: AdWidget(
+                  ad: adcontroller.staticNotesListAd,
+                ),
+              )
+            : const SizedBox(
+                height: 20,
+                child: Text('data'),
+              ),
         body: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
           margin: EdgeInsets.only(top: 6.h),

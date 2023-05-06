@@ -57,6 +57,8 @@ class NotasListController extends GetxController {
     return notesList.value;
   }
 
+
+
   // ///Todo update notes sin cargar toda la base de datos
   // setNotesFromDB2() async {
   //   notesList2.value = await PreviusDbProvider.instance.getNotesFromDB();

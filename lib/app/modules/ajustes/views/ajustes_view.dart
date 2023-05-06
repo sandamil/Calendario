@@ -19,18 +19,19 @@ class AjustesView extends GetView<AjustesController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        centerTitle: false,
-        elevation: 0,
-        backgroundColor: Colors.transparent,
         leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back_ios,
-              color: PRIMARY_COLOR,
-              size: 26.sp,
-            ),
-            onPressed: () {
-              Get.back();
-            }),
+          icon: Icon(
+            Icons.home,
+            color: PRIMARY_COLOR,
+            size: 26.sp,
+          ),
+          onPressed: () {
+            Get.offAllNamed('/home');
+          },
+        ),
+        centerTitle: false,
+        elevation: 0.0,
+        backgroundColor: Colors.transparent,
         title: Text(
           'Settings'.tr,
           style: CustomTextStyle.appBarTitle(context: context),

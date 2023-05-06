@@ -196,7 +196,7 @@ class AlarmasController extends GetxController {
     await loadAlarmCreadaEdit();
 
     editNotasController.setAlarmaCreada(noRemind.value);
-    await Get.to(() => const EditNotasView());
+    await Get.to(() => EditNotasView());
   }
 
   goToAddNotas() async {
@@ -210,7 +210,7 @@ class AlarmasController extends GetxController {
     await loadAlarmCreada();
     await updatealarmaActivadaString();
     addNotasController.setAlarmaCreada(noRemind.value);
-    await Get.to(() => const AddNotasView());
+    await Get.to(() => AddNotasView());
   }
 
   loadAlarmCreada() {

@@ -1,3 +1,4 @@
+import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -40,8 +41,20 @@ class MyStyles {
   static AppBarTheme getAppBarTheme({required bool isLightTheme}) =>
       AppBarTheme(
         systemOverlayStyle: isLightTheme
-            ? SystemUiOverlayStyle.dark
-            : SystemUiOverlayStyle.light,
+            ? const SystemUiOverlayStyle(
+          // Status bar color
+          statusBarColor: LightThemeColors.scaffoldBackgroundColor,
+          // Status bar brightness (optional)
+          statusBarIconBrightness: Brightness.dark, // For Android (dark icons)
+          statusBarBrightness: Brightness.light, // For iOS (dark icons)
+        )
+            : const SystemUiOverlayStyle(
+          // Status bar color
+          statusBarColor: DarkThemeColors.scaffoldBackgroundColor,
+          // Status bar brightness (optional)
+          statusBarIconBrightness: Brightness.light, // For Android (dark icons)
+          statusBarBrightness: Brightness.dark, // For iOS (dark icons)
+        ),
         elevation: 0,
         titleTextStyle:
             getTextTheme(isLightTheme: isLightTheme).bodyLarge!.copyWith(

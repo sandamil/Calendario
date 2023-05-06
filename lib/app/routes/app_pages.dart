@@ -86,7 +86,7 @@ class AppPages {
       transition: Transition.fadeIn,
       transitionDuration: const Duration(milliseconds: 100),
       name: _Paths.NOTAS,
-      page: () => const NotasListView(),
+      page: () => NotasListView(),
       binding: NotasListBinding(),
     ),
     GetPage(
@@ -100,14 +100,14 @@ class AppPages {
       transition: Transition.fadeIn,
       transitionDuration: const Duration(milliseconds: 100),
       name: _Paths.ADD_NOTAS,
-      page: () => const AddNotasView(),
+      page: () => AddNotasView(),
       binding: AddNotasBinding(),
     ),
     GetPage(
       transition: Transition.fadeIn,
       transitionDuration: const Duration(milliseconds: 100),
       name: _Paths.EDIT_NOTAS,
-      page: () => const EditNotasView(),
+      page: () => EditNotasView(),
       binding: EditNotasBinding(),
     ),
     GetPage(

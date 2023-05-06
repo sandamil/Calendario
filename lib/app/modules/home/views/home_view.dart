@@ -82,14 +82,14 @@ class HomeView extends GetView<HomeController> {
             onPressed: () {
               // MyTheme.changeTheme();
             },
-            label: adcontroller.staticAdLoaded.value
+            label: adcontroller.staticAdHomeLoaded.value
                 ? Container(
               color: Colors.transparent,
-              width:adcontroller.staticAd.size.width.toDouble(),
-              height: adcontroller.staticAd.size.height.toDouble(),
+              width:adcontroller.staticHomeAd.size.width.toDouble(),
+              height: adcontroller.staticHomeAd.size.height.toDouble(),
               alignment: Alignment.bottomCenter,
               child: AdWidget(
-                ad: adcontroller.staticAd,
+                ad: adcontroller.staticHomeAd,
               ),
             )
                 : const SizedBox(),

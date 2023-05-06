@@ -13,10 +13,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
 
+import '../../../../../controllers/ads_controller.dart';
 import '../controllers/add_notas_controller.dart';
 
 class AddNotasView extends GetView<AddNotasController> {
-  const AddNotasView({Key? key}) : super(key: key);
+  AddNotasView({Key? key}) : super(key: key);
+  final adcontroller = Get.find<AdsController>();
 
   @override
   Widget build(BuildContext context) {
@@ -42,8 +44,11 @@ class AddNotasView extends GetView<AddNotasController> {
                 color: PRIMARY_COLOR,
                 size: 26.sp,
               ),
-              onPressed: () {
+              onPressed: () async {
+                adcontroller.loadNotesListBannerAd();
+
                 Get.offAllNamed('/notas');
+
               }),
           actions: <Widget>[
             IconButton(
@@ -54,6 +59,8 @@ class AddNotasView extends GetView<AddNotasController> {
               ),
               padding: EdgeInsets.only(right: 3.w),
               onPressed: () async {
+                adcontroller.loadNotesListBannerAd();
+
                 controller.addTravelEvent();
                 await controller.addEvent();
                 Get.offAllNamed('/notas');

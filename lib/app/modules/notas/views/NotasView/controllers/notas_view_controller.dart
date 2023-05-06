@@ -5,8 +5,11 @@ import 'package:calendario2/app/modules/notas/controllers/notas_controller.dart'
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../../controllers/ads_controller.dart';
+
 class NotasViewController extends GetxController {
   NotasListController notasListController = Get.put(NotasListController());
+  final adcontroller = Get.find<AdsController>();
 
   RxBool headerShouldShow = false.obs;
   RxBool important = false.obs;
@@ -69,6 +72,8 @@ class NotasViewController extends GetxController {
   }
 
   void handleEdit() {
+    adcontroller.staticNotesListAd.dispose();
+
     Get.toNamed(
       '/edit-notas',
       arguments: {'id': currentNote.value.id!, 'noteData': currentNote.value},

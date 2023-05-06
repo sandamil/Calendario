@@ -8,10 +8,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import '../../../../../controllers/ads_controller.dart';
 import '../controllers/edit_notas_controller.dart';
 
 class EditNotasView extends GetView<EditNotasController> {
-  const EditNotasView({Key? key}) : super(key: key);
+   EditNotasView({Key? key}) : super(key: key);
+
+  final adcontroller = Get.find<AdsController>();
+
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +41,8 @@ class EditNotasView extends GetView<EditNotasController> {
                 size: 26.sp,
               ),
               onPressed: () {
+                adcontroller.loadNotesListBannerAd();
+
                 Get.offAllNamed('/notas');
               }),
           actions: <Widget>[
@@ -48,6 +54,8 @@ class EditNotasView extends GetView<EditNotasController> {
               ),
               padding: EdgeInsets.only(right: 3.w),
               onPressed: () async {
+                adcontroller.loadNotesListBannerAd();
+
                 await controller.editNote();
                 Get.offAllNamed('/notas');
               },

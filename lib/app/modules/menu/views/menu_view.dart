@@ -168,7 +168,7 @@ class MenuView extends GetView<MenuAppController> {
                   ],
                 ),
                 onPressed: () {
-                  Get.toNamed('/crear-turno');
+                  // Get.toNamed('/crear-turno');
                   Navigator.pushNamedAndRemoveUntil(context, "/crear-turno", (r) => false);
 
                   // Get.to(() => const TurnoView());
@@ -211,7 +211,9 @@ class MenuView extends GetView<MenuAppController> {
                   ],
                 ),
                 onPressed: () {
-                  Get.toNamed('/ajustes');
+                  // Get.toNamed('/ajustes');
+                  Navigator.pushNamedAndRemoveUntil(context, "/ajustes", (r) => false);
+
                 },
                 //splashColor: AAThemeData.buttonColor,
               ),
@@ -251,7 +253,8 @@ class MenuView extends GetView<MenuAppController> {
                   ],
                 ),
                 onPressed: () {
-                  Get.toNamed('/ayuda');
+                  Navigator.pushNamedAndRemoveUntil(context, "/ayuda", (r) => false);
+
                 },
                 //splashColor: AAThemeData.buttonColor,
               ),

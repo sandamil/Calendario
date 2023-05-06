@@ -16,21 +16,22 @@ class AyudaView extends GetView<AyudaController> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back_ios,
-              color: PRIMARY_COLOR,
-              size: 26.sp,
-            ),
-            onPressed: () {
-              Get.back();
-            }),
+          icon: Icon(
+            Icons.home,
+            color: PRIMARY_COLOR,
+            size: 26.sp,
+          ),
+          onPressed: () {
+            Get.offAllNamed('/home');
+          },
+        ),
+        centerTitle: false,
+        elevation: 0.0,
+        backgroundColor: Colors.transparent,
         title: Text(
           'Ayuda',
           style: CustomTextStyle.appBarTitle(context: context),
         ),
-        centerTitle: false,
-        elevation: 0,
-        backgroundColor: Colors.transparent,
       ),
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 10.w),
