@@ -40,7 +40,7 @@ class BeautifulAlertDialog extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text("Atención!",
+                    Text("Atención ‼️",
                         style: TextStyle(
                             color: Colors.red,
                             fontSize: 25.sp,

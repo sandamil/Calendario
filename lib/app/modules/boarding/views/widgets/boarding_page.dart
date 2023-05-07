@@ -24,7 +24,7 @@ class BoardingPage extends StatelessWidget {
               child: Column(
             children: <Widget>[
               Padding(
-                padding: EdgeInsets.only(top: 50.h, left: 20.w),
+                padding: EdgeInsets.only(top: 30.h, left: 20.w),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -49,7 +49,7 @@ class BoardingPage extends StatelessWidget {
                       ),
                     ),
                     SizedBox(
-                      height: 20.h,
+                      height: 10.h,
                     ),
                     Padding(
                       padding: EdgeInsets.only(right: 30.w),

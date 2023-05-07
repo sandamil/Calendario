@@ -179,6 +179,13 @@ class CalendarController extends GetxController {
     return list;
   }
 
+  deleteTurnoCuadrante(id) {
+    print('deleteTurnoCuadrante $id');
+
+    DBHelper.db.deleteItemID(id);
+    Get.offAllNamed('/home');
+  }
+
 
 
 }

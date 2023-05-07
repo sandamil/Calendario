@@ -30,36 +30,37 @@ class BoardingController extends GetxController {
           subTitle: 'Bienvenidos a la aplicación',
           description:
               "En esta app podrás llevar un control de tus turnos y horarios de trabajo y anotar todo lo que necesites."
-              "\n\nPonte en contacto con nosotros ante cuelquier duda o sugerencia."
+              "\n\nPonte en contacto con nosotros ante cualquier duda o sugerencia."
               "\n\nVamos a empezar, "
-              "\n¡desliza la pantalla hacia la izquierda!",
+              "\n¡Desliza la pantalla hacia la izquierda!",
           imagePath: 'assets/other/vacio.png'),
       const BoardingModel(
           title: 'Un pequeño tutorial',
           subTitle: 'Como usar la app:',
           description:
-              "Para marcar los dias que trabajas o que quieres resaltar, en el calendario, tenemos que crear primero los tipos de dias que queremos añadir."
-              "\n\nDesde el boton de menu accedemos a la pantalla de Turnos, y aqui creamos los tipos de dia, o turnos que vamos a usar de forma predefinida."
-              "\nPuedes crear diferentes tipos de dia, si trabajas de mañanas, tardes y noches, ya estan creados y puedes usarlos. podrias añadir otros como Vacaciones, Baja, Partido... "
-              "\nLo que necesites "
-              "\nEstos son los dias que vas a poder elegir para crear tu cuadrante, y tambien para añadir al calendario al mantener pulsado sobre cualquier dia."
-              "\nEn la siguiente pantalla tienes video explicativo",
+              "Para marcar los días que trabajas o que quieres resaltar, en el calendario, tenemos que crear primero los tipos de días que queremos añadir."
+                  "\n\nDesde el botón de menú accedemos a la pantalla de Turnos, y aquí creamos los tipos de día, o turnos que vamos a usar de forma predefinida."
+                  "\nPuedes crear diferentes tipos de día, si trabajas de mañanas, tardes y noches, ya están creados y puedes usarlos. podrías añadir otros como Vacaciones, Baja, Partido... "
+                  "\nLo que necesites "
+                  "\nEstos son los días que vas a poder elegir para crear tu cuadrante, y también para añadir al calendario al mantener pulsado sobre cualquier día."
+                  "\nEn la siguiente pantalla tienes video explicativo",
           imagePath: 'assets/other/vacio.png'),
       const BoardingModel(
           title: '',
           subTitle: '',
           description: '',
-          imagePath: 'assets/other/turnogif.gif'),
+          imagePath: 'assets/other/turnos.gif'),
       const BoardingModel(
           title: 'Cuadrantes',
           subTitle: 'Vamos a ver los',
           description:
-              "Desde el menu cuadrante, creas una lista de dias para un turno completo que se repetira en el calendario."
-              "\nSi tu turno, por ejemplo, se repite cada 10 dias, tienes que hacer una lista con esos 10 dias."
-              "\n\nCuando tengas el listado de dias hecho, añades la fecha de inicio, esta es la fecha en la que se añadira el primer dia del cuadrante o lista que acabas de crear"
-              "\nLa fecha de fin es la fecha en la que quieres que se dejen de marcar los dias en el calendario, solo indica el ultimo dia del calendario que se marcara con ese cuadrante. por defecto se añade un año, si no la cambias"
-              "\nTambien puedes crear una lista con solo un dia, para marcar varios dias del calendario. Esto es util por ejemplo para marcar 15 dias de vacaciones en el calendario."
+          "Desde el menú cuadrante, creas una lista de días para un turno completo que se repetirá en el calendario."
+              "\nSi tu turno, por ejemplo, se repite cada 10 días, tienes que hacer una lista con esos 10 días."
+              "\n\nCuando tengas el listado de días hecho, añades la fecha de inicio, esta es la fecha en la que se añadirá el primer día del cuadrante o lista que acabas de crear"
+              "\nLa fecha de fin es la fecha en la que quieres que se dejen de marcar los días en el calendario, solo indica el ultimo día del calendario que se marcara con ese cuadrante. por defecto se añade un año, si no la cambias"
+              "\nTambién puedes crear una lista con solo un día, para marcar varios dias del calendario. Esto es util por ejemplo para marcar 15 dias de vacaciones en el calendario."
               "\nEn la siguiente pantalla lo veras en un video.",
+
           imagePath: 'assets/other/vacio.png'),
       const BoardingModel(
         title: '',
@@ -71,12 +72,12 @@ class BoardingController extends GetxController {
         subTitle: 'No te olvides nada',
         title: 'Notas',
         description:
-        "\nDesde el menu puedes acceder a la pantalla Notas, donde podras crear y gestionar las notas y tareas pendientes o completadas"
-        "\nPodras añadir tantas como desees al dia seleccionado, las puedes borrar y editar, tambien desde la pantalla principal pulsando o deslizando la nota debajo del calendario, donde se muestran las notas para el dia seleccionado."
-        "\nEn la pantalla notas tienes un buscador por si necesitas buscar una o varias notas entre todas las guardadas y asi poder consultarla o editarla de forma rapida."
-        "\nTambien tiene un boton donde filtraras y se mostraran solo las marcadas como importantes si esta activado o todas si no lo esta."
-        "\nA todas las notas le puedes añadir alarma para que te avise en el momento que hayas selecionado la hora de inicio o el que elijas, ya que puedes personalizar el aaviso a la hora que necesites, antes de la hora de inicio"
-        "\nAhora vas a ver todo esto en un video",
+        "Desde el menú puedes acceder a la pantalla Notas, donde puedes crear y gestionar las notas y tareas pendientes o completadas"
+            "\nPodrás añadir tantas como desees al día seleccionado, las puedes borrar y editar, también desde la pantalla principal pulsando o deslizando la nota debajo del calendario, donde se muestran las notas para el día seleccionado."
+            "\nEn la pantalla notas tienes un buscador por si necesitas buscar una o varias notas entre todas las guardadas y así poder consultarla o editarla de forma rápida."
+            "\nTambién tiene un botón donde filtraras y se mostraran solo las marcadas como importantes si esta activado o todas si no lo esta."
+            "\nA todas las notas le puedes añadir alarma para que te avise en el momento que hayas seleccionado la hora de inicio o el que elijas, ya que puedes personalizar el aviso a la hora que necesites, antes de la hora de inicio"
+            "\nAhora vas a ver todo esto en un video",
         imagePath: 'assets/other/vacio.png',
       ),
       const BoardingModel(

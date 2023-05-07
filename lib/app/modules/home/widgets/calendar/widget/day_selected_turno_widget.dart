@@ -6,6 +6,9 @@ import 'package:calendario2/config/util/hexColor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:sqflite/sqflite.dart';
+
+import '../../../../../components/custom_snackbar.dart';
 
 class DaySelecetedTurnoWidget extends StatelessWidget {
   const DaySelecetedTurnoWidget({super.key});
@@ -29,82 +32,103 @@ class DaySelecetedTurnoWidget extends StatelessWidget {
                         shrinkWrap: true,
                         itemCount: c.selectedEvents.value.length,
                         itemBuilder: (context, index) {
-                          return Container(
-                            height: 22.h,
-                            padding: EdgeInsets.symmetric(
-                                vertical: 1.h, horizontal: 2.w),
-                            decoration: BoxDecoration(
-                              color: HexColor(
-                                  c.selectedEvents.value[index].color!),
-                              border: Border.all(width: 0.8.r),
-                              borderRadius: BorderRadius.circular(5.r),
-                            ),
-                            margin: EdgeInsets.symmetric(
-                                horizontal: 2.w, vertical: 2.h),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                // FittedBox(
-                                //   child: Text(
-                                //     '${c.selectedEvents.value[index].dateTime.toString().substring(8, 10)}-${c.selectedEvents.value[index].dateTime.toString().substring(5, 7)}-${c.selectedEvents.value[index].dateTime.toString().substring(0, 4)}',
-                                //     style: TextStyle(
-                                //         fontSize: 14.sp,
-                                //         color: HexColor(c.selectedEvents
-                                //                         .value[index].color!)
-                                //                     .computeLuminance() >
-                                //                 0.5
-                                //             ? Colors.black
-                                //             : Colors.white),
-                                //   ),
-                                // ),
-                                // SizedBox(
-                                //   width: 20.w,
-                                // ),
-                                FittedBox(
-                                  child: Text(
-                                    c.selectedEvents.value[index].description!,
-                                    style: TextStyle(
-                                        height: 1.2.h,
-                                        fontSize: 14.sp,
-                                        fontWeight: FontWeight.bold,
-                                        color: HexColor(c.selectedEvents
-                                                        .value[index].color!)
-                                                    .computeLuminance() >
-                                                0.5
-                                            ? Colors.black
-                                            : Colors.white),
+                          return GestureDetector(
+                            onLongPress: (){
+
+
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+
+                                    content: const Text("Quieres borrar este Turno?"),
+                                    action: SnackBarAction(
+                                      onPressed: (){
+                                        c.deleteTurnoCuadrante(c.selectedEvents.value[index].id);
+                                      },
+                                      label: "Borrar este Turno",
+                                    ),
+                                  )
+                              );
+
+                            },
+
+
+                            child: Container(
+                              height: 22.h,
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 1.h, horizontal: 2.w),
+                              decoration: BoxDecoration(
+                                color: HexColor(
+                                    c.selectedEvents.value[index].color!),
+                                border: Border.all(width: 0.8.r),
+                                borderRadius: BorderRadius.circular(5.r),
+                              ),
+                              margin: EdgeInsets.symmetric(
+                                  horizontal: 2.w, vertical: 2.h),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  // FittedBox(
+                                  //   child: Text(
+                                  //     '${c.selectedEvents.value[index].dateTime.toString().substring(8, 10)}-${c.selectedEvents.value[index].dateTime.toString().substring(5, 7)}-${c.selectedEvents.value[index].dateTime.toString().substring(0, 4)}',
+                                  //     style: TextStyle(
+                                  //         fontSize: 14.sp,
+                                  //         color: HexColor(c.selectedEvents
+                                  //                         .value[index].color!)
+                                  //                     .computeLuminance() >
+                                  //                 0.5
+                                  //             ? Colors.black
+                                  //             : Colors.white),
+                                  //   ),
+                                  // ),
+                                  // SizedBox(
+                                  //   width: 20.w,
+                                  // ),
+                                  FittedBox(
+                                    child: Text(
+                                      c.selectedEvents.value[index].description!,
+                                      style: TextStyle(
+                                          height: 1.2.h,
+                                          fontSize: 14.sp,
+                                          fontWeight: FontWeight.bold,
+                                          color: HexColor(c.selectedEvents
+                                                          .value[index].color!)
+                                                      .computeLuminance() >
+                                                  0.5
+                                              ? Colors.black
+                                              : Colors.white),
+                                    ),
                                   ),
-                                ),
-                                // SizedBox(
-                                //   width: 20.w,
-                                // ),
-                                c.selectedEvents.value[index].startHour !=
-                                            null &&
-                                        c.selectedEvents.value[index].endHour !=
-                                            null
-                                    ? Padding(
-                                        padding: EdgeInsets.only(left: 15.w),
-                                        child: FittedBox(
-                                          child: Text(
-                                            'de ${c.selectedEvents.value[index].startHour.toString()} a ${c.selectedEvents.value[index].endHour.toString()}',
-                                            style: TextStyle(
-                                                height: 1.2.h,
-                                                fontSize: 14.sp,
-                                                color: HexColor(c
-                                                                .selectedEvents
-                                                                .value[index]
-                                                                .color!)
-                                                            .computeLuminance() >
-                                                        0.5
-                                                    ? Colors.black
-                                                    : Colors.white),
+                                  // SizedBox(
+                                  //   width: 20.w,
+                                  // ),
+                                  c.selectedEvents.value[index].startHour !=
+                                              null &&
+                                          c.selectedEvents.value[index].endHour !=
+                                              null
+                                      ? Padding(
+                                          padding: EdgeInsets.only(left: 15.w),
+                                          child: FittedBox(
+                                            child: Text(
+                                              'de ${c.selectedEvents.value[index].startHour.toString()} a ${c.selectedEvents.value[index].endHour.toString()}',
+                                              style: TextStyle(
+                                                  height: 1.2.h,
+                                                  fontSize: 14.sp,
+                                                  color: HexColor(c
+                                                                  .selectedEvents
+                                                                  .value[index]
+                                                                  .color!)
+                                                              .computeLuminance() >
+                                                          0.5
+                                                      ? Colors.black
+                                                      : Colors.white),
+                                            ),
                                           ),
-                                        ),
-                                      )
-                                    : Container(
-                                        padding: EdgeInsets.only(right: 20.w),
-                                      )
-                              ],
+                                        )
+                                      : Container(
+                                          padding: EdgeInsets.only(right: 20.w),
+                                        )
+                                ],
+                              ),
                             ),
                           );
                         },

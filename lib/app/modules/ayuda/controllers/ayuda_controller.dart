@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:calendario2/app/components/toast.dart';
 import 'package:calendario2/app/data/local/previusTaskDatabase.dart';
 import 'package:calendario2/app/data/model/previousTaskModel.dart';
 import 'package:calendario2/app/modules/ayuda/views/pages/notas_version_anterior_screen.dart';
@@ -7,9 +10,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../views/pages/feedback_screen.dart';
 import '../views/widgets/notasBkpCard.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AyudaController extends GetxController {
   //TODO: Implement AyudaController
@@ -48,11 +53,30 @@ class AyudaController extends GetxController {
     );
   }
 
-  void launchGmail() {}
+  void launchGmail() async {
+    final Uri params = Uri(
+      scheme: 'mailto',
+      path: 'ajatsoft@gmail.com',
+      query: 'subject= Email Calendario Turnos Appp&body = ',
+    );
+    String url = params.toString();
+    if (await launchUrlString(url)) {
+      await launchUrlString(url);
+    } else {
+      print('Could not launch gmail');
+    }
+  }
 
   void reportProblem() {}
 
-  void launchTwitter() {}
+  void launchTwitter() async {
+    const String url = 'https://www.twitter.com/@ajatsoft';
+    if (await launchUrlString(url)) {
+      await launchUrlString(url);
+    } else {
+      print('Could not launch twitter');
+    }
+  }
 
   void giveFeedbackClicked(context) {
     AnalyticsHelper.logEvent(event: AnalyticsHelper.ayudaGiveFeedbackClicked);
@@ -64,6 +88,33 @@ class AyudaController extends GetxController {
   }
 
   void rateAppClicked() {}
+
+
+
+  void onRateThisAppPress() async {
+    // logEvent(EventNames.rateAppClicked, {});
+    if (Platform.isAndroid || Platform.isIOS) {
+      // todo support for ios
+      var androidPackageName = 'ajat.calendario.turnos';
+      final appId = Platform.isAndroid ? androidPackageName: 'YOUR_IOS_APP_ID';
+      final url = Uri.parse(
+        Platform.isAndroid
+            ? "market://details?id=$appId"
+            : "https://apps.apple.com/app/id$appId",
+      );
+      bool canLaunchIntent = await canLaunchUrl(url);
+      if (canLaunchIntent) {
+        launchUrl(
+          url,
+          mode: LaunchMode.externalApplication,
+        );
+      } else {
+        launchUrlString(
+            'https://play.google.com/store/apps/details?id=$androidPackageName');
+      }
+    }
+  }
+
 
   RxList<PreviousTask> notesBkpList = <PreviousTask>[].obs;
 

@@ -46,12 +46,12 @@ class AyudaView extends GetView<AyudaController> {
                     title: "Resumen",
                     subtitle:
                     "Presiona aquí para ver el resumen que aparece la primera vez que instalas la aplicacion.",
-                    onTap: () => controller.reportProblem(),
+                    onTap: () => Get.toNamed('/boarding'),
                   ),
                   AyudaRowWidget(
                     title: "Videotutoriales",
                     subtitle: "Aquí podrás ver videotutoriales para ver ejemplos de uso de la aplicación.",
-                    onTap:  () => controller.launchTwitter(),
+                    onTap:  () => controller.launchTwitter,
                   ),
                 ],
               ),
@@ -63,7 +63,7 @@ class AyudaView extends GetView<AyudaController> {
                     title: "Email",
                     subtitle:
                     "Contacta con nosotros por email para cualquier duda, sugerencia o reportar algun error.",
-                    onTap: () => controller.reportProblem(),
+                    onTap: () => controller.launchGmail(),
                   ),
                   AyudaRowWidget(
                     title: "Twitter",
@@ -85,7 +85,7 @@ class AyudaView extends GetView<AyudaController> {
                   AyudaRowWidget(
                     title: "Califica app",
                     subtitle: "Comparte tu experiencia en Play Store",
-                    onTap: controller.rateAppClicked,
+                    onTap: controller.onRateThisAppPress,
                   ),
                 ],
               ),
