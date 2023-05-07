@@ -8,10 +8,14 @@ import 'day_selected_turno_widget.dart';
 
 class CustomAlertDilogDaySelected extends StatelessWidget {
   CustomAlertDilogDaySelected(
-      {super.key, required this.selectedDate, required this.turno
-      // required this.dayType
-      });
+      {super.key,
+      required this.selectedDate,
+      required this.turno,
+      required this.x,
+      required this.y});
 
+  double x;
+  double y;
   final DateTime selectedDate;
   final List turno;
 
@@ -19,43 +23,53 @@ class CustomAlertDilogDaySelected extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    return Align(
-      alignment: Alignment.center,
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 10.w),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
+    return Container(
+      height: Get.height,
+      width: Get.width,
+      child: Stack(
+        children: [
+          Positioned(
+            left: x,
+            top: y,
+            child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 10.w),
-              decoration: BoxDecoration(
-                color: MyColors.backgroundColor,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(5.r),
-                ),
-              ),
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  SizedBox(height: 2.h),
-                  getContent(),
-                  SizedBox(height: 2.h),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: turnoBtn(context, selectedDate),
+                  Container(
+                    height: 200,
+                    width: Get.width,
+                    padding: EdgeInsets.symmetric(horizontal: 10.w),
+                    decoration: BoxDecoration(
+                      color: MyColors.backgroundColor,
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(5.r),
                       ),
-                      SizedBox(width: 2.w),
-                      Expanded(
-                        child: eventoBtn(context, selectedDate),
-                      ),
-                    ],
+                    ),
+                    child: Column(
+                      children: [
+                        SizedBox(height: 2.h),
+                        getContent(),
+                        SizedBox(height: 2.h),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: turnoBtn(context, selectedDate),
+                            ),
+                            SizedBox(width: 2.w),
+                            Expanded(
+                              child: eventoBtn(context, selectedDate),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -70,7 +84,7 @@ class CustomAlertDilogDaySelected extends StatelessWidget {
 
   Widget turnoBtn(context, selectedDate) {
     return Padding(
-      padding:  EdgeInsets.all(2.h),
+      padding: EdgeInsets.all(2.h),
       child: ElevatedButton(
         onPressed: () async {
           await calendarController.fetchTurno();
@@ -84,7 +98,7 @@ class CustomAlertDilogDaySelected extends StatelessWidget {
 
   Widget eventoBtn(context, selectedDate) {
     return Padding(
-      padding:  EdgeInsets.all(2.h),
+      padding: EdgeInsets.all(2.h),
       child: ElevatedButton(
         onPressed: () {
           Get.toNamed('/add-notas', arguments: selectedDate);

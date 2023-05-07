@@ -115,30 +115,25 @@ class CalendarWidget extends StatelessWidget {
                   ...notas.map((nota) => Padding(
                         padding: EdgeInsets.symmetric(
                             vertical: 0.5.h, horizontal: 3.w),
-                        child: GestureDetector(
-                          onTap: () {
-                            CustomDialog.mostrarTask(nota, context);
-                          },
-                          child: Container(
-                              decoration: BoxDecoration(
-                                color: PRIMARY_COLOR_TRANSPARENTE,
-                                border: Border.all(
-                                    color: PRIMARY_COLOR, width: 1.h),
-                                borderRadius: BorderRadius.circular(3.r),
+                        child: Container(
+                            decoration: BoxDecoration(
+                              color: PRIMARY_COLOR_TRANSPARENTE,
+                              border: Border.all(
+                                  color: PRIMARY_COLOR, width: 1.h),
+                              borderRadius: BorderRadius.circular(3.r),
+                            ),
+                            height: 15.h,
+                            child: Align(
+                              alignment: Alignment.center,
+                              child: Text(
+                                nota.title!.toUpperCase(),
+                                maxLines:1,
+                                style: TextStyle(
+                                    height: 1.h,
+                                    fontSize: 11.sp,
+                                    fontWeight: FontWeight.w600),
                               ),
-                              height: 15.h,
-                              child: Align(
-                                alignment: Alignment.center,
-                                child: Text(
-                                  nota.title!.toUpperCase(),
-                                  maxLines:1,
-                                  style: TextStyle(
-                                      height: 1.h,
-                                      fontSize: 11.sp,
-                                      fontWeight: FontWeight.w600),
-                                ),
-                              )),
-                        ),
+                            )),
                       )),
                 ],
               ),

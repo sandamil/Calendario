@@ -13,8 +13,37 @@ import '../widgets/calendar/widget/customAlertDialogTurnoList.dart';
 import '../widgets/calendar/widget/customAlertDialogDaySelected.dart';
 
 class CalendarController extends GetxController {
-
   Rx<CalendarFormat> _calendarFormat = CalendarFormat.month.obs;
+
+  onTapDown(TapDownDetails details) {
+    currentX = details.globalPosition.dx;
+    currentY = details.globalPosition.dy;
+    // or user the local position method to get the offset
+    print(details.localPosition);
+    print("tap down " + currentX.toString() + ", " + currentY.toString());
+  }
+
+  onTapUp(TapUpDetails details) {
+    var x = details.globalPosition.dx;
+    var y = details.globalPosition.dy;
+    // or user the local position method to get the offset
+    print(details.localPosition);
+    print("tap up " + x.toString() + ", " + y.toString());
+  }
+
+  var currentX = 0.0;
+  void currentXval(double dx) {
+    print(dx);
+
+    currentX = dx;
+  }
+
+  var currentY = 0.0;
+  void currentYval(double dy) {
+    print(dy);
+    currentY = dy;
+  }
+
   Rx<CalendarFormat> get calendarFormat => _calendarFormat;
 
   var selectedDay = DateTime.now().obs;
@@ -47,7 +76,6 @@ class CalendarController extends GetxController {
 
   RxBool isReady = false.obs;
 
-
 ///////////////oninit
   /// ==
 
@@ -62,12 +90,19 @@ class CalendarController extends GetxController {
     if (!isSameDay(selectedDate, selectedDay.value)) {
       selectedDay.value = selectedDate;
       _focusedDay.value = focusedDate;
+    } else {
+      Get.dialog(CustomAlertDilogDaySelected(
+          x: currentX,
+          y: currentY,
+          selectedDate: selectedDate,
+          turno: turno.value));
     }
     selectedEvents.value = getEventForDay(selectedDay.value);
     selectedNotas.value = getEventsOfDay(selectedDay.value);
     // Get.dialog(CustomAlertDilogDaySelected(
     //     selectedDate: selectedDate, turno: turno.value));
   }
+
   onDaySelectedLongPress(DateTime selectedDate, DateTime focusedDate) async {
     if (!isSameDay(selectedDate, selectedDay.value)) {
       await {
@@ -78,8 +113,13 @@ class CalendarController extends GetxController {
     selectedEvents.value = await getEventForDay(selectedDay.value);
     selectedNotas.value = getEventsOfDay(selectedDay.value);
 
+    print(currentX.toString());
+
     Get.dialog(CustomAlertDilogDaySelected(
-        selectedDate: selectedDate, turno: turno.value));
+        x: currentX,
+        y: currentY,
+        selectedDate: selectedDate,
+        turno: turno.value));
   }
 
 //TODO Comprobar rendimiento focusedday obs
@@ -108,8 +148,7 @@ class CalendarController extends GetxController {
 
   Future<Map<DateTime, List<CuadranteDay>>> fetchCuadrante() async {
     cuadrante.value = await DBHelper.db.getItemModels();
-    for (CuadranteDay turno in cuadrante) {
-    }
+    for (CuadranteDay turno in cuadrante) {}
     cuadranteMap.value.clear();
     for (var turno in cuadrante) {
       cuadranteMap.value.putIfAbsent(turno.dateTime!, () => <CuadranteDay>[]);
@@ -129,7 +168,6 @@ class CalendarController extends GetxController {
   //   return notasMap.value;
   // }
 
-
   Future<List<TurnoType>> fetchTurno() async {
     turno.value = await DBHelper.db.getTypeModels();
     return turno;
@@ -146,14 +184,12 @@ class CalendarController extends GetxController {
   }
 
 ///////////////     Notas
-/// ==
-
-
+  /// ==
 
   RxList<Task> listEvent = <Task>[].obs;
   RxList<Task> listEvent2 = <Task>[].obs;
 
-   getListEvent() async {
+  getListEvent() async {
     listEvent.value = await DbProvider.instance.getNotesFromDB();
   }
 
@@ -161,7 +197,9 @@ class CalendarController extends GetxController {
     bool check = false;
     if (listEvent.isNotEmpty) {
       listEvent.value.forEach((event) {
-        if (DataValidator.isSameDay(DateTime.fromMillisecondsSinceEpoch(event.startTimeMilliseconds!), day)) {
+        if (DataValidator.isSameDay(
+            DateTime.fromMillisecondsSinceEpoch(event.startTimeMilliseconds!),
+            day)) {
           check = true;
         }
       });
@@ -172,7 +210,9 @@ class CalendarController extends GetxController {
   List<Task> getEventsOfDay(DateTime day) {
     List<Task> list = [];
     listEvent.value.forEach((event) {
-      if (DataValidator.isSameDay(DateTime.fromMillisecondsSinceEpoch(event.startTimeMilliseconds!), day)) {
+      if (DataValidator.isSameDay(
+          DateTime.fromMillisecondsSinceEpoch(event.startTimeMilliseconds!),
+          day)) {
         list.add(event);
       }
     });
@@ -185,9 +225,6 @@ class CalendarController extends GetxController {
     DBHelper.db.deleteItemID(id);
     Get.offAllNamed('/home');
   }
-
-
-
 }
 
 class DataValidator {
@@ -200,4 +237,3 @@ class DataValidator {
     return false;
   }
 }
-

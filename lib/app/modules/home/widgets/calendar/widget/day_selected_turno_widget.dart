@@ -33,25 +33,20 @@ class DaySelecetedTurnoWidget extends StatelessWidget {
                         itemCount: c.selectedEvents.value.length,
                         itemBuilder: (context, index) {
                           return GestureDetector(
-                            onLongPress: (){
-
-
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-
-                                    content: const Text("Quieres borrar este Turno?"),
-                                    action: SnackBarAction(
-                                      onPressed: (){
-                                        c.deleteTurnoCuadrante(c.selectedEvents.value[index].id);
-                                      },
-                                      label: "Borrar este Turno",
-                                    ),
-                                  )
-                              );
-
+                            onLongPress: () {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                content:
+                                    const Text("Quieres borrar este Turno?"),
+                                action: SnackBarAction(
+                                  onPressed: () {
+                                    c.deleteTurnoCuadrante(
+                                        c.selectedEvents.value[index].id);
+                                  },
+                                  label: "Borrar este Turno",
+                                ),
+                              ));
                             },
-
-
                             child: Container(
                               height: 22.h,
                               padding: EdgeInsets.symmetric(
@@ -85,7 +80,8 @@ class DaySelecetedTurnoWidget extends StatelessWidget {
                                   // ),
                                   FittedBox(
                                     child: Text(
-                                      c.selectedEvents.value[index].description!,
+                                      c.selectedEvents.value[index]
+                                          .description!,
                                       style: TextStyle(
                                           height: 1.2.h,
                                           fontSize: 14.sp,
@@ -103,7 +99,8 @@ class DaySelecetedTurnoWidget extends StatelessWidget {
                                   // ),
                                   c.selectedEvents.value[index].startHour !=
                                               null &&
-                                          c.selectedEvents.value[index].endHour !=
+                                          c.selectedEvents.value[index]
+                                                  .endHour !=
                                               null
                                       ? Padding(
                                           padding: EdgeInsets.only(left: 15.w),
