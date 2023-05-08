@@ -25,131 +25,111 @@ class HomeView extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return Obx(() {
       return GestureDetector(
-        behavior: HitTestBehavior.translucent, // add this
-        // onTapCancel: () => print('Touched but not tapped'),
-        //
-        // onTap: () {
-        // FocusScopeNode currentFocus = FocusScope.of(context);
-        // if (!currentFocus.hasPrimaryFocus) {
-        //   currentFocus.unfocus();
-        // }
-        // print('tapped!');
-        // },
-        //
-        //
-        //
+        behavior: HitTestBehavior.translucent,
         onTapDown: (TapDownDetails details) =>
             calendarController.onTapDown(details),
-        // onTapUp: (TapUpDetails details) => calendarController.onTapUp(details),
+        child: Scaffold(
+            appBar: AppBar(
+              centerTitle: false,
+              elevation: 0,
+              backgroundColor: Colors.transparent,
+              leading: Builder(
+                builder: (BuildContext context) {
+                  return IconButton(
+                    key: controller.firstTime.value
+                        ? controller.tutorialController.keyButton6
+                        : key,
+                    icon: Icon(
+                      Icons.menu,
+                      color: PRIMARY_COLOR,
+                      size: 26.sp,
+                    ),
+                    onPressed: () {
+                      Get.to(() => const MenuView(),
+                          duration: const Duration(milliseconds: 100),
+                          transition: Transition.leftToRight);
+                    },
+                    tooltip: MaterialLocalizations.of(context)
+                        .openAppDrawerTooltip,
+                  );
+                },
+              ),
+              title: const SelectedDayWidget(),
+              actions: [
+                IconButton(
+                  key: controller.firstTime.value
+                      ? controller.tutorialController.keyButton7
+                      : key,
+                  color: PRIMARY_COLOR,
+                  icon: const Icon(
+                    Icons.today,
+                  ),
+                  tooltip: 'today',
+                  onPressed: () async {
+                    // CustomDialog.showPopUpInfo(
+                    //   title: 'Volver a HOY',
+                    //   description: 'Selecciona Mes al que quieres ir',
+                    //   labelButton: 'Volver',
+                    //   // onPress: (){}
+                    // );adb backup -noapk ajat.calendario.turnos
 
-        onTapUp: (det) {
-          calendarController.currentXval(det.localPosition.dx);
-          calendarController.currentYval(det.localPosition.dy);
-        },
-        child: SafeArea(
-          child: Scaffold(
-              appBar: AppBar(
-                centerTitle: false,
-                elevation: 0,
-                backgroundColor: Colors.transparent,
-                leading: Builder(
-                  builder: (BuildContext context) {
-                    return IconButton(
-                      key: controller.firstTime.value
-                          ? controller.tutorialController.keyButton6
-                          : key,
-                      icon: Icon(
-                        Icons.menu,
-                        color: PRIMARY_COLOR,
-                        size: 26.sp,
-                      ),
-                      onPressed: () {
-                        Get.to(() => const MenuView(),
-                            duration: const Duration(milliseconds: 100),
-                            transition: Transition.leftToRight);
-                      },
-                      tooltip: MaterialLocalizations.of(context)
-                          .openAppDrawerTooltip,
-                    );
+                    // / data/data/ ajat.calendario.turnos/app_flutter/ DBC4A.db
+                    await PreviusDbProvider.instance.getPreviousTaskFromDB();
+                    // print(notesList.asMap());
                   },
                 ),
-                title: const SelectedDayWidget(),
-                actions: [
-                  IconButton(
-                    key: controller.firstTime.value
-                        ? controller.tutorialController.keyButton7
-                        : key,
-                    color: PRIMARY_COLOR,
-                    icon: const Icon(
-                      Icons.today,
-                    ),
-                    tooltip: 'today',
-                    onPressed: () async {
-                      // CustomDialog.showPopUpInfo(
-                      //   title: 'Volver a HOY',
-                      //   description: 'Selecciona Mes al que quieres ir',
-                      //   labelButton: 'Volver',
-                      //   // onPress: (){}
-                      // );adb backup -noapk ajat.calendario.turnos
-
-                      // / data/data/ ajat.calendario.turnos/app_flutter/ DBC4A.db
-                      await PreviusDbProvider.instance.getPreviousTaskFromDB();
-                      // print(notesList.asMap());
+              ],
+            ),
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerDocked,
+            floatingActionButton: Platform.isAndroid
+                ? FloatingActionButton.extended(
+                    backgroundColor: Colors.transparent,
+                    elevation: 0,
+                    onPressed: () {
+                      // MyTheme.changeTheme();
                     },
-                  ),
-                ],
-              ),
-              floatingActionButtonLocation:
-                  FloatingActionButtonLocation.centerDocked,
-              floatingActionButton: Platform.isAndroid
-                  ? FloatingActionButton.extended(
-                      backgroundColor: Colors.transparent,
-                      elevation: 0,
-                      onPressed: () {
-                        // MyTheme.changeTheme();
-                      },
-                      label: adcontroller.staticAdHomeLoaded.value
-                          ? Container(
-                              color: Colors.transparent,
-                              width: adcontroller.staticHomeAd.size.width
-                                  .toDouble(),
-                              height: adcontroller.staticHomeAd.size.height
-                                  .toDouble(),
-                              alignment: Alignment.bottomCenter,
-                              child: AdWidget(
-                                ad: adcontroller.staticHomeAd,
-                              ),
-                            )
-                          : const SizedBox(),
-                    )
-                  : null,
-              body: Column(
-                children: [
-                  SizedBox(height: 2.h),
-                  CalendarWidget(
+                    label: adcontroller.staticAdHomeLoaded.value
+                        ? Container(
+                            color: Colors.transparent,
+                            width: adcontroller.staticHomeAd.size.width
+                                .toDouble(),
+                            height: adcontroller.staticHomeAd.size.height
+                                .toDouble(),
+                            alignment: Alignment.bottomCenter,
+                            child: AdWidget(
+                              ad: adcontroller.staticHomeAd,
+                            ),
+                          )
+                        : const SizedBox(),
+                  )
+                : null,
+            body: Column(
+              children: [
+                SizedBox(height: 2.h),
+                CalendarWidget(
+                  key: controller.firstTime.value
+                      ? controller.tutorialController.keyButton8
+                      : key,
+                ),
+                SizedBox(height: 5.h),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8.w),
+                  child: LineWidget(),
+                ),
+                // SizedBox(height: 2.h),
+                // Obx(() => _buildSelectedDay()),
+                SizedBox(height: 2.h),
+                Obx(() {
+                  return Expanded(
+                    child: _buildListEvent(),
                     key: controller.firstTime.value
-                        ? controller.tutorialController.keyButton8
+                        ? controller.tutorialController.keyButton9
                         : key,
-                  ),
-                  SizedBox(height: 5.h),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8.w),
-                    child: LineWidget(),
-                  ),
-                  // SizedBox(height: 2.h),
-                  // Obx(() => _buildSelectedDay()),
-                  SizedBox(height: 2.h),
-                  Obx(() {
-                    return Expanded(
-                      child: _buildListEvent(),
-                      key: controller.firstTime.value
-                          ? controller.tutorialController.keyButton9
-                          : key,
-                    );
-                  }),
-                ],
-              )),
-        ),
+                  );
+                }),
+              ],
+            )),
       );
     });
   }

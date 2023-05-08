@@ -5,6 +5,7 @@ import 'package:calendario2/config/util/dateUtils.dart';
 import 'package:calendario2/config/util/hexColor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -18,6 +19,7 @@ class DaySelecetedTurnoWidget extends StatelessWidget {
     var theme = Theme.of(context);
 
     return Scaffold(
+      extendBody: true,
       backgroundColor: theme.scaffoldBackgroundColor,
       body: GetX<CalendarController>(
         init: CalendarController(),
@@ -32,21 +34,21 @@ class DaySelecetedTurnoWidget extends StatelessWidget {
                         shrinkWrap: true,
                         itemCount: c.selectedEvents.value.length,
                         itemBuilder: (context, index) {
-                          return GestureDetector(
-                            onLongPress: () {
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(SnackBar(
-                                content:
-                                    const Text("Quieres borrar este Turno?"),
-                                action: SnackBarAction(
-                                  onPressed: () {
-                                    c.deleteTurnoCuadrante(
-                                        c.selectedEvents.value[index].id);
-                                  },
-                                  label: "Borrar este Turno",
+                          return Slidable(
+                            endActionPane: ActionPane(
+                              motion: const DrawerMotion(),
+                              extentRatio: 0.3,
+                              children: [
+                                SlidableAction(
+                                  label: 'Eliminar',
+                                  borderRadius: BorderRadius.all(Radius.circular(5.r)),
+                                  backgroundColor: Colors.redAccent,
+                                  // icon: Icons.send,
+                                  onPressed: (context) { c.deleteTurnoCuadrante(
+                                      c.selectedEvents.value[index].id);},
                                 ),
-                              ));
-                            },
+                              ],
+                            ),
                             child: Container(
                               height: 22.h,
                               padding: EdgeInsets.symmetric(

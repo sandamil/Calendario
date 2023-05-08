@@ -15,34 +15,11 @@ import '../widgets/calendar/widget/customAlertDialogDaySelected.dart';
 class CalendarController extends GetxController {
   Rx<CalendarFormat> _calendarFormat = CalendarFormat.month.obs;
 
-  onTapDown(TapDownDetails details) {
-    currentX = details.globalPosition.dx;
-    currentY = details.globalPosition.dy;
-    // or user the local position method to get the offset
-    print(details.localPosition);
-    print("tap down " + currentX.toString() + ", " + currentY.toString());
-  }
 
-  onTapUp(TapUpDetails details) {
-    var x = details.globalPosition.dx;
-    var y = details.globalPosition.dy;
-    // or user the local position method to get the offset
-    print(details.localPosition);
-    print("tap up " + x.toString() + ", " + y.toString());
-  }
 
   var currentX = 0.0;
-  void currentXval(double dx) {
-    print(dx);
-
-    currentX = dx;
-  }
-
   var currentY = 0.0;
-  void currentYval(double dy) {
-    print(dy);
-    currentY = dy;
-  }
+
 
   Rx<CalendarFormat> get calendarFormat => _calendarFormat;
 
@@ -84,6 +61,11 @@ class CalendarController extends GetxController {
     await fetchTurno();
     await getListEvent();
     super.onInit();
+  }
+
+  onTapDown(TapDownDetails details) {
+    currentX = details.globalPosition.dx;
+    currentY = details.globalPosition.dy;
   }
 
   onDaySelected(DateTime selectedDate, DateTime focusedDate) {

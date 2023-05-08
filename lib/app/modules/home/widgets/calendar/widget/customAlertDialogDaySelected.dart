@@ -25,19 +25,32 @@ class CustomAlertDilogDaySelected extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: Get.height,
-      width: Get.width,
+      // width: Get.width,
       child: Stack(
         children: [
           Positioned(
-            left: x,
-            top: y,
+            // left: x,
+            top: y - 40.h,
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10.w),
+              padding: EdgeInsets.symmetric(horizontal: 0.w),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Container(
-                    height: 200,
+                    height: 19,
+                    width: Get.width,
+                    child: Stack(
+                      children: [
+                        Positioned(
+                          left: x,
+                          child: CustomPaint(
+                              size: Size(20.h, 20.w), painter: DrawTriangle()),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    height: 220,
                     width: Get.width,
                     padding: EdgeInsets.symmetric(horizontal: 10.w),
                     decoration: BoxDecoration(
@@ -47,6 +60,7 @@ class CustomAlertDilogDaySelected extends StatelessWidget {
                       ),
                     ),
                     child: Column(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
                         SizedBox(height: 2.h),
                         getContent(),
@@ -107,4 +121,44 @@ class CustomAlertDilogDaySelected extends StatelessWidget {
       ),
     );
   }
+}
+
+class DrawTriangle extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    var path = Path();
+    path.moveTo(size.width / 2, 0);
+    path.lineTo(0, size.height);
+    path.lineTo(size.height, size.width);
+    path.close();
+    canvas.drawPath(path, Paint()..color = MyColors.backgroundColor);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return false;
+  }
+}
+
+class ClipperStack extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    Path path = Path();
+
+    path.moveTo(0.0, 0.0);
+    path.lineTo(0.0, size.height - 10);
+    path.lineTo((size.width / 2) - 5, size.height - 10);
+
+    path.lineTo(size.width / 2, size.height);
+
+    path.lineTo((size.width / 2) + 5, size.height - 10);
+    path.lineTo(size.width, size.height - 10);
+
+    path.lineTo(size.width, 0.0);
+
+    return path;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) => true;
 }
