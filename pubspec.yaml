@@ -3,7 +3,7 @@ description: Calendario 2.0.
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 2.0.1+25
+version: 2.0.1+30
 
 environment:
   sdk: '>=2.19.3 <3.0.0'
@@ -64,6 +64,27 @@ dev_dependencies:
     sdk: flutter
 
   flutter_lints: ^2.0.1
+  flutter_launcher_icons: "^0.13.1"
+
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  adaptive_icon_background: "FF9800FF"
+  image_path: "assets/icon/icon.png"
+  min_sdk_android: 19 # android min sdk min:16, default 21
+  web:
+    generate: true
+    image_path: "assets/icon/icon.png"
+    background_color: "FF9800FF"
+    theme_color: "FF9800FF"
+  windows:
+    generate: true
+    image_path: "assets/icon/icon.png"
+    icon_size: 48 # min:48, max:256, default: 48
+  macos:
+    generate: true
+    image_path: "assets/icon/icon.png"
 
 
 flutter:

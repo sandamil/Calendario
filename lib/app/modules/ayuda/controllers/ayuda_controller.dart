@@ -1,10 +1,5 @@
 import 'dart:io';
 
-import 'package:calendario2/app/components/toast.dart';
-import 'package:calendario2/app/data/local/previusTaskDatabase.dart';
-import 'package:calendario2/app/data/model/previousTaskModel.dart';
-import 'package:calendario2/app/modules/ayuda/views/pages/notas_version_anterior_screen.dart';
-import 'package:calendario2/app/modules/ayuda/views/pages/version_anterior_screen.dart';
 import 'package:calendario2/config/util/analytics_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -13,7 +8,6 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../views/pages/feedback_screen.dart';
-import '../views/widgets/notasBkpCard.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AyudaController extends GetxController {
@@ -23,7 +17,6 @@ class AyudaController extends GetxController {
 
   @override
   void onInit() {
-    setNotesFromDB();
     super.onInit();
   }
 
@@ -38,20 +31,10 @@ class AyudaController extends GetxController {
   }
 
   void goToVersionAnteriorScreen() {
-    Get.to(
-      () => const VersionAnteriorScreen(),
-      transition: Transition.fadeIn,
-      duration: const Duration(milliseconds: 100),
-    );
+    Get.toNamed('/version-anterior');
   }
 
-  void goToNotasVersionAnteriorScreen() {
-    Get.to(
-      () => const NotasVersionAnteriorScreen(),
-      transition: Transition.fadeIn,
-      duration: const Duration(milliseconds: 100),
-    );
-  }
+
 
   void launchGmail() async {
     final Uri params = Uri(
@@ -116,26 +99,5 @@ class AyudaController extends GetxController {
   }
 
 
-  RxList<PreviousTask> notesBkpList = <PreviousTask>[].obs;
 
-  setNotesFromDB() async {
-    notesBkpList.value = await PreviusDbProvider.instance.getPreviousTaskFromDB();
-    update();
-    return notesBkpList.value;
-  }
-
-  List<Widget> buildNoteBkpComponentsList() {
-    List<Widget> noteBkcComponentsList = [];
-    notesBkpList.value.sort((a, b) {
-      return b.year!.compareTo(a.year as num);
-    });
-    notesBkpList.value.forEach((note) {
-      noteBkcComponentsList.add(NotasBkpCard(
-        noteData: note,
-        // onTapAction: openNoteToRead,
-      ));
-    });
-
-    return noteBkcComponentsList;
-  }
 }

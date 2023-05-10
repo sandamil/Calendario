@@ -1,3 +1,4 @@
+import 'package:calendario2/app/components/custom_dialog.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/config/theme/my_fonts.dart';
 import 'package:calendario2/config/util/assets.dart';
@@ -9,14 +10,16 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:rive/rive.dart';
 
+import '../../../controllers/ads_controller.dart';
 import '../controllers/ajustes_controller.dart';
 import '../../../../widgets/setting_title.dart';
 
 class AjustesView extends GetView<AjustesController> {
   const AjustesView({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
+    final adcontroller = Get.find<AdsController>();
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -26,6 +29,7 @@ class AjustesView extends GetView<AjustesController> {
             size: 26.sp,
           ),
           onPressed: () {
+            adcontroller.staticHomeAd.load();
             Get.offAllNamed('/home');
           },
         ),
@@ -49,7 +53,7 @@ class AjustesView extends GetView<AjustesController> {
                 return SettingTile(
                     icon: ConstrainedBox(
                       constraints:
-                      const BoxConstraints.expand(height: 50, width: 50),
+                          const BoxConstraints.expand(height: 50, width: 50),
                       child: Rive(
                         artboard: controller.artboard.value!,
                         fit: BoxFit.fill,
@@ -59,8 +63,8 @@ class AjustesView extends GetView<AjustesController> {
                     btnText: "Theme".tr,
                     trailing: GestureDetector(
                         child: ConstrainedBox(
-                          constraints:
-                          const BoxConstraints.expand(height: 40, width: 80),
+                          constraints: const BoxConstraints.expand(
+                              height: 40, width: 80),
                           child: Rive(
                             artboard: controller.artboard2.value!,
                             fit: BoxFit.fill,
@@ -71,14 +75,14 @@ class AjustesView extends GetView<AjustesController> {
                           controller.cambioModo();
                         })
 
-                  // CupertinoSwitch(
-                  //   value: controller.isDark.value,
-                  //   onChanged: (val) async {
-                  //     controller.isDark.value = !controller.isDark.value;
-                  //     await controller.changeTheme(val);
-                  //   },
-                  // ),
-                );
+                    // CupertinoSwitch(
+                    //   value: controller.isDark.value,
+                    //   onChanged: (val) async {
+                    //     controller.isDark.value = !controller.isDark.value;
+                    //     await controller.changeTheme(val);
+                    //   },
+                    // ),
+                    );
               }),
 
               SettingTile(
@@ -94,6 +98,10 @@ class AjustesView extends GetView<AjustesController> {
               SettingTile(
                 icon: const ImageIcon(AssetImage(MyIcon.notificationIcon)),
                 btnText: "Ajustes alarma".tr,
+                onPressed: () => CustomDialog.showPopUpInfo(
+                  description: 'En próximas actualizaciones estará disponible',
+                  title: 'Pronto Disponible',
+                ),
                 //   trailing: KSwitch(),
               ),
               // SettingTile(
@@ -121,13 +129,21 @@ class AjustesView extends GetView<AjustesController> {
                         backgroundColor: Colors.green,
                         // background (button) color
                         foregroundColor:
-                        Colors.green, // foreground (text) color
+                            Colors.green, // foreground (text) color
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        CustomDialog.showPopUpInfo(
+                          description:
+                              'En próximas actualizaciones estará disponible',
+                          title: 'Pronto Disponible',
+                        );
+                      },
                       child: Padding(
                         padding: EdgeInsets.symmetric(horizontal: 8.w),
-                        child: Text('Obtener version pro', style: TextStyle(
-                            color: MyColors.textButtom),),
+                        child: Text(
+                          'Obtener version pro',
+                          style: TextStyle(color: MyColors.textButtom),
+                        ),
                       ),
                     ),
                   )
@@ -178,5 +194,4 @@ class AjustesView extends GetView<AjustesController> {
       ),
     );
   }
-
 }

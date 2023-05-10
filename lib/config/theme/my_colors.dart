@@ -58,6 +58,8 @@ class MyColors {
 }
 
 const Color PRIMARY_COLOR = Color.fromRGBO(255, 152, 0, 1.0);
+const Color PRIMARY_COLOR_ICON_GREY = Color.fromRGBO(242, 242, 242, 1.0);
+const Color PRIMARY_COLOR_ICON_GREY_BLACK = Color.fromRGBO(102, 102, 102, 1.0);
 // const Color PRIMARY_COLOR = Colors.black;
 // const Color PRIMARY_COLOR = Color.fromRGBO(215, 129, 0, 1.0);
 const Color ACCENT_COLOR = Color(0xff005AFF);

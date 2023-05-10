@@ -2,7 +2,7 @@ import 'package:calendario2/app/controllers/tutorialController.dart';
 import 'package:calendario2/app/data/local/my_shared_pref.dart';
 import 'package:calendario2/app/data/local/previusTaskDatabase.dart';
 import 'package:calendario2/app/data/local/taskDatabase.dart';
-import 'package:calendario2/app/data/model/previousTaskModel.dart';
+import 'package:calendario2/app/data/model/previousDatabase/previousTaskModel.dart';
 import 'package:calendario2/app/modules/home/controllers/calendar_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

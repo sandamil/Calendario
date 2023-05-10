@@ -1,4 +1,5 @@
 
+import 'package:calendario2/app/controllers/ads_controller.dart';
 import 'package:calendario2/app/modules/home/views/home_view.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/config/theme/styles.dart';
@@ -11,12 +12,14 @@ import '../../../../config/theme/my_fonts.dart';
 import '../controllers/menu_controller.dart';
 
 class MenuView extends GetView<MenuAppController> {
+
   const MenuView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     double qaButtonHeight = 200.h;
     double qaButtonWidth = 120.w;
+    final adcontroller = Get.find<AdsController>();
 
     return Scaffold(
       appBar: AppBar(
@@ -30,6 +33,7 @@ class MenuView extends GetView<MenuAppController> {
             size: 26.sp,
           ),
           onPressed: () {
+            adcontroller.staticHomeAd.load();
             Get.to(() => HomeView(),
                 duration: const Duration(microseconds: 700),
                 transition: Transition.rightToLeft);

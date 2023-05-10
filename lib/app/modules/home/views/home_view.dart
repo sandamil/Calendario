@@ -45,6 +45,7 @@ class HomeView extends GetView<HomeController> {
                       size: 26.sp,
                     ),
                     onPressed: () {
+                      adcontroller.staticHomeAd.dispose();
                       Get.to(() => const MenuView(),
                           duration: const Duration(milliseconds: 100),
                           transition: Transition.leftToRight);
@@ -65,7 +66,8 @@ class HomeView extends GetView<HomeController> {
                     Icons.today,
                   ),
                   tooltip: 'today',
-                  onPressed: () async {
+                  onPressed: ()  {
+                    Get.toNamed('/version-anterior');
                     // CustomDialog.showPopUpInfo(
                     //   title: 'Volver a HOY',
                     //   description: 'Selecciona Mes al que quieres ir',
@@ -74,7 +76,6 @@ class HomeView extends GetView<HomeController> {
                     // );adb backup -noapk ajat.calendario.turnos
 
                     // / data/data/ ajat.calendario.turnos/app_flutter/ DBC4A.db
-                    await PreviusDbProvider.instance.getPreviousTaskFromDB();
                     // print(notesList.asMap());
                   },
                 ),

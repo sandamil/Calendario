@@ -16,6 +16,7 @@ abstract class Routes {
   static const AYUDA = _Paths.AYUDA;
   static const BOARDING = _Paths.BOARDING;
   static const INICIO = _Paths.INICIO;
+  static const VERSION_ANTERIOR = _Paths.VERSION_ANTERIOR;
 }
 
 abstract class _Paths {
@@ -33,4 +34,5 @@ abstract class _Paths {
   static const AYUDA = '/ayuda';
   static const BOARDING = '/boarding';
   static const INICIO = '/inicio';
+  static const VERSION_ANTERIOR = '/version-anterior';
 }

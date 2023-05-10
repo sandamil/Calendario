@@ -66,7 +66,7 @@ class BoardingController extends GetxController {
         title: '',
         subTitle: '',
         description: '',
-        imagePath: 'assets/other/cuadrantegif.gif',
+        imagePath: 'assets/other/Cuadrantes.gif',
       ),
       const BoardingModel(
         subTitle: 'No te olvides nada',

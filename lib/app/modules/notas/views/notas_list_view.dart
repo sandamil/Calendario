@@ -19,6 +19,8 @@ class NotasListView extends GetView<NotasListController> {
 
   @override
   Widget build(BuildContext context) {
+    final adcontroller = Get.find<AdsController>();
+
     return Obx(() {
       return Scaffold(
         appBar: AppBar(
@@ -29,6 +31,8 @@ class NotasListView extends GetView<NotasListController> {
               size: 26.sp,
             ),
             onPressed: () {
+              adcontroller.staticHomeAd.load();
+
               Get.offAllNamed('/home');
             },
           ),

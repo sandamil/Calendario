@@ -25,35 +25,38 @@ class CustomAlertDilogDaySelected extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: Get.height,
-      // width: Get.width,
+      width: Get.width - 20.w,
       child: Stack(
         children: [
           Positioned(
             // left: x,
             top: y - 40.h,
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 0.w),
+              padding: EdgeInsets.symmetric(horizontal: 10.w),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Container(
-                    height: 19,
-                    width: Get.width,
+
+                    height: 30,
+                    width: Get.width - 20.w,
                     child: Stack(
                       children: [
                         Positioned(
-                          left: x,
+                          left: x -20.w,
                           child: CustomPaint(
-                              size: Size(20.h, 20.w), painter: DrawTriangle()),
+                              size: Size(35, 35), painter: DrawTriangle()),
                         ),
                       ],
                     ),
                   ),
                   Container(
+
                     height: 220,
-                    width: Get.width,
+                    width: Get.width - 20.w,
                     padding: EdgeInsets.symmetric(horizontal: 10.w),
                     decoration: BoxDecoration(
+                      border: Border.all(color: PRIMARY_COLOR),
                       color: MyColors.backgroundColor,
                       borderRadius: BorderRadius.all(
                         Radius.circular(5.r),
@@ -131,7 +134,7 @@ class DrawTriangle extends CustomPainter {
     path.lineTo(0, size.height);
     path.lineTo(size.height, size.width);
     path.close();
-    canvas.drawPath(path, Paint()..color = MyColors.backgroundColor);
+    canvas.drawPath(path, Paint()..color = PRIMARY_COLOR);
   }
 
   @override

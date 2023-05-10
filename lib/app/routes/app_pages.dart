@@ -1,7 +1,5 @@
 import 'package:get/get.dart';
 
-import '../modules/crearCuadrante/bindings/crear_cuadrante_binding.dart';
-import '../modules/crearCuadrante/views/crear_cuadrante_view.dart';
 import '../modules/CrearTurno/bindings/crear_turno_binding.dart';
 import '../modules/CrearTurno/views/turno_view.dart';
 import '../modules/ajustes/bindings/ajustes_binding.dart';
@@ -10,6 +8,8 @@ import '../modules/ayuda/bindings/ayuda_binding.dart';
 import '../modules/ayuda/views/ayuda_view.dart';
 import '../modules/boarding/bindings/boarding_binding.dart';
 import '../modules/boarding/views/boarding_view.dart';
+import '../modules/crearCuadrante/bindings/crear_cuadrante_binding.dart';
+import '../modules/crearCuadrante/views/crear_cuadrante_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/inicio/bindings/inicio_binding.dart';
@@ -26,6 +26,8 @@ import '../modules/notas/views/NotasView/views/notas_view.dart';
 import '../modules/notas/views/alarmas/bindings/alarmas_binding.dart';
 import '../modules/notas/views/alarmas/views/alarmas_view.dart';
 import '../modules/notas/views/notas_list_view.dart';
+import '../modules/versionAnterior/bindings/version_anterior_binding.dart';
+import '../modules/versionAnterior/views/version_anterior_view.dart';
 
 part 'app_routes.dart';
 
@@ -35,13 +37,11 @@ class AppPages {
   static const INITIAL = Routes.HOME;
 
   static final routes = [
-
     GetPage(
       name: _Paths.INICIO,
       page: () => const InicioView(),
       binding: InicioBinding(),
     ),
-
     GetPage(
       name: _Paths.BOARDING,
       page: () => const BoardingView(),
@@ -124,6 +124,10 @@ class AppPages {
       page: () => const AyudaView(),
       binding: AyudaBinding(),
     ),
-
+    GetPage(
+      name: _Paths.VERSION_ANTERIOR,
+      page: () => const VersionAnteriorView(),
+      binding: VersionAnteriorBinding(),
+    ),
   ];
 }

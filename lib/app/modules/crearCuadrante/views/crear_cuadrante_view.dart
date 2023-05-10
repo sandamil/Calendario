@@ -1,3 +1,4 @@
+import 'package:calendario2/app/controllers/ads_controller.dart';
 import 'package:calendario2/app/modules/CrearTurno/views/widgets/input_field.dart';
 import 'package:calendario2/app/modules/crearCuadrante/widgets/beautifulAlertDialog.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
@@ -16,6 +17,7 @@ class CrearCuadranteView extends GetView<CrearCuadranteController> {
 
   @override
   Widget build(BuildContext context) {
+    final adcontroller = Get.find<AdsController>();
     return Obx(
       () {
         return Scaffold(
@@ -30,6 +32,8 @@ class CrearCuadranteView extends GetView<CrearCuadranteController> {
                 size: 26.sp,
               ),
               onPressed: () {
+                adcontroller.staticHomeAd.load();
+
                 Get.offAllNamed('/home');
               },
             ),
@@ -291,6 +295,8 @@ class CrearCuadranteView extends GetView<CrearCuadranteController> {
   }
 
   showAlertLoadingDialog(BuildContext context) {
+    final adcontroller = Get.find<AdsController>();
+
     Widget okButton = Obx(() {
       return TextButton(
         child: controller.cuadranteLoading.value
@@ -301,6 +307,8 @@ class CrearCuadranteView extends GetView<CrearCuadranteController> {
               )
             : const Text('Calendario'),
         onPressed: () async {
+          adcontroller.staticHomeAd.load();
+
           Get.offAllNamed('/home');
         },
       );

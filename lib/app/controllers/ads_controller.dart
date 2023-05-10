@@ -53,6 +53,7 @@ class AdsController extends GetxController {
   }
 
   void loadHomeBannerAd() {
+
     staticHomeAd = BannerAd(
         adUnitId: _adHomeId,
         size: AdSize.banner,

@@ -1,6 +1,8 @@
+import 'package:calendario2/app/controllers/ads_controller.dart';
 import 'package:calendario2/app/data/local/calendarDatabase.dart';
 import 'package:calendario2/app/data/model/cuadranteDay.dart';
 import 'package:calendario2/app/modules/home/controllers/calendar_controller.dart';
+import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/config/util/hexColor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -18,6 +20,8 @@ class CustomAlertDialogTurnoList extends StatelessWidget {
   //
   @override
   Widget build(BuildContext context) {
+    final adcontroller = Get.find<AdsController>();
+
     var theme = Theme.of(context);
 
     return Align(
@@ -30,6 +34,7 @@ class CustomAlertDialogTurnoList extends StatelessWidget {
             Container(
               padding: EdgeInsets.symmetric(horizontal: 10.w),
               decoration: BoxDecoration(
+                border: Border.all(color: PRIMARY_COLOR),
                 color: theme.scaffoldBackgroundColor,
                 borderRadius: BorderRadius.all(
                   Radius.circular(5.r),
@@ -80,6 +85,7 @@ class CustomAlertDialogTurnoList extends StatelessWidget {
                               ),
                             );
                             await calendarController.fetchCuadrante();
+                            adcontroller.staticHomeAd.load();
 
                             Get.offAllNamed('/home');
                           },

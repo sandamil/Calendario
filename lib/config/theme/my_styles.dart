@@ -47,6 +47,10 @@ class MyStyles {
           // Status bar brightness (optional)
           statusBarIconBrightness: Brightness.dark, // For Android (dark icons)
           statusBarBrightness: Brightness.light, // For iOS (dark icons)
+
+          systemNavigationBarColor: LightThemeColors.scaffoldBackgroundColor,
+          systemNavigationBarDividerColor: LightThemeColors.scaffoldBackgroundColor,
+          systemNavigationBarIconBrightness: Brightness.dark,
         )
             : const SystemUiOverlayStyle(
           // Status bar color
@@ -54,6 +58,10 @@ class MyStyles {
           // Status bar brightness (optional)
           statusBarIconBrightness: Brightness.light, // For Android (dark icons)
           statusBarBrightness: Brightness.dark, // For iOS (dark icons)
+
+          systemNavigationBarColor: DarkThemeColors.scaffoldBackgroundColor,
+          systemNavigationBarDividerColor: DarkThemeColors.scaffoldBackgroundColor,
+          systemNavigationBarIconBrightness: Brightness.light,
         ),
         elevation: 0,
         titleTextStyle:

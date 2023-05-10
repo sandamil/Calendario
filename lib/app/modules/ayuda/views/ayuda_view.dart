@@ -1,3 +1,4 @@
+import 'package:calendario2/app/controllers/ads_controller.dart';
 import 'package:calendario2/app/modules/ayuda/views/widgets/ayuda_group_widget.dart';
 import 'package:calendario2/app/modules/ayuda/views/widgets/ayuda_row_widget.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
@@ -11,8 +12,11 @@ import '../controllers/ayuda_controller.dart';
 
 class AyudaView extends GetView<AyudaController> {
   const AyudaView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
+    final adcontroller = Get.find<AdsController>();
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -22,6 +26,7 @@ class AyudaView extends GetView<AyudaController> {
             size: 26.sp,
           ),
           onPressed: () {
+            adcontroller.staticHomeAd.load();
             Get.offAllNamed('/home');
           },
         ),

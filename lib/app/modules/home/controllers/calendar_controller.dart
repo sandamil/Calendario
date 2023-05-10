@@ -1,5 +1,6 @@
 import 'dart:collection';
 
+import 'package:calendario2/app/controllers/ads_controller.dart';
 import 'package:calendario2/app/data/local/calendarDatabase.dart';
 import 'package:calendario2/app/data/local/taskDatabase.dart';
 import 'package:calendario2/app/data/model/taskModel.dart';
@@ -13,6 +14,9 @@ import '../widgets/calendar/widget/customAlertDialogTurnoList.dart';
 import '../widgets/calendar/widget/customAlertDialogDaySelected.dart';
 
 class CalendarController extends GetxController {
+  final adcontroller = Get.find<AdsController>();
+
+
   Rx<CalendarFormat> _calendarFormat = CalendarFormat.month.obs;
 
 
@@ -202,7 +206,7 @@ class CalendarController extends GetxController {
   }
 
   deleteTurnoCuadrante(id) {
-    print('deleteTurnoCuadrante $id');
+    adcontroller.staticHomeAd.load();
 
     DBHelper.db.deleteItemID(id);
     Get.offAllNamed('/home');
