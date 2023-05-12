@@ -157,28 +157,34 @@ class DaySelecetedTurnoWidget extends StatelessWidget {
                                 SizedBox(
                                   width: 4.w,
                                 ),
-                                Text(
-                                  '${DateTime.fromMillisecondsSinceEpoch(nota.startTimeMilliseconds!).formatDateTime24H}',
-                                  style: TextStyle(
-                                      height: 1.2.h,
-                                      fontSize: 14.sp,
-                                      fontWeight: FontWeight.w600),
-                                ),
-                                SizedBox(
-                                  width: 4.w,
-                                ),
-                                Text(
-                                  nota.title!.toUpperCase(),
-                                  style: TextStyle(
-                                      height: 1.2.h,
-                                      fontSize: 14.sp,
-                                      fontWeight: FontWeight.w600),
+                                Container(
+                                  width: 40.w,
+                                  child: Text(
+                                    '${DateTime.fromMillisecondsSinceEpoch(nota.startTimeMilliseconds!).formatDateTime24H}',
+                                    style: TextStyle(
+                                        height: 1.2.h,
+                                        fontSize: 14.sp,
+                                        fontWeight: FontWeight.w600),
+                                  ),
                                 ),
                                 SizedBox(
                                   width: 4.w,
                                 ),
                                 Container(
-                                  width: 150.w,
+                                  width: 90.w,
+                                  child: Text(
+                                    nota.title!.toUpperCase(),
+                                    style: TextStyle(
+                                        height: 1.2.h,
+                                        fontSize: 14.sp,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 4.w,
+                                ),
+                                Container(
+                                  width: 170.w,
                                   child: Text(
                                     nota.notes!,
                                     overflow: TextOverflow.ellipsis,

@@ -222,7 +222,7 @@ class NotasView extends GetView<NotasViewController> {
                   Padding(
                     padding: EdgeInsets.only(
                         left: 24.w, top: 16.h, bottom: 14.h, right: 24.w),
-                    child: controller.isAlarmaCreated.value
+                    child: !controller.isAlarmaCreated.value
                         ? const Text(
                             "No has añadido alarma",
                             style: TextStyle(

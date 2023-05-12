@@ -62,7 +62,7 @@ class AddNotasView extends GetView<AddNotasController> {
                 adcontroller.loadNotesListBannerAd();
 
                 controller.addTravelEvent();
-                await controller.addEvent();
+                await controller.saveNota();
                 Get.offAllNamed('/notas');
               },
             )
@@ -344,7 +344,7 @@ class AddNotasView extends GetView<AddNotasController> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
                                 Text(
-                                  controller.alarmaActivadaString,
+                                  controller.alarmaActivadaString.value,
                                   style: TextStyle(
                                       color: MyColors.textButtomBlack,
                                       fontSize: 16.sp),
@@ -421,8 +421,9 @@ class AddNotasView extends GetView<AddNotasController> {
                                 controller.alarmaCreadaNota!.dateTime.minute,
                           ).format(context),
                           onPressed: () {
-                            alarmasController.navigateToAlarmScreen(
-                                controller.alarmaCreadaNota, context);
+                            null;
+                            // alarmasController.navigateToAlarmScreen(
+                            //     controller.alarmaCreadaNota, context);
                           },
                           // onDismissed: () {
                           //   Alarm.stop(alarmasController

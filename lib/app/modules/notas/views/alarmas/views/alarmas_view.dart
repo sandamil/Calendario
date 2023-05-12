@@ -57,8 +57,8 @@ class AlarmasView extends GetView<AlarmasController> {
                   },
                 ),
               ),
-              Text(
-                  '${controller.alarmaActivada.value} ${controller.startTime}'),
+              // Text(
+              //     '${controller.alarmaActivada.value} ${controller.startTime}'),
               // Text('${controller.id} == ${addNotasController.idGenerated}'),
               controller.noRemind.value
                   ? Column(

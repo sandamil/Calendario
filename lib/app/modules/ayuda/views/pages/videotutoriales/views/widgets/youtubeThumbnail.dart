@@ -1,0 +1,57 @@
+import 'package:calendario2/app/modules/ayuda/views/pages/videotutoriales/views/widgets/video_view.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+
+import '../../../../../../../../config/theme/my_colors.dart';
+import '../../../../../../../../config/util/app_image.dart';
+import '../../../../../../../../widgets/buttons/buttons.dart';
+
+class YouTubeThumbnail extends StatelessWidget {
+  const YouTubeThumbnail({Key? key, required this.id,}) : super(key: key);
+  final String id;
+
+
+  String get imageUrl => 'http://img.youtube.com/vi/$id/hqdefault.jpg';
+
+  @override
+  Widget build(BuildContext context) {
+    void handlePressed() => Get.to(FullscreenVideoViewer(id: id,));
+    return MergeSemantics(
+      child: ConstrainedBox(
+        constraints: BoxConstraints(maxWidth: 400),
+        child: Column(
+          children: [
+            AppBtn.basic(
+              semanticLabel: 'Youtube thumbnail',
+              onPressed: handlePressed,
+              child: Stack(children: [
+                AppImage(image: NetworkImage(imageUrl), fit: BoxFit.cover, scale: 1.0),
+                Positioned.fill(
+                  child: Center(
+                    child: Container(
+                      padding: EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                        color: black.withOpacity(0.66),
+                        borderRadius: BorderRadius.circular(999),
+                      ),
+                      child: Icon(
+                        Icons.play_arrow,
+                        color: white,
+                        size: 48.sp,
+                      ),
+                    ),
+                  ),
+                ),
+              ]),
+            ),
+            SizedBox(height: 8.h,),
+            // Padding(
+            //     padding: EdgeInsets.symmetric(horizontal: 24.w),
+            //     child: Text(caption, style: TextStyle(fontSize: 14, height: 20, fontWeight: FontWeight.w500))),
+          ],
+        ),
+      ),
+    );
+  }
+}

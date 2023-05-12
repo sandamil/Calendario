@@ -60,7 +60,7 @@ class AjustesView extends GetView<AjustesController> {
                         useArtboardSize: true,
                       ),
                     ),
-                    btnText: "Theme".tr,
+                    btnText: "Tema".tr,
                     trailing: GestureDetector(
                         child: ConstrainedBox(
                           constraints: const BoxConstraints.expand(

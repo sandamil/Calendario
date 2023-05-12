@@ -28,6 +28,8 @@ class NotasViewController extends GetxController {
     isAlarmaCreated.value = currentNote.value.isAlarmaCreated!;
     showHeader();
     super.onInit();
+    print(currentNote.value.toMap());
+
   }
 
   @override

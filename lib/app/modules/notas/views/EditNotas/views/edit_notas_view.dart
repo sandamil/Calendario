@@ -282,8 +282,9 @@ class EditNotasView extends GetView<EditNotasController> {
                           minute: controller.alarmaCreadaNota!.dateTime.minute,
                         ).format(context),
                         onPressed: () {
-                          alarmasController.navigateToAlarmScreen(
-                              controller.alarmaCreadaNota, context);
+                          null;
+                          // alarmasController.navigateToAlarmScreen(
+                          //     controller.alarmaCreadaNota, context);
                         },
                         // onDismissed: () {
                         //   Alarm.stop(alarmasController

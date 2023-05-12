@@ -42,6 +42,10 @@ class AlarmasController extends GetxController {
         notes = Get.arguments['notes'];
         id = Get.arguments['id'];
       }
+      startTime = Get.arguments['startTime'];
+      title = Get.arguments['title'];
+      notes = Get.arguments['notes'];
+      id = Get.arguments['id'];
     }
 
     super.onInit();
@@ -102,7 +106,7 @@ class AlarmasController extends GetxController {
 
     } else {
       AddNotasController adNotasController = Get.find();
-      adNotasController.alarmaActivadaString = alarmaActivada.value;
+      adNotasController.alarmaActivadaString.value = alarmaActivada.value;
     }
      }
 

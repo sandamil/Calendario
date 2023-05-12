@@ -135,8 +135,23 @@ class AddNotasController extends GetxController {
     }
   }
 
-  addEvent() async {
-    Task _item = await DbProvider.instance.select(
+
+
+  saveNota() async {
+    print('saveNota');
+    print('');
+    print('');
+    print('');
+    print(idGenerated);
+    print(title.text);
+    print(site.text);
+    print(notes.text);
+    print(isImportant.value);
+    print( startTime.value.millisecondsSinceEpoch);
+    print(endTime.value.millisecondsSinceEpoch);
+    print( alarmaActivadaString.value);
+    print(alarmaCreada);
+    print('saveNota');
       await DbProvider.instance.insertNotas(
         Task(
           id: idGenerated,
@@ -147,19 +162,11 @@ class AddNotasController extends GetxController {
           startTimeMilliseconds: startTime.value.millisecondsSinceEpoch,
           endTimeMilliseconds: endTime.value.millisecondsSinceEpoch,
           idAlarma: idGenerated,
-          alarmaActivadaString: alarmaActivadaString,
+          alarmaActivadaString: alarmaActivadaString.value,
           isAlarmaCreated: alarmaCreada,
           // time: Jiffy().format('yyyy-MM-dd h:mm:ss a')
         ),
-      ),
     );
-
-    // remindList.forEach((e) {
-    //   if (e['select']) {
-    //     push.setOneTime(_item.id! * 10 + e['id'], title, notes,
-    //         e['time'](startTime.value));
-    //   }
-    // });
   }
 
   void markImportantAsDirty() {
@@ -170,7 +177,7 @@ class AddNotasController extends GetxController {
   ///NOtificaciones
   ///
 
-  String alarmaActivadaString = 'Sin recordatorio';
+  RxString alarmaActivadaString = 'Sin recordatorio'.obs;
 
 
 

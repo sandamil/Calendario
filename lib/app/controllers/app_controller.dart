@@ -1,5 +1,6 @@
 
 import 'package:calendario2/config/util/app_utils.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class AppController extends GetxController {
@@ -17,6 +18,35 @@ class AppController extends GetxController {
     getAppVersion();
     // getAppLanguageOptions();
     super.onInit();
+  }
+
+  List<Axiss> supportedOrientations = [Axiss.vertical, Axiss.horizontal];
+
+  List<Axiss>? _supportedOrientationsOverride;
+  set supportedOrientationsOverride(List<Axiss>? value) {
+    if (_supportedOrientationsOverride != value) {
+      _supportedOrientationsOverride = value;
+      _updateSystemOrientation();
+    }
+  }
+
+  void _updateSystemOrientation() {
+    final axisList = _supportedOrientationsOverride ?? supportedOrientations;
+    //debugPrint('updateDeviceOrientation, supportedAxis: $axisList');
+    final orientations = <DeviceOrientation>[];
+    if (axisList.contains(Axiss.vertical)) {
+      orientations.addAll([
+        DeviceOrientation.portraitUp,
+        DeviceOrientation.portraitDown,
+      ]);
+    }
+    if (axisList.contains(Axiss.horizontal)) {
+      orientations.addAll([
+        DeviceOrientation.landscapeLeft,
+        DeviceOrientation.landscapeRight,
+      ]);
+    }
+    SystemChrome.setPreferredOrientations(orientations);
   }
 
   // Future<void> initData() async {
@@ -78,4 +108,17 @@ class AppController extends GetxController {
   //     Locale(value.locale.languageCode, value.locale.countryCode),
   //   );
   // }
+}
+
+enum Axiss {
+  /// Left and right.
+  ///
+  /// See also:
+  ///
+  ///  * [TextDirection], which disambiguates between left-to-right horizontal
+  ///    content and right-to-left horizontal content.
+  horizontal,
+
+  /// Up and down.
+  vertical,
 }

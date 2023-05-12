@@ -36,13 +36,13 @@ class NotasBkpCard extends StatelessWidget {
     Color color =
     colorList.elementAt(Random().nextInt(colorList.length));
 
-    return Container(
+    return Card(
       // padding: EdgeInsets.only(left: 4.w, right: 4.w),
-      decoration: BoxDecoration(
-
-        borderRadius: BorderRadius.circular(5.r),
-        boxShadow: [buildBoxShadow(color, context)],
-      ),
+      // decoration: BoxDecoration(
+      //
+      //   borderRadius: BorderRadius.circular(5.r),
+      //   boxShadow: [buildBoxShadow(color, context)],
+      // ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(12),
           child: Container(
