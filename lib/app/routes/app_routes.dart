@@ -17,6 +17,7 @@ abstract class Routes {
   static const BOARDING = _Paths.BOARDING;
   static const INICIO = _Paths.INICIO;
   static const VERSION_ANTERIOR = _Paths.VERSION_ANTERIOR;
+  static const VIDEOTUTORIALES = _Paths.VIDEOTUTORIALES;
 }
 
 abstract class _Paths {
@@ -35,4 +36,5 @@ abstract class _Paths {
   static const BOARDING = '/boarding';
   static const INICIO = '/inicio';
   static const VERSION_ANTERIOR = '/version-anterior';
+  static const VIDEOTUTORIALES = '/videotutoriales';
 }

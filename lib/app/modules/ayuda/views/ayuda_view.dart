@@ -50,30 +50,26 @@ class AyudaView extends GetView<AyudaController> {
                   AyudaRowWidget(
                     title: "Resumen",
                     subtitle:
-                    "Presiona aquí para ver el resumen que aparece la primera vez que instalas la aplicacion.",
+                        "Presiona aquí para ver el resumen que aparece la primera vez que instalas la aplicacion.",
                     onTap: () => Get.toNamed('/boarding'),
                   ),
                   AyudaRowWidget(
                     title: "Videotutoriales",
-                    subtitle: "Aquí podrás ver videotutoriales para ver ejemplos de uso de la aplicación.",
-                    onTap:  () => controller.launchTwitter,
+                    subtitle:
+                        "Aquí podrás ver videotutoriales para ver ejemplos de uso de la aplicación.",
+                    onTap: () => Get.toNamed('/videotutoriales'),
                   ),
                 ],
               ),
               SizedBox(height: 10.h),
               SettingsGroup(
-                title: "Contacto",
+                title: "Version Anterior",
                 children: [
                   AyudaRowWidget(
-                    title: "Email",
+                    title: "Datos Guardados",
                     subtitle:
-                    "Contacta con nosotros por email para cualquier duda, sugerencia o reportar algun error.",
-                    onTap: () => controller.launchGmail(),
-                  ),
-                  AyudaRowWidget(
-                    title: "Twitter",
-                    subtitle: "Síguenos para conocer todas las novedades o comunícate con nosotros a través de Twitter",
-                    onTap:  () => controller.launchTwitter(),
+                        "Consulta aquí, los datos guardados de tu versión anterior a Calendario 2.0, o Mayo 2023.",
+                    onTap: () => controller.goToVersionAnteriorScreen(),
                   ),
                 ],
               ),
@@ -84,7 +80,7 @@ class AyudaView extends GetView<AyudaController> {
                   AyudaRowWidget(
                     title: "Enviar Feedback",
                     subtitle:
-                    "Sugiera sus comentarios y solicitudes para que esta aplicación sea imprescindible para usted",
+                        "Sugiera sus comentarios y solicitudes para que esta aplicación sea imprescindible para usted",
                     onTap: () => controller.giveFeedbackClicked(context),
                   ),
                   AyudaRowWidget(
@@ -95,18 +91,23 @@ class AyudaView extends GetView<AyudaController> {
                 ],
               ),
               SizedBox(height: 10.h),
-
               SettingsGroup(
-                title: "Version Anterior",
+                title: "Contacto",
                 children: [
                   AyudaRowWidget(
-                    title: "Datos Guardados",
+                    title: "Email",
                     subtitle:
-                    "Consulta aquí, los datos guardados de tu versión anterior a Calendario 2.0, o Mayo 2023.",
-                    onTap: () => controller.goToVersionAnteriorScreen(),
+                        "Contacta con nosotros por email para cualquier duda, sugerencia o reportar algun error.",
+                    onTap: () => controller.launchGmail(),
+                  ),
+                  AyudaRowWidget(
+                    title: "Twitter",
+                    subtitle:
+                        "Síguenos para conocer todas las novedades o comunícate con nosotros a través de Twitter",
+                    onTap: () => controller.launchTwitter(),
                   ),
                 ],
-              )
+              ),
             ],
           ),
         ),

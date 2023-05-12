@@ -26,11 +26,11 @@ dependencies:
 
   table_calendar: ^3.0.9
 
-  shared_preferences: ^2.1.0
+  shared_preferences: ^2.1.1
   get_storage: ^2.1.1
 
-  sqflite: ^2.2.8+1
-  path_provider: ^2.0.14
+  sqflite: ^2.2.8+2
+  path_provider: ^2.0.15
 
   alarm: ^1.0.5
 #    path: /Users/imac/StudioProjects/alarm
@@ -41,14 +41,19 @@ dependencies:
 
   flutter_slidable: ^3.0.0
 
-  url_launcher: ^6.1.10
+  #  //Todo  añadir animaciones a los dialogos
+  flutter_animated_dialog: 2.0.1
+
+  url_launcher: ^6.1.11
+  youtube_player_iframe: ^4.0.4
+  image_fade: ^0.6.2
 
   rive: ^0.10.4
 
   rename: ^2.1.1
 
   permission_handler:
-  package_info_plus: ^3.1.2
+  package_info_plus: ^4.0.0
   tutorial_coach_mark: ^1.2.8
   modal_bottom_sheet:
     git:
@@ -94,6 +99,7 @@ flutter:
     - assets/
     - assets/images/
     - assets/images/iconos/
+    - assets/images/_common/icons/
     - assets/images/tutorial/
     - assets/animaciones/
     - assets/alarmas/

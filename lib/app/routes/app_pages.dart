@@ -1,3 +1,5 @@
+import 'package:calendario2/app/modules/ayuda/views/pages/videotutoriales/bindings/videotutoriales_binding.dart';
+import 'package:calendario2/app/modules/ayuda/views/pages/videotutoriales/views/videotutoriales_view.dart';
 import 'package:get/get.dart';
 
 import '../modules/CrearTurno/bindings/crear_turno_binding.dart';
@@ -125,9 +127,18 @@ class AppPages {
       binding: AyudaBinding(),
     ),
     GetPage(
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 100),
       name: _Paths.VERSION_ANTERIOR,
       page: () => const VersionAnteriorView(),
       binding: VersionAnteriorBinding(),
+    ),
+    GetPage(
+      transition: Transition.fadeIn,
+      transitionDuration: const Duration(milliseconds: 100),
+      name: _Paths.VIDEOTUTORIALES,
+      page: () => const VideotutorialesView(),
+      binding: VideotutorialesBinding(),
     ),
   ];
 }
