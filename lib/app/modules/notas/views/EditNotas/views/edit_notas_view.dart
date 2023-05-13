@@ -20,7 +20,6 @@ class EditNotasView extends GetView<EditNotasController> {
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
-    AlarmasController alarmasController = AlarmasController();
 
     return Obx(() {
       return Scaffold(

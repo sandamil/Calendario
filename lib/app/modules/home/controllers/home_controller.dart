@@ -3,7 +3,6 @@ import 'package:calendario2/app/controllers/tutorialController.dart';
 import 'package:calendario2/app/data/local/my_shared_pref.dart';
 import 'package:calendario2/app/modules/notas/controllers/notas_controller.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 
 class HomeController extends GetxController {
@@ -12,6 +11,7 @@ class HomeController extends GetxController {
 
   RxBool firstTime = false.obs;
 
+  @override
   void onInit() async {
     if (MySharedPref.getTutoHomeFirst()) {
       firstTime.value = true;
@@ -21,14 +21,7 @@ class HomeController extends GetxController {
     super.onInit();
   }
 
-  void onReady() {
-    super.onReady();
-  }
 
-  @override
-  void onClose() {
-    super.onClose();
-  }
 
   //? to close the app
   void appCloseConfirm(context) {

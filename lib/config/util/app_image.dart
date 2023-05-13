@@ -67,10 +67,10 @@ class _AppImageState extends State<AppImage> {
       image: _displayImage,
       fit: widget.fit,
       alignment: widget.alignment,
-      duration: widget.duration ?? Duration(milliseconds: 300),
+      duration: widget.duration ?? const Duration(milliseconds: 300),
       syncDuration: widget.syncDuration ?? 0.ms,
       loadingBuilder: (_, value, ___) {
-        if (!widget.distractor && !widget.progress) return SizedBox();
+        if (!widget.distractor && !widget.progress) return const SizedBox();
         return Center(child: AppLoadingIndicator(value: widget.progress ? value : null, color: widget.color));
       },
       errorBuilder: (_, __) => Container(
@@ -78,7 +78,7 @@ class _AppImageState extends State<AppImage> {
         alignment: Alignment.center,
         child: LayoutBuilder(builder: (_, constraints) {
           double size = min(constraints.biggest.width, constraints.biggest.height);
-          if (size < 16) return SizedBox();
+          if (size < 16) return const SizedBox();
           return Icon(
             Icons.image_not_supported_outlined,
             color: white.withOpacity(0.1),

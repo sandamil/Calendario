@@ -1,8 +1,5 @@
-import 'dart:math';
 
-import 'package:calendario2/app/data/model/previousDatabase/previousTaskModel.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:intl/intl.dart';
 
 import 'package:flutter/material.dart';
 

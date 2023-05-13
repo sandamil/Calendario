@@ -98,10 +98,6 @@ class BoardingController extends GetxController {
     Get.toNamed('/home');
   }
 
-  @override
-  void onClose() {
-    super.onClose();
-  }
 
   void onPageChanged(int page) {
     pageController

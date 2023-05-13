@@ -12,10 +12,6 @@ class TutorialHomeController extends GetxController {
     firstInstall();
   }
 
-  @override
-  void onClose() {
-    super.onClose();
-  }
 
   ///Tutorial
   ///

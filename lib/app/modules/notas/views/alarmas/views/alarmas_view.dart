@@ -237,12 +237,12 @@ class AlarmasView extends GetView<AlarmasController> {
                                           child: Text("Minutos"),
                                         ),
                                         DropdownMenuItem(
-                                          child: Text("Horas"),
                                           value: 'Horas',
+                                          child: Text("Horas"),
                                         ),
                                         DropdownMenuItem(
-                                          child: Text("Dias"),
                                           value: 'Dias',
+                                          child: Text("Dias"),
                                         ),
                                       ]),
                                 ],

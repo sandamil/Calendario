@@ -23,7 +23,7 @@ class CustomAlertDilogDaySelected extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: Get.height,
       width: Get.width - 20.w,
       child: Stack(
@@ -36,7 +36,7 @@ class CustomAlertDilogDaySelected extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Container(
+                  SizedBox(
 
                     height: 30,
                     width: Get.width - 20.w,
@@ -45,7 +45,7 @@ class CustomAlertDilogDaySelected extends StatelessWidget {
                         Positioned(
                           left: x -20.w,
                           child: CustomPaint(
-                              size: Size(35, 35), painter: DrawTriangle()),
+                              size: const Size(35, 35), painter: DrawTriangle()),
                         ),
                       ],
                     ),

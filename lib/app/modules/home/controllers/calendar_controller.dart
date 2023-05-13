@@ -17,7 +17,7 @@ class CalendarController extends GetxController {
   final adcontroller = Get.find<AdsController>();
 
 
-  Rx<CalendarFormat> _calendarFormat = CalendarFormat.month.obs;
+  final Rx<CalendarFormat> _calendarFormat = CalendarFormat.month.obs;
 
 
 
@@ -28,7 +28,7 @@ class CalendarController extends GetxController {
   Rx<CalendarFormat> get calendarFormat => _calendarFormat;
 
   var selectedDay = DateTime.now().obs;
-  Rx<DateTime> _focusedDay = DateTime.now().obs;
+  final Rx<DateTime> _focusedDay = DateTime.now().obs;
 
   // Rx<DateTime> get selectedDay => _selectedDay;
   Rx<DateTime> get focusedDay => _focusedDay;
@@ -60,6 +60,7 @@ class CalendarController extends GetxController {
 ///////////////oninit
   /// ==
 
+  @override
   void onInit() async {
     await fetchCuadrante();
     await fetchTurno();
@@ -81,7 +82,7 @@ class CalendarController extends GetxController {
           x: currentX,
           y: currentY,
           selectedDate: selectedDate,
-          turno: turno.value));
+          turno: turno));
     }
     selectedEvents.value = getEventForDay(selectedDay.value);
     selectedNotas.value = getEventsOfDay(selectedDay.value);
@@ -91,21 +92,20 @@ class CalendarController extends GetxController {
 
   onDaySelectedLongPress(DateTime selectedDate, DateTime focusedDate) async {
     if (!isSameDay(selectedDate, selectedDay.value)) {
-      await {
-        selectedDay.value = selectedDate,
-        _focusedDay.value = focusedDate,
-      };
+      {
+        selectedDay.value = selectedDate;
+        _focusedDay.value = focusedDate;
+      }
     }
-    selectedEvents.value = await getEventForDay(selectedDay.value);
+    selectedEvents.value = getEventForDay(selectedDay.value);
     selectedNotas.value = getEventsOfDay(selectedDay.value);
 
-    print(currentX.toString());
 
     Get.dialog(CustomAlertDilogDaySelected(
         x: currentX,
         y: currentY,
         selectedDate: selectedDate,
-        turno: turno.value));
+        turno: turno));
   }
 
 //TODO Comprobar rendimiento focusedday obs
@@ -134,18 +134,17 @@ class CalendarController extends GetxController {
 
   Future<Map<DateTime, List<CuadranteDay>>> fetchCuadrante() async {
     cuadrante.value = await DBHelper.db.getItemModels();
-    for (CuadranteDay turno in cuadrante) {}
-    cuadranteMap.value.clear();
-    for (var turno in cuadrante) {
-      cuadranteMap.value.putIfAbsent(turno.dateTime!, () => <CuadranteDay>[]);
-      List<CuadranteDay>? turnoData = cuadranteMap.value[turno.dateTime];
+    cuadranteMap.clear();
+    for (CuadranteDay turno in cuadrante) {
+      cuadranteMap.putIfAbsent(turno.dateTime!, () => <CuadranteDay>[]);
+      List<CuadranteDay>? turnoData = cuadranteMap[turno.dateTime];
       turnoData!.add(turno);
-      cuadranteMap.value.update(turno.dateTime!, (data) {
+      cuadranteMap.update(turno.dateTime!, (data) {
         return turnoData;
       });
     }
     isReady.value = true;
-    return cuadranteMap.value;
+    return cuadranteMap;
   }
 
   // getNotesFromDB() async {
@@ -182,26 +181,26 @@ class CalendarController extends GetxController {
   bool hasEvent(DateTime day) {
     bool check = false;
     if (listEvent.isNotEmpty) {
-      listEvent.value.forEach((event) {
+      for (var event in listEvent) {
         if (DataValidator.isSameDay(
             DateTime.fromMillisecondsSinceEpoch(event.startTimeMilliseconds!),
             day)) {
           check = true;
         }
-      });
+      }
     }
     return check;
   }
 
   List<Task> getEventsOfDay(DateTime day) {
     List<Task> list = [];
-    listEvent.value.forEach((event) {
+    for (var event in listEvent) {
       if (DataValidator.isSameDay(
           DateTime.fromMillisecondsSinceEpoch(event.startTimeMilliseconds!),
           day)) {
         list.add(event);
       }
-    });
+    }
     return list;
   }
 

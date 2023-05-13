@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 
-import '../views/widgets/video_view.dart';
 
 class VideotutorialesController extends GetxController {
   final urlHomeS = '0vph4HSnY3s';
@@ -19,20 +18,8 @@ class VideotutorialesController extends GetxController {
   final urlVistaNotaDetalle = 'Md9TEMlTFBE';
 
   final count = 0.obs;
-  @override
-  void onInit() {
-    super.onInit();
-  }
 
-  @override
-  void onReady() {
-    super.onReady();
-  }
 
-  @override
-  void onClose() {
-    super.onClose();
-  }
 
 
 

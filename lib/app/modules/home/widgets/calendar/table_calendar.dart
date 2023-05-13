@@ -8,7 +8,6 @@ import 'package:calendario2/config/util/hexColor.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:table_calendar/table_calendar.dart';
-import '../../../../components/custom_dialog.dart';
 
 class CalendarWidget extends StatelessWidget {
   final calendarController = Get.put(CalendarController());
@@ -60,8 +59,8 @@ class CalendarWidget extends StatelessWidget {
                       //     controller.changeCalendarFormat(format);
                       //   }
                       // },
-                      onCalendarCreated: (_) async {
-                        await calendarController.update;
+                      onCalendarCreated: (_) {
+                        calendarController.update;
                       },
                       onPageChanged: calendarController.onPageChanged,
                       calendarBuilders: _calendarBuilders())

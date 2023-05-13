@@ -2,22 +2,9 @@ import 'package:get/get.dart';
 
 
 class MenuAppController extends GetxController {
-  //TODO: Implement MenuController
 
 
-  @override
-  void onInit() {
-    super.onInit();
-  }
 
-  @override
-  void onReady() {
-    super.onReady();
-  }
 
-  @override
-  void onClose() {
-    super.onClose();
-  }
 
 }

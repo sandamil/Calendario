@@ -4,7 +4,7 @@ class ValidationUtils {
   }
 
   static bool isValidList(List<dynamic>? list) {
-    return list != null && list.length > 0;
+    return list != null && list.isNotEmpty;
   }
 
   static bool isValidDouble(double? value) {
@@ -21,7 +21,7 @@ class ValidationUtils {
       try {
         int.parse(value);
         return true;
-      } catch (NumberFormatException) {
+      } catch (numberFormatException) {
         return false;
       }
     }
@@ -47,7 +47,7 @@ class ValidationUtils {
       try {
         double val = double.parse(doubleValue);
         return isValidDouble(val);
-      } catch (NumberFormatException) {
+      } catch (numberFormatException) {
         return false;
       }
     }

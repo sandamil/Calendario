@@ -7,9 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:get/get.dart';
-import 'package:sqflite/sqflite.dart';
 
-import '../../../../../components/custom_snackbar.dart';
 
 class DaySelecetedTurnoWidget extends StatelessWidget {
   const DaySelecetedTurnoWidget({super.key});
@@ -28,11 +26,11 @@ class DaySelecetedTurnoWidget extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                c.selectedEvents.value.isEmpty
+                c.selectedEvents.isEmpty
                     ? Container()
                     : ListView.builder(
                         shrinkWrap: true,
-                        itemCount: c.selectedEvents.value.length,
+                        itemCount: c.selectedEvents.length,
                         itemBuilder: (context, index) {
                           return Slidable(
                             endActionPane: ActionPane(
@@ -45,7 +43,7 @@ class DaySelecetedTurnoWidget extends StatelessWidget {
                                   backgroundColor: Colors.redAccent,
                                   // icon: Icons.send,
                                   onPressed: (context) { c.deleteTurnoCuadrante(
-                                      c.selectedEvents.value[index].id);},
+                                      c.selectedEvents[index].id);},
                                 ),
                               ],
                             ),
@@ -55,7 +53,7 @@ class DaySelecetedTurnoWidget extends StatelessWidget {
                                   vertical: 1.h, horizontal: 2.w),
                               decoration: BoxDecoration(
                                 color: HexColor(
-                                    c.selectedEvents.value[index].color!),
+                                    c.selectedEvents[index].color!),
                                 border: Border.all(width: 0.8.r),
                                 borderRadius: BorderRadius.circular(5.r),
                               ),
@@ -82,14 +80,14 @@ class DaySelecetedTurnoWidget extends StatelessWidget {
                                   // ),
                                   FittedBox(
                                     child: Text(
-                                      c.selectedEvents.value[index]
+                                      c.selectedEvents[index]
                                           .description!,
                                       style: TextStyle(
                                           height: 1.2.h,
                                           fontSize: 14.sp,
                                           fontWeight: FontWeight.bold,
                                           color: HexColor(c.selectedEvents
-                                                          .value[index].color!)
+                                                          [index].color!)
                                                       .computeLuminance() >
                                                   0.5
                                               ? Colors.black
@@ -99,22 +97,22 @@ class DaySelecetedTurnoWidget extends StatelessWidget {
                                   // SizedBox(
                                   //   width: 20.w,
                                   // ),
-                                  c.selectedEvents.value[index].startHour !=
+                                  c.selectedEvents[index].startHour !=
                                               null &&
-                                          c.selectedEvents.value[index]
+                                          c.selectedEvents[index]
                                                   .endHour !=
                                               null
                                       ? Padding(
                                           padding: EdgeInsets.only(left: 15.w),
                                           child: FittedBox(
                                             child: Text(
-                                              'de ${c.selectedEvents.value[index].startHour.toString()} a ${c.selectedEvents.value[index].endHour.toString()}',
+                                              'de ${c.selectedEvents[index].startHour.toString()} a ${c.selectedEvents[index].endHour.toString()}',
                                               style: TextStyle(
                                                   height: 1.2.h,
                                                   fontSize: 14.sp,
                                                   color: HexColor(c
                                                                   .selectedEvents
-                                                                  .value[index]
+                                                                  [index]
                                                                   .color!)
                                                               .computeLuminance() >
                                                           0.5
@@ -135,7 +133,7 @@ class DaySelecetedTurnoWidget extends StatelessWidget {
                 SizedBox(
                   height: 3.h,
                 ),
-                ...c.selectedNotas.value.map((nota) => Padding(
+                ...c.selectedNotas.map((nota) => Padding(
                       padding:
                           EdgeInsets.symmetric(vertical: 1.h, horizontal: 2.w),
                       child: GestureDetector(
@@ -157,10 +155,10 @@ class DaySelecetedTurnoWidget extends StatelessWidget {
                                 SizedBox(
                                   width: 4.w,
                                 ),
-                                Container(
+                                SizedBox(
                                   width: 40.w,
                                   child: Text(
-                                    '${DateTime.fromMillisecondsSinceEpoch(nota.startTimeMilliseconds!).formatDateTime24H}',
+                                    DateTime.fromMillisecondsSinceEpoch(nota.startTimeMilliseconds!).formatDateTime24H,
                                     style: TextStyle(
                                         height: 1.2.h,
                                         fontSize: 14.sp,
@@ -170,7 +168,7 @@ class DaySelecetedTurnoWidget extends StatelessWidget {
                                 SizedBox(
                                   width: 4.w,
                                 ),
-                                Container(
+                                SizedBox(
                                   width: 90.w,
                                   child: Text(
                                     nota.title!.toUpperCase(),
@@ -183,7 +181,7 @@ class DaySelecetedTurnoWidget extends StatelessWidget {
                                 SizedBox(
                                   width: 4.w,
                                 ),
-                                Container(
+                                SizedBox(
                                   width: 170.w,
                                   child: Text(
                                     nota.notes!,

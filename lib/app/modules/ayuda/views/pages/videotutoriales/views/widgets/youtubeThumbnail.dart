@@ -19,7 +19,7 @@ class YouTubeThumbnail extends StatelessWidget {
     void handlePressed() => Get.to(FullscreenVideoViewer(id: id,));
     return MergeSemantics(
       child: ConstrainedBox(
-        constraints: BoxConstraints(maxWidth: 400),
+        constraints: const BoxConstraints(maxWidth: 400),
         child: Column(
           children: [
             AppBtn.basic(
@@ -30,7 +30,7 @@ class YouTubeThumbnail extends StatelessWidget {
                 Positioned.fill(
                   child: Center(
                     child: Container(
-                      padding: EdgeInsets.all(4),
+                      padding: const EdgeInsets.all(4),
                       decoration: BoxDecoration(
                         color: black.withOpacity(0.66),
                         borderRadius: BorderRadius.circular(999),

@@ -38,11 +38,6 @@ class NotasListController extends GetxController {
     }
   }
 
-  @override
-  void onReady() {
-    print(notesList2.value.length);
-    super.onReady();
-  }
 
   @override
   void onClose() {
@@ -54,7 +49,7 @@ class NotasListController extends GetxController {
   setNotesFromDB() async {
     notesList.value = await DbProvider.instance.getNotesFromDB();
     update();
-    return notesList.value;
+    return notesList;
   }
 
 
@@ -106,11 +101,11 @@ class NotasListController extends GetxController {
 
   List<Widget> buildNoteComponentsList() {
     List<Widget> noteComponentsList = [];
-    notesList.value.sort((a, b) {
+    notesList.sort((a, b) {
       return b.startTimeMilliseconds!.compareTo(a.startTimeMilliseconds as num);
     });
     if (searchController.value.text.isNotEmpty) {
-      notesList.value.forEach((note) {
+      for (var note in notesList) {
         if (note.title!
                 .toLowerCase()
                 .contains(searchController.value.text.toLowerCase()) ||
@@ -122,25 +117,25 @@ class NotasListController extends GetxController {
             onTapAction: openNoteToRead,
           ));
         }
-      });
+      }
       return noteComponentsList;
     }
     if (isFlagOn.value) {
-      notesList.value.forEach((note) {
+      for (var note in notesList) {
         if (note.isImportant!) {
           noteComponentsList.add(TaskCard(
             noteData: note,
             onTapAction: openNoteToRead,
           ));
         }
-      });
+      }
     } else {
-      notesList.value.forEach((note) {
+      for (var note in notesList) {
         noteComponentsList.add(TaskCard(
           noteData: note,
           onTapAction: openNoteToRead,
         ));
-      });
+      }
     }
     return noteComponentsList;
   }

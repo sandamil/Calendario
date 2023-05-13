@@ -12,7 +12,7 @@ abstract class PageTransformer {
   Widget transform(Widget child, TransformInfo info);
 }
 
-typedef Widget PageTransformerBuilderCallback(Widget child, TransformInfo info);
+typedef PageTransformerBuilderCallback = Widget Function(Widget child, TransformInfo info);
 
 class PageTransformerBuilder extends PageTransformer {
   final PageTransformerBuilderCallback builder;
@@ -96,6 +96,7 @@ class TransformerPageController extends PageController {
     return renderPage;
   }
 
+  @override
   double get page {
     return loop
         ? _getRenderPageFromRealPage(realPage, loop, itemCount, reverse)
@@ -175,7 +176,7 @@ class TransformerPageView extends StatefulWidget {
   ///
   /// [itemBuilder] will be called only with indices greater than or equal to
   /// zero and less than [itemCount].
-  TransformerPageView({
+  const TransformerPageView({
     Key? key,
     this.index,
     Duration? duration,
@@ -192,7 +193,7 @@ class TransformerPageView extends StatefulWidget {
     this.pageController,
     required this.itemCount,
   })  : assert(itemCount != 0),
-        this.duration = duration ??
+        duration = duration ??
             const Duration(milliseconds: kDefaultTransactionDuration),
         super(key: key);
 
@@ -519,6 +520,7 @@ class _TransformerPageViewState extends State<TransformerPageView> {
 
   ChangeNotifier? _controller;
 
+  @override
   void dispose() {
     super.dispose();
     if (_controller != null) {

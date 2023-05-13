@@ -51,11 +51,11 @@ class AppBtn extends StatelessWidget {
     if (semanticLabel == null && text == null) throw ('AppBtn.from must include either text or semanticLabel');
     this.semanticLabel = semanticLabel ?? text ?? '';
     _builder = (context) {
-      if (text == null && icon == null) return SizedBox.shrink();
+      if (text == null && icon == null) return const SizedBox.shrink();
       Text? txt = text == null
           ? null
           : Text(text.toUpperCase(),
-              style: TextStyle(fontSize : 14.sp, fontWeight: FontWeight.w500, letterSpacing : 2, height: 14), textHeightBehavior: TextHeightBehavior(applyHeightToFirstAscent: false));
+              style: TextStyle(fontSize : 14.sp, fontWeight: FontWeight.w500, letterSpacing : 2, height: 14), textHeightBehavior: const TextHeightBehavior(applyHeightToFirstAscent: false));
       Widget? icn = icon == null ? null : _buildIcon(context, icon, isSecondary: isSecondary, size: iconSize);
       if (txt != null && icn != null) {
         return Row(
@@ -114,7 +114,7 @@ class AppBtn extends StatelessWidget {
     Color textColor = isSecondary ? black : white;
     BorderSide side = border ?? BorderSide.none;
 
-    Widget content = _builder?.call(context) ?? child ?? SizedBox.shrink();
+    Widget content = _builder?.call(context) ?? child ?? const SizedBox.shrink();
     if (expand) content = Center(child: content);
 
     OutlinedBorder shape = circular

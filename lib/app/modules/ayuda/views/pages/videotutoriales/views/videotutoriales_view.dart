@@ -1,7 +1,6 @@
 import 'package:calendario2/app/modules/ayuda/views/pages/videotutoriales/views/widgets/video_view.dart';
 import 'package:calendario2/app/modules/ayuda/views/pages/videotutoriales/views/widgets/videotutoriales_group_widget.dart';
 import 'package:calendario2/app/modules/ayuda/views/pages/videotutoriales/views/widgets/videotutoriales_row_widget.dart';
-import 'package:calendario2/app/modules/ayuda/views/widgets/ayuda_group_widget.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,9 +8,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../../../../../../../config/theme/my_fonts.dart';
-import '../../../../../../../config/util/app_image.dart';
-import '../../../../../../../widgets/buttons/buttons.dart';
-import '../../../widgets/ayuda_row_widget.dart';
 import '../controllers/videotutoriales_controller.dart';
 
 class VideotutorialesView extends GetView<VideotutorialesController> {

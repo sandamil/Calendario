@@ -38,7 +38,7 @@ class AddNotasController extends GetxController {
   ///ALARMA
   AlarmSettings? alarmaCreadaNota;
 
-  var _alarmaCreada = false.obs;
+  final _alarmaCreada = false.obs;
   bool get alarmaCreada => _alarmaCreada.value;
   void setAlarmaCreada(bool value) {
     _alarmaCreada.value = value;
@@ -66,10 +66,6 @@ class AddNotasController extends GetxController {
 
   }
 
-  @override
-  void onReady() {
-    super.onReady();
-  }
 
   @override
   void onClose() {
@@ -138,20 +134,6 @@ class AddNotasController extends GetxController {
 
 
   saveNota() async {
-    print('saveNota');
-    print('');
-    print('');
-    print('');
-    print(idGenerated);
-    print(title.text);
-    print(site.text);
-    print(notes.text);
-    print(isImportant.value);
-    print( startTime.value.millisecondsSinceEpoch);
-    print(endTime.value.millisecondsSinceEpoch);
-    print( alarmaActivadaString.value);
-    print(alarmaCreada);
-    print('saveNota');
       await DbProvider.instance.insertNotas(
         Task(
           id: idGenerated,

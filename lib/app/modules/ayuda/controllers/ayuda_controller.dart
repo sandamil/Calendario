@@ -15,20 +15,8 @@ class AyudaController extends GetxController {
 
   final count = 0.obs;
 
-  @override
-  void onInit() {
-    super.onInit();
-  }
 
-  @override
-  void onReady() {
-    super.onReady();
-  }
 
-  @override
-  void onClose() {
-    super.onClose();
-  }
 
   void goToVersionAnteriorScreen() {
     Get.toNamed('/version-anterior');
@@ -46,7 +34,6 @@ class AyudaController extends GetxController {
     if (await launchUrlString(url)) {
       await launchUrlString(url);
     } else {
-      print('Could not launch gmail');
     }
   }
 
@@ -57,7 +44,6 @@ class AyudaController extends GetxController {
     if (await launchUrlString(url)) {
       await launchUrlString(url);
     } else {
-      print('Could not launch twitter');
     }
   }
 

@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../../../../../../../../config/theme/my_colors.dart';
-import '../../controllers/videotutoriales_controller.dart';
 
 
 class VideotutorialesRowWidget extends StatelessWidget {
@@ -13,7 +12,7 @@ class VideotutorialesRowWidget extends StatelessWidget {
   final String subtitle;
   final String id;
   final VoidCallback onTap;
-  VideotutorialesRowWidget(
+  const VideotutorialesRowWidget(
       {Key? key,
       required this.title,
       required this.subtitle,
@@ -40,7 +39,7 @@ class VideotutorialesRowWidget extends StatelessWidget {
             ),
             Row(
               children: [
-                Container(
+                SizedBox(
                   height: 150.h,
                   width: Get.width / 2.8,
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -58,11 +57,11 @@ class VideotutorialesRowWidget extends StatelessWidget {
                         color: MyColors.textColor.withOpacity(0.6),
                       ),
                     ),
-                    Spacer(),
+                    const Spacer(),
 
                   ]),
                 ),
-                Container(
+                SizedBox(
                   height: 150.h,
                     width: Get.width / 2,
                     child: YouTubeThumbnail(id: id)),

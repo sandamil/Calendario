@@ -1,7 +1,6 @@
 import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../../config/theme/my_colors.dart';
 
 class SettingsGroup extends StatelessWidget {
   final String title;

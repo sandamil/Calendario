@@ -1,6 +1,4 @@
-import 'dart:developer';
 
-import 'package:calendario2/app/modules/ajustes/controllers/ajustes_controller.dart';
 import 'package:calendario2/config/theme/my_fonts.dart';
 import 'package:calendario2/config/util/hexColor.dart';
 import 'package:flutter/material.dart';
@@ -9,9 +7,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../../../../../config/theme/my_colors.dart';
-import '../../../ayuda/controllers/ayuda_controller.dart';
-import '../../../ayuda/views/widgets/ayuda_group_widget.dart';
-import '../../../ayuda/views/widgets/ayuda_row_widget.dart';
 import '../../controllers/version_anterior_controller.dart';
 
 class TurnosCalendarioScreen extends GetView<VersionAnteriorController> {

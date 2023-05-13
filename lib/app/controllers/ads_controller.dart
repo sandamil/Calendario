@@ -57,7 +57,7 @@ class AdsController extends GetxController {
     staticHomeAd = BannerAd(
         adUnitId: _adHomeId,
         size: AdSize.banner,
-        request: AdRequest(),
+        request: const AdRequest(),
         listener: BannerAdListener(onAdLoaded: (ad) {
           staticAdHomeLoaded.value = true;
         }, onAdFailedToLoad: (ad, error) {
@@ -71,7 +71,7 @@ class AdsController extends GetxController {
     staticNotesListAd = BannerAd(
         adUnitId: _adNotesListId,
         size: AdSize.banner,
-        request: AdRequest(),
+        request: const AdRequest(),
         listener: BannerAdListener(onAdLoaded: (ad) {
           staticAdNotesListLoaded.value = true;
         }, onAdFailedToLoad: (ad, error) {
@@ -85,7 +85,7 @@ class AdsController extends GetxController {
     staticCuadrantesListAd = BannerAd(
         adUnitId: _adCuadrantesListId,
         size: AdSize.banner,
-        request: AdRequest(),
+        request: const AdRequest(),
         listener: BannerAdListener(onAdLoaded: (ad) {
           staticAdCuadrantesListLoaded.value = true;
         }, onAdFailedToLoad: (ad, error) {
@@ -99,7 +99,7 @@ class AdsController extends GetxController {
     staticCrearNotasLisAd = BannerAd(
         adUnitId: _adCrearNotasListId,
         size: AdSize.banner,
-        request: AdRequest(),
+        request: const AdRequest(),
         listener: BannerAdListener(onAdLoaded: (ad) {
           staticAdCrearNotasLoaded.value = true;
         }, onAdFailedToLoad: (ad, error) {
@@ -113,7 +113,7 @@ class AdsController extends GetxController {
     staticTurnosListAd = BannerAd(
         adUnitId: _adTurnosListId,
         size: AdSize.banner,
-        request: AdRequest(),
+        request: const AdRequest(),
         listener: BannerAdListener(onAdLoaded: (ad) {
           staticAdTurnosListLoaded.value = true;
         }, onAdFailedToLoad: (ad, error) {

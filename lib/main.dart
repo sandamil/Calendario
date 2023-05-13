@@ -55,7 +55,6 @@ Future<void> initMemory() async {
       Permission.storage,
       // Permission.camera,
     ].request();
-    print(statuses[Permission.storage]); // it should print PermissionStatus.granted
   }
 }
 

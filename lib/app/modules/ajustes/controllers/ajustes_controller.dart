@@ -65,15 +65,7 @@ class AjustesController extends GetxController {
     super.onInit();
   }
 
-  @override
-  void onReady() {
-    super.onReady();
-  }
 
-  @override
-  void onClose() {
-    super.onClose();
-  }
 
   Future<void> cambioModo() async {
     isDark.value = !isDark.value;
@@ -147,7 +139,6 @@ class AjustesController extends GetxController {
     if (await canLaunch(url)) {
       await launch(url);
     } else {
-      print('Could not launch gmail');
     }
   }
 
@@ -161,7 +152,6 @@ class AjustesController extends GetxController {
     if (await canLaunch(url)) {
       await launch(url);
     } else {
-      print('Could not launch gmail');
     }
   }
 
@@ -170,7 +160,6 @@ class AjustesController extends GetxController {
     if (await canLaunch(url)) {
       await launch(url);
     } else {
-      print('Could not launch twitter');
     }
   }
 

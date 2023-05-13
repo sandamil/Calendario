@@ -86,7 +86,7 @@ class ParallaxColor extends StatefulWidget {
 
   final TransformInfo info;
 
-  ParallaxColor({
+  const ParallaxColor({
     super.key,
     required this.colors,
     required this.info,

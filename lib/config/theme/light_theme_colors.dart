@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
 
 // TODO add your light theme colors palette
 class LightThemeColors
@@ -10,7 +9,7 @@ class LightThemeColors
   static Color accentColor = const Color(0xff005AFF);
 
   //APPBAR
-  static const Color appBarColor = Color(0xFFA500);
+  static const Color appBarColor = Color(0x00ffa500);
 
   //SCAFFOLD
   static const Color scaffoldBackgroundColor = Color(0xffebeaea);

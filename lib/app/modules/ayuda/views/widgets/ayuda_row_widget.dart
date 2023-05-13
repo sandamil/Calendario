@@ -25,7 +25,7 @@ class AyudaRowWidget extends StatelessWidget {
           children: [
             Row(
               children: [
-                Container(
+                SizedBox(
                   width: Get.width - 90.w,
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                     Text(
@@ -45,7 +45,7 @@ class AyudaRowWidget extends StatelessWidget {
 
                   ]),
                 ),
-                Spacer(),
+                const Spacer(),
                 Icon(Icons.arrow_right,size: 30.sp,)
 
               ],

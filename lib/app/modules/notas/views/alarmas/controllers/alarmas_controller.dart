@@ -54,10 +54,6 @@ class AlarmasController extends GetxController {
     });
   }
 
-  @override
-  void onReady() {
-    super.onReady();
-  }
 
   @override
   void onClose() {
@@ -151,9 +147,9 @@ class AlarmasController extends GetxController {
       loopAudio: loopAudio,
       fadeDuration: fadeVolume ? 5.0 : 0.0,
       notificationTitle:
-          showNotifOnRing && enableNotif ? 'Nota: ${title}' : null,
+          showNotifOnRing && enableNotif ? 'Nota: $title' : null,
       notificationBody:
-          showNotifOnRing && enableNotif ? 'Mensaje: ${notes}' : null,
+          showNotifOnRing && enableNotif ? 'Mensaje: $notes' : null,
       enableNotificationOnKill: showNotifOnKill,
     );
 

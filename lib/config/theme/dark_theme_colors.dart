@@ -12,7 +12,7 @@ class DarkThemeColors {
   static Color accentColor = const Color(0xff005AFF);
 
   //APPBAR
-  static const Color appBarColor = const Color(0xFFA500);
+  static const Color appBarColor = const Color(0x00ffa500);
 
   //SCAFFOLD
   static const Color scaffoldBackgroundColor = Color(0xff303030);

@@ -1,7 +1,5 @@
 import 'dart:io';
 
-import 'package:calendario2/app/components/custom_dialog.dart';
-import 'package:calendario2/app/data/local/previusTaskDatabase.dart';
 import 'package:calendario2/app/modules/notas/views/widgets/taskCard.dart';
 import 'package:calendario2/app/modules/home/controllers/calendar_controller.dart';
 import 'package:calendario2/app/modules/home/widgets/calendar/table_calendar.dart';
@@ -26,13 +24,12 @@ class HomeView extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        if(Platform.isAndroid){
+        if (Platform.isAndroid) {
           //? to close quick order floating if its open when click back btn
-          if(isDialOpen.value){
+          if (isDialOpen.value) {
             isDialOpen.value = false;
             return false;
-          }
-          else{
+          } else {
             controller.appCloseConfirm(context);
           }
         }
@@ -81,7 +78,7 @@ class HomeView extends GetView<HomeController> {
                       Icons.today,
                     ),
                     tooltip: 'today',
-                    onPressed: ()  {
+                    onPressed: () {
                       Get.toNamed('/version-anterior');
                       // CustomDialog.showPopUpInfo(
                       //   title: 'Volver a HOY',
@@ -138,10 +135,10 @@ class HomeView extends GetView<HomeController> {
                   SizedBox(height: 2.h),
                   Obx(() {
                     return Expanded(
-                      child: _buildListEvent(),
                       key: controller.firstTime.value
                           ? controller.tutorialController.keyButton9
                           : key,
+                      child: _buildListEvent(),
                     );
                   }),
                 ],
@@ -154,70 +151,28 @@ class HomeView extends GetView<HomeController> {
   Widget _buildListEvent() {
     final calendarVM = Get.find<CalendarController>();
     final selectedDay = calendarVM.selectedDay.value;
-    String formattedDate =
-        '${selectedDay.day} / ${selectedDay.month} / ${selectedDay.year}';
     List events = calendarVM.getEventsOfDay(selectedDay);
 
     return SingleChildScrollView(
       child: Column(
         children: [
-          // events.isNotEmpty
-          //     ? Row(
-          //         crossAxisAlignment: CrossAxisAlignment.start,
-          //         children: [
-          //           Container(
-          //             margin: EdgeInsets.only(left: 4.w),
-          //             child:  Text(
-          //               'Notas para el día:',
-          //               style: TextStyle(fontSize: 14.sp),
-          //             ),
-          //           ),
-          //           const SizedBox(height: 5),
-          //           Container(
-          //             margin:  EdgeInsets.only(left: 4.w),
-          //             child: Text(
-          //               formattedDate,
-          //               style: TextStyle(fontSize: 14.sp),
-          //             ),
-          //           ),
-          //         ],
-          //       )
-          //     : Row(
-          //         crossAxisAlignment: CrossAxisAlignment.start,
-          //         children: [
-          //           Container(
-          //             margin: EdgeInsets.only(left: 4.w),
-          //             child: Text(
-          //               'No hay notas grabadas para el día:',
-          //               style: TextStyle(fontSize: 14.sp),
-          //             ),
-          //           ),
-          //            SizedBox(height: 5.h),
-          //           Container(
-          //             margin: EdgeInsets.only(left: 4.w),
-          //             child: Text(
-          //               formattedDate,
-          //               style: TextStyle(fontSize: 14.sp),
-          //             ),
-          //           ),
-          //         ],
-          //       ),
           SingleChildScrollView(
-              child: Column(
-            children: events
-                .map(
-                  (event) => Column(
-                    children: [
-                      // CardEvent(event: event),
-                      TaskCard(
-                          noteData: event,
-                          onTapAction:
-                              controller.notasController.openNoteToRead)
-                    ],
-                  ),
-                )
-                .toList(),
-          )),
+            child: Column(
+              children: events
+                  .map(
+                    (event) => Column(
+                      children: [
+                        // CardEvent(event: event),
+                        TaskCard(
+                            noteData: event,
+                            onTapAction:
+                                controller.notasController.openNoteToRead)
+                      ],
+                    ),
+                  )
+                  .toList(),
+            ),
+          ),
         ],
       ),
     );

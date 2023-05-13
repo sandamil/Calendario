@@ -28,19 +28,10 @@ class NotasViewController extends GetxController {
     isAlarmaCreated.value = currentNote.value.isAlarmaCreated!;
     showHeader();
     super.onInit();
-    print(currentNote.value.toMap());
 
   }
 
-  @override
-  void onReady() {
-    super.onReady();
-  }
 
-  @override
-  void onClose() {
-    super.onClose();
-  }
 
   void showHeader() async {
     Future.delayed(const Duration(milliseconds: 100), () {

@@ -41,18 +41,10 @@ class CrearCuadranteController extends GetxController {
     super.onInit();
   }
 
-  @override
-  void onReady() {
-    super.onReady();
-  }
 
-  @override
-  void onClose() {
-    super.onClose();
-  }
 
   bool submit() {
-    return list.length != 0 &&
+    return list.isNotEmpty &&
         endDate.value.toString() != "" &&
         endDate.value.toString().isNotEmpty &&
         inicialDate.value.toString() != "" &&
@@ -136,7 +128,7 @@ class CrearCuadranteController extends GetxController {
                         return ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             shape: RoundedRectangleBorder(
-                              borderRadius: new BorderRadius.circular(5.r),
+                              borderRadius: BorderRadius.circular(5.r),
                             ),
                             backgroundColor: HexColor(m.color!),
                           ),

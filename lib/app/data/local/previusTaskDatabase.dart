@@ -65,7 +65,6 @@ class PreviusDbProvider {
         notesList.add(PreviousTask.fromMap(map));
       }
     }
-    print(notesList.asMap());
 
     return notesList;
   }
@@ -89,7 +88,6 @@ class PreviusDbProvider {
         previousShiftList.add(PreviousShift.fromMap(map));
       }
     }
-    print(previousShiftList.asMap());
 
     return previousShiftList;
   }
@@ -114,7 +112,6 @@ class PreviusDbProvider {
         previousTurnosCAlendariotList.add(CustomShitTemplate.fromMap(map));
       }
     }
-    print(previousTurnosCAlendariotList.asMap());
 
     return previousTurnosCAlendariotList;
   }

@@ -41,7 +41,8 @@ dependencies:
 
   flutter_slidable: ^3.0.0
 
-  #  //Todo  añadir animaciones a los dialogos
+  #  Todo  añadir animaciones a los dialogos
+
   flutter_animated_dialog: 2.0.1
 
   url_launcher: ^6.1.11
