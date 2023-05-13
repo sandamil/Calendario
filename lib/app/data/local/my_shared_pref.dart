@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:calendario2/app/data/model/cuadranteName.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -12,6 +15,7 @@ class MySharedPref {
 
   // STORING KEYS
   static const String _currentLocalKey = 'current_local';
+  static const String _cuadranteName = 'cuadranteName';
   static const String _lightThemeKey = 'is_theme_light';
 
   /// init get storage services
@@ -46,6 +50,23 @@ class MySharedPref {
       return LocalizationService.supportedLanguages[langCode]!;
   }
 
+  static setCuadrantesList(List<String> list) async {
+    _sharedPreferences.setStringList(_cuadranteName, list);
+  }
+  static deleteCuadrantesList() async {
+    _sharedPreferences.remove(_cuadranteName);
+  }
+
+
+
+static getStringList() {
+  List<String>? cuadranteNamesList = _sharedPreferences.getStringList(_cuadranteName);
+return cuadranteNamesList;
+  }
+
+
+
+
   static Future<void> setTutoHomeFirst(bool first) =>
       _sharedPreferences.setBool('tutoHomeFirst', first);
 
@@ -78,7 +99,9 @@ class MySharedPref {
 
 
 
+
   /// clear all data from shared pref
   static Future<void> clear() async => await _sharedPreferences.clear();
+
 
 }

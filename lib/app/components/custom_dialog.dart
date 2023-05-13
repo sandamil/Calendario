@@ -21,6 +21,7 @@ class CustomDialog {
     required String desc,
     btnCancelText = 'No',
     btnOkText = 'Si',
+    circularColor,
     required Function onTapOK,
     required Function onTapCancel,
   }) {
@@ -71,10 +72,15 @@ class CustomDialog {
                                       )),
                                   5.verticalSpace,
                                   FittedBox(
-                                      child: Text(
-                                        desc,
-                                        style:  TextStyle(
-                                          color: MyColors.cellTextColor,
+                                      child: Center(
+                                        child: Text(
+                                          textAlign: TextAlign.center,
+
+                                          desc,
+                                          style:  TextStyle(
+
+                                            color: MyColors.cellTextColor,
+                                          ),
                                         ),
                                       )),
                                   10.verticalSpace,
@@ -125,7 +131,7 @@ class CustomDialog {
                           child: CircleAvatar(
                             minRadius: 19.r,
                             maxRadius: 31.r,
-                            backgroundColor: Colors.green,
+                            backgroundColor: circularColor ?? Colors.green,
                             child: Icon(
                               Icons.question_mark_sharp,
                               size: 38.sp,
@@ -193,7 +199,7 @@ class CustomDialog {
       context: Get.context!,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Mensaje de Error'),
+          title: const Text('Error'),
           titlePadding: const EdgeInsets.all(10),
           titleTextStyle: const TextStyle(
             color: Colors.red,

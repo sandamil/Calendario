@@ -83,6 +83,11 @@ class CustomTextStyle {
     fontSize: 50.w,
     color: PRIMARY_COLOR,
   );
+ static TextStyle textCuadranteMenu = GoogleFonts.firaSans(
+    fontWeight: FontWeight.w900,
+    fontSize: 30.w,
+    color: PRIMARY_COLOR,
+  );
 
   static TextStyle text = TextStyle(
     fontWeight: FontWeight.w400,

@@ -1,5 +1,6 @@
 class CuadranteDay {
   int? id;
+  String? cuadranteName;
   String? title;
   String? startHour;
   String? endHour;
@@ -9,6 +10,7 @@ class CuadranteDay {
 
   CuadranteDay(
       {this.id,
+      this.cuadranteName,
       this.title,
       this.description,
       this.startHour,
@@ -19,6 +21,7 @@ class CuadranteDay {
   Map<String, dynamic> toMap() {
     return {
       'id': id,
+      'cuadranteName': cuadranteName,
       'title': title,
       'description': description,
       'startHour': startHour,
@@ -31,6 +34,7 @@ class CuadranteDay {
   factory CuadranteDay.fromMap(Map<String, dynamic> map) {
     return CuadranteDay(
       id: map['id'] as int,
+      cuadranteName: map['cuadranteName'] as String?,
       title: map['title'] as String?,
       description: map['description'] as String?,
       startHour: map['startHour'] as String?,

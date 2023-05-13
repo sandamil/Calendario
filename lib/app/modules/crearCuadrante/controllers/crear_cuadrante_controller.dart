@@ -1,22 +1,31 @@
-
+import 'package:calendario2/app/components/custom_dialog.dart';
 import 'package:calendario2/app/controllers/tutorialController.dart';
 import 'package:calendario2/app/data/local/calendarDatabase.dart';
 import 'package:calendario2/app/data/local/my_shared_pref.dart';
 import 'package:calendario2/app/data/model/cuadranteDay.dart';
+import 'package:calendario2/app/data/model/cuadranteName.dart';
 import 'package:calendario2/app/data/model/turnoType.dart';
 import 'package:calendario2/config/util/hexColor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-
 class CrearCuadranteController extends GetxController {
   TutorialController tutorialController = TutorialController();
 
+  RxString cuadranteNameString = "".obs;
+
+  List<String> cuadrantesNameList = [];
+
+  get getCuadranteNameString => cuadranteNameString.value;
+
+  void setCuadranteName(String cuadranteNameValue) =>
+      cuadranteNameString.value = cuadranteNameValue;
+
+  var cuadranteName = TextEditingController();
 
   Rx<DateTime> inicialDate = DateTime.now().obs;
   Rx<DateTime> endDate = DateTime.now().add(const Duration(days: 365)).obs;
-  // late Rxn<DateTime> endDate;
 
   RxList<TurnoType> list = <TurnoType>[].obs;
   RxList<TurnoType> turnoType = <TurnoType>[].obs;
@@ -29,6 +38,8 @@ class CrearCuadranteController extends GetxController {
 
   @override
   void onInit() async {
+     cuadrantesNameList = MySharedPref.getStringList() ?? [];
+
     // inicialDate = Rxn(DateTime.now());
     // endDate = Rxn(DateTime.now().add(const Duration(days: 365)));
 
@@ -40,8 +51,6 @@ class CrearCuadranteController extends GetxController {
     fetchTurnosType();
     super.onInit();
   }
-
-
 
   bool submit() {
     return list.isNotEmpty &&
@@ -58,11 +67,13 @@ class CrearCuadranteController extends GetxController {
   Future cuadranteLoad() async {
     await Rotation(
         DateTime.parse(inicialDate.value.toString().substring(0, 10)),
-        DateTime.parse(endDate.value.toString().substring(0, 10)));
+        DateTime.parse(endDate.value.toString().substring(0, 10)),
+        );
     cuadranteLoading.value = false;
   }
 
   Rotation(DateTime start, DateTime end) async {
+
     DateTime date;
     var x = 0;
     var difference = end.difference(start).inDays;
@@ -72,6 +83,8 @@ class CrearCuadranteController extends GetxController {
       if (x >= list.length) {
         x = 0;
       }
+      print(cuadranteNameString);
+
       await DBHelper.db.addItem(
         CuadranteDay(
           dateTime: date,
@@ -80,15 +93,31 @@ class CrearCuadranteController extends GetxController {
           endHour: list[x].endHour,
           startHour: list[x].startHour,
           title: list[x].title,
+          cuadranteName: cuadranteNameString.value,
         ),
       );
       x = x + 1;
     }
+    cuadrantesNameList.add(cuadranteNameString.value);
+    MySharedPref.setCuadrantesList(cuadrantesNameList);
   }
 
   Future<List<TurnoType>> fetchTurnosType() async {
     turnoType.value = await DBHelper.db.getTypeModels();
     return turnoType;
+  }
+
+  deleteCuadrante(cuadranteName) async {
+    await DBHelper.db.deleteCuadrante(cuadranteName);
+     cuadrantesNameList.remove(cuadranteName);
+     MySharedPref.setCuadrantesList(cuadrantesNameList);
+
+  }
+deleteAllCuadrante() async {
+    await DBHelper.db.deleteALlCuadrante();
+     cuadrantesNameList.clear();
+     MySharedPref.deleteCuadrantesList();
+
   }
 
   void addYear() async {
@@ -104,8 +133,6 @@ class CrearCuadranteController extends GetxController {
       endDate.refresh();
     }
   }
-
-
 
   Future<void> showPopUp(BuildContext context) {
     return showDialog<void>(
@@ -174,15 +201,4 @@ class CrearCuadranteController extends GetxController {
       },
     );
   }
-
-
-
-
-
-
-
-
-
-
-
 }

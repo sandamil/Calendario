@@ -1,8 +1,10 @@
+import 'package:calendario2/app/components/custom_dialog.dart';
 import 'package:calendario2/app/controllers/ads_controller.dart';
 import 'package:calendario2/app/modules/CrearTurno/views/widgets/input_field.dart';
 import 'package:calendario2/app/modules/crearCuadrante/widgets/beautifulAlertDialog.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/config/theme/my_fonts.dart';
+import 'package:calendario2/config/theme/styles.dart';
 import 'package:calendario2/config/util/hexColor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
@@ -11,277 +13,230 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../controllers/crear_cuadrante_controller.dart';
+import 'add_cuadrante_view.dart';
 
 class CrearCuadranteView extends GetView<CrearCuadranteController> {
   const CrearCuadranteView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    double qaButtonHeight = 100.h;
+    double qaButtonWidth = 120.w;
     final adcontroller = Get.find<AdsController>();
-    return Obx(
-      () {
-        return Scaffold(
-          appBar: AppBar(
-            elevation: 0,
-            backgroundColor: Colors.transparent,
-            centerTitle: false,
-            leading: IconButton(
-              icon: Icon(
-                Icons.home,
-                color: PRIMARY_COLOR,
-                size: 26.sp,
-              ),
-              onPressed: () {
-                adcontroller.staticHomeAd.load();
-
-                Get.offAllNamed('/home');
-              },
-            ),
-            title: Text(
-              'Crear Cuadrante',
-              style: CustomTextStyle.appBarTitle(context: context),
-            ),
-            actions: <Widget>[
-              IconButton(
-                onPressed: controller.submit()
-                    ? () async {
-                        //Todo carcgar primera pagina de calendario
-
-                        showAlertLoadingDialog(context);
-                        await controller.cuadranteLoad();
-                      }
-                    : () => alertDialog(context),
-                icon: controller.submit()
-                    ? Icon(
-                        Icons.done,
-                        color: Colors.green,
-                        size: 24.sp,
-                      )
-                    : Icon(
-                        Icons.done_outline,
-                        color: PRIMARY_COLOR.withOpacity(0.4),
-                        size: 24.sp,
-                      ),
-                key: controller.firstTime.value
-                    ? controller.tutorialController.keyButton5
-                    : key,
-              )
-            ],
+    return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        centerTitle: false,
+        leading: IconButton(
+          icon: Icon(
+            Icons.home,
+            color: PRIMARY_COLOR,
+            size: 26.sp,
           ),
-          body: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              SizedBox(
-                height: 1.h,
-              ),
-              Column(
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      Text(
-                        "Pulsa aqui para ver como crear cuadrante.",
-                        style: TextStyle(
-                          fontSize: 12.sp,
-                        ),
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.info, color: Colors.redAccent),
-                        tooltip: '',
-                        onPressed: () {
-                          controller.firstTime.value = true;
+          onPressed: () {
+            adcontroller.staticHomeAd.load();
 
-                          controller.tutorialController
-                              .showTutorial(context, 'cuadrante');
-                        },
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: <Widget>[
+            Get.offAllNamed('/home');
+          },
+        ),
+        title: Text(
+          'Cuadrantes',
+          style: CustomTextStyle.appBarTitle(context: context),
+        ),
+        // actions: <Widget>[
+        //   IconButton(
+        //     onPressed: controller.submit()
+        //         ? () async {
+        //             //Todo carcgar primera pagina de calendario
+        //
+        //             showAlertLoadingDialog(context);
+        //             await controller.cuadranteLoad();
+        //           }
+        //         : () => alertDialog(context),
+        //     icon: controller.submit()
+        //         ? Icon(
+        //             Icons.done,
+        //             color: Colors.green,
+        //             size: 24.sp,
+        //           )
+        //         : Icon(
+        //             Icons.done_outline,
+        //             color: PRIMARY_COLOR.withOpacity(0.4),
+        //             size: 24.sp,
+        //           ),
+        //     key: controller.firstTime.value
+        //         ? controller.tutorialController.keyButton5
+        //         : key,
+        //   )
+        // ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[
+            SizedBox(
+              height: 25.h,
+            ),
+            Expanded(
+              flex: 10,
+              child: MaterialButton(
+                elevation: 10,
+                padding: const EdgeInsets.all(0),
+                shape: RoundedRectangleBorder(borderRadius: Corners.xmBorder),
+                height: qaButtonHeight,
+                minWidth: qaButtonWidth,
+                color: MyColors.cellSelectedColor,
+                child: Padding(
+                  padding: const EdgeInsets.all(0),
+                  child: Text("Crear nuevo Cuadrante",
+                      style: CustomTextStyle.textCuadranteMenu),
+                ),
+
+                onPressed: () {
+                  // Get.toNamed('/notas', (r) => false);
+                  Get.to(const AddCuadranteView()); //   Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(
+                  //           builder: (context) =>
+                  //               TaskListVIew(widget.time, widget.events)));
+                },
+                // splashColor: AAThemeData.buttonColor,
+              ),
+            ),
+            SizedBox(
+              height: 25.h,
+            ),
+
+            Expanded(
+              flex: 80,
+              child: MaterialButton(
+                elevation: 10,
+                padding: const EdgeInsets.all(0),
+                shape: RoundedRectangleBorder(borderRadius: Corners.xmBorder),
+                height: qaButtonHeight,
+                minWidth: qaButtonWidth,
+                color: MyColors.cellSelectedColor,
+                child: Padding(
+                  padding: const EdgeInsets.all(0),
+                  child: Column(
+                    children: [
                       SizedBox(
-                        width: (MediaQuery.of(context).size.width) / 2.2,
-                        child: InputField(
-                          label: 'Inicio',
-                          hintText: controller.inicialDate.value
-                              .toIso8601String()
-                              .substring(0, 10),
-                          widget: IconButton(
+                        height: 10.h,
+                      ),
+                      Row(
+                        children: [
+                          Spacer(),
+                          Text("Mis Cuadrantes",
+                              style: CustomTextStyle.textCuadranteMenu),
+                  Spacer(),
+                  Spacer(),
+                  IconButton(
                             onPressed: () {
-                              DatePicker.showDatePicker(context,
-                                  theme: DatePickerTheme(
-                                      cancelStyle: TextStyle(
-                                          color: Colors.redAccent.shade200,
-                                          fontSize: 16.sp,
-                                          fontWeight: FontWeight.bold),
-                                      doneStyle: TextStyle(
-                                          color: MyColors.textColorPrimary,
-                                          fontSize: 16.sp,
-                                          fontWeight: FontWeight.bold),
-                                      itemStyle: TextStyle(
-                                          color: MyColors.textColorPrimary,
-                                          fontSize: 16.sp,
-                                          fontWeight: FontWeight.bold),
-                                      backgroundColor: MyColors.cellColor),
-                                  showTitleActions: true,
-                                  minTime: DateTime(2020),
-                                  maxTime: DateTime(2050), onChanged: (date) {
-                                controller.inicialDate.value = date;
-                              }, onConfirm: (date) {
-                                controller.inicialDate.value = date;
-                              },
-                                  currentTime: DateTime.now(),
-                                  locale: LocaleType.es);
+                              CustomDialog.myConfirmDialogBody(
+                                circularColor: Colors.redAccent,
+                                  context: context,
+                                  title: 'Eliminar TODOS',
+                                  desc:
+                                      'Si aceptas y pulsas ok eliminaras,'
+                                          '\ntodos los cuadrantes creados.'
+                                          '\nY LOS TURNOS AÑADIDOS MANUALMENTE',
+                                  onTapOK: () {
+                                     controller.deleteAllCuadrante();
+                                    Navigator.of(context).pop();
+
+                                  },
+                                  onTapCancel: () =>
+                                      Navigator.of(context).pop());
                             },
                             icon: Icon(
-                              Icons.calendar_today_outlined,
-                              key: controller.firstTime.value
-                                  ? controller.tutorialController.keyButton
-                                  : key,
+                              Icons.delete_forever_outlined,
+                              size: 30.sp,
+                              color: Colors.red,
                             ),
                           ),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 15,
+        Spacer(),
+
+        ],
                       ),
                       SizedBox(
-                        width: (MediaQuery.of(context).size.width) / 2.2,
-                        child: InputField(
-                          label: 'Fin',
-                          hintText: controller.endDate.value
-                              .toIso8601String()
-                              .substring(0, 10),
-                          widget: IconButton(
-                            key: controller.firstTime.value
-                                ? controller.tutorialController.keyButton2
-                                : key,
-                            onPressed: () {
-                              DatePicker.showDatePicker(
-                                  theme: DatePickerTheme(
-                                      cancelStyle: TextStyle(
-                                          color: Colors.redAccent.shade200,
-                                          fontSize: 16.sp,
-                                          fontWeight: FontWeight.bold),
-                                      doneStyle: TextStyle(
-                                          color: MyColors.textColorPrimary,
-                                          fontSize: 16.sp,
-                                          fontWeight: FontWeight.bold),
-                                      itemStyle: TextStyle(
-                                          color: MyColors.textColorPrimary,
-                                          fontSize: 16.sp,
-                                          fontWeight: FontWeight.bold),
-                                      backgroundColor: MyColors.cellColor),
-                                  context,
-                                  showTitleActions: true,
-                                  minTime: DateTime(2020),
-                                  maxTime: DateTime(2050), onChanged: (date) {
-                                controller.endDate.value = date;
-                              }, onConfirm: (date) {
-                                controller.endDate.value = date;
-                              },
-                                  currentTime: DateTime.now(),
-                                  locale: LocaleType.es);
-                            },
-                            icon: const Icon(Icons.calendar_today_outlined),
-                          ),
-                        ),
+                        height: 15.h,
                       ),
+                      Container(
+                        height: 200.h,
+                        child: ListView.builder(
+                          physics: const BouncingScrollPhysics(),
+                          itemCount: controller.cuadrantesNameList.length,
+                          itemBuilder: (context, index) {
+                            final name = controller.cuadrantesNameList[index];
+
+                            return Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 8.h),
+                              child: Card(
+                                child: ListTile(
+                                    title: Text(
+                                      name,
+                                      style: CustomTextStyle.rowButomText,
+                                    ),
+                                    trailing: IconButton(
+                                      onPressed: () =>
+                                          controller.deleteCuadrante(name),
+                                      icon: const Icon(
+                                          Icons.delete_forever_outlined),
+                                    )),
+                              ),
+                            );
+                          },
+                          //   RadioListTile(
+                          //     title: Text(controller.languages[index].name),
+                          //     value: controller.languages[index].languageCode,
+                          //     groupValue: controller.selectedLanguage.value.languageCode,
+                          //     onChanged: (value) {
+                          //       log('pressed: ${controller.languages[index].languageCode}');
+                          //       controller.setSelectedShippingTypeIndex(controller.languages[index].languageCode);
+                          //     },
+                          //   ),
+                          // ),
+                          // children: [
+                          //   ...List.generate(
+                          //     controller.languages.length,
+                          //     (index) => RadioListTile(
+                          //       title: Text(controller.languages[index].name),
+                          //       value: controller.languages[index].languageCode,
+                          //       groupValue: controller.selectedLanguage.value.languageCode,
+                          //       onChanged: (value) {
+                          //         controller.setSelectedShippingTypeIndex(controller.languages[index].languageCode);
+                          //       },
+                          //     ),
+                          //     // ListTile(leading: ,trailing: ,)
+                          //   ),
+                          // ],
+                        ),
+                      )
                     ],
                   ),
-                ],
-              ),
-              SizedBox(
-                height: 1.h,
-              ),
-              Container(
-                key: controller.firstTime.value
-                    ? controller.tutorialController.keyButton3
-                    : key,
-                padding: EdgeInsets.all(8.w),
-                child: GridView.builder(
-                  shrinkWrap: true,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 5),
-                  itemCount: controller.list.length,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      decoration: BoxDecoration(
-                          color: HexColor(controller.list[index].color!),
-                          border: Border.all(width: 0.8),
-                          borderRadius: BorderRadius.circular(5.r),
-                          boxShadow: const <BoxShadow>[
-                            BoxShadow(
-                                color: Colors.black45,
-                                offset: Offset(0, 1),
-                                blurRadius: 3),
-                          ]),
-                      margin: const EdgeInsets.all(2.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          Padding(
-                            padding: EdgeInsets.all(2.h),
-                            child: Text(
-                              controller.list[index].title!,
-                              style: TextStyle(
-                                fontSize: 22,
-                                fontWeight: FontWeight.bold,
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .titleLarge!
-                                    .color,
-                              ),
-                            ),
-                          ),
-                          GestureDetector(
-                            child: Container(
-                              padding: EdgeInsets.only(bottom: 2.h),
-                              child: Icon(
-                                shadows: const <Shadow>[
-                                  BoxShadow(
-                                      color: Colors.redAccent,
-                                      blurRadius: 15.0,
-                                      // offset: Offset(1, 0)
-                                      ),
-                                  BoxShadow(
-                                    blurRadius: 12.0,
-                                    color: Colors.red,
-                                  ),
-                                ],
-                                Icons.delete_forever,
-                                color: Theme.of(context)
-                                    .textTheme
-                                    .titleLarge!
-                                    .color,
-                              ),
-                            ),
-                            onTap: () async {
-                              controller.list.remove(controller.list[index]);
-                            },
-                          ),
-                        ],
-                      ),
-                    );
-                  },
                 ),
+
+                onPressed: () {
+                  // Get.toNamed('/notas', (r) => false);
+                  // Navigator.pushNamedAndRemoveUntil(context, "/notas", (r) => false);
+                  //   Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(
+                  //           builder: (context) =>
+                  //               TaskListVIew(widget.time, widget.events)));
+                },
+                // splashColor: AAThemeData.buttonColor,
               ),
-            ],
-          ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () async {
-              await controller.showPopUp(context);
-            },
-            key: controller.firstTime.value
-                ? controller.tutorialController.keyButton4
-                : key,
-            child: const Icon(Icons.add),
-          ),
-        );
-      },
+            ),
+            SizedBox(
+              height: 30.h,
+            ),
+          ],
+        ),
+      ),
     );
   }
 

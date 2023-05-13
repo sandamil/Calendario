@@ -35,6 +35,7 @@ class DBHelper {
     await db.execute(
         'CREATE TABLE $_cuadrantes('
             'id INTEGER PRIMARY KEY AUTOINCREMENT, '
+            'cuadranteName STRING, '
             'title STRING, '
             'datetime TEXT, '
             'startHour TEXT, '
@@ -102,7 +103,7 @@ class DBHelper {
     DateTime dayEnd = day.add(const Duration(days: 300));
 
     List<Map<String, dynamic>> result = await dbClient!.rawQuery(
-        "SELECT * FROM $_cuadrantes WHERE datetime BETWEEN '${dayStart.toString()}' AND '${dayEnd.toString()}'");
+        "SELECT * FROM $_cuadrantes");
 
     return result.map((m) => CuadranteDay.fromMap(m)).toList();
   }
@@ -147,6 +148,16 @@ class DBHelper {
     Database? dbClient = await database;
     await dbClient!
         .delete(_cuadrantes, where: "datetime = ?", whereArgs: [dateTime]);
+  }
+  Future<void> deleteCuadrante(String cuadranteName) async {
+    Database? dbClient = await database;
+    await dbClient!
+        .delete(_cuadrantes, where: "cuadranteName = ?", whereArgs: [cuadranteName]);
+  }
+Future<void> deleteALlCuadrante() async {
+    Database? dbClient = await database;
+    await dbClient!
+        .delete(_cuadrantes);
   }
 
   Future<void> deleteItemID(int id) async {
