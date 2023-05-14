@@ -103,17 +103,21 @@ class AddCuadranteView extends GetView<CrearCuadranteController> {
                         ),
                       ],
                     ),
-                    TextField(
-                      controller: controller.cuadranteName,
-                      onChanged: (value) => controller.setCuadranteName(value),
-                      decoration: const InputDecoration(
-                        hintText: 'Nombre del cuadrante creado',
-                        labelText: 'Nombre del Cuadrante',
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(15))),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 12.h),
+                      child: TextField(
+
+                        controller: controller.cuadranteName,
+                        onChanged: (value) => controller.setCuadranteName(value),
+                        decoration: const InputDecoration(
+                          hintText: 'Nombre del cuadrante creado',
+                          labelText: 'Nombre del Cuadrante',
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(15))),
+                        ),
+                        maxLines: 1,
+                        maxLength: 20,
                       ),
-                      maxLines: 1,
-                      maxLength: 20,
                     ),
                     Row(
                       mainAxisSize: MainAxisSize.min,

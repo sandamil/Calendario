@@ -1,3 +1,4 @@
+import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -41,27 +42,33 @@ class MyStyles {
       AppBarTheme(
         systemOverlayStyle: isLightTheme
             ? const SystemUiOverlayStyle(
-          // Status bar color
-          statusBarColor: LightThemeColors.scaffoldBackgroundColor,
-          // Status bar brightness (optional)
-          statusBarIconBrightness: Brightness.dark, // For Android (dark icons)
-          statusBarBrightness: Brightness.light, // For iOS (dark icons)
+                // Status bar color
+                statusBarColor: LightThemeColors.scaffoldBackgroundColor,
+                // Status bar brightness (optional)
+                statusBarIconBrightness:
+                    Brightness.dark, // For Android (dark icons)
+                statusBarBrightness: Brightness.light, // For iOS (dark icons)
 
-          systemNavigationBarColor: LightThemeColors.scaffoldBackgroundColor,
-          systemNavigationBarDividerColor: LightThemeColors.scaffoldBackgroundColor,
-          systemNavigationBarIconBrightness: Brightness.dark,
-        )
+                systemNavigationBarColor:
+                    LightThemeColors.scaffoldBackgroundColor,
+                systemNavigationBarDividerColor:
+                    LightThemeColors.scaffoldBackgroundColor,
+                systemNavigationBarIconBrightness: Brightness.dark,
+              )
             : const SystemUiOverlayStyle(
-          // Status bar color
-          statusBarColor: DarkThemeColors.scaffoldBackgroundColor,
-          // Status bar brightness (optional)
-          statusBarIconBrightness: Brightness.light, // For Android (dark icons)
-          statusBarBrightness: Brightness.dark, // For iOS (dark icons)
+                // Status bar color
+                statusBarColor: DarkThemeColors.scaffoldBackgroundColor,
+                // Status bar brightness (optional)
+                statusBarIconBrightness:
+                    Brightness.light, // For Android (dark icons)
+                statusBarBrightness: Brightness.dark, // For iOS (dark icons)
 
-          systemNavigationBarColor: DarkThemeColors.scaffoldBackgroundColor,
-          systemNavigationBarDividerColor: DarkThemeColors.scaffoldBackgroundColor,
-          systemNavigationBarIconBrightness: Brightness.light,
-        ),
+                systemNavigationBarColor:
+                    DarkThemeColors.scaffoldBackgroundColor,
+                systemNavigationBarDividerColor:
+                    DarkThemeColors.scaffoldBackgroundColor,
+                systemNavigationBarIconBrightness: Brightness.light,
+              ),
         elevation: 0,
         titleTextStyle:
             getTextTheme(isLightTheme: isLightTheme).bodyLarge!.copyWith(
@@ -275,9 +282,12 @@ class MyStyles {
         dayPeriodTextStyle:
             const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
         helpTextStyle: TextStyle(
-            fontSize: 14.sp, fontWeight: FontWeight.bold, color: isLightTheme
-            ? LightThemeColors.bodyTextColor
-            : DarkThemeColors.bodyTextColor,),
+          fontSize: 14.sp,
+          fontWeight: FontWeight.bold,
+          color: isLightTheme
+              ? LightThemeColors.bodyTextColor
+              : DarkThemeColors.bodyTextColor,
+        ),
         // helpTextStyle: TextStyle(
         //   fontSize: 16.sp, fontWeight: FontWeight.bold, color: isLightTheme
         //     ? LightThemeColors.bodyTextColor
@@ -285,7 +295,6 @@ class MyStyles {
 
         inputDecorationTheme: InputDecorationTheme(
           errorStyle: const TextStyle(color: Colors.blue),
-
           prefixIconColor: isLightTheme
               ? LightThemeColors.darkTextColor
               : DarkThemeColors.lightTextColor,
@@ -297,17 +306,19 @@ class MyStyles {
                 ? LightThemeColors.darkTextColor
                 : DarkThemeColors.lightTextColor,
           ),
-          hintStyle: TextStyle(color: isLightTheme
-              ? LightThemeColors.darkTextColor.withOpacity(0.8)
-              : DarkThemeColors.lightTextColor.withOpacity(0.8), fontSize: 18, fontWeight: FontWeight.w200),
+          hintStyle: TextStyle(
+              color: isLightTheme
+                  ? LightThemeColors.darkTextColor.withOpacity(0.8)
+                  : DarkThemeColors.lightTextColor.withOpacity(0.8),
+              fontSize: 18,
+              fontWeight: FontWeight.w200),
           enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(
-                width: 4.0,
-                color: isLightTheme
-                    ? LightThemeColors.dividerColor
-                    : DarkThemeColors.dividerColor,
-              )),
-
+              borderSide: BorderSide(
+            width: 4.0,
+            color: isLightTheme
+                ? LightThemeColors.dividerColor
+                : DarkThemeColors.dividerColor,
+          )),
           errorBorder: const UnderlineInputBorder(
               borderSide: BorderSide(width: 0.7, color: Colors.red)),
           focusedErrorBorder: const UnderlineInputBorder(
@@ -317,11 +328,7 @@ class MyStyles {
           border: const UnderlineInputBorder(
               borderSide: BorderSide(width: 2.0, color: Colors.redAccent)),
           disabledBorder: const UnderlineInputBorder(
-              borderSide: BorderSide(
-                  width: 2.0,
-                  color:
-                  Colors.redAccent)),
-
+              borderSide: BorderSide(width: 2.0, color: Colors.redAccent)),
         ),
         // inputDecorationTheme: InputDecorationTheme(
         //   errorBorder: const UnderlineInputBorder(
@@ -354,20 +361,25 @@ class MyStyles {
         entryModeIconColor: Colors.orange,
       );
 
-  // static InputDecorationTheme getInputDecorationTheme(
-  //         {required bool isLightTheme}) =>
-  //     const InputDecorationTheme(
-  //       // focusedErrorBorder: UnderlineInputBorder(
-  //       //     borderSide: BorderSide(width: 0.7, color: errorColor)),
-  //       // focusedBorder: UnderlineInputBorder(
-  //       //     borderSide: BorderSide(width: 0.5, color: primaryColor)),
-  //       enabledBorder: UnderlineInputBorder(
-  //           borderSide: BorderSide(width: 2.0, color: Colors.redAccent)),
-  //       border: UnderlineInputBorder(
-  //           borderSide: BorderSide(width: 2.0, color: Colors.redAccent)),
-  //       // disabledBorder: UnderlineInputBorder(
-  //       //     borderSide: BorderSide(width: 2.0, color: disabledColor)),
-  //     );
+  static InputDecorationTheme getInputDecorationTheme(
+          {required bool isLightTheme}) =>
+      const InputDecorationTheme(
+        labelStyle: TextStyle(color: Colors.orange),
+        // focusedErrorBorder: UnderlineInputBorder(
+        //     borderSide: BorderSide(width: 0.7, color: errorColor)),
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+                style: BorderStyle.solid,
+                color: Colors.orange
+            ),
+          ),
+        enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(width: 2.0, color: Colors.orange)),
+        border: OutlineInputBorder(
+            borderSide: BorderSide(width: 2.0, color: Colors.orange)),
+        // disabledBorder: UnderlineInputBorder(
+        //     borderSide: BorderSide(width: 2.0, color: disabledColor)),
+      );
 
   // static InputDecorationTheme getInputDecorationTheme2(
   //         {required bool isLightTheme}) =>

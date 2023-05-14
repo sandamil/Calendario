@@ -19,7 +19,7 @@ class AppIcon extends StatelessWidget {
       height: size,
       child: Center(
         child: Image.asset(path,
-            width: size, height: size, color: color ?? Color(0xFFF8ECE5), filterQuality: FilterQuality.high),
+            width: size, height: size, color: color ?? const Color(0xFFF8ECE5), filterQuality: FilterQuality.high),
       ),
     );
   }

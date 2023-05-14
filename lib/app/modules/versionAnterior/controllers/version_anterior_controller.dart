@@ -26,15 +26,7 @@ class VersionAnteriorController extends GetxController {
     super.onInit();
   }
 
-  @override
-  void onReady() {
-    super.onReady();
-  }
 
-  @override
-  void onClose() {
-    super.onClose();
-  }
 
   RxList<PreviousTask> notesBkpList = <PreviousTask>[].obs;
   RxList<PreviousShift> turnosPersonalizadosBkpList = <PreviousShift>[].obs;

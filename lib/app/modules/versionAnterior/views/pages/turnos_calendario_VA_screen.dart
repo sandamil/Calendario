@@ -40,84 +40,79 @@ class TurnosCalendarioScreen extends GetView<VersionAnteriorController> {
               shrinkWrap: true,
               itemCount: controller.turnosCalendarioBkpList.value.length,
               itemBuilder: (context, index) {
-                return Container(
-                  // padding: EdgeInsets.only(left: 4.w, right: 4.w),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
-                    child: Container(
-                        margin:
-                        EdgeInsets.symmetric(vertical: 2.h, horizontal: 2.w),
-                        height: 56.h,
-                        child: Material(
-                            borderRadius: BorderRadius.circular(5.r),
-                            clipBehavior: Clip.antiAlias,
-                            color: HexColor(controller
-                                .turnosPersonalizadosBkpList
-                                .value[controller.turnosCalendarioBkpList.value[index].position!]
-                                .color!).withOpacity(0.3),
-                            child: InkWell(
-                                borderRadius: BorderRadius.circular(5.r),
-                                onTap: () {
-                                  // onTapAction(noteData);
-                                },
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 8.w),
-                                  child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment
-                                        .center,
-                                    children: <Widget>[
+                return ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: Container(
+                      margin:
+                      EdgeInsets.symmetric(vertical: 2.h, horizontal: 2.w),
+                      height: 56.h,
+                      child: Material(
+                          borderRadius: BorderRadius.circular(5.r),
+                          clipBehavior: Clip.antiAlias,
+                          color: HexColor(controller
+                              .turnosPersonalizadosBkpList
+                              .value[controller.turnosCalendarioBkpList.value[index].position!]
+                              .color!).withOpacity(0.3),
+                          child: InkWell(
+                              borderRadius: BorderRadius.circular(5.r),
+                              onTap: () {
+                                // onTapAction(noteData);
+                              },
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 8.w),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment
+                                      .center,
+                                  children: <Widget>[
 
 
-                                      Container(
-                                        margin: EdgeInsets.only(left: 20.w,
-                                            bottom: 3.h, right: 4.w),
-                                        child: Text(
-                                          '${controller
-                                              .turnosCalendarioBkpList
-                                              .value[index]
-                                              .day}  ${controller
-                                              .turnosCalendarioBkpList
-                                              .value[index]
-                                              .month} ${controller
-                                              .turnosCalendarioBkpList
-                                              .value[index]
-                                              .year}',
-                                          textAlign: TextAlign.right,
-                                          style: TextStyle(
-                                              fontSize: 20.sp,
-                                              // color: Colors.grey.shade300,
-                                              fontWeight: FontWeight.w900),
-                                        ),
+                                    Container(
+                                      margin: EdgeInsets.only(left: 20.w,
+                                          bottom: 3.h, right: 4.w),
+                                      child: Text(
+                                        '${controller
+                                            .turnosCalendarioBkpList
+                                            .value[index]
+                                            .day}  ${controller
+                                            .turnosCalendarioBkpList
+                                            .value[index]
+                                            .month} ${controller
+                                            .turnosCalendarioBkpList
+                                            .value[index]
+                                            .year}',
+                                        textAlign: TextAlign.right,
+                                        style: TextStyle(
+                                            fontSize: 20.sp,
+                                            // color: Colors.grey.shade300,
+                                            fontWeight: FontWeight.w900),
                                       ),
-                                       SizedBox(width: 60.w,),
-                                      Row(
-                                        children: <Widget>[
-                                          Container(
-                                            child: Obx(() {
-                                              return Text(
-                                                controller
+                                    ),
+                                     SizedBox(width: 60.w,),
+                                    Row(
+                                      children: <Widget>[
+                                        Obx(() {
+                                          return Text(
+                                            controller
+                                                .turnosPersonalizadosBkpList
+                                                .value[controller.turnosCalendarioBkpList.value[index].position!]
+                                                .title!,
+                                            style: TextStyle(
+                                                color: HexColor( controller
                                                     .turnosPersonalizadosBkpList
                                                     .value[controller.turnosCalendarioBkpList.value[index].position!]
-                                                    .title!,
-                                                style: TextStyle(
-                                                    color: HexColor( controller
-                                                        .turnosPersonalizadosBkpList
-                                                        .value[controller.turnosCalendarioBkpList.value[index].position!]
-                                                        .color!),
-                                                    // fontFamily: 'ZillaSlab',
-                                                    fontSize: 24.sp,
-                                                    fontWeight: FontWeight
-                                                        .w800),
-                                              );
-                                            }),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                )))),
-                  ),
+                                                    .color!),
+                                                // fontFamily: 'ZillaSlab',
+                                                fontSize: 24.sp,
+                                                fontWeight: FontWeight
+                                                    .w800),
+                                          );
+                                        }),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              )))),
                 );
               });
         })

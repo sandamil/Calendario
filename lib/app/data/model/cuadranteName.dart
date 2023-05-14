@@ -12,7 +12,7 @@ class CuadranteName {
 
   Map<String, dynamic> toJson() {
     return {
-      "name": this.name,
+      "name": name,
     };
   }
 }

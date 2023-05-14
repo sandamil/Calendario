@@ -119,6 +119,14 @@ class DBHelper {
     return res;
   }
 
+Future<int> updateItem(CuadranteDay item) async {
+    final dbClient = await database;
+    await dbClient!.delete("Cuadrante", where: "datetime = ? and cuadranteName=?"   , whereArgs: [item.dateTime?.toIso8601String().substring(0,10), item.cuadranteName ]);
+    int res = await dbClient!.insert("Cuadrante", item.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace);
+    return res;
+  }
+
 
 
 

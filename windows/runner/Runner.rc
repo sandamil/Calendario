@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.ajatsoft" "\0"
-            VALUE "FileDescription", "Calendario" "\0"
+            VALUE "FileDescription", "calendario" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "Calendario" "\0"
+            VALUE "InternalName", "calendario" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2023 com.ajatsoft. All rights reserved." "\0"
             VALUE "OriginalFilename", "calendario2.exe" "\0"
-            VALUE "ProductName", "Calendario" "\0"
+            VALUE "ProductName", "calendario" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

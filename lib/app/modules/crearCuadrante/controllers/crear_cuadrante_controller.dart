@@ -1,9 +1,7 @@
-import 'package:calendario2/app/components/custom_dialog.dart';
 import 'package:calendario2/app/controllers/tutorialController.dart';
 import 'package:calendario2/app/data/local/calendarDatabase.dart';
 import 'package:calendario2/app/data/local/my_shared_pref.dart';
 import 'package:calendario2/app/data/model/cuadranteDay.dart';
-import 'package:calendario2/app/data/model/cuadranteName.dart';
 import 'package:calendario2/app/data/model/turnoType.dart';
 import 'package:calendario2/config/util/hexColor.dart';
 import 'package:flutter/material.dart';
@@ -73,6 +71,33 @@ class CrearCuadranteController extends GetxController {
   }
 
   Rotation(DateTime start, DateTime end) async {
+    if (cuadrantesNameList.contains(cuadranteNameString.value)) {
+      DateTime date;
+      var x = 0;
+      var difference = end.difference(start).inDays;
+
+      for (int i = 0; i <= difference; i++) {
+        date = start.add(Duration(days: i)).add(const Duration(hours: 6));
+        if (x >= list.length) {
+          x = 0;
+        }
+        await DBHelper.db.updateItem(
+          CuadranteDay(
+            dateTime: date,
+            color: list[x].color,
+            description: list[x].description,
+            endHour: list[x].endHour,
+            startHour: list[x].startHour,
+            title: list[x].title,
+            cuadranteName: cuadranteNameString.value,
+          ),
+        );
+        x = x + 1;
+      }
+      return;
+    }
+
+
 
     DateTime date;
     var x = 0;
@@ -83,8 +108,6 @@ class CrearCuadranteController extends GetxController {
       if (x >= list.length) {
         x = 0;
       }
-      print(cuadranteNameString);
-
       await DBHelper.db.addItem(
         CuadranteDay(
           dateTime: date,

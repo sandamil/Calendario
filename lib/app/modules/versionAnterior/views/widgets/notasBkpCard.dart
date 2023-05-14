@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:calendario2/app/data/model/previousDatabase/previousTaskModel.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:intl/intl.dart';
 
 import 'package:flutter/material.dart';
 
@@ -31,7 +30,6 @@ class NotasBkpCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // NotasViewController notasViewController = NotasViewController();
-    print(noteData.note);
 
     Color color =
     colorList.elementAt(Random().nextInt(colorList.length));

@@ -1,13 +1,10 @@
 import 'package:calendario2/app/components/custom_dialog.dart';
 import 'package:calendario2/app/controllers/ads_controller.dart';
-import 'package:calendario2/app/modules/CrearTurno/views/widgets/input_field.dart';
 import 'package:calendario2/app/modules/crearCuadrante/widgets/beautifulAlertDialog.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/config/theme/my_fonts.dart';
 import 'package:calendario2/config/theme/styles.dart';
-import 'package:calendario2/config/util/hexColor.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
@@ -109,7 +106,6 @@ class CrearCuadranteView extends GetView<CrearCuadranteController> {
             SizedBox(
               height: 25.h,
             ),
-
             Expanded(
               flex: 80,
               child: MaterialButton(
@@ -128,25 +124,23 @@ class CrearCuadranteView extends GetView<CrearCuadranteController> {
                       ),
                       Row(
                         children: [
-                          Spacer(),
+                          const Spacer(),
                           Text("Mis Cuadrantes",
                               style: CustomTextStyle.textCuadranteMenu),
-                  Spacer(),
-                  Spacer(),
-                  IconButton(
+                          const Spacer(),
+                          const Spacer(),
+                          IconButton(
                             onPressed: () {
                               CustomDialog.myConfirmDialogBody(
-                                circularColor: Colors.redAccent,
+                                  circularColor: Colors.redAccent,
                                   context: context,
                                   title: 'Eliminar TODOS',
-                                  desc:
-                                      'Si aceptas y pulsas ok eliminaras,'
-                                          '\ntodos los cuadrantes creados.'
-                                          '\nY LOS TURNOS AÑADIDOS MANUALMENTE',
+                                  desc: 'Si aceptas y pulsas ok eliminaras,'
+                                      '\ntodos los cuadrantes creados.'
+                                      '\nY LOS TURNOS AÑADIDOS MANUALMENTE',
                                   onTapOK: () {
-                                     controller.deleteAllCuadrante();
+                                    controller.deleteAllCuadrante();
                                     Navigator.of(context).pop();
-
                                   },
                                   onTapCancel: () =>
                                       Navigator.of(context).pop());
@@ -157,9 +151,8 @@ class CrearCuadranteView extends GetView<CrearCuadranteController> {
                               color: Colors.red,
                             ),
                           ),
-        Spacer(),
-
-        ],
+                          const Spacer(),
+                        ],
                       ),
                       SizedBox(
                         height: 15.h,

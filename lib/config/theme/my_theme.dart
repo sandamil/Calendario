@@ -80,7 +80,10 @@ class MyTheme {
 
 
       // timePicker theme
-        timePickerTheme: MyStyles.getTimePickerTheme(isLightTheme: isLight),
+      timePickerTheme: MyStyles.getTimePickerTheme(isLightTheme: isLight),
+
+ // timePicker theme
+      inputDecorationTheme: MyStyles.getInputDecorationTheme(isLightTheme: isLight),
 
 
 

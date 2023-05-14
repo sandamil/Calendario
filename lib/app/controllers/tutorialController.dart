@@ -1,4 +1,3 @@
-import 'package:calendario2/app/controllers/app_controller.dart';
 import 'package:calendario2/app/data/local/my_shared_pref.dart';
 import 'package:calendario2/app/modules/crearCuadrante/controllers/crear_cuadrante_controller.dart';
 import 'package:calendario2/app/modules/home/controllers/home_controller.dart';
