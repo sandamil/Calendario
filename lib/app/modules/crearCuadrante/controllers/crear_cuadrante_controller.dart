@@ -3,6 +3,7 @@ import 'package:calendario2/app/data/local/calendarDatabase.dart';
 import 'package:calendario2/app/data/local/my_shared_pref.dart';
 import 'package:calendario2/app/data/model/cuadranteDay.dart';
 import 'package:calendario2/app/data/model/turnoType.dart';
+import 'package:calendario2/app/modules/crearCuadrante/views/add_cuadrante_view.dart';
 import 'package:calendario2/config/util/hexColor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -36,7 +37,7 @@ class CrearCuadranteController extends GetxController {
 
   @override
   void onInit() async {
-     cuadrantesNameList = MySharedPref.getStringList() ?? [];
+    cuadrantesNameList = MySharedPref.getStringList() ?? [];
 
     // inicialDate = Rxn(DateTime.now());
     // endDate = Rxn(DateTime.now().add(const Duration(days: 365)));
@@ -64,9 +65,9 @@ class CrearCuadranteController extends GetxController {
 
   Future cuadranteLoad() async {
     await Rotation(
-        DateTime.parse(inicialDate.value.toString().substring(0, 10)),
-        DateTime.parse(endDate.value.toString().substring(0, 10)),
-        );
+      DateTime.parse(inicialDate.value.toString().substring(0, 10)),
+      DateTime.parse(endDate.value.toString().substring(0, 10)),
+    );
     cuadranteLoading.value = false;
   }
 
@@ -96,8 +97,6 @@ class CrearCuadranteController extends GetxController {
       }
       return;
     }
-
-
 
     DateTime date;
     var x = 0;
@@ -130,17 +129,23 @@ class CrearCuadranteController extends GetxController {
     return turnoType;
   }
 
+  editarCuadrante(String name) {
+    Get.to(const AddCuadranteView());
+    cuadranteName.text = name;
+    cuadranteNameString.value = name;
+  }
+
+
   deleteCuadrante(cuadranteName) async {
     await DBHelper.db.deleteCuadrante(cuadranteName);
-     cuadrantesNameList.remove(cuadranteName);
-     MySharedPref.setCuadrantesList(cuadrantesNameList);
-
+    cuadrantesNameList.remove(cuadranteName);
+    MySharedPref.setCuadrantesList(cuadrantesNameList);
   }
-deleteAllCuadrante() async {
-    await DBHelper.db.deleteALlCuadrante();
-     cuadrantesNameList.clear();
-     MySharedPref.deleteCuadrantesList();
 
+  deleteAllCuadrante() async {
+    await DBHelper.db.deleteALlCuadrante();
+    cuadrantesNameList.clear();
+    MySharedPref.deleteCuadrantesList();
   }
 
   void addYear() async {

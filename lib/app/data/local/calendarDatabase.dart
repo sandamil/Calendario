@@ -7,7 +7,6 @@ import 'dart:async';
 import '../model/cuadranteDay.dart';
 import '../model/turnoType.dart';
 
-
 class DBHelper {
   DBHelper._();
   static final DBHelper db = DBHelper._();
@@ -33,18 +32,16 @@ class DBHelper {
 
   void _onCreate(Database db, int version) async {
     await db.execute(
-        'CREATE TABLE $_cuadrantes('
-            'id INTEGER PRIMARY KEY AUTOINCREMENT, '
-            'cuadranteName STRING, '
-            'title STRING, '
-            'datetime TEXT, '
-            'startHour TEXT, '
-            'endHour TEXT, '
-            'description TEXT, '
-            'color TEXT)',
+      'CREATE TABLE $_cuadrantes('
+      'id INTEGER PRIMARY KEY AUTOINCREMENT, '
+      'cuadranteName STRING, '
+      'title STRING, '
+      'datetime TEXT, '
+      'startHour TEXT, '
+      'endHour TEXT, '
+      'description TEXT, '
+      'color TEXT)',
     );
-
-
 
     await db.execute('''CREATE TABLE $_turnos
       (
@@ -74,20 +71,12 @@ class DBHelper {
     db.execute(
         "INSERT into $_turnos(id, title, description, color, startHour, endHour) "
         ' VALUES(4, "L", "Libre", "ffffff", "00:00", "23:59")  ');
-
   }
-
-
-
 
   Future<CuadranteDay?> fetchItem(int id) async {
     final dbClient = await database;
     List result =
-    await dbClient!.query(
-        _cuadrantes,
-        where: "id = ?",
-        whereArgs: [id]
-    );
+        await dbClient!.query(_cuadrantes, where: "id = ?", whereArgs: [id]);
     if (result.isEmpty) {
       return null;
     } else {
@@ -102,15 +91,11 @@ class DBHelper {
     DateTime dayStart = day.subtract(const Duration(days: 60));
     DateTime dayEnd = day.add(const Duration(days: 300));
 
-    List<Map<String, dynamic>> result = await dbClient!.rawQuery(
-        "SELECT * FROM $_cuadrantes");
+    List<Map<String, dynamic>> result =
+        await dbClient!.rawQuery("SELECT * FROM $_cuadrantes");
 
     return result.map((m) => CuadranteDay.fromMap(m)).toList();
   }
-
-
-
-
 
   Future<int> addItem(CuadranteDay item) async {
     final dbClient = await database;
@@ -119,17 +104,18 @@ class DBHelper {
     return res;
   }
 
-Future<int> updateItem(CuadranteDay item) async {
+  Future<int> updateItem(CuadranteDay item) async {
     final dbClient = await database;
-    await dbClient!.delete("Cuadrante", where: "datetime = ? and cuadranteName=?"   , whereArgs: [item.dateTime?.toIso8601String().substring(0,10), item.cuadranteName ]);
+    await dbClient!.delete("Cuadrante",
+        where: "datetime = ? and cuadranteName=?",
+        whereArgs: [
+          item.dateTime?.toIso8601String().substring(0, 10),
+          item.cuadranteName
+        ]);
     int res = await dbClient!.insert("Cuadrante", item.toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace);
     return res;
   }
-
-
-
-
 
   // Future<int> replaceItemModel(Cuadrante itemModel) async {
   //   Database? dbClient = await database;
@@ -151,30 +137,26 @@ Future<int> updateItem(CuadranteDay item) async {
   //   }
   // }
 
-
   Future<void> deleteItemDateTime(String dateTime) async {
     Database? dbClient = await database;
     await dbClient!
         .delete(_cuadrantes, where: "datetime = ?", whereArgs: [dateTime]);
   }
+
   Future<void> deleteCuadrante(String cuadranteName) async {
     Database? dbClient = await database;
-    await dbClient!
-        .delete(_cuadrantes, where: "cuadranteName = ?", whereArgs: [cuadranteName]);
+    await dbClient!.delete(_cuadrantes,
+        where: "cuadranteName = ?", whereArgs: [cuadranteName]);
   }
-Future<void> deleteALlCuadrante() async {
+
+  Future<void> deleteALlCuadrante() async {
     Database? dbClient = await database;
-    await dbClient!
-        .delete(_cuadrantes);
+    await dbClient!.delete(_cuadrantes);
   }
 
   Future<void> deleteItemID(int id) async {
     Database? dbClient = await database;
-    await dbClient!
-        .delete(
-        _cuadrantes,
-        where: "id = ?",
-        whereArgs: [id]);
+    await dbClient!.delete(_cuadrantes, where: "id = ?", whereArgs: [id]);
   }
 
   Future<List<TurnoType>> getTypeModels() async {
@@ -192,8 +174,7 @@ Future<void> deleteALlCuadrante() async {
 
   Future<void> deleteTypeId(int id) async {
     final dbClient = await database;
-    await dbClient!
-        .delete(_turnos, where: "id = ?", whereArgs: [id]);
+    await dbClient!.delete(_turnos, where: "id = ?", whereArgs: [id]);
   }
 
   Future closeDb() async {
@@ -206,5 +187,3 @@ Future<void> deleteALlCuadrante() async {
     return await dbClient!.delete(_cuadrantes);
   }
 }
-
-

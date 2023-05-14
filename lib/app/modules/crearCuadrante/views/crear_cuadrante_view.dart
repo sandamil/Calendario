@@ -168,17 +168,29 @@ class CrearCuadranteView extends GetView<CrearCuadranteController> {
                             return Padding(
                               padding: EdgeInsets.symmetric(horizontal: 8.h),
                               child: Card(
-                                child: ListTile(
-                                    title: Text(
-                                      name,
-                                      style: CustomTextStyle.rowButomText,
-                                    ),
-                                    trailing: IconButton(
+                                child: Row(
+                                  children: [
+                                    SizedBox(width: 10.w),
+                                  Text(
+                                  name,
+                                  style: CustomTextStyle.rowButomText,
+                                ),
+                                    Spacer(),
+                                    IconButton(
                                       onPressed: () =>
-                                          controller.deleteCuadrante(name),
+                                          controller.editarCuadrante(name),
                                       icon: const Icon(
-                                          Icons.delete_forever_outlined),
-                                    )),
+                                          Icons.edit_calendar),
+                                    ),
+                                  IconButton(
+                                    onPressed: () =>
+                                        controller.deleteCuadrante(name),
+                                    icon: const Icon(
+                                        Icons.delete_forever_outlined),
+                                  )
+
+                                  ],
+                                ),
                               ),
                             );
                           },
