@@ -101,7 +101,8 @@ class AjustesView extends GetView<AjustesController> {
                   // controller.navigateToAlarmScreen(context);
                   // alarmasController.navigateToAlarmScreen(
                   //     controller.alarmaCreadaNota, context);
-                  CustomDialog.showPopUpInfo(
+                  MyCustomDialog.showPopUpInfo(
+                    context: context,
                   description: 'En próximas actualizaciones estará disponible',
                   title: 'Pronto Disponible',
                 );
@@ -136,7 +137,8 @@ class AjustesView extends GetView<AjustesController> {
                             Colors.green, // foreground (text) color
                       ),
                       onPressed: () {
-                        CustomDialog.showPopUpInfo(
+                        MyCustomDialog.showPopUpInfo(
+                          context: context,
                           description:
                               'En próximas actualizaciones estará disponible',
                           title: 'Pronto Disponible',

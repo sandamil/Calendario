@@ -264,7 +264,7 @@ class AddTurnoView extends GetView<CrearTurnoController> {
                                 Get.back(closeOverlays: true);
                               }
                             : () {
-                                CustomDialog.alertaError(
+                                MyCustomDialog.alertaError(
                                   duracion: 3,
                                   'Necesitas añadir un Título valido.'
                                   '\nAbreviatura puede ir vacio si no quieres mostrarla en el calendario',

@@ -25,7 +25,7 @@ class HomeController extends GetxController {
 
   //? to close the app
   void appCloseConfirm(context) {
-    CustomDialog.myConfirmDialogBody(
+    MyCustomDialog.myConfirmDialogBody(
       context: context,
       title: '¿ Salir de la aplicacion ?',
       desc: 'Quieres cerrar la aplicación?'

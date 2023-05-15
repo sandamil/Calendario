@@ -47,7 +47,7 @@ class AddCuadranteView extends GetView<CrearCuadranteController> {
                 onPressed: controller.submit()
                     ? () async {
                   if (controller.cuadranteNameString.isEmpty) {
-                    CustomDialog.alertaError('Es necesario añadir nombre al cuadrante');
+                    MyCustomDialog.alertaError('Es necesario añadir nombre al cuadrante');
                     return;
                   }
                         //Todo carcgar primera pagina de calendario

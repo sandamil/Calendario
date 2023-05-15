@@ -37,7 +37,6 @@ class CustomAlertDilogDaySelected extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   SizedBox(
-
                     height: 30,
                     width: Get.width - 20.w,
                     child: Stack(
@@ -51,7 +50,6 @@ class CustomAlertDilogDaySelected extends StatelessWidget {
                     ),
                   ),
                   Container(
-
                     height: 220,
                     width: Get.width - 20.w,
                     padding: EdgeInsets.symmetric(horizontal: 10.w),

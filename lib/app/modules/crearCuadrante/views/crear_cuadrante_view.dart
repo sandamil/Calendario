@@ -5,6 +5,7 @@ import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/config/theme/my_fonts.dart';
 import 'package:calendario2/config/theme/styles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
@@ -131,7 +132,7 @@ class CrearCuadranteView extends GetView<CrearCuadranteController> {
                           const Spacer(),
                           IconButton(
                             onPressed: () {
-                              CustomDialog.myConfirmDialogBody(
+                              MyCustomDialog.myConfirmDialogBody(
                                   circularColor: Colors.redAccent,
                                   context: context,
                                   title: 'Eliminar TODOS',
@@ -246,7 +247,11 @@ class CrearCuadranteView extends GetView<CrearCuadranteController> {
   }
 
   alertDialog(BuildContext context) {
-    showDialog(
+    showAnimatedDialog(
+      animationType: DialogTransitionType.slideFromRightFade,
+      curve: Curves.fastOutSlowIn,
+      duration: const Duration(milliseconds: 900),
+      barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
         return const BeautifulAlertDialog();
@@ -282,8 +287,12 @@ class CrearCuadranteView extends GetView<CrearCuadranteController> {
         okButton,
       ],
     );
-    showDialog(
+    showAnimatedDialog(
       context: context,
+      animationType: DialogTransitionType.fadeScale,
+      curve: Curves.fastOutSlowIn,
+      duration: const Duration(milliseconds: 900),
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return alert;
       },

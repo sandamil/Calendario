@@ -367,7 +367,7 @@ class MyStyles {
         labelStyle: TextStyle(color: Colors.orange),
         // focusedErrorBorder: UnderlineInputBorder(
         //     borderSide: BorderSide(width: 0.7, color: errorColor)),
-          focusedBorder: OutlineInputBorder(
+        focusedBorder: OutlineInputBorder(
             borderSide: BorderSide(
                 style: BorderStyle.solid,
                 color: Colors.orange

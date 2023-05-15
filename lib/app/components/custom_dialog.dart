@@ -13,7 +13,7 @@ import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 
 import '../../widgets/big_text.dart';
 
-class CustomDialog {
+class MyCustomDialog {
 
   static void myConfirmDialogBody({
     required BuildContext context,
@@ -29,6 +29,7 @@ class CustomDialog {
     showAnimatedDialog(
       context: context,
       barrierDismissible: true,
+
       builder: (BuildContext context) {
         return AlertDialog(
             insetPadding: EdgeInsets.all(0.sp),
@@ -147,6 +148,7 @@ class CustomDialog {
               ],
             ));
       },
+
       animationType: DialogTransitionType.scale,
       curve: Curves.fastOutSlowIn,
       duration: const Duration(milliseconds: 900),
@@ -238,52 +240,62 @@ class CustomDialog {
 
 
   static showPopUpInfo({
+    required BuildContext context,
     String? title,
     String? description,
     String? labelButton,
     Function()? onPress,
   }) {
-    Get.dialog(
-      Dialog(
-        backgroundColor: Colors.transparent,
-        insetPadding: EdgeInsets.symmetric(horizontal: 24.w),
-        child: Container(
-          padding: EdgeInsets.fromLTRB(20.w.w, 20.w, 20.w, 4.w),
-          decoration:
-          BoxDecoration(borderRadius: Corners.smBorder, color: MyColors.cellColor),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                title ?? '',
-                style: CustomTextStyle.title.copyWith(fontSize: 16.w),
-                textAlign: TextAlign.center,
+    showAnimatedDialog(
+        context: context,
+        animationType: DialogTransitionType.fadeScale,
+        curve: Curves.fastOutSlowIn,
+        duration: const Duration(milliseconds: 900),
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return Dialog(
+            backgroundColor: Colors.transparent,
+            insetPadding: EdgeInsets.symmetric(horizontal: 24.w),
+            child: Container(
+              padding: EdgeInsets.fromLTRB(20.w.w, 20.w, 20.w, 4.w),
+              decoration:
+              BoxDecoration(
+                  borderRadius: Corners.smBorder, color: MyColors.cellColor),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    title ?? '',
+                    style: CustomTextStyle.title.copyWith(fontSize: 16.w),
+                    textAlign: TextAlign.center,
+                  ),
+                  verticalSpace(Insets.med),
+                  Text(
+                    description ?? '',
+                    style: CustomTextStyle.text,
+                    textAlign: TextAlign.center,
+                  ),
+                  verticalSpace(Insets.xl),
+                  ButtonPrimary(
+                    onTap: onPress ?? Get.back,
+                    label: labelButton ?? 'OK',
+                  ),
+                  SizedBox(height: 20.h),
+                ],
               ),
-              verticalSpace(Insets.med),
-              Text(
-                description ?? '',
-                style: CustomTextStyle.text,
-                textAlign: TextAlign.center,
-              ),
-              verticalSpace(Insets.xl),
-              ButtonPrimary(
-                onTap: onPress ?? Get.back,
-                label: labelButton ?? 'OK',
-              ),
-              SizedBox(height: 20.h),
-            ],
-          ),
-        ),
-      ),
-      barrierDismissible: false,
+            ),
+          );
+        }
     );
   }
 
 
 
   static mostrarTask(Task nota, context) {
-    showDialog(
+    showAnimatedDialog(
         context: context,
+        barrierDismissible: true,
+
         builder: (BuildContext context) {
           return AlertDialog(
             shape: RoundedRectangleBorder(borderRadius: Corners.smBorder),
@@ -336,8 +348,15 @@ class CustomDialog {
               ],
             ),
           );
-        });
-    Future.delayed(const Duration(seconds: 10), () {
+        },
+
+      animationType: DialogTransitionType.scale,
+      curve: Curves.easeIn,
+      duration: const Duration(milliseconds: 600),
+
+
+    );
+    Future.delayed(const Duration(seconds: 2), () {
       Get.back();
     });
   }
