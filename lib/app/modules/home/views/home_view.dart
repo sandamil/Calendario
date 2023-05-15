@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:calendario2/app/data/model/taskModel.dart';
 import 'package:calendario2/app/modules/notas/views/widgets/taskCard.dart';
 import 'package:calendario2/app/modules/home/controllers/calendar_controller.dart';
 import 'package:calendario2/app/modules/home/widgets/calendar/table_calendar.dart';
@@ -138,7 +139,7 @@ class HomeView extends GetView<HomeController> {
                       key: controller.firstTime.value
                           ? controller.tutorialController.keyButton9
                           : key,
-                      child: _buildListEvent(),
+                      child: _buildListEvent(context, calendarController.selectedNotas),
                     );
                   }),
                 ],
@@ -148,10 +149,10 @@ class HomeView extends GetView<HomeController> {
     );
   }
 
-  Widget _buildListEvent() {
-    final calendarVM = Get.find<CalendarController>();
-    final selectedDay = calendarVM.selectedDay;
-    List events = calendarVM.getEventsOfDay(selectedDay.value);
+  Widget _buildListEvent(BuildContext context, List<Task> events) {
+    // final calendarVM = Get.find<CalendarController>();
+    // final selectedDay = calendarVM.selectedDayRx;
+    // List events = calendarVM.getEventsOfDay(selectedDay.value);
 
     return SingleChildScrollView(
       child: Column(

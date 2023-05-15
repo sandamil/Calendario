@@ -26,20 +26,21 @@ class CalendarController extends GetxController {
   ///============================
 //============================= Todo Rendimiento de app con obs =============================
 //
-
-  // Rx<DateTime> get selectedDay => _selectedDay;
-  Rx<DateTime> selectedDay = DateTime.now().obs;
-  // DateTime _selectedDay = DateTime.now();
-//   get selectedDay => _selectedDay;
+  final focusDayRx = DateTime.now().toLocal().obs;
+  final selectedDayRx = DateTime.now().toLocal().obs;
+//   // Rx<DateTime> get selectedDay => _selectedDay;
+//   Rx<DateTime> selectedDay = DateTime.now().obs;
+//   // DateTime _selectedDay = DateTime.now();
+// //   get selectedDay => _selectedDay;
+// //
 //
+//   final Rx<DateTime> _focusedDay = DateTime.now().obs;
+//   Rx<DateTime> get focusedDay => _focusedDay;
+//   setFocusedDay(DateTime day) => _focusedDay;
+// //   DateTime _focusedDay = DateTime.now();
+// //   var focusedDay = DateTime.now();
 
-  final Rx<DateTime> _focusedDay = DateTime.now().obs;
-  Rx<DateTime> get focusedDay => _focusedDay;
-  setFocusedDay(DateTime day) => _focusedDay;
-//   DateTime _focusedDay = DateTime.now();
-//   var focusedDay = DateTime.now();
-
-  RxList<CuadranteDay> selectedEvents = <CuadranteDay>[].obs;
+  final selectedEvents = <CuadranteDay>[].obs;
   RxList<Task> selectedNotas = <Task>[].obs;
   // get selectedEvents => _selectedEvents;
 
@@ -71,29 +72,32 @@ class CalendarController extends GetxController {
   }
 
   onDaySelected(DateTime selectedDate, DateTime focusedDate) async {
-    if (!isSameDay(selectedDate, selectedDay.value)) {
-      selectedDay.value = selectedDate;
-      _focusedDay.value = focusedDate;
+    if (!isSameDay(selectedDate, selectedDayRx.value)) {
+      selectedDayRx.value = selectedDate;
+      focusDayRx.value = focusedDate;
+      selectedEvents.value = getEventForDay(selectedDate);
+      selectedNotas.value = getEventsOfDay(selectedDate);
+      update();
     }
-    else {
-      selectedDay.value = selectedDate;
-      _focusedDay.value = focusedDate;
-      // Get.dialog(CustomAlertDilogDaySelected(
-      //     x: currentX, y: currentY, selectedDate: selectedDate, turno: turno));
-    }
-    selectedEvents.value = getEventForDay(selectedDay.value);
-    selectedNotas.value = getEventsOfDay(selectedDay.value);
-    // Get.dialog(CustomAlertDilogDaySelected(
-    //     x: currentX, y: currentY, selectedDate: selectedDate, turno: turno));
+    // else {
+    //   selectedDay.value = selectedDate;
+    //   _focusedDay.value = focusedDate;
+    //   // Get.dialog(CustomAlertDilogDaySelected(
+    //   //     x: currentX, y: currentY, selectedDate: selectedDate, turno: turno));
+    // }
+    // selectedEvents.value = getEventForDay(selectedDay.value);
+    // selectedNotas.value = getEventsOfDay(selectedDay.value);
+    // // Get.dialog(CustomAlertDilogDaySelected(
+    // //     x: currentX, y: currentY, selectedDate: selectedDate, turno: turno));
   }
 
   onDaySelectedLongPress(DateTime selectedDate, DateTime focusedDate) async {
-    if (!isSameDay(selectedDate, selectedDay.value)) {
-      selectedDay.value = selectedDate;
-      _focusedDay.value = focusedDate;
+    if (!isSameDay(selectedDate, selectedDayRx.value)) {
+      selectedDayRx.value = selectedDate;
+      focusDayRx.value = focusedDate;
     }
-    selectedEvents.value = getEventForDay(selectedDay.value);
-    selectedNotas.value = getEventsOfDay(selectedDay.value);
+    selectedEvents.value = getEventForDay(selectedDate);
+    selectedNotas.value = getEventsOfDay(selectedDate);
 
     Get.dialog(CustomAlertDilogDaySelected(
         x: currentX, y: currentY, selectedDate: selectedDate, turno: turno));
@@ -101,7 +105,14 @@ class CalendarController extends GetxController {
 
 //TODO Comprobar rendimiento focusedday obs
   onPageChanged(focusedDay) {
-    _focusedDay.value = focusedDay;
+    focusDayRx.value = focusedDay;
+
+    // change the selected day to the first day of current month.
+    selectedDayRx.value = DateTime(focusedDay.year, focusedDay.month, 1);
+
+    // change the selected events to the first day of current month.
+    selectedNotas.value = getEventsOfDay(selectedDayRx.value);
+
     update();
   }
 
@@ -163,7 +174,7 @@ class CalendarController extends GetxController {
   /// ==
 
   RxList<Task> listEvent = <Task>[].obs;
-  RxList<Task> listEvent2 = <Task>[].obs;
+  // RxList<Task> listEvent2 = <Task>[].obs;
 
   getListEvent() async {
     listEvent.value = await DbProvider.instance.getNotesFromDB();

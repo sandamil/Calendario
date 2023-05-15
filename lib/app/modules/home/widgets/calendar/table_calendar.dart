@@ -43,13 +43,13 @@ class CalendarWidget extends StatelessWidget {
                       // },
                       firstDay: DateTime(2000),
                       lastDay: DateTime(2050),
-                      focusedDay: calendarController.focusedDay.value,
+                      focusedDay: calendarController.focusDayRx.value,
                       // calendarFormat: controller.calendarFormat,
                       eventLoader: calendarController.getEventForDay,
                       startingDayOfWeek: StartingDayOfWeek.monday,
                       selectedDayPredicate: (day) {
                         return isSameDay(
-                            calendarController.selectedDay.value, day);
+                            calendarController.selectedDayRx.value, day);
                       },
                       onDaySelected: calendarController.onDaySelected,
                       onDayLongPressed:
