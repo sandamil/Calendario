@@ -135,7 +135,6 @@ class CrearCuadranteController extends GetxController {
     cuadranteNameString.value = name;
   }
 
-
   deleteCuadrante(cuadranteName) async {
     await DBHelper.db.deleteCuadrante(cuadranteName);
     cuadrantesNameList.remove(cuadranteName);

@@ -49,7 +49,7 @@ class NotasListController extends GetxController {
   setNotesFromDB() async {
     notesList.value = await DbProvider.instance.getNotesFromDB();
     update();
-    return notesList;
+    return notesList.value;
   }
 
 
@@ -101,11 +101,11 @@ class NotasListController extends GetxController {
 
   List<Widget> buildNoteComponentsList() {
     List<Widget> noteComponentsList = [];
-    notesList.sort((a, b) {
+    notesList.value.sort((a, b) {
       return b.startTimeMilliseconds!.compareTo(a.startTimeMilliseconds as num);
     });
     if (searchController.value.text.isNotEmpty) {
-      for (var note in notesList) {
+      for (var note in notesList.value) {
         if (note.title!
                 .toLowerCase()
                 .contains(searchController.value.text.toLowerCase()) ||
@@ -121,7 +121,7 @@ class NotasListController extends GetxController {
       return noteComponentsList;
     }
     if (isFlagOn.value) {
-      for (var note in notesList) {
+      for (var note in notesList.value) {
         if (note.isImportant!) {
           noteComponentsList.add(TaskCard(
             noteData: note,
@@ -130,7 +130,7 @@ class NotasListController extends GetxController {
         }
       }
     } else {
-      for (var note in notesList) {
+      for (var note in notesList.value) {
         noteComponentsList.add(TaskCard(
           noteData: note,
           onTapAction: openNoteToRead,

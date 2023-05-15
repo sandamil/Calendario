@@ -97,10 +97,15 @@ class AjustesView extends GetView<AjustesController> {
               SettingTile(
                 icon: const ImageIcon(AssetImage(MyIcon.notificationIcon)),
                 btnText: "Ajustes alarma".tr,
-                onPressed: () => CustomDialog.showPopUpInfo(
+                onPressed: () {
+                  // controller.navigateToAlarmScreen(context);
+                  // alarmasController.navigateToAlarmScreen(
+                  //     controller.alarmaCreadaNota, context);
+                  CustomDialog.showPopUpInfo(
                   description: 'En próximas actualizaciones estará disponible',
                   title: 'Pronto Disponible',
-                ),
+                );
+                },
                 //   trailing: KSwitch(),
               ),
               // SettingTile(

@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:alarm/model/alarm_settings.dart';
 import 'package:calendario2/app/data/local/my_shared_pref.dart';
 import 'package:calendario2/app/data/model/language.dart';
 import 'package:calendario2/app/modules/ajustes/views/widgets/language_screen.dart';
@@ -11,6 +12,8 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:rive/rive.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../views/widgets/alarm_settings.dart';
 
 class AjustesController extends GetxController {
   RxBool isDark = true.obs;
@@ -163,4 +166,35 @@ class AjustesController extends GetxController {
     }
   }
 
+
+
+  void editarAlarmas() {
+    Get.to(AlarmSettingsScreen());
+  }
+
+  AlarmSettings? settings;
+
+  Future<void> navigateToAlarmScreen(context) async {
+    final res = await showModalBottomSheet<bool?>(
+        context: context,
+        isScrollControlled: true,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+        builder: (context) {
+          return FractionallySizedBox(
+            heightFactor: 0.6,
+            child: AlarmSettingsScreen(alarmSettings: settings,),
+          );
+        });
+
+    if (res != null && res == true) loadAlarms();
+  }
+
+  loadAlarms() async {
+    // alarms.value = Alarm.getAlarms();
+    // alarms.sort((a, b) => a.dateTime.isBefore(b.dateTime) ? 0 : 1);
+    // searchIdAlarma();
+    update();
+  }
 }

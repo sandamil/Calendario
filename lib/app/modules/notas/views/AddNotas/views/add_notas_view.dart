@@ -422,8 +422,8 @@ class AddNotasView extends GetView<AddNotasController> {
                           ).format(context),
                           onPressed: () {
                             null;
-                            // alarmasController.navigateToAlarmScreen(
-                            //     controller.alarmaCreadaNota, context);
+                            alarmasController.navigateToAlarmScreen(
+                                controller.alarmaCreadaNota, context);
                           },
                           // onDismissed: () {
                           //   Alarm.stop(alarmasController
