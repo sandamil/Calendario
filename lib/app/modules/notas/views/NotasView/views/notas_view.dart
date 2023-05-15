@@ -63,7 +63,7 @@ class NotasView extends GetView<NotasViewController> {
                   color: PRIMARY_COLOR,
                   size: 26.sp,
                 ),
-                onPressed: controller.handleShare,
+                onPressed: controller.shareApp,
               ),
               IconButton(
                 icon: Icon(

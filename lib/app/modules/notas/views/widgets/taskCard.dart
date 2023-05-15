@@ -1,11 +1,13 @@
 import 'dart:math';
 
 import 'package:calendario2/app/data/model/taskModel.dart';
+import 'package:calendario2/config/util/dateUtils.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 
 import 'package:flutter/material.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../../../notas/views/NotasView/controllers/notas_view_controller.dart';
 
@@ -51,19 +53,6 @@ class TaskCard extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(12),
         child: Slidable(
-          startActionPane: ActionPane(
-            motion: const DrawerMotion(),
-            extentRatio: 0.3,
-            children: [
-              SlidableAction(
-                label: 'Compartir',
-                borderRadius: BorderRadius.all(Radius.circular(5.r)),
-                backgroundColor: Colors.blue,
-                icon: Icons.send,
-                onPressed: (context) {},
-              ),
-            ],
-          ),
           endActionPane: ActionPane(
               motion: const DrawerMotion(),
               extentRatio: 0.5,
@@ -73,7 +62,14 @@ class TaskCard extends StatelessWidget {
                   icon: Icons.share,
                   backgroundColor: Colors.blue,
                   borderRadius: BorderRadius.all(Radius.circular(5.r)),
-                  onPressed: (context) {},
+                  onPressed: (context) {
+                    Share.share(''
+                        'Titulo: ${noteData.title}'
+                        '\nNota: ${noteData.notes}'
+                        '\nInicio: ${DateTime.fromMillisecondsSinceEpoch(noteData.startTimeMilliseconds!).formatDateTime24H} h.  ${DateTime.fromMillisecondsSinceEpoch(noteData.startTimeMilliseconds!).formatDateYMMMd}'
+                        '\nFin: ${DateTime.fromMillisecondsSinceEpoch(noteData.endTimeMilliseconds!).formatDateTime24H} h.  ${DateTime.fromMillisecondsSinceEpoch(noteData.endTimeMilliseconds!).formatDateYMMMd}'
+                    );
+                  },
                 ),
                 SlidableAction(
                   label: 'Delete',

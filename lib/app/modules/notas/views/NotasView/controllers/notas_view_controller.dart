@@ -2,8 +2,10 @@ import 'package:calendario2/app/components/toast.dart';
 import 'package:calendario2/app/data/local/taskDatabase.dart';
 import 'package:calendario2/app/data/model/taskModel.dart';
 import 'package:calendario2/app/modules/notas/controllers/notas_controller.dart';
+import 'package:calendario2/config/util/dateUtils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../../../../../controllers/ads_controller.dart';
 
@@ -77,6 +79,20 @@ class NotasViewController extends GetxController {
     //         builder: (context) => EditTaskPage(widget.currentNote, _warnList)));
   }
 
+
+  Future<void> shareApp() async {
+    print('Titulo: ${currentNote.value.title}'
+        '\nNota: ${currentNote.value.notes}'
+        '\nInicio: ${DateTime.fromMillisecondsSinceEpoch(currentNote.value.startTimeMilliseconds!).formatDateTime24H} h.  ${DateTime.fromMillisecondsSinceEpoch(currentNote.value.startTimeMilliseconds!).formatDateYMMMd}'
+        '\nFin: ${DateTime.fromMillisecondsSinceEpoch(currentNote.value.endTimeMilliseconds!).formatDateTime24H} h.  ${DateTime.fromMillisecondsSinceEpoch(currentNote.value.endTimeMilliseconds!).formatDateYMMMd}'
+    );
+    Share.share(''
+        'Titulo: ${currentNote.value.title}'
+        '\nNota: ${currentNote.value.notes}'
+        '\nInicio: ${DateTime.fromMillisecondsSinceEpoch(currentNote.value.startTimeMilliseconds!).formatDateTime24H} h.  ${DateTime.fromMillisecondsSinceEpoch(currentNote.value.startTimeMilliseconds!).formatDateYMMMd}'
+        '\nFin: ${DateTime.fromMillisecondsSinceEpoch(currentNote.value.endTimeMilliseconds!).formatDateTime24H} h.  ${DateTime.fromMillisecondsSinceEpoch(currentNote.value.endTimeMilliseconds!).formatDateYMMMd}'
+    );
+  }
   ///todo share
   void handleShare() {
     //   Share.share(
