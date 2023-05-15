@@ -16,35 +16,40 @@ import '../widgets/calendar/widget/customAlertDialogDaySelected.dart';
 class CalendarController extends GetxController {
   final adcontroller = Get.find<AdsController>();
 
-
   final Rx<CalendarFormat> _calendarFormat = CalendarFormat.month.obs;
-
-
 
   var currentX = 0.0;
   var currentY = 0.0;
 
-
   Rx<CalendarFormat> get calendarFormat => _calendarFormat;
 
-  var selectedDay = DateTime.now().obs;
-  final Rx<DateTime> _focusedDay = DateTime.now().obs;
+
+  ///============================
+//============================= Todo Rendimiento de app con obs =============================
+//
 
   // Rx<DateTime> get selectedDay => _selectedDay;
-  Rx<DateTime> get focusedDay => _focusedDay;
+  // Rx<DateTime> selectedDay = DateTime.now().obs;
+  DateTime selectedDay = DateTime.now();
+//   get selectedDay => _selectedDay;
+//
 
+  final Rx<DateTime> _focusedDay = DateTime.now().obs;
+  Rx<DateTime> get focusedDay => _focusedDay;
   setFocusedDay(DateTime day) => _focusedDay;
+//   DateTime _focusedDay = DateTime.now();
+//   var focusedDay = DateTime.now();
+
+
+
+
+
 
   RxList<CuadranteDay> selectedEvents = <CuadranteDay>[].obs;
   RxList<Task> selectedNotas = <Task>[].obs;
   // get selectedEvents => _selectedEvents;
 
-  ///============================
-//============================= Todo Rendimiento de app con obs =============================
-  // DateTime _selectedDay = DateTime.now();
-  // DateTime _focusedDay = DateTime.now();
-  // get selectedDay => _selectedDay;
-  // var focusedDay = DateTime.now();
+
 
   RxMap<DateTime, List<CuadranteDay>> cuadranteMap =
       <DateTime, List<CuadranteDay>>{}.obs;
@@ -74,8 +79,8 @@ class CalendarController extends GetxController {
   }
 
   onDaySelected(DateTime selectedDate, DateTime focusedDate) {
-    if (!isSameDay(selectedDate, selectedDay.value)) {
-      selectedDay.value = selectedDate;
+    if (!isSameDay(selectedDate, selectedDay)) {
+      selectedDay = selectedDate;
       _focusedDay.value = focusedDate;
     } else {
       Get.dialog(CustomAlertDilogDaySelected(
@@ -84,21 +89,21 @@ class CalendarController extends GetxController {
           selectedDate: selectedDate,
           turno: turno));
     }
-    selectedEvents.value = getEventForDay(selectedDay.value);
-    selectedNotas.value = getEventsOfDay(selectedDay.value);
+    selectedEvents.value = getEventForDay(selectedDay);
+    selectedNotas.value = getEventsOfDay(selectedDay);
     // Get.dialog(CustomAlertDilogDaySelected(
     //     selectedDate: selectedDate, turno: turno.value));
   }
 
   onDaySelectedLongPress(DateTime selectedDate, DateTime focusedDate) async {
-    if (!isSameDay(selectedDate, selectedDay.value)) {
+    if (!isSameDay(selectedDate, selectedDay)) {
       {
-        selectedDay.value = selectedDate;
+        selectedDay = selectedDate;
         _focusedDay.value = focusedDate;
       }
     }
-    selectedEvents.value = getEventForDay(selectedDay.value);
-    selectedNotas.value = getEventsOfDay(selectedDay.value);
+    selectedEvents.value = getEventForDay(selectedDay);
+    selectedNotas.value = getEventsOfDay(selectedDay);
 
 
     Get.dialog(CustomAlertDilogDaySelected(

@@ -49,7 +49,7 @@ class CalendarWidget extends StatelessWidget {
                       startingDayOfWeek: StartingDayOfWeek.monday,
                       selectedDayPredicate: (day) {
                         return isSameDay(
-                            calendarController.selectedDay.value, day);
+                            calendarController.selectedDay, day);
                       },
                       onDaySelected: calendarController.onDaySelected,
                       onDayLongPressed:
