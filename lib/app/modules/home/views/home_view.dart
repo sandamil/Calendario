@@ -151,7 +151,7 @@ class HomeView extends GetView<HomeController> {
   Widget _buildListEvent() {
     final calendarVM = Get.find<CalendarController>();
     final selectedDay = calendarVM.selectedDay;
-    List events = calendarVM.getEventsOfDay(selectedDay);
+    List events = calendarVM.getEventsOfDay(selectedDay.value);
 
     return SingleChildScrollView(
       child: Column(

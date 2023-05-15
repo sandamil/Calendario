@@ -55,7 +55,13 @@ class MyColors {
   static Color get textDisable => MyTheme().getThemeIsLight
       ? const Color(0xffa2a2a2)
       : const Color(0xff676767);
+
+  static Color get menuCardBackground => MyTheme().getThemeIsLight
+      ? const Color(0xFFfdfcfc)
+      : const Color(0xff444444);
 }
+
+
 
 const Color PRIMARY_COLOR = Color.fromRGBO(255, 152, 0, 1.0);
 const Color PRIMARY_COLOR_ICON_GREY = Color.fromRGBO(242, 242, 242, 1.0);

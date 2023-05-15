@@ -23,14 +23,13 @@ class CalendarController extends GetxController {
 
   Rx<CalendarFormat> get calendarFormat => _calendarFormat;
 
-
   ///============================
 //============================= Todo Rendimiento de app con obs =============================
 //
 
   // Rx<DateTime> get selectedDay => _selectedDay;
-  // Rx<DateTime> selectedDay = DateTime.now().obs;
-  DateTime selectedDay = DateTime.now();
+  Rx<DateTime> selectedDay = DateTime.now().obs;
+  // DateTime _selectedDay = DateTime.now();
 //   get selectedDay => _selectedDay;
 //
 
@@ -40,16 +39,9 @@ class CalendarController extends GetxController {
 //   DateTime _focusedDay = DateTime.now();
 //   var focusedDay = DateTime.now();
 
-
-
-
-
-
   RxList<CuadranteDay> selectedEvents = <CuadranteDay>[].obs;
   RxList<Task> selectedNotas = <Task>[].obs;
   // get selectedEvents => _selectedEvents;
-
-
 
   RxMap<DateTime, List<CuadranteDay>> cuadranteMap =
       <DateTime, List<CuadranteDay>>{}.obs;
@@ -78,39 +70,33 @@ class CalendarController extends GetxController {
     currentY = details.globalPosition.dy;
   }
 
-  onDaySelected(DateTime selectedDate, DateTime focusedDate) {
-    if (!isSameDay(selectedDate, selectedDay)) {
-      selectedDay = selectedDate;
+  onDaySelected(DateTime selectedDate, DateTime focusedDate) async {
+    if (!isSameDay(selectedDate, selectedDay.value)) {
+      selectedDay.value = selectedDate;
       _focusedDay.value = focusedDate;
-    } else {
-      Get.dialog(CustomAlertDilogDaySelected(
-          x: currentX,
-          y: currentY,
-          selectedDate: selectedDate,
-          turno: turno));
     }
-    selectedEvents.value = getEventForDay(selectedDay);
-    selectedNotas.value = getEventsOfDay(selectedDay);
+    else {
+      selectedDay.value = selectedDate;
+      _focusedDay.value = focusedDate;
+      // Get.dialog(CustomAlertDilogDaySelected(
+      //     x: currentX, y: currentY, selectedDate: selectedDate, turno: turno));
+    }
+    selectedEvents.value = getEventForDay(selectedDay.value);
+    selectedNotas.value = getEventsOfDay(selectedDay.value);
     // Get.dialog(CustomAlertDilogDaySelected(
-    //     selectedDate: selectedDate, turno: turno.value));
+    //     x: currentX, y: currentY, selectedDate: selectedDate, turno: turno));
   }
 
   onDaySelectedLongPress(DateTime selectedDate, DateTime focusedDate) async {
-    if (!isSameDay(selectedDate, selectedDay)) {
-      {
-        selectedDay = selectedDate;
-        _focusedDay.value = focusedDate;
-      }
+    if (!isSameDay(selectedDate, selectedDay.value)) {
+      selectedDay.value = selectedDate;
+      _focusedDay.value = focusedDate;
     }
-    selectedEvents.value = getEventForDay(selectedDay);
-    selectedNotas.value = getEventsOfDay(selectedDay);
-
+    selectedEvents.value = getEventForDay(selectedDay.value);
+    selectedNotas.value = getEventsOfDay(selectedDay.value);
 
     Get.dialog(CustomAlertDilogDaySelected(
-        x: currentX,
-        y: currentY,
-        selectedDate: selectedDate,
-        turno: turno));
+        x: currentX, y: currentY, selectedDate: selectedDate, turno: turno));
   }
 
 //TODO Comprobar rendimiento focusedday obs
