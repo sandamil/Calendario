@@ -53,6 +53,8 @@ dependencies:
   rename: ^2.1.1
 
   permission_handler:
+  flutter_markdown: ^0.6.14
+
   package_info_plus: ^4.0.0
   tutorial_coach_mark: ^1.2.8
   modal_bottom_sheet:

@@ -1,4 +1,8 @@
+import 'dart:io';
+
 import 'package:calendario2/app/components/custom_dialog.dart';
+import 'package:calendario2/app/modules/ajustes/views/pages/about_page.dart';
+import 'package:calendario2/app/routes/app_pages.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/config/theme/my_fonts.dart';
 import 'package:calendario2/config/util/assets.dart';
@@ -14,6 +18,7 @@ import '../controllers/ajustes_controller.dart';
 import '../../../../widgets/setting_title.dart';
 
 class AjustesView extends GetView<AjustesController> {
+
   const AjustesView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -190,6 +195,24 @@ class AjustesView extends GetView<AjustesController> {
                 },
               ),
               SizedBox(height: 20.h),
+              Divider(
+                indent: 15.w,
+                endIndent: 15.w,
+              ),
+              SettingTitleTile("Sobre Nosotros".tr),
+              SettingTile(
+                icon: const ImageIcon(AssetImage(MyIcon.notificationIcon)),
+                btnText: "Información App".tr,
+                onPressed: () {
+                  RouteUtils.toAboutPage();
+                },
+                //   trailing: KSwitch(),
+              ),
+              // SettingTile(
+              //   icon: const ImageIcon(AssetImage(MyIcon.solIcon)),
+              //   btnText: "Ajustes alarma".tr,
+              //   //   trailing: KSwitch(),
+              // ),
               Divider(
                 indent: 15.w,
                 endIndent: 15.w,

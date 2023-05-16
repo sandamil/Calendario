@@ -18,6 +18,8 @@ import 'config/theme/my_theme.dart';
 import 'config/translations/localization_service.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
+import 'debug/log/log.dart';
+
 
 late Mixpanel mixPanel;
 
@@ -27,6 +29,7 @@ Future<void> main() async {
   await Alarm.init(showDebugLogs: true);
   await initMemory();
   initMixpanel();
+  Log.init();
 
   MobileAds.instance.initialize();
 

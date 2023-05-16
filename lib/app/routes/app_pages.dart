@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:calendario2/app/modules/ajustes/views/pages/dev_page.dart';
+import 'package:calendario2/app/modules/ajustes/views/pages/log_console.dart';
 import 'package:calendario2/app/modules/ayuda/views/pages/videotutoriales/bindings/videotutoriales_binding.dart';
 import 'package:calendario2/app/modules/ayuda/views/pages/videotutoriales/views/videotutoriales_view.dart';
 import 'package:get/get.dart';
@@ -6,6 +10,8 @@ import '../modules/CrearTurno/bindings/crear_turno_binding.dart';
 import '../modules/CrearTurno/views/turno_view.dart';
 import '../modules/ajustes/bindings/ajustes_binding.dart';
 import '../modules/ajustes/views/ajustes_view.dart';
+import '../modules/ajustes/views/pages/about_page.dart';
+import '../modules/ajustes/views/pages/privacy_policy_page.dart';
 import '../modules/ayuda/bindings/ayuda_binding.dart';
 import '../modules/ayuda/views/ayuda_view.dart';
 import '../modules/boarding/bindings/boarding_binding.dart';
@@ -141,4 +147,39 @@ class AppPages {
       binding: VideotutorialesBinding(),
     ),
   ];
+}
+
+
+class RouteUtils {
+  static Transition transition = (Platform.isAndroid)
+      ? Transition.downToUp
+      : Transition.cupertino;
+
+  static Future? toAboutPage() {
+    return Get.to(
+          () =>  AboutPage(),
+      transition: transition,
+    );
+  }
+
+  static Future? toPrivacyPolicyPage() {
+    return Get.to(
+          () => const PrivacyPolicyPage(),
+      transition: transition,
+    );
+  }
+
+  static Future? toDevPage() {
+    return Get.to(
+          () => const DevPage(),
+      transition: transition,
+    );
+  }
+
+  static Future? toLogConsolePage() {
+    return Get.to(
+          () => LogConsole(dark: true),
+      transition: transition,
+    );
+  }
 }
