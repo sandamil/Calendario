@@ -106,19 +106,20 @@ class CustomAlertDilogDaySelected extends StatelessWidget {
           Navigator.pop(context);
           calendarController.showPopUp(Get.context!, selectedDate, turno);
         },
-        child: const Text("+ Turno"),
+        child: const Text("Añade Turno"),
       ),
     );
   }
 
   Widget eventoBtn(context, selectedDate) {
+    int date = selectedDate.millisecondsSinceEpoch;
     return Padding(
       padding: EdgeInsets.all(2.h),
       child: ElevatedButton(
         onPressed: () {
-          Get.toNamed('/add-notas', arguments: selectedDate);
+          Get.toNamed('/add-notas', arguments: date);
         },
-        child: const Text("+ Evento"),
+        child: const Text("Añade Nota"),
       ),
     );
   }

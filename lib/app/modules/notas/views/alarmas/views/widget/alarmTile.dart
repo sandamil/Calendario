@@ -41,7 +41,7 @@ class ExampleAlarmTile extends StatelessWidget {
               ),
             ),
             const Spacer(),
-            const Icon(Icons.keyboard_arrow_right_rounded, size: 35),
+            // const Icon(Icons.keyboard_arrow_right_rounded, size: 35),
           ],
         ),
       ),

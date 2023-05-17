@@ -100,7 +100,7 @@ class CalendarController extends GetxController {
     selectedNotas.value = getEventsOfDay(selectedDate);
 
     Get.dialog(CustomAlertDilogDaySelected(
-        x: currentX, y: currentY, selectedDate: selectedDate, turno: turno));
+        x: currentX, y: currentY, selectedDate: selectedDayRx.value, turno: turno));
   }
 
 //TODO Comprobar rendimiento focusedday obs

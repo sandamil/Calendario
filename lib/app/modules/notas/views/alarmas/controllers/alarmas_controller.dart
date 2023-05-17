@@ -11,6 +11,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class AlarmasController extends GetxController {
+  final addNotasController = Get.put(AddNotasController());
+
+
   RxList<AlarmSettings> alarms = <AlarmSettings>[].obs;
 
   late int id;
@@ -20,7 +23,7 @@ class AlarmasController extends GetxController {
 
   AlarmSettings? alarmaCreada;
 
-  Rx<Task> currentNote = Task().obs;
+  // Rx<Task> currentNote = Task().obs;
 
   RxBool isEditing = false.obs;
 
@@ -29,23 +32,28 @@ class AlarmasController extends GetxController {
   void onInit() {
     if (Get.arguments != null) {
       if (Get.arguments['isEditing'] == true) {
-        currentNote.value = Get.arguments['currentNote'];
+        // currentNote.value = Get.arguments['currentNote'];
         isEditing.value = true;
-        startTime = DateTime.fromMillisecondsSinceEpoch(
-            currentNote.value.startTimeMilliseconds!);
-        title = currentNote.value.title;
-        notes = currentNote.value.notes;
-        id = currentNote.value.id!;
+        // startTime = DateTime.fromMillisecondsSinceEpoch(
+        //     currentNote.value.startTimeMilliseconds!);
+        // title = currentNote.value.title;
+        // notes = currentNote.value.notes;
+        // id = currentNote.value.id!;
+        startTime = Get.arguments['startTime'];
+        title = Get.arguments['title'];
+        notes = Get.arguments['notes'];
+        id = Get.arguments['id'];
+
       } else {
         startTime = Get.arguments['startTime'];
         title = Get.arguments['title'];
         notes = Get.arguments['notes'];
         id = Get.arguments['id'];
       }
-      startTime = Get.arguments['startTime'];
-      title = Get.arguments['title'];
-      notes = Get.arguments['notes'];
-      id = Get.arguments['id'];
+      // startTime = Get.arguments['startTime'];
+      // title = Get.arguments['title'];
+      // notes = Get.arguments['notes'];
+      // id = Get.arguments['id'];
     }
 
     super.onInit();
@@ -200,8 +208,6 @@ class AlarmasController extends GetxController {
   }
 
   goToAddNotas() async {
-    final addNotasController = Get.find<AddNotasController>();
-
     noRemind.value
         ? await setAlarmTime()
         : CustomSnackBar.showCustomSnackBar(

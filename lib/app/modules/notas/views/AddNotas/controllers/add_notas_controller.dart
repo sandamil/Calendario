@@ -51,8 +51,8 @@ class AddNotasController extends GetxController {
     idGenerated = int.parse(randomIdGenerator());
     var dateTimeCalendar = Get.arguments;
     if (dateTimeCalendar != null) {
-      startTime.value = dateTimeCalendar;
-      endTime.value = dateTimeCalendar;
+      startTime.value =  DateTime.fromMillisecondsSinceEpoch(dateTimeCalendar);
+      endTime.value =  DateTime.fromMillisecondsSinceEpoch(dateTimeCalendar);
     }
     super.onInit();
 
@@ -134,7 +134,9 @@ class AddNotasController extends GetxController {
 
 
   saveNota() async {
-      await DbProvider.instance.insertNotas(
+    print( startTime.value.millisecondsSinceEpoch);
+
+    await DbProvider.instance.insertNotas(
         Task(
           id: idGenerated,
           title: title.text,

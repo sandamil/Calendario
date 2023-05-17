@@ -103,43 +103,78 @@ class AddNotasView extends GetView<AddNotasController> {
                                     backgroundColor: MyColors.cellColor),
                                 showTitleActions: true,
                                 onChanged: (DateTime date) {
+
+
                               if (controller
                                       .endTime.value.millisecondsSinceEpoch <
                                   date.millisecondsSinceEpoch) {
                                 controller.endTime.value = date;
+
                               }
                               controller.startTime.value = date;
                             }, onConfirm: (DateTime date) {
                               controller.setStartTime(date);
-                            },
+
+                                },
                                 currentTime: controller.startTime.value,
+
                                 locale: LocaleType.es);
+
+
                           },
-                          child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                Text('Hora de inicio',
-                                    style: CustomTextStyle.rowButomText),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                          child: Column(
+                            children: [
+                              Container(
+                                key: controller.firstTime.value
+                                    ? controller.tutorialController.keyButton13
+                                    : key,
+                                child: _buildGeneralFormField(
+                                    controller.title, 'Titulo del evento', 1),
+                              ),
+                              SizedBox(
+                                height: 4.h,
+                              ),
+                              Column(
+                                key: controller.firstTime.value
+                                    ? controller.tutorialController.keyButton17
+                                    : key,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  _buildGeneralFormField(controller.site, 'Ubicación', 2),
+                                  SizedBox(
+                                    height: 4.h,
+                                  ),
+                                  _buildGeneralFormField(
+                                      controller.notes, 'Observaciones', 8),
+                                ],
+                              ),
+                              Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: <Widget>[
-                                    Text(
-                                      '${controller.startTime.value.formatDateYMD} ${controller.startTime.value.formatDateTime24H}',
-                                      style: TextStyle(
-                                          color: MyColors.textButtomBlack,
-                                          fontSize: 16.sp),
-                                    ),
-                                    Icon(
-                                      Icons.arrow_forward_ios,
-                                      size: 16.sp,
-                                      color: PRIMARY_COLOR,
+                                    Text('Hora de inicio',
+                                        style: CustomTextStyle.rowButomText),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      children: <Widget>[
+                                        Text(
+                                          '${controller.startTime.value.formatDateYMD} ${controller.startTime.value.formatDateTime24H}',
+                                          style: TextStyle(
+                                              color: MyColors.textButtomBlack,
+                                              fontSize: 16.sp),
+                                        ),
+                                        Icon(
+                                          Icons.arrow_forward_ios,
+                                          size: 16.sp,
+                                          color: PRIMARY_COLOR,
+                                        )
+                                      ],
                                     )
-                                  ],
-                                )
-                              ])),
+                                  ]),
+                            ],
+                          )),
                       TextButton(
                           onPressed: () {
                             DatePicker.showDateTimePicker(Get.context!,
@@ -412,8 +447,8 @@ class AddNotasView extends GetView<AddNotasController> {
                           ).format(context),
                           onPressed: () {
                             null;
-                            alarmasController.navigateToAlarmScreen(
-                                controller.alarmaCreadaNota, context);
+                            // alarmasController.navigateToAlarmScreen(
+                            //     controller.alarmaCreadaNota, context);
                           },
                           // onDismissed: () {
                           //   Alarm.stop(alarmasController
@@ -453,33 +488,8 @@ class AddNotasView extends GetView<AddNotasController> {
                               ],
                             )
                           ])),
-                  SizedBox(
-                    height: 4.h,
-                  ),
-                  Container(
-                    key: controller.firstTime.value
-                        ? controller.tutorialController.keyButton13
-                        : key,
-                    child: _buildGeneralFormField(
-                        controller.title, 'Titulo del evento', 1),
-                  ),
-                  SizedBox(
-                    height: 4.h,
-                  ),
-                  Column(
-                    key: controller.firstTime.value
-                        ? controller.tutorialController.keyButton17
-                        : key,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      _buildGeneralFormField(controller.site, 'Ubicación', 2),
-                      SizedBox(
-                        height: 4.h,
-                      ),
-                      _buildGeneralFormField(
-                          controller.notes, 'Observaciones', 8),
-                    ],
-                  ),
+
+
 
                   Container(
                     padding: EdgeInsets.only(left: 8.w, top: 16.h),

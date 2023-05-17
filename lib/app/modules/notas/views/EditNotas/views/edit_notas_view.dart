@@ -1,3 +1,4 @@
+import 'package:alarm/alarm.dart';
 import 'package:calendario2/app/modules/home/widgets/calendar/widget/line.dart';
 import 'package:calendario2/app/modules/notas/views/alarmas/views/widget/alarmTile.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
@@ -8,12 +9,14 @@ import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import '../../../../../controllers/ads_controller.dart';
+import '../../alarmas/controllers/alarmas_controller.dart';
 import '../controllers/edit_notas_controller.dart';
 
 class EditNotasView extends GetView<EditNotasController> {
    EditNotasView({Key? key}) : super(key: key);
 
   final adcontroller = Get.find<AdsController>();
+   AlarmasController alarmasController = AlarmasController();
 
 
   @override
@@ -78,6 +81,16 @@ class EditNotasView extends GetView<EditNotasController> {
                 SizedBox(
                   height: 4.h,
                 ),
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 6.w),
+                  child: _buildGeneralFormField(
+                      controller.site.value, 'Ubicación', 2),
+                ),
+                SizedBox(
+                  height: 4.h,
+                ),
+                _buildGeneralFormField(
+                    controller.notes.value, 'Observaciones', 8),
                 TextButton(
                     onPressed: () {
                       DatePicker.showDateTimePicker(Get.context!,
@@ -222,19 +235,66 @@ class EditNotasView extends GetView<EditNotasController> {
                                             child: Padding(
                                               padding: EdgeInsets.all(4.h),
                                               child: Text(
-                                                'Tienes una alarma creada, para modificarla o borrarla accede a las opciones pulsando en ella.',
+                                                'Si continuas se borrara la esta alarma preestablecida para las: ${TimeOfDay(
+                                                  hour: controller
+                                                      .alarmaCreadaNota!
+                                                      .dateTime
+                                                      .hour,
+                                                  minute: controller
+                                                      .alarmaCreadaNota!
+                                                      .dateTime
+                                                      .minute,
+                                                ).format(context)}',
                                                 style: Theme.of(context)
                                                     .textTheme
                                                     .headlineMedium,
                                               ),
                                             ),
                                           ),
-                                          ElevatedButton(
-                                            onPressed: () {
-                                              Get.back();
-                                              // Get.toNamed('/add-notas', arguments: selectedDate);
-                                            },
-                                            child: const Text("Aceptar"),
+                                          Row(
+                                            children: [
+                                              Expanded(
+                                                child: ElevatedButton(
+                                                  onPressed: () {
+                                                    Get.back();
+                                                    // Get.toNamed('/add-notas', arguments: selectedDate);
+                                                  },
+                                                  child:
+                                                  const Text("Cancelar"),
+                                                ),
+                                              ),
+                                              SizedBox(
+                                                width: 8.w,
+                                              ),
+                                              Expanded(
+                                                  child: ElevatedButton(
+                                                    onPressed: () {
+                                                      Alarm.stop(controller
+                                                          .alarmaCreadaNota!
+                                                          .id)
+                                                          .then((_) =>
+                                                          alarmasController
+                                                              .loadAlarms());
+                                                      controller
+                                                          .alarmaCreadaNota =
+                                                      null;
+                                                      Get.toNamed('/alarmas',
+                                                          arguments: {
+                                                            'isEditing': true,
+                                                            'id': controller.id,
+                                                            'startTime':
+                                                            controller
+                                                                .startTime
+                                                                .value,
+                                                            'notes': controller
+                                                                .notes.value.text,
+                                                            'title': controller
+                                                                .title.value.text
+                                                          });
+                                                    },
+                                                    child: const Text("Borrar"),
+                                                  )),
+                                            ],
                                           ),
                                         ],
                                       ),
@@ -319,19 +379,7 @@ class EditNotasView extends GetView<EditNotasController> {
                             ],
                           )
                         ])),
-                SizedBox(
-                  height: 4.h,
-                ),
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 6.w),
-                  child: _buildGeneralFormField(
-                      controller.site.value, 'Ubicación', 2),
-                ),
-                SizedBox(
-                  height: 4.h,
-                ),
-                _buildGeneralFormField(
-                    controller.notes.value, 'Observaciones', 8),
+
               ],
             )),
           ),
