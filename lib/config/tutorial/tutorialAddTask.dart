@@ -21,8 +21,8 @@ const _info8 = "Recuerda:";
 const _info9 =
     "Esta opción, no es una alarma en sí, te llegará una notificación al movil "
     "y al abrirla sonará si tienes activado el sonido"
-    "\n\n para que esta opción funcione, déjala en segundo plano cuando salgas de ella, "
-    "no cierres la aplicación desde el gestor de aplicaciones de tu movil";
+    "\n para que esta opción funcione, "
+    "no cierres la aplicación desde el gestor de aplicaciones de tu movil, déjala en segundo plano";
 const _info10 = "Marcar como importante";
 const _info11 =
     "Marca como importante la nota deseada, esta opción además de marcar como importante una nota, sirve para filtrar en el listado de notas solo las importantes";
@@ -167,7 +167,7 @@ class ListTargetAddTask {
       keyTarget: keyButton15,
       contents: [
         TargetContent(
-            align: ContentAlign.top,
+            align: ContentAlign.bottom,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -194,7 +194,7 @@ class ListTargetAddTask {
               ],
             )),
         TargetContent(
-            align: ContentAlign.bottom,
+            align: ContentAlign.top,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -228,7 +228,7 @@ class ListTargetAddTask {
       keyTarget: keyButton16,
       contents: [
         TargetContent(
-            align: ContentAlign.bottom,
+            align: ContentAlign.top,
             child: Container(
               padding: const EdgeInsets.only(top: 10.0),
               height: 290.h,

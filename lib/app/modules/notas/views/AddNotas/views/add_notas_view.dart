@@ -75,10 +75,34 @@ class AddNotasView extends GetView<AddNotasController> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 mainAxisSize: MainAxisSize.max,
                 children: <Widget>[
+                  Container(
+                    key: controller.firstTime.value
+                        ? controller.tutorialController.keyButton13
+                        : key,
+                    child: _buildGeneralFormField(
+                        controller.title, 'Titulo del evento', 1),
+                  ),
+                  SizedBox(
+                    height: 4.h,
+                  ),
+                  Column(
+                    key: controller.firstTime.value
+                        ? controller.tutorialController.keyButton17
+                        : key,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      _buildGeneralFormField(
+                          controller.site, 'Ubicación', 2),
+                      SizedBox(
+                        height: 4.h,
+                      ),
+                      _buildGeneralFormField(
+                          controller.notes, 'Observaciones', 8),
+                    ],
+                  ),
                   SizedBox(
                     height: 10.h,
                   ),
-
                   Column(
                     key: controller.firstTime.value
                         ? controller.tutorialController.keyButton14
@@ -103,53 +127,27 @@ class AddNotasView extends GetView<AddNotasController> {
                                     backgroundColor: MyColors.cellColor),
                                 showTitleActions: true,
                                 onChanged: (DateTime date) {
-
-
                               if (controller
                                       .endTime.value.millisecondsSinceEpoch <
                                   date.millisecondsSinceEpoch) {
                                 controller.endTime.value = date;
-
                               }
                               controller.startTime.value = date;
                             }, onConfirm: (DateTime date) {
                               controller.setStartTime(date);
-
-                                },
+                            },
                                 currentTime: controller.startTime.value,
-
                                 locale: LocaleType.es);
-
-
                           },
                           child: Column(
                             children: [
-                              Container(
-                                key: controller.firstTime.value
-                                    ? controller.tutorialController.keyButton13
-                                    : key,
-                                child: _buildGeneralFormField(
-                                    controller.title, 'Titulo del evento', 1),
-                              ),
+
                               SizedBox(
-                                height: 4.h,
-                              ),
-                              Column(
-                                key: controller.firstTime.value
-                                    ? controller.tutorialController.keyButton17
-                                    : key,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  _buildGeneralFormField(controller.site, 'Ubicación', 2),
-                                  SizedBox(
-                                    height: 4.h,
-                                  ),
-                                  _buildGeneralFormField(
-                                      controller.notes, 'Observaciones', 8),
-                                ],
+                                height: 6.h,
                               ),
                               Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: <Widget>[
                                     Text('Hora de inicio',
@@ -157,7 +155,8 @@ class AddNotasView extends GetView<AddNotasController> {
                                     Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment: CrossAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
                                       children: <Widget>[
                                         Text(
                                           '${controller.startTime.value.formatDateYMD} ${controller.startTime.value.formatDateTime24H}',
@@ -205,9 +204,11 @@ class AddNotasView extends GetView<AddNotasController> {
                                 locale: LocaleType.es);
                           },
                           child: Row(
+
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
+
                                 Text('Hora final',
                                     style: CustomTextStyle.rowButomText),
                                 Row(
@@ -231,7 +232,6 @@ class AddNotasView extends GetView<AddNotasController> {
                               ])),
                     ],
                   ),
-
                   SizedBox(
                     height: 2.h,
                   ),
@@ -382,61 +382,6 @@ class AddNotasView extends GetView<AddNotasController> {
                               ],
                             )
                           ])),
-
-                  // Container(
-                  //   height: 200.h,
-                  //   child: alarmasController.alarms.value.isNotEmpty
-                  //       ? ListView.builder(
-                  //         physics: const NeverScrollableScrollPhysics(),
-                  //         shrinkWrap: true,
-                  //         itemCount: alarmasController.alarms.value.length,
-                  //         itemBuilder: (context, index) {
-                  //           return Column(
-                  //             mainAxisSize: MainAxisSize.max,
-                  //             children: [
-                  //               alarmasController.alarms[index].id ==
-                  //                       controller.idGenerated
-                  //                   ? ExampleAlarmTile(
-                  //                       key: Key(alarmasController
-                  //                           .alarms.value[index].id
-                  //                           .toString()),
-                  //                       title: TimeOfDay(
-                  //                         hour: alarmasController.alarms
-                  //                             .value[index].dateTime.hour,
-                  //                         minute: alarmasController.alarms
-                  //                             .value[index].dateTime.minute,
-                  //                       ).format(context),
-                  //                       onPressed: () => alarmasController
-                  //                           .navigateToAlarmScreen(
-                  //                               alarmasController
-                  //                                   .alarms.value[index]),
-                  //                       onDismissed: () {
-                  //                         Alarm.stop(alarmasController
-                  //                                 .alarms.value[index].id)
-                  //                             .then((_) => alarmasController
-                  //                                 .loadAlarms());
-                  //                       },
-                  //                     )
-                  //                   : Container()
-                  //             ],
-                  //           );
-                  //         },
-                  //         // Center(
-                  //         //     child: Text(
-                  //         //       "No alarms set",
-                  //         //       style: Theme
-                  //         //           .of(context)
-                  //         //           .textTheme
-                  //         //           .titleMedium,
-                  //         //     ));
-                  //         // },
-                  //       )
-                  //       : Center(
-                  //           child: Text(
-                  //           "No alarms set",
-                  //           style: Theme.of(context).textTheme.titleMedium,
-                  //         )),
-                  // ),
                   controller.alarmaCreadaNota != null
                       ? ExampleAlarmTile(
                           key: Key(controller.alarmaCreadaNota!.id.toString()),
@@ -450,12 +395,6 @@ class AddNotasView extends GetView<AddNotasController> {
                             // alarmasController.navigateToAlarmScreen(
                             //     controller.alarmaCreadaNota, context);
                           },
-                          // onDismissed: () {
-                          //   Alarm.stop(alarmasController
-                          //       .alarmaCreada!.id)
-                          //       .then((_) => alarmasController
-                          //       .loadAlarms());
-                          // },
                         )
                       : Container(),
                   LineWidget(),
@@ -488,9 +427,6 @@ class AddNotasView extends GetView<AddNotasController> {
                               ],
                             )
                           ])),
-
-
-
                   Container(
                     padding: EdgeInsets.only(left: 8.w, top: 16.h),
                     child: Row(

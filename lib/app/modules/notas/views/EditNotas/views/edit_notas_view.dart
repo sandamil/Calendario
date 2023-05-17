@@ -91,6 +91,9 @@ class EditNotasView extends GetView<EditNotasController> {
                 ),
                 _buildGeneralFormField(
                     controller.notes.value, 'Observaciones', 8),
+                SizedBox(
+                  height: 6.h,
+                ),
                 TextButton(
                     onPressed: () {
                       DatePicker.showDateTimePicker(Get.context!,
