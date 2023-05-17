@@ -57,7 +57,7 @@ class MyColors {
       : const Color(0xff676767);
 
   static Color get menuCardBackground => MyTheme().getThemeIsLight
-      ? const Color(0xFFfdfcfc)
+      ? const Color(0xfff5f3f1)
       : const Color(0xff444444);
 }
 

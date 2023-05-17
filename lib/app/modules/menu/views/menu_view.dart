@@ -60,7 +60,7 @@ class MenuView extends GetView<MenuAppController> {
                     borderRadius: Corners.xmBorder),
                 height: qaButtonHeight,
                 minWidth: qaButtonWidth,
-                color: MyColors.cellTodayColor,
+                color: MyColors.menuCardBackground,
                 child: Stack(
                   children: <Widget>[
                     Container(
@@ -107,7 +107,7 @@ class MenuView extends GetView<MenuAppController> {
                     borderRadius: Corners.xmBorder),
                 height: qaButtonHeight,
                 minWidth: qaButtonWidth,
-                color: MyColors.cellTodayColor,
+                color: MyColors.menuCardBackground,
                 child: Stack(
                   children: <Widget>[
                     Container(
@@ -192,7 +192,7 @@ class MenuView extends GetView<MenuAppController> {
                     borderRadius: Corners.xmBorder),
                 height: qaButtonHeight,
                 minWidth: qaButtonWidth,
-                color: MyColors.cellSelectedColor,
+                color: MyColors.menuCardBackground,
                 child: Stack(
                   children: <Widget>[
                     Container(
@@ -234,7 +234,7 @@ class MenuView extends GetView<MenuAppController> {
                     borderRadius: Corners.xmBorder),
                 height: qaButtonHeight,
                 minWidth: qaButtonWidth,
-                color: MyColors.cellSelectedColor,
+                color: MyColors.menuCardBackground,
                 child: Stack(
                   children: <Widget>[
                     Container(

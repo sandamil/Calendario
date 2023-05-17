@@ -51,7 +51,7 @@ class ListTargetAddTask {
         keyTarget: keyButton13,
         contents: [
           TargetContent(
-            align: ContentAlign.bottom,
+            align: ContentAlign.top,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -65,26 +65,35 @@ class ListTargetAddTask {
                     _info,
                     style: TextStyle(
                       color: Colors.white.withOpacity(0.90),
-                      fontSize: 26.sp,
+                      fontSize: 25.sp,
                       fontWeight: FontWeight.bold,
                     ),
                     textAlign: TextAlign.center,
                   ),
+                ),
+              ],
+            ),
+          ),
+          TargetContent(
+            align: ContentAlign.bottom,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                SizedBox(
+                  height: 2.h,
                 ),
                 Padding(
                   padding: EdgeInsets.all(2.w),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: <Widget>[
-                      SizedBox(
-                        height: 2.h,
-                      ),
                       CustomTextWidget(
                         data: _info2,
                         // style: GoogleFonts.lato(),
                         color: Colors.white,
                         textAlign: TextAlign.center,
-                        fontSize: 20.sp,
+                        fontSize: 19.sp,
                       ),
                     ],
                   ),
@@ -92,6 +101,7 @@ class ListTargetAddTask {
               ],
             ),
           ),
+
         ],
         shape: ShapeLightFocus.RRect,
       ),
@@ -172,13 +182,13 @@ class ListTargetAddTask {
                   textAlign: TextAlign.center,
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(top: 10.0),
+                  padding: EdgeInsets.only(top: 5.h),
                   child: CustomTextWidget(
                     data: _info7,
                     // style: GoogleFonts.lato(),
                     color: Colors.white,
                     textAlign: TextAlign.center,
-                    fontSize: 20.sp,
+                    fontSize: 18.sp,
                   ),
                 ),
               ],
@@ -292,7 +302,7 @@ class ListTargetAddTask {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.only(top: 10.0),
+                padding: EdgeInsets.only(top: 1.h),
                 child: CustomTextWidget(
                   data: _info14,
                   // style: GoogleFonts.lato(),

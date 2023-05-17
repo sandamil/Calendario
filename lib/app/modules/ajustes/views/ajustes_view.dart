@@ -204,15 +204,16 @@ class AjustesView extends GetView<AjustesController> {
                 icon: const ImageIcon(AssetImage(MyIcon.notificationIcon)),
                 btnText: "Información App".tr,
                 onPressed: () {
-                  RouteUtils.toAboutPage();
+                  MyCustomDialog.showPopUpInfo(
+                    context: context,
+                    description:
+                    'En próximas actualizaciones estará disponible',
+                    title: 'Pronto Disponible',
+                  );
+                  // RouteUtils.toAboutPage();
                 },
-                //   trailing: KSwitch(),
               ),
-              // SettingTile(
-              //   icon: const ImageIcon(AssetImage(MyIcon.solIcon)),
-              //   btnText: "Ajustes alarma".tr,
-              //   //   trailing: KSwitch(),
-              // ),
+
               Divider(
                 indent: 15.w,
                 endIndent: 15.w,

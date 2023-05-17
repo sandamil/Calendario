@@ -79,16 +79,7 @@ class AddNotasView extends GetView<AddNotasController> {
                   SizedBox(
                     height: 10.h,
                   ),
-                  Container(
-                    key: controller.firstTime.value
-                        ? controller.tutorialController.keyButton13
-                        : key,
-                    child: _buildGeneralFormField(
-                        controller.title, 'Titulo del evento', 1),
-                  ),
-                  SizedBox(
-                    height: 4.h,
-                  ),
+
                   Column(
                     key: controller.firstTime.value
                         ? controller.tutorialController.keyButton14
@@ -463,6 +454,16 @@ class AddNotasView extends GetView<AddNotasController> {
                               ],
                             )
                           ])),
+                  SizedBox(
+                    height: 4.h,
+                  ),
+                  Container(
+                    key: controller.firstTime.value
+                        ? controller.tutorialController.keyButton13
+                        : key,
+                    child: _buildGeneralFormField(
+                        controller.title, 'Titulo del evento', 1),
+                  ),
                   SizedBox(
                     height: 4.h,
                   ),

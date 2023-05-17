@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:calendario2/config/theme/my_colors.dart';
+import 'package:calendario2/config/theme/my_fonts.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:calendario2/app/data/model/cuadranteDay.dart';
@@ -157,10 +158,7 @@ class CalendarWidget extends StatelessWidget {
                   children: [
                     Text(
                       day.day.toString(),
-                      style: TextStyle(
-                        fontSize: 12.sp,
-                        // fontFamily: 'FiraCode',
-                        // color: MyColors.cellTextColor,
+                      style: CustomTextStyle.numberCalendar.copyWith(
                       ),
                     ),
                   ],
@@ -192,11 +190,8 @@ class CalendarWidget extends StatelessWidget {
                   children: [
                     Text(
                       day.day.toString(),
-                      style: TextStyle(
-                        fontSize: 12.sp,
-                        // fontFamily: 'FiraCode',
-                        // color: MyColors.cellTextColor,
-                      ),
+                      style: CustomTextStyle.numberCalendar,
+
                     ),
                   ],
                 ),
@@ -224,12 +219,8 @@ class CalendarWidget extends StatelessWidget {
                 alignment: Alignment.topCenter,
                 child: Text(
                   day.day.toString(),
-                  style: TextStyle(
-                    fontSize: 15.sp,
-                    fontWeight: FontWeight.bold,
-                    // fontFamily: 'FiraCode',
-                    // color: MyColors.cellTextColor,
-                  ),
+                  style: CustomTextStyle.numberCalendar.copyWith(fontSize: 15.sp),
+
                 ),
               ),
             ),
@@ -271,8 +262,9 @@ class CalendarWidget extends StatelessWidget {
         ///==      dowBuilder:         ========================================
         dowBuilder: (context, day) {
           final text = DateFormat.E('es').format(day);
-          if (day.weekday == DateTime.sunday ||
-              day.weekday == DateTime.saturday) {
+          if (day.weekday == DateTime.sunday
+              // || day.weekday == DateTime.saturday
+          ) {
             return Center(
               child: Text(
                 text.toUpperCase(),
