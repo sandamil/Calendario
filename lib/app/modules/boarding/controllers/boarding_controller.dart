@@ -30,6 +30,10 @@ class BoardingController extends GetxController {
           subTitle: 'Bienvenidos a la aplicación',
           description:
               "En esta app podrás llevar un control de tus turnos y horarios de trabajo y anotar todo lo que necesites."
+              "\n\nEste tutorial solo se verá la primera vez que inicies la aplicacion, "
+                  "si tienes dudas, puedes ir desde menú, a la pantalla ayuda,"
+                  " donde podrás ver este tutorial "
+                  "y también a un monton de videotutoriales, en los que ver como usar cualquier función de la aplicación"
               "\n\nPonte en contacto con nosotros ante cualquier duda o sugerencia."
               "\n\nVamos a empezar, "
               "\n¡Desliza la pantalla hacia la izquierda!",

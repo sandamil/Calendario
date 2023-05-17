@@ -48,7 +48,6 @@ class AddNotasView extends GetView<AddNotasController> {
                 adcontroller.loadNotesListBannerAd();
 
                 Get.offAllNamed('/notas');
-
               }),
           actions: <Widget>[
             IconButton(

@@ -72,7 +72,7 @@ class TaskCard extends StatelessWidget {
                   },
                 ),
                 SlidableAction(
-                  label: 'Delete',
+                  label: 'Eliminar',
                   icon: Icons.delete,
                   backgroundColor: Colors.red,
                   borderRadius: BorderRadius.all(Radius.circular(5.r)),
