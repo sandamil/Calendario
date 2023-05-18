@@ -1,7 +1,6 @@
 import '../strings_enum.dart';
 
-final Map<String, String> arAR =
-{
+final Map<String, String> arAR = {
   Strings.hello : 'مرحباً!',
   Strings.loading : 'جاري التحميل',
 
@@ -17,9 +16,23 @@ final Map<String, String> arAR =
 
 
   //ajustes screen
-  Strings.title: 'تعديل بياناتي',
-  Strings.address: 'الموقع',
-  Strings.notification: 'الإشعارات',
-  Strings.language: 'اللغة',
-  Strings.logout: 'تسجيل الخروج',
+  Strings.title: 'إعدادات',
+  Strings.general: 'عام',
+  Strings.tema: 'مشكلة',
+  Strings.notification: 'إشعارات',
+  Strings.language: 'لغة',
+  Strings.ajustesAlarma: "إعدادات المنبه",
+  Strings.pro: "نسخة برو",
+  Strings.getPro: "الحصول على نسخة احترافية",
+  Strings.login: 'تسجيل الدخول',
+  Strings.register: 'سِجِلّ',
+  Strings.pdf: "تصدير ملف PDF",
+  Strings.backup: 'دعم',
+  Strings.online: 'متصل',
+  Strings.nosotros: 'معلومات عنا',
+  Strings.infoApp: "معلومات التطبيق",
+
+  Strings.espanol: 'الأسبانية',
+  Strings.arabic: 'عرب',
+  Strings.english: 'إنجليزي',
 };

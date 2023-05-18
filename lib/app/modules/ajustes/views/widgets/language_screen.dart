@@ -15,7 +15,7 @@ class LanguageScreen extends GetView<AjustesController> {
       appBar: AppBar(
         iconTheme: Theme.of(context).iconTheme,
         title: Text(
-          'Language'.tr,
+          'Idioma'.tr,
           style: Theme.of(context).textTheme.headlineSmall,
         ),
       ),

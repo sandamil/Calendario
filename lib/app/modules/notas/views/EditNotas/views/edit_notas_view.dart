@@ -5,7 +5,7 @@ import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/config/theme/my_fonts.dart';
 import 'package:calendario2/config/util/dateUtils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart' as dp;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import '../../../../../controllers/ads_controller.dart';
@@ -96,8 +96,8 @@ class EditNotasView extends GetView<EditNotasController> {
                 ),
                 TextButton(
                     onPressed: () {
-                      DatePicker.showDateTimePicker(Get.context!,
-                          theme: DatePickerTheme(
+                      dp.DatePicker.showDateTimePicker(Get.context!,
+                          theme: dp.DatePickerTheme(
                               cancelStyle: TextStyle(
                                   color: Colors.redAccent.shade200,
                                   fontSize: 16.sp,
@@ -120,7 +120,7 @@ class EditNotasView extends GetView<EditNotasController> {
                       },
                           onConfirm: (DateTime date) {},
                           currentTime: controller.startTime.value,
-                          locale: LocaleType.es);
+                          locale: dp.LocaleType.es);
                     },
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -148,8 +148,8 @@ class EditNotasView extends GetView<EditNotasController> {
                         ])),
                 TextButton(
                     onPressed: () {
-                      DatePicker.showDateTimePicker(Get.context!,
-                          theme: DatePickerTheme(
+                      dp.DatePicker.showDateTimePicker(Get.context!,
+                          theme: dp.DatePickerTheme(
                               cancelStyle: TextStyle(
                                   color: Colors.redAccent.shade200,
                                   fontSize: 16.sp,
@@ -171,7 +171,7 @@ class EditNotasView extends GetView<EditNotasController> {
                       },
                           onConfirm: (DateTime date) {},
                           currentTime: controller.endTime.value,
-                          locale: LocaleType.es);
+                          locale: dp.LocaleType.es);
                     },
                     child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -13,11 +13,27 @@ const Map<String, String> enUs = {
   Strings.serverError : 'Server error',
   Strings.urlNotFound : 'Url not found',
 
+  Strings.descriptionAjustesPI : 'In future updates it will be available',
+  Strings.titleAjustesPI : 'Soon Available',
 
   //ajustes screen
   Strings.title: 'Settings',
-  Strings.address: 'Address',
-  Strings.notification: 'Notification',
+  Strings.general: 'General',
+  Strings.tema: 'Theme',
+  Strings.notification: 'Notifications',
   Strings.language: 'Language',
-  Strings.logout: 'Logout',
+  Strings.ajustesAlarma: 'Alarm Settings',
+  Strings.pro: 'Version Pro',
+  Strings.getPro: 'Get version pro',
+  Strings.login: 'Login',
+  Strings.register: 'Register',
+  Strings.pdf: 'Export Pdf',
+  Strings.backup: 'Backup',
+  Strings.online: 'Online',
+  Strings.nosotros: 'About Us',
+  Strings.infoApp: 'App Info',
+
+  Strings.espanol: 'Spanish',
+  Strings.arabic: 'Arab',
+  Strings.english: 'English',
 };

@@ -7,9 +7,8 @@ import 'package:calendario2/config/theme/my_fonts.dart';
 import 'package:calendario2/config/util/app_utils.dart';
 import 'package:calendario2/config/util/dateUtils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-// import 'package:flutter_datetime_picker/flutter_datetime_picker.dart' as dp;
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart' as dp;
 
 import 'package:get/get.dart';
 
@@ -110,8 +109,8 @@ class AddNotasView extends GetView<AddNotasController> {
                     children: <Widget>[
                       TextButton(
                           onPressed: () {
-                            DatePicker.showDateTimePicker(Get.context!,
-                                theme: DatePickerTheme(
+                            dp.DatePicker.showDateTimePicker(Get.context!,
+                                theme: dp.DatePickerTheme(
                                     cancelStyle: TextStyle(
                                         color: Colors.redAccent.shade200,
                                         fontSize: 16.sp,
@@ -137,7 +136,7 @@ class AddNotasView extends GetView<AddNotasController> {
                               controller.setStartTime(date);
                             },
                                 currentTime: controller.startTime.value,
-                                locale: LocaleType.es);
+                                locale: dp.LocaleType.es);
                           },
                           child: Column(
                             children: [
@@ -176,8 +175,8 @@ class AddNotasView extends GetView<AddNotasController> {
                           )),
                       TextButton(
                           onPressed: () {
-                            DatePicker.showDateTimePicker(Get.context!,
-                                theme: DatePickerTheme(
+                            dp.DatePicker.showDateTimePicker(Get.context!,
+                                theme: dp.DatePickerTheme(
                                     cancelStyle: TextStyle(
                                         color: Colors.redAccent.shade200,
                                         fontSize: 16.sp,
@@ -201,7 +200,7 @@ class AddNotasView extends GetView<AddNotasController> {
                             },
                                 onConfirm: (DateTime date) {},
                                 currentTime: controller.endTime.value,
-                                locale: LocaleType.es);
+                                locale: dp.LocaleType.es);
                           },
                           child: Row(
 

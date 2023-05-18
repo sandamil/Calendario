@@ -14,12 +14,14 @@ import 'package:get/get.dart';
 import 'package:rive/rive.dart';
 
 import '../../../controllers/ads_controller.dart';
+import '../../notas/views/alarmas/controllers/alarmas_controller.dart';
 import '../controllers/ajustes_controller.dart';
 import '../../../../widgets/setting_title.dart';
 
 class AjustesView extends GetView<AjustesController> {
+  AlarmasController alarmasController = AlarmasController();
 
-  const AjustesView({Key? key}) : super(key: key);
+  AjustesView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     final adcontroller = Get.find<AdsController>();
@@ -41,7 +43,7 @@ class AjustesView extends GetView<AjustesController> {
         elevation: 0.0,
         backgroundColor: Colors.transparent,
         title: Text(
-          'Settings'.tr,
+          'Ajustes'.tr,
           style: CustomTextStyle.appBarTitle(context: context),
         ),
       ),
@@ -51,8 +53,7 @@ class AjustesView extends GetView<AjustesController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SettingTitleTile('General'),
-
+              SettingTitleTile('General'.tr),
               Obx(() {
                 return SettingTile(
                     icon: ConstrainedBox(
@@ -91,7 +92,7 @@ class AjustesView extends GetView<AjustesController> {
 
               SettingTile(
                   icon: const ImageIcon(AssetImage(MyIcon.languageIcon)),
-                  btnText: 'Language'.tr,
+                  btnText: 'Idioma'.tr,
                   trailing: Text(controller.selectedLanguage.value.name),
                   onPressed: controller.goToLanguageScreen),
               Divider(
@@ -103,14 +104,13 @@ class AjustesView extends GetView<AjustesController> {
                 icon: const ImageIcon(AssetImage(MyIcon.notificationIcon)),
                 btnText: "Ajustes alarma".tr,
                 onPressed: () {
-                  // controller.navigateToAlarmScreen(context);
-                  // alarmasController.navigateToAlarmScreen(
-                  //     controller.alarmaCreadaNota, context);
-                  MyCustomDialog.showPopUpInfo(
-                    context: context,
-                  description: 'En próximas actualizaciones estará disponible',
-                  title: 'Pronto Disponible',
-                );
+                  alarmasController.navigateToAlarmScreen(
+                      controller.alarmSettings, context);
+                  // MyCustomDialog.showPopUpInfo(
+                  //   context: context,
+                  // description: 'En próximas actualizaciones estará disponible'.tr,
+                  // title: 'Pronto Disponible'.tr,
+                // );
                 },
                 //   trailing: KSwitch(),
               ),
@@ -145,14 +145,14 @@ class AjustesView extends GetView<AjustesController> {
                         MyCustomDialog.showPopUpInfo(
                           context: context,
                           description:
-                              'En próximas actualizaciones estará disponible',
-                          title: 'Pronto Disponible',
+                              'En próximas actualizaciones estará disponible'.tr,
+                          title: 'Pronto Disponible'.tr,
                         );
                       },
                       child: Padding(
                         padding: EdgeInsets.symmetric(horizontal: 8.w),
                         child: Text(
-                          'Obtener version pro',
+                          'Obtener version pro'.tr,
                           style: TextStyle(color: MyColors.textButtom),
                         ),
                       ),
@@ -189,7 +189,7 @@ class AjustesView extends GetView<AjustesController> {
               SettingTile(
                 icon: const ImageIcon(AssetImage(MyIcon.candadoIcon)),
                 btnText: "Backup".tr,
-                trailing: const Text("Online"),
+                trailing: Text("Online".tr),
                 onPressed: () {
                   controller.launchTwitter();
                 },
@@ -207,8 +207,8 @@ class AjustesView extends GetView<AjustesController> {
                   MyCustomDialog.showPopUpInfo(
                     context: context,
                     description:
-                    'En próximas actualizaciones estará disponible',
-                    title: 'Pronto Disponible',
+                    'En próximas actualizaciones estará disponible'.tr,
+                    title: 'Pronto Disponible'.tr,
                   );
                   // RouteUtils.toAboutPage();
                 },

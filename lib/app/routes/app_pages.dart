@@ -66,7 +66,7 @@ class AppPages {
       transition: Transition.fadeIn,
       transitionDuration: const Duration(milliseconds: 100),
       name: _Paths.AJUSTES,
-      page: () => const AjustesView(),
+      page: () => AjustesView(),
       binding: AjustesBinding(),
     ),
     GetPage(

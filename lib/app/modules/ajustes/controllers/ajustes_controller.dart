@@ -16,6 +16,9 @@ import 'package:url_launcher/url_launcher.dart';
 import '../views/widgets/alarm_settings.dart';
 
 class AjustesController extends GetxController {
+  AlarmSettings? settings;
+
+
   RxBool isDark = true.obs;
 
   final List<Language> languages = <Language>[];
@@ -26,6 +29,8 @@ class AjustesController extends GetxController {
 
   final artboard = Rxn<RuntimeArtboard>();
   final artboard2 = Rxn<RuntimeArtboard>();
+
+  AlarmSettings? alarmSettings;
 
 
   // var islight = true;
@@ -125,9 +130,9 @@ class AjustesController extends GetxController {
 
   List<Language> getSupportedLanguagesService() {
     return [
-      Language(name: 'Español', languageCode: 'es'),
-      Language(name: 'Arabic', languageCode: 'ar'),
-      Language(name: 'English', languageCode: 'en'),
+      Language(name: 'Español'.tr, languageCode: 'es'),
+      Language(name: 'Arabe'.tr, languageCode: 'ar'),
+      Language(name: 'English'.tr, languageCode: 'en'),
     ];
   }
 
@@ -172,24 +177,8 @@ class AjustesController extends GetxController {
     Get.to(AlarmSettingsScreen());
   }
 
-  AlarmSettings? settings;
 
-  Future<void> navigateToAlarmScreen(context) async {
-    final res = await showModalBottomSheet<bool?>(
-        context: context,
-        isScrollControlled: true,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        builder: (context) {
-          return FractionallySizedBox(
-            heightFactor: 0.6,
-            child: AlarmSettingsScreen(alarmSettings: settings,),
-          );
-        });
 
-    if (res != null && res == true) loadAlarms();
-  }
 
   loadAlarms() async {
     // alarms.value = Alarm.getAlarms();
