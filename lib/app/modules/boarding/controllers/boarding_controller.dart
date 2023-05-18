@@ -35,9 +35,15 @@ class BoardingController extends GetxController {
                   " donde podrás ver este tutorial "
                   "y también a un monton de videotutoriales, en los que ver como usar cualquier función de la aplicación"
               "\n\nPonte en contacto con nosotros ante cualquier duda o sugerencia."
+              "\n\nAntes de nada, si vienes de una versión anterior de esta aplicación, puedes acceder a los datos guardados desde la pantalla principal o desde el menu ayuda/version anterior."
               "\n\nVamos a empezar, "
               "\n¡Desliza la pantalla hacia la izquierda!",
           imagePath: 'assets/other/vacio.png'),
+      const BoardingModel(
+          title: '',
+          subTitle: '',
+          description: '',
+          imagePath: 'assets/other/versionAnterior.png'),
       const BoardingModel(
           title: 'Un pequeño tutorial',
           subTitle: 'Como usar la app:',

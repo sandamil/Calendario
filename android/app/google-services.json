@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "574148281822",
+    "firebase_url": "https://calendario-turnos-8453d.firebaseio.com",
+    "project_id": "calendario-turnos-8453d",
+    "storage_bucket": "calendario-turnos-8453d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:574148281822:android:d3ae6bd068276f3f",
+        "android_client_info": {
+          "package_name": "ajat.calendario.turnos"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "574148281822-3tkj46l9e800a31437rkhfn8navh7spk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ajat.calendario.turnos",
+            "certificate_hash": "2aed96aa47b30bd030043a19dd678856221aaf35"
+          }
+        },
+        {
+          "client_id": "574148281822-540i25l9ldj0np731htha7qg8inbue9j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBkasOt5vsTyeQ17-35qWUNjSfgi9jr3uw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "574148281822-540i25l9ldj0np731htha7qg8inbue9j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      },
+      "admob_app_id": "ca-app-pub-5849370961147264~6244440433"
+    }
+  ],
+  "configuration_version": "1"
+}

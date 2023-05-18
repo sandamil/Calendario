@@ -8,7 +8,7 @@ import 'package:calendario2/config/util/app_utils.dart';
 import 'package:calendario2/config/util/dateUtils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart' as dp;
+import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart' as dp;
 
 import 'package:get/get.dart';
 

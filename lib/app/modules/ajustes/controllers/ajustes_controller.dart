@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:alarm/model/alarm_settings.dart';
 import 'package:calendario2/app/data/local/my_shared_pref.dart';
 import 'package:calendario2/app/data/model/language.dart';
+import 'package:calendario2/app/modules/ajustes/views/pages/util/connector_parameter.dart';
 import 'package:calendario2/app/modules/ajustes/views/widgets/language_screen.dart';
 import 'package:calendario2/config/theme/my_theme.dart';
 import 'package:calendario2/config/translations/localization_service.dart';
@@ -13,6 +14,7 @@ import 'package:get/get.dart';
 import 'package:rive/rive.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../views/pages/util/dio_connector.dart';
 import '../views/widgets/alarm_settings.dart';
 
 class AjustesController extends GetxController {
@@ -185,5 +187,14 @@ class AjustesController extends GetxController {
     // alarms.sort((a, b) => a.dateTime.isBefore(b.dateTime) ? 0 : 1);
     // searchIdAlarma();
     update();
+  }
+
+  Future<String> getDataByGet(ConnectorParameter parameter) async {
+    try {
+      String result = await DioConnector.instance.getDataByGet(parameter);
+      return result;
+    } catch (e) {
+      rethrow;
+    }
   }
 }

@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:calendario2/app/modules/ajustes/controllers/ajustes_controller.dart';
+import 'package:calendario2/config/theme/my_fonts.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -16,7 +17,7 @@ class LanguageScreen extends GetView<AjustesController> {
         iconTheme: Theme.of(context).iconTheme,
         title: Text(
           'Idioma'.tr,
-          style: Theme.of(context).textTheme.headlineSmall,
+          style: CustomTextStyle.appBarTitle(context: context),
         ),
       ),
       body: ListView.builder(

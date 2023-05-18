@@ -164,7 +164,7 @@ class RouteUtils {
 
   static Future? toPrivacyPolicyPage() {
     return Get.to(
-          () => const PrivacyPolicyPage(),
+          () => PrivacyPolicyPage(),
       transition: transition,
     );
   }

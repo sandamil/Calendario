@@ -6,7 +6,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../../../config/theme/my_fonts.dart';
+import '../../../../../config/util/app_utils.dart';
 import '../../../../../config/util/list_view_animator.dart';
+import '../../../../controllers/app_controller.dart';
 import '../../../../routes/app_pages.dart';
 import 'dev_page.dart';
 
@@ -80,7 +83,7 @@ class _AboutPageState extends State<AboutPage> {
     switch (value) {
       case OnListViewPress.appUpdate:
         Toast.toast(context, msg: 'Checking version...');
-        // final result = await APPVersion.checkShouldUpdate();
+        // final result = await AppController.checkShouldUpdate();
         // if (!result) {
         //   Toast.toast(context, msg: 'Already the latest version');
         // }
@@ -89,9 +92,9 @@ class _AboutPageState extends State<AboutPage> {
         // RouteUtils.toContributorsPage();
         break;
       case OnListViewPress.version:
-        // String mainVersion = await AppUpdate.getAppVersion();
+        String mainVersion = await AppUtils.getAppVersion();
         if (pressTime == 0) {
-          // Toast.toast(context, msg: mainVersion);
+          Toast.toast(context, msg: mainVersion);
 
         }
         pressTime++;
@@ -121,7 +124,11 @@ class _AboutPageState extends State<AboutPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Sobre nosotros'),
+        iconTheme: Theme.of(context).iconTheme,
+        title: Text(
+          'Informacion App',
+          style: CustomTextStyle.appBarTitle(context: context),
+        ),
       ),
       body: ListView.separated(
         itemCount: listViewData.length,

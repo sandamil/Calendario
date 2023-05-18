@@ -3,6 +3,7 @@ import 'package:calendario2/config/util/app_utils.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
+
 class AppController extends GetxController {
   String appVersion = 'version 1.0.0';
   // RxBool isShowLog = true.obs;
@@ -15,10 +16,33 @@ class AppController extends GetxController {
   @override
   void onInit() {
     // initData();
-    getAppVersion();
+    // getAppVersion();
     // getAppLanguageOptions();
     super.onInit();
   }
+
+
+  Future<void> getAppVersion() async {
+    appVersion = await AppUtils.getAppVersion();
+  }
+
+
+
+///Ajustes APPVERSION
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   List<Axiss> supportedOrientations = [Axiss.vertical, Axiss.horizontal];
 
@@ -54,9 +78,9 @@ class AppController extends GetxController {
   //   isShowLog(b);
   // }
 
-  Future<void> getAppVersion() async {
-    appVersion = await AppUtils.getAppVersion();
-  }
+
+
+
 
   // Future<void> showLogButton() async {
   //   await AppStorage.write(key: LOG_BUTTON, value: '1');
