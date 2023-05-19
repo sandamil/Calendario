@@ -95,11 +95,24 @@ class AjustesView extends GetView<AjustesController> {
                   btnText: 'Idioma'.tr,
                   trailing: Text(controller.selectedLanguage.value.name),
                   onPressed: controller.goToLanguageScreen),
-              Divider(
-                indent: 15.w,
-                endIndent: 15.w,
+              // Divider(
+              //   indent: 15.w,
+              //   endIndent: 15.w,
+              // ),
+              SettingTile(
+                icon: const ImageIcon(AssetImage(MyIcon.notificationIcon)),
+                btnText: "Información App".tr,
+                onPressed: () {
+                  // MyCustomDialog.showPopUpInfo(
+                  //   context: context,
+                  //   description:
+                  //       'En próximas actualizaciones estará disponible',
+                  //   title: 'Pronto Disponible',
+                  // );
+                  RouteUtils.toAboutPage();
+                },
               ),
-              SettingTitleTile("Notificationes".tr),
+              // SettingTitleTile("Notificationes".tr),
               SettingTile(
                 icon: const ImageIcon(AssetImage(MyIcon.notificationIcon)),
                 btnText: "Ajustes alarma".tr,
@@ -110,7 +123,7 @@ class AjustesView extends GetView<AjustesController> {
                   //   context: context,
                   // description: 'En próximas actualizaciones estará disponible'.tr,
                   // title: 'Pronto Disponible'.tr,
-                // );
+                  // );
                 },
                 //   trailing: KSwitch(),
               ),
@@ -145,7 +158,8 @@ class AjustesView extends GetView<AjustesController> {
                         MyCustomDialog.showPopUpInfo(
                           context: context,
                           description:
-                              'En próximas actualizaciones estará disponible'.tr,
+                              'En próximas actualizaciones estará disponible'
+                                  .tr,
                           title: 'Pronto Disponible'.tr,
                         );
                       },

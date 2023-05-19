@@ -20,11 +20,17 @@ import 'package:intl/date_symbol_data_local.dart';
 
 import 'debug/log/log.dart';
 
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 late Mixpanel mixPanel;
 
 Future<void> main() async {
+
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   Get.put(AppController());
   await Alarm.init(showDebugLogs: true);
   await initMemory();

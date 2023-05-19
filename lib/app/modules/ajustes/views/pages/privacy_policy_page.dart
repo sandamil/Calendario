@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:get/get.dart';
 
+import '../../../../../config/theme/my_fonts.dart';
 import '../../../../../config/theme/my_colors.dart';
 import '../../../../../config/util/app_link.dart';
 
@@ -16,7 +17,11 @@ class PrivacyPolicyPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
-          title: Text('Privacy policy'),
+          iconTheme: Theme.of(context).iconTheme,
+          title: Text(
+            'Política de privacidad',
+            style: CustomTextStyle.appBarTitle(context: context),
+          ),
         ),
         body: FutureBuilder<String>(
           future: ajustesController.getDataByGet(ConnectorParameter(AppLink.privacyPolicyUrlString)),

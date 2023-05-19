@@ -14,6 +14,7 @@ import 'package:get/get.dart';
 import 'package:rive/rive.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../../debug/log/log.dart';
 import '../views/pages/util/dio_connector.dart';
 import '../views/widgets/alarm_settings.dart';
 
@@ -43,6 +44,9 @@ class AjustesController extends GetxController {
     loadShippingTypes();
     final currentLanguageCode = MySharedPref.getCurrentLocal().languageCode;
     log('curent language code: $currentLanguageCode');
+    Log.e("curent language code: $currentLanguageCode");
+    Log.d("curent language code: $currentLanguageCode");
+
     selectedLanguage = languages
         .firstWhere((element) => element.languageCode == currentLanguageCode)
         .obs;

@@ -12,6 +12,7 @@ import '../modules/ajustes/bindings/ajustes_binding.dart';
 import '../modules/ajustes/views/ajustes_view.dart';
 import '../modules/ajustes/views/pages/about_page.dart';
 import '../modules/ajustes/views/pages/privacy_policy_page.dart';
+import '../modules/ajustes/views/pages/util/dio_connector.dart';
 import '../modules/ayuda/bindings/ayuda_binding.dart';
 import '../modules/ayuda/views/ayuda_view.dart';
 import '../modules/boarding/bindings/boarding_binding.dart';
@@ -167,6 +168,10 @@ class RouteUtils {
           () => PrivacyPolicyPage(),
       transition: transition,
     );
+  }
+
+  static Future toAliceInspectorPage() async {
+    DioConnector.instance.alice.showInspector();
   }
 
   static Future? toDevPage() {

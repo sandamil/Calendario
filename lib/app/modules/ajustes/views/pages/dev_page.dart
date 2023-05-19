@@ -1,8 +1,10 @@
-// ignore_for_file: import_of_legacy_library_into_null_safe
 
+import 'package:calendario2/app/modules/ajustes/views/pages/util/cloud_messaging_utils.dart';
+import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../config/util/list_view_animator.dart';
+import '../../../../../debug/log/log.dart';
 import '../../../../components/toast.dart';
 import '../../../../routes/app_pages.dart';
 
@@ -30,15 +32,19 @@ class DevPage extends StatelessWidget {
   void _onListViewPress(context, OnListViewPress value) async {
     switch (value) {
       case OnListViewPress.cloudMessageToken:
-        // final token = await CloudMessagingUtils.getToken();
-        // Toast.toast(context, msg: "$token copy");
-        // FlutterClipboard.copy(token ?? '');
+        final token = await CloudMessagingUtils.getToken();
+        Log.e("file size = $token");
+
+        Toast.toast(context, msg: "$token copy");
+        FlutterClipboard.copy(token ?? '');
         break;
       case OnListViewPress.dioLog:
-        // RouteUtils.toAliceInspectorPage();
+        RouteUtils.toAliceInspectorPage();
         break;
       case OnListViewPress.appLog:
         RouteUtils.toLogConsolePage();
+        Log.d("file size = ????????????????????????????");
+
         break;
       default:
         Toast.toast(context, msg: 'No function');

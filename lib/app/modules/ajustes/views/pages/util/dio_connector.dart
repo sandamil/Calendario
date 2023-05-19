@@ -6,6 +6,7 @@ import 'package:dart_big5/big5.dart';
 import 'package:get/get.dart' as k;
 import 'package:get/get_core/src/get_main.dart';
 
+import 'alice.dart';
 import 'connector_parameter.dart';
 import 'early_interceptor_adapter.dart';
 
@@ -17,9 +18,9 @@ class DioConnector {
     "Upgrade-Insecure-Requests": "1",
   };
 
-  // final alice = Alice(
-  //   navigatorKey: Get.key,
-  // );
+  final alice = Alice(
+    navigatorKey: Get.key,
+  );
 
   static final dioOptions = BaseOptions(
     connectTimeout: 5000,

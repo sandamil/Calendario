@@ -1,10 +1,12 @@
 import 'dart:collection';
 
+import 'package:calendario2/app/modules/ajustes/views/pages/util/ansi_parser.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:logger/logger.dart';
 
-import 'ansi_parser.dart';
+import '../../../../../debug/log/log.dart';
+
 
 final ListQueue<OutputEvent> _outputEventBuffer = ListQueue();
 int _bufferSize = 50;
@@ -153,6 +155,8 @@ class _LogConsoleState extends State<LogConsole> {
             IconButton(
               icon: const Icon(Icons.add),
               onPressed: () {
+                Log.d("curent language code:");
+
                 setState(() {
                   _logFontSize++;
                 });
