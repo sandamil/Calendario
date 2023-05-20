@@ -7,14 +7,14 @@ const _info = "Botón menú:";
 const _info2 =
     "Desde este botón accedes al menú de la aplicación donde podrás acceder al menú, "
     "desde donde podrás ir a las diferentes utilidades de la app y ajustes";
-const _info3 = "Botón HOY";
-const _info4 = "Pulsa en este botón para ir al dia de hoy."
-    "\n \n Si cambias de mes para ver tu calendario y quieres volver de forma rapida al dia de hoy, "
-    "esta es la opcion mas rapida y cómoda";
+const _info3 = "Botón Version Anterior";
+const _info4 = "Pulsa en este botón para ir a los datos guardados del calendario anterior."
+    "\n \n Si prefieres tener instalada la version anterior del calendario, puedes descargarla desde el menu ayuda, pulsando en versión anterior."
+    "Allí veras un menu donde acceder a la aplicacion anterior y descargar. cualquier duda ponte en contacto con nosotros en el email ajatsoft@gmail.com";
 const _info5 = "Calendario";
 const _info6 =
     "En el calendario aparecen los turnos de tu cuadrante creado y las notas guardadas."
-    "\nPusando en cada dia veras debajo las notas para ese dia"
+    "\nPulsando en cada dia veras debajo las notas para ese dia"
     "\nSi mantienes pulsado encima de algun dia podrás aladir de forma rapida un turno o una nota";
 const _info7 = "Resumen de dia";
 const _info8 =
@@ -143,6 +143,7 @@ class InicioListTarget {
       keyTarget: calKeys3,
       contents: [
         TargetContent(
+          padding: EdgeInsets.symmetric(horizontal: 15, vertical: 1),
             align: ContentAlign.top,
             child: Text(
               _info5,
@@ -154,6 +155,8 @@ class InicioListTarget {
               textAlign: TextAlign.center,
             )),
         TargetContent(
+            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 1),
+
             align: ContentAlign.bottom,
             child: SingleChildScrollView(
               child: SizedBox(
@@ -163,7 +166,7 @@ class InicioListTarget {
                   // style: GoogleFonts.lato(),
                   color: Colors.white,
                   textAlign: TextAlign.center,
-                  fontSize: 18.sp,
+                  fontSize: 16.sp,
                 ),
               ),
             )),

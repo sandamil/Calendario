@@ -37,6 +37,21 @@ class VersionAnteriorView extends GetView<VersionAnteriorController> {
       body: Column(
         children: <Widget>[
           SettingsGroup(
+            title: "Aplicacion anterior",
+            children: [
+              AyudaRowWidget(
+                title: "Descarga aplicación",
+                subtitle:
+                "Desde aqui puedes descargar versión anterior"
+                    "\nSi descargas e instalas la version anterior no se acualizará a esta desde Play Store",
+                onTap: () {
+                  controller.descargaVersionAnterior();
+                },
+              ),
+            ],
+          ),
+          SizedBox(height: 20.h,),
+          SettingsGroup(
             title: "Notas",
             children: [
               AyudaRowWidget(

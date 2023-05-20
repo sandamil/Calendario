@@ -32,12 +32,24 @@ class NotasListController extends GetxController {
 
     setNotesFromDB();
     super.onInit();
-    if (MySharedPref.getTutoTaskFirst()) {
-      firstTime.value = true;
-      tutorialController.firstInstall('task');
-    }
+    // if (MySharedPref.getTutoTaskFirst()) {
+    //   firstTime.value = true;
+    //   tutorialController.firstInstall('task');
+    // }
   }
 
+  @override
+  void onReady() {
+    Future.delayed(const Duration(milliseconds: 300), () {
+      // MySharedPref.setTutoTaskFirst(true);
+      if (MySharedPref.getTutoTaskFirst()) {
+        firstTime.value = true;
+        tutorialController.firstInstall('task');
+      }
+    });
+
+    super.onReady();
+  }
 
   @override
   void onClose() {

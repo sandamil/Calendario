@@ -42,13 +42,20 @@ class CrearCuadranteController extends GetxController {
     // inicialDate = Rxn(DateTime.now());
     // endDate = Rxn(DateTime.now().add(const Duration(days: 365)));
 
-    if (MySharedPref.getTutoCuadranteFirst()) {
-      firstTime.value = true;
-      tutorialController.firstInstall('cuadrante');
-    }
+    // if (MySharedPref.getTutoCuadranteFirst()) {
+    //   firstTime.value = true;
+    //   tutorialController.firstInstall('cuadrante');
+    // }
 
     fetchTurnosType();
     super.onInit();
+  }
+
+  @override
+  void onReady() {
+
+
+    super.onReady();
   }
 
   bool submit() {
