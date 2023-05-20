@@ -23,6 +23,7 @@ class HomeView extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
+
     return WillPopScope(
       onWillPop: () async {
         if (Platform.isAndroid) {
@@ -37,6 +38,7 @@ class HomeView extends GetView<HomeController> {
         return false;
       },
       child: Obx(() {
+
         return GestureDetector(
           behavior: HitTestBehavior.translucent,
           onTapDown: (TapDownDetails details) =>
@@ -80,7 +82,9 @@ class HomeView extends GetView<HomeController> {
                     ),
                     tooltip: 'today',
                     onPressed: () {
-                      Get.toNamed('/version-anterior');
+                      controller.firstTime.value = true;
+                      controller.tutorialController.showTutorial(context, 'home');
+                      // Get.toNamed('/version-anterior');
                       // CustomDialog.showPopUpInfo(
                       //   title: 'Volver a HOY',
                       //   description: 'Selecciona Mes al que quieres ir',

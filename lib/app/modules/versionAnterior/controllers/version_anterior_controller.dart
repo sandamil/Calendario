@@ -7,6 +7,7 @@ import 'package:calendario2/app/modules/versionAnterior/views/widgets/ShiftsBkpC
 import 'package:calendario2/app/modules/versionAnterior/views/widgets/notasBkpCard.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../data/model/previousDatabase/customShiftTemplate.dart';
 import '../../../data/model/previousDatabase/previousShift.dart';
@@ -16,6 +17,9 @@ class VersionAnteriorController extends GetxController {
   late PreviousShift shift;
 
   RxString shiftName = ''.obs;
+
+  final Uri _url = Uri.parse('https://drive.google.com/file/d/1qno2uZNL88bItxBR4CigHnd3S8_SZIB8/view');
+
 
 
   @override
@@ -123,6 +127,13 @@ void goToTurnosPersonalizadosScreen() {
     shiftName.value = shift.title!;
     update();
     return shift;
+  }
+
+  Future<void>  descargaVersionAnterior() async{
+      if (!await launchUrl(_url)) {
+        throw Exception('Could not launch $_url');
+      }
+
   }
 
 

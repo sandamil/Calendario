@@ -10,6 +10,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
 
+import '../../../data/local/my_shared_pref.dart';
 import '../controllers/crear_cuadrante_controller.dart';
 import 'add_cuadrante_view.dart';
 
@@ -94,6 +95,13 @@ class CrearCuadranteView extends GetView<CrearCuadranteController> {
                 ),
 
                 onPressed: () {
+                  Future.delayed(const Duration(milliseconds: 300), () {
+                    // MySharedPref.setTutoCuadranteFirst(true);
+                    if (MySharedPref.getTutoCuadranteFirst()) {
+                      controller.firstTime.value = true;
+                      controller.tutorialController.firstInstall('cuadrante');
+                    }
+                  });
                   // Get.toNamed('/notas', (r) => false);
                   Get.to(const AddCuadranteView()); //   Navigator.push(
                   //       context,

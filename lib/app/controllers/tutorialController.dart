@@ -86,7 +86,7 @@ class TutorialController extends GetxController {
   GlobalKey? keyButton9 = GlobalKey();
 
   void createTutorialHome() {
-    var homeController = Get.put(HomeController());
+    var homeController = HomeController();
 
     tutorialCoachMark = TutorialCoachMark(
       alignSkip: Alignment.bottomRight,

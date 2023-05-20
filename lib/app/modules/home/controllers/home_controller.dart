@@ -7,21 +7,28 @@ import 'package:get/get.dart';
 
 class HomeController extends GetxController {
   NotasListController notasController = NotasListController();
-  TutorialController tutorialController = TutorialController();
+  TutorialController tutorialController = Get.put(TutorialController());
 
   RxBool firstTime = false.obs;
 
+
   @override
   void onInit() async {
-    if (MySharedPref.getTutoHomeFirst()) {
-      firstTime.value = true;
-      tutorialController.firstInstall('home');
-    }
-
-    super.onInit();
+     super.onInit();
   }
 
+  @override
+  void onReady() {
+    Future.delayed(const Duration(milliseconds: 300), () {
+      // MySharedPref.setTutoHomeFirst(true);
+      if (MySharedPref.getTutoHomeFirst()) {
+        firstTime.value = true;
+        tutorialController.firstInstall('home');
+      }
+    });
 
+    super.onReady();
+  }
 
   //? to close the app
   void appCloseConfirm(context) {

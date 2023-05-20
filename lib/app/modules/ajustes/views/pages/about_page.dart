@@ -84,10 +84,10 @@ class _AboutPageState extends State<AboutPage> {
     switch (value) {
       case OnListViewPress.appUpdate:
         Toast.toast(context, msg: 'Checking version...');
-        final result = await APPVersion.checkShouldUpdate();
-        if (!result) {
-          Toast.toast(context, msg: 'Already the latest version');
-        }
+        // final result = await APPVersion.checkShouldUpdate();
+        // if (!result) {
+        //   Toast.toast(context, msg: 'Already the latest version');
+        // }
         break;
       case OnListViewPress.contribution:
         // RouteUtils.toContributorsPage();

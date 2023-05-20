@@ -27,10 +27,10 @@ const _info10 = "Marcar como importante";
 const _info11 =
     "Marca como importante la nota deseada, esta opción además de marcar como importante una nota, sirve para filtrar en el listado de notas solo las importantes";
 const _info12 = "Ubicación y observaciones";
-const _info13 = "En estos dos campos puedes insertar el texto que necesites."
-    "\nEn el de ubicación se recomienda un texto corto como un lugar o ubicacion.";
+const _info13 = "En estos dos campos puedes insertar el texto que necesites.";
 const _info14 =
-    "En observaciones puedes escribir un resumen o texto más amplio, se mostrará en el detalle de la nota, "
+    "En el de ubicación se recomienda un texto corto como un lugar o ubicacion."
+    "\nEn observaciones puedes escribir un resumen o texto más amplio, se mostrará en el detalle de la nota, "
     "tanto si la abres desde la pantalla principal como desde el listado de notas";
 const _info15 = "Tutorial ayuda";
 const _info16 =

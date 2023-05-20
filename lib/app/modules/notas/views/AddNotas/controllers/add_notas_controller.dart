@@ -56,14 +56,27 @@ class AddNotasController extends GetxController {
     }
     super.onInit();
 
-    if (MySharedPref.getTutoAddTaskFirst()) {
-      firstTime.value = true;
-      tutorialController.firstInstall('taskAdd');
-    }
+    // if (MySharedPref.getTutoAddTaskFirst()) {
+    //   firstTime.value = true;
+    //   tutorialController.firstInstall('taskAdd');
+    // }
     // textController.addListener(() {
     //   subtractTimeString.value = textController.text;
     // });
 
+  }
+
+  @override
+  void onReady() {
+    Future.delayed(const Duration(milliseconds: 300), () {
+      // MySharedPref.setTutoAddTaskFirst(true);
+      if (MySharedPref.getTutoAddTaskFirst()) {
+        firstTime.value = true;
+        tutorialController.firstInstall('taskAdd');
+      }
+    });
+
+    super.onReady();
   }
 
 
