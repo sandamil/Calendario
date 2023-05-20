@@ -21,10 +21,10 @@ packages:
     dependency: "direct main"
     description:
       name: alice_lightweight
-      sha256: caac73b9adfb93d6c52d36ced851ad1284ef8b127a6b638f466bee4f2f3f44e9
+      sha256: "873b80b4ee98747c2ec4db1e432b98b5f6f1910a77cbedaa8048aa97dd92c741"
       url: "https://pub.dev"
     source: hosted
-    version: "3.3.0"
+    version: "3.4.0"
   android_alarm_manager_plus:
     dependency: transitive
     description:
@@ -197,10 +197,10 @@ packages:
     dependency: "direct main"
     description:
       name: dio
-      sha256: "7d328c4d898a61efc3cd93655a0955858e29a0aa647f0f9e02d59b3bb275e2e8"
+      sha256: "347d56c26d63519552ef9a569f2a593dda99a81fdbdff13c584b7197cfe05059"
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.6"
+    version: "5.1.2"
   fake_async:
     dependency: transitive
     description:
@@ -337,30 +337,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.5.1"
-  firebase_remote_config:
-    dependency: "direct main"
-    description:
-      name: firebase_remote_config
-      sha256: "191aa5376ccf512d12e124dc7a99abcb6bd5d4e2b073d102253dd94d5a513e57"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.0.15"
-  firebase_remote_config_platform_interface:
-    dependency: transitive
-    description:
-      name: firebase_remote_config_platform_interface
-      sha256: cffee0e79cfd6acadcc53be5dbae31d1c67a603827223a234b5d9d5983ac6c9b
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.4.1"
-  firebase_remote_config_web:
-    dependency: transitive
-    description:
-      name: firebase_remote_config_web
-      sha256: "43d014f2c54fa283b5825352208215f0fc228ad8bfc0613a054885039d8cf721"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.4.1"
   flex_color_picker:
     dependency: "direct main"
     description:
@@ -426,10 +402,10 @@ packages:
     dependency: transitive
     description:
       name: flutter_local_notifications
-      sha256: ee6ee56855aa920899b68586b538474d086c149932220b47b92502cbfb5ba5e5
+      sha256: "20c92629902b125cb624efdbacbbe98806b3c0b01adb3d84d1c72198b3eafb1a"
       url: "https://pub.dev"
     source: hosted
-    version: "14.0.0+2"
+    version: "14.0.1"
   flutter_local_notifications_linux:
     dependency: transitive
     description:

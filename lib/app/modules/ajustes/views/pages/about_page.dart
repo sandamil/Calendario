@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:calendario2/app/components/toast.dart';
 import 'package:calendario2/app/modules/ajustes/views/pages/privacy_policy_page.dart';
-import 'package:calendario2/app/modules/ajustes/views/pages/util/app_version.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -84,10 +83,10 @@ class _AboutPageState extends State<AboutPage> {
     switch (value) {
       case OnListViewPress.appUpdate:
         Toast.toast(context, msg: 'Checking version...');
-        final result = await APPVersion.checkShouldUpdate();
-        if (!result) {
-          Toast.toast(context, msg: 'Already the latest version');
-        }
+        // final result = await APPVersion.checkShouldUpdate();
+        // if (!result) {
+        //   Toast.toast(context, msg: 'Already the latest version');
+        // }
         break;
       case OnListViewPress.contribution:
         // RouteUtils.toContributorsPage();

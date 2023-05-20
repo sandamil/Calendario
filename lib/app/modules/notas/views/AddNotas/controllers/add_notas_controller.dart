@@ -56,10 +56,6 @@ class AddNotasController extends GetxController {
     }
     super.onInit();
 
-    if (MySharedPref.getTutoAddTaskFirst()) {
-      firstTime.value = true;
-      tutorialController.firstInstall('taskAdd');
-    }
     // textController.addListener(() {
     //   subtractTimeString.value = textController.text;
     // });

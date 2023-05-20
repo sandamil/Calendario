@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -44,23 +43,26 @@ class MySharedPref {
     // default language is english
     if (langCode == null) {
       return LocalizationService.defaultLanguage;
-      }
-      return LocalizationService.supportedLanguages[langCode]!;
+    }
+    return LocalizationService.supportedLanguages[langCode]!;
   }
 
   static setCuadrantesList(List<String> list) async {
     _sharedPreferences.setStringList(_cuadranteName, list);
   }
+
   static deleteCuadrantesList() async {
     _sharedPreferences.remove(_cuadranteName);
   }
 
-
-
-static getStringList() {
-  List<String>? cuadranteNamesList = _sharedPreferences.getStringList(_cuadranteName);
-return cuadranteNamesList;
+  static getStringList() {
+    List<String>? cuadranteNamesList =
+        _sharedPreferences.getStringList(_cuadranteName);
+    return cuadranteNamesList;
   }
+
+
+
 
 
 
@@ -68,8 +70,11 @@ return cuadranteNamesList;
   static Future<void> setTutoHomeFirst(bool first) =>
       _sharedPreferences.setBool('tutoHomeFirst', first);
 
-  static bool getTutoHomeFirst() =>
-      _sharedPreferences.getBool("tutoHomeFirst") ?? false;
+  static bool getTutoHomeFirst() {
+    print('estoy aqui');
+    _sharedPreferences.setBool('tutoHomeFirst', true);
+    return _sharedPreferences.getBool("tutoHomeFirst") ?? false;
+  }
 
   static Future<void> setTutoTaskFirst(bool first) =>
       _sharedPreferences.setBool('tutoTask', first);
@@ -89,17 +94,6 @@ return cuadranteNamesList;
   static bool getTutoCuadranteFirst() =>
       _sharedPreferences.getBool("tutoCuadrante") ?? false;
 
-
-
-
-
-
-
-
-
-
   /// clear all data from shared pref
   static Future<void> clear() async => await _sharedPreferences.clear();
-
-
 }

@@ -23,9 +23,9 @@ class DioConnector {
   );
 
   static final dioOptions = BaseOptions(
-    connectTimeout: 5000,
-    receiveTimeout: 10000,
-    sendTimeout: 5000,
+    connectTimeout: Duration(milliseconds: 5000),
+    receiveTimeout: Duration(milliseconds: 10000),
+    sendTimeout:Duration(milliseconds: 5000) ,
     headers: _headers,
     responseType: ResponseType.json,
     contentType: "application/x-www-form-urlencoded",
@@ -64,11 +64,11 @@ class DioConnector {
   static String _big5Decoder(List<int> responseBytes, RequestOptions options, ResponseBody responseBody) =>
       big5.decode(responseBytes);
   //
-  // Future<void> init({required List<Interceptor> interceptors}) async {
-  //   dio.interceptors.addAll(interceptors);
-  //   dio.interceptors.add(alice.getDioInterceptor());
-  // }
-  //
+  Future<void> init({required List<Interceptor> interceptors}) async {
+    dio.interceptors.addAll(interceptors);
+    dio.interceptors.add(alice.getDioInterceptor());
+  }
+
   // void deleteCookies() {
   //   try {
   //     _cookieJar.deleteAll();

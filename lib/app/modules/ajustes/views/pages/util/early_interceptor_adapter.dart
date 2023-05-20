@@ -47,25 +47,27 @@ class EarlyInterceptorAdapter implements HttpClientAdapter {
     Stream<Uint8List>? requestStream,
     Future? cancelFuture,
   ) async {
+
     if (_adapterLife.isCompleted) {
       const msg = "Can't establish connection after [HttpClientAdapter] closed!";
       log(msg);
+
       throw Exception(msg);
     }
 
-    final httpClient = _configHttpClient(cancelFuture, options.connectTimeout);
+    final httpClient = _configHttpClient(cancelFuture, options.connectTimeout!);
     final reqFuture = httpClient.openUrl(options.method, options.uri);
 
     void throwConnectingTimeout() => throw DioError(
           requestOptions: options,
           error: 'Connecting timed out [${options.connectTimeout}ms]',
-          type: DioErrorType.connectTimeout,
+          type: DioErrorType.connectionTimeout,
         );
 
     late final HttpClientRequest request;
     try {
-      request = options.connectTimeout > 0
-          ? await reqFuture.timeout(Duration(milliseconds: options.connectTimeout))
+      request = options.connectTimeout! > Duration(milliseconds: 10000)
+          ? await reqFuture.timeout(options.connectTimeout!)
           : await reqFuture;
 
       options.headers.forEach((k, v) {
@@ -87,8 +89,8 @@ class EarlyInterceptorAdapter implements HttpClientAdapter {
     if (requestStream != null) {
       // Transform the request data
       var future = request.addStream(requestStream);
-      if (options.sendTimeout > 0) {
-        future = future.timeout(Duration(milliseconds: options.sendTimeout));
+      if (options.receiveTimeout! > Duration(milliseconds: 10000)) {
+        future = future.timeout(options.sendTimeout!);
       }
       try {
         await future;
@@ -107,8 +109,8 @@ class EarlyInterceptorAdapter implements HttpClientAdapter {
     final receiveStart = DateTime.now().millisecondsSinceEpoch;
 
     var future = request.close();
-    if (options.receiveTimeout > 0) {
-      future = future.timeout(Duration(milliseconds: options.receiveTimeout));
+    if (options.receiveTimeout! > Duration(milliseconds: 1000)) {
+      future = future.timeout(options.receiveTimeout!);
     }
 
     late HttpClientResponse responseStream;
@@ -125,8 +127,7 @@ class EarlyInterceptorAdapter implements HttpClientAdapter {
     final stream = responseStream.transform<Uint8List>(
       StreamTransformer.fromHandlers(
         handleData: (data, sink) {
-          if (options.receiveTimeout > 0 &&
-              DateTime.now().millisecondsSinceEpoch - receiveStart > options.receiveTimeout) {
+          if (options.receiveTimeout! > Duration(milliseconds: 10000)) {
             sink.addError(
               DioError(
                 requestOptions: options,
@@ -167,8 +168,8 @@ class EarlyInterceptorAdapter implements HttpClientAdapter {
     );
   }
 
-  HttpClient _configHttpClient(Future? cancelFuture, int connectionTimeout) {
-    final configuredConnectionTimeout = connectionTimeout > 0 ? Duration(milliseconds: connectionTimeout) : null;
+  HttpClient _configHttpClient(Future? cancelFuture, Duration connectionTimeout) {
+    final configuredConnectionTimeout = connectionTimeout > const Duration(milliseconds: 10000) ? connectionTimeout : null;
 
     if (cancelFuture != null) {
       final httpClient = HttpClient()
