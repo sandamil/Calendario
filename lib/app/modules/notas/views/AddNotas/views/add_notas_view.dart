@@ -1,4 +1,6 @@
-import 'package:alarm/alarm.dart';
+import 'dart:io';
+
+
 import 'package:calendario2/app/modules/home/widgets/calendar/widget/line.dart';
 import 'package:calendario2/app/modules/notas/views/alarmas/controllers/alarmas_controller.dart';
 import 'package:calendario2/app/modules/notas/views/alarmas/views/widget/alarmTile.dart';
@@ -7,17 +9,20 @@ import 'package:calendario2/config/theme/my_fonts.dart';
 import 'package:calendario2/config/util/app_utils.dart';
 import 'package:calendario2/config/util/dateUtils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart' as dp;
 
 import 'package:get/get.dart';
 
+import '../../../../../../config/util/app_icons.dart';
 import '../../../../../controllers/ads_controller.dart';
 import '../controllers/add_notas_controller.dart';
 
 class AddNotasView extends GetView<AddNotasController> {
   AddNotasView({Key? key}) : super(key: key);
   final adcontroller = Get.find<AdsController>();
+
 
   @override
   Widget build(BuildContext context) {
@@ -59,7 +64,7 @@ class AddNotasView extends GetView<AddNotasController> {
               onPressed: () async {
                 adcontroller.loadNotesListBannerAd();
 
-                controller.addTravelEvent();
+                // controller.addTravelEvent();
                 await controller.saveNota();
                 Get.offAllNamed('/notas');
               },
@@ -237,7 +242,7 @@ class AddNotasView extends GetView<AddNotasController> {
                   LineWidget(),
                   TextButton(
                       onPressed: () async {
-                        controller.alarmaCreadaNota != null
+                        controller.alarmaCreada
                             ? Get.dialog(Align(
                                 alignment: Alignment.center,
                                 child: Padding(
@@ -259,9 +264,8 @@ class AddNotasView extends GetView<AddNotasController> {
                                           children: [
                                             Padding(
                                               padding: EdgeInsets.all(8.h),
-                                              child: Icon(
-                                                Icons.info,
-                                                color: Colors.redAccent,
+                                              child: AppIcon(AppIcons.informacion,
+                                                color: Colors.green,
                                                 size: 38.sp,
                                               ),
                                             ),
@@ -270,24 +274,24 @@ class AddNotasView extends GetView<AddNotasController> {
                                               color:
                                                   theme.scaffoldBackgroundColor,
                                               height: 100.h,
-                                              child: Padding(
-                                                padding: EdgeInsets.all(4.h),
-                                                child: Text(
-                                                  'Si continuas se borrara la esta alarma preestablecida para las: ${TimeOfDay(
-                                                    hour: controller
-                                                        .alarmaCreadaNota!
-                                                        .dateTime
-                                                        .hour,
-                                                    minute: controller
-                                                        .alarmaCreadaNota!
-                                                        .dateTime
-                                                        .minute,
-                                                  ).format(context)}',
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .headlineMedium,
-                                                ),
-                                              ),
+                                              // child: Padding(
+                                              //   padding: EdgeInsets.all(4.h),
+                                              //   child: Text(
+                                              //     'Si continuas se borrara la esta alarma preestablecida para las: ${TimeOfDay(
+                                              //       hour: controller
+                                              //           .alarmaCreadaNota!
+                                              //           .dateTime
+                                              //           .hour,
+                                              //       minute: controller
+                                              //           .alarmaCreadaNota!
+                                              //           .dateTime
+                                              //           .minute,
+                                              //     ).format(context)}',
+                                              //     style: Theme.of(context)
+                                              //         .textTheme
+                                              //         .headlineMedium,
+                                              //   ),
+                                              // ),
                                             ),
                                             Row(
                                               children: [
@@ -304,18 +308,13 @@ class AddNotasView extends GetView<AddNotasController> {
                                                 SizedBox(
                                                   width: 8.w,
                                                 ),
+
+
                                                 Expanded(
                                                     child: ElevatedButton(
-                                                  onPressed: () {
-                                                    Alarm.stop(controller
-                                                            .alarmaCreadaNota!
-                                                            .id)
-                                                        .then((_) =>
-                                                            alarmasController
-                                                                .loadAlarms());
-                                                    controller
-                                                            .alarmaCreadaNota =
-                                                        null;
+                                                  onPressed: () async {
+                                                    // controller.alarmTime = DateTime(2020);
+                                                    // await alarmasController.flutterLocalNotificationsPlugin.cancel(controller.idGenerated);  // 0 is your notification id
                                                     Get.toNamed('/alarmas',
                                                         arguments: {
                                                           'id': controller
@@ -381,21 +380,23 @@ class AddNotasView extends GetView<AddNotasController> {
                               ],
                             )
                           ])),
-                  controller.alarmaCreadaNota != null
-                      ? ExampleAlarmTile(
-                          key: Key(controller.alarmaCreadaNota!.id.toString()),
+                  controller.alarmTime.isBefore(DateTime.now())
+              // || alarmasController.pendingNotifications.contains(id: '${controller.idGenerated}')
+                      ?  Container()
+                  : ExampleAlarmTile(
+                          key: Key(controller.alarmTime.toString()),
                           title: TimeOfDay(
-                            hour: controller.alarmaCreadaNota!.dateTime.hour,
+                            hour: controller.alarmTime.hour,
                             minute:
-                                controller.alarmaCreadaNota!.dateTime.minute,
+                            controller.alarmTime.minute,
                           ).format(context),
                           onPressed: () {
                             null;
                             // alarmasController.navigateToAlarmScreen(
                             //     controller.alarmaCreadaNota, context);
                           },
-                        )
-                      : Container(),
+                        ),
+                      // : Container(child: Text(controller.alarmTime.toString()),),
                   LineWidget(),
                   SizedBox(
                     height: 2.h,
@@ -440,7 +441,7 @@ class AddNotasView extends GetView<AddNotasController> {
                           key: controller.firstTime.value
                               ? controller.tutorialController.keyNotasAyuda
                               : key,
-                          icon: const Icon(Icons.info, color: Colors.redAccent),
+                          icon: const AppIcon(AppIcons.informacion, color: Colors.green),
                           tooltip: '',
                           onPressed: () {
                             controller.firstTime.value = true;

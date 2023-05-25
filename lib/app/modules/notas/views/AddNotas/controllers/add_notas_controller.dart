@@ -1,9 +1,10 @@
-import 'package:alarm/alarm.dart';
+
 import 'package:calendario2/app/controllers/tutorialController.dart';
 import 'package:calendario2/app/data/local/my_shared_pref.dart';
 import 'package:calendario2/app/data/local/taskDatabase.dart';
 import 'package:calendario2/app/data/model/taskModel.dart';
 import 'package:calendario2/config/util/constant.dart';
+import 'package:calendario2/config/util/dateUtils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -31,18 +32,26 @@ class AddNotasController extends GetxController {
   Rx<DateTime> endTime = DateTime.now().obs;
   RxBool isImportant = false.obs;
 
-  DateTime time = DateTime.now();
+
+
 
   var idGenerated;
 
   ///ALARMA
-  AlarmSettings? alarmaCreadaNota;
+  // AlarmSettings? alarmaCreadaNota;
 
   final _alarmaCreada = false.obs;
   bool get alarmaCreada => _alarmaCreada.value;
   void setAlarmaCreada(bool value) {
     _alarmaCreada.value = value;
   }
+
+  DateTime alarmTime = DateTime.now();
+  void setAlarmaTime(DateTime value) {
+    alarmTime = value;
+    alarmaHora = value.formatDateTime24H.toString();
+  }
+  late String alarmaHora;
 
   RxBool firstTime = false.obs;
 
@@ -55,6 +64,7 @@ class AddNotasController extends GetxController {
       endTime.value =  DateTime.fromMillisecondsSinceEpoch(dateTimeCalendar);
     }
     super.onInit();
+
 
     // if (MySharedPref.getTutoAddTaskFirst()) {
     //   firstTime.value = true;
@@ -88,68 +98,70 @@ class AddNotasController extends GetxController {
     super.onClose();
   }
 
-  void addTravelEvent() {
-    final int daysNum = endTime.value.difference(startTime.value).inDays;
-    if (0 == daysNum) {
-      final DateTime time = DateTime(
-          startTime.value.year, startTime.value.month, startTime.value.day);
-      setTravelEvent(
-        time,
-        title.text,
-        site.text,
-        startTime.value,
-        endTime.value,
-        isImportant.value,
-      );
-    } else {
-      for (int i = 0; i <= daysNum; i++) {
-        DateTime _time = DateTime(startTime.value.year, startTime.value.month,
-            startTime.value.day + i);
-        if (0 == i) {
-          setTravelEvent(_time, title.text, site.text, startTime.value,
-              DateTime(0, 0, 0, 24), isImportant.value);
-        } else if (i == daysNum) {
-          setTravelEvent(time, title.text, site.text, DateTime(0, 0, 0, 0),
-              endTime.value, isImportant.value);
-        } else {
-          setTravelEvent(_time, title.text, site.text, DateTime(0, 0, 0, 0),
-              DateTime(0, 0, 0, 24), isImportant.value);
-        }
-      }
-    }
-  }
-
-  void setTravelEvent(DateTime time, String title, String site,
-      DateTime startTime, DateTime endTime, bool isImportant) async {
-    if (events[time] != null) {
-      events[time]?.add(Task(
-        id: idGenerated,
-        title: title,
-        site: site,
-        startTimeMilliseconds: startTime.millisecondsSinceEpoch,
-        endTimeMilliseconds: endTime.millisecondsSinceEpoch,
-        isImportant: isImportant,
-      ));
-    } else {
-      events[time] = [
-        Task(
-          id: idGenerated,
-          title: title,
-          site: site,
-          startTimeMilliseconds: startTime.millisecondsSinceEpoch,
-          endTimeMilliseconds: endTime.millisecondsSinceEpoch,
-          isImportant: isImportant,
-        )
-      ];
-    }
-  }
+  // void addTravelEvent() {
+  //   final int daysNum = endTime.value.difference(startTime.value).inDays;
+  //   if (0 == daysNum) {
+  //     final DateTime time = DateTime(
+  //         startTime.value.year, startTime.value.month, startTime.value.day);
+  //     setTravelEvent(
+  //       time,
+  //       title.text,
+  //       site.text,
+  //       startTime.value,
+  //       endTime.value,
+  //       isImportant.value,
+  //     );
+  //   } else {
+  //     for (int i = 0; i <= daysNum; i++) {
+  //       DateTime _time = DateTime(startTime.value.year, startTime.value.month,
+  //           startTime.value.day + i);
+  //       if (0 == i) {
+  //         setTravelEvent(_time, title.text, site.text, startTime.value,
+  //             DateTime(0, 0, 0, 24), isImportant.value);
+  //       } else if (i == daysNum) {
+  //         setTravelEvent(time, title.text, site.text, DateTime(0, 0, 0, 0),
+  //             endTime.value, isImportant.value);
+  //       } else {
+  //         setTravelEvent(_time, title.text, site.text, DateTime(0, 0, 0, 0),
+  //             DateTime(0, 0, 0, 24), isImportant.value);
+  //       }
+  //     }
+  //   }
+  // }
+  //
+  // void setTravelEvent(DateTime time, String title, String site,
+  //     DateTime startTime, DateTime endTime, bool isImportant) async {
+  //   if (events[time] != null) {
+  //     events[time]?.add(Task(
+  //       id: idGenerated,
+  //       title: title,
+  //       site: site,
+  //       startTimeMilliseconds: startTime.millisecondsSinceEpoch,
+  //       endTimeMilliseconds: endTime.millisecondsSinceEpoch,
+  //       isImportant: isImportant,
+  //     ));
+  //   } else {
+  //     events[time] = [
+  //       Task(
+  //         id: idGenerated,
+  //         title: title,
+  //         site: site,
+  //         startTimeMilliseconds: startTime.millisecondsSinceEpoch,
+  //         endTimeMilliseconds: endTime.millisecondsSinceEpoch,
+  //         isImportant: isImportant,
+  //       )
+  //     ];
+  //   }
+  // }
 
 
 
   saveNota() async {
-    print( startTime.value.millisecondsSinceEpoch);
 
-    await DbProvider.instance.insertNotas(
+
+    print( alarmaHora);
+
+    await NotasDB.instance.insertNotas(
         Task(
           id: idGenerated,
           title: title.text,
@@ -159,11 +171,15 @@ class AddNotasController extends GetxController {
           startTimeMilliseconds: startTime.value.millisecondsSinceEpoch,
           endTimeMilliseconds: endTime.value.millisecondsSinceEpoch,
           idAlarma: idGenerated,
+          alarmaHora: alarmaHora,
           alarmaActivadaString: alarmaActivadaString.value,
           isAlarmaCreated: alarmaCreada,
           // time: Jiffy().format('yyyy-MM-dd h:mm:ss a')
         ),
+
     );
+    print( alarmaHora);
+
   }
 
   void markImportantAsDirty() {

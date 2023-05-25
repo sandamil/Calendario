@@ -155,8 +155,6 @@ class _LogConsoleState extends State<LogConsole> {
             IconButton(
               icon: const Icon(Icons.add),
               onPressed: () {
-                Log.d("curent language code:");
-
                 setState(() {
                   _logFontSize++;
                 });

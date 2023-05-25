@@ -74,7 +74,7 @@ class CustomAlertDialogTurnoList extends StatelessWidget {
                           ),
                           onPressed: () async {
 
-                            await DBHelper.db.addItem(
+                            await CalendarioDB.db.addItem(
                               CuadranteDay(
                                 dateTime: DateTime.parse(selectedDate.toString().substring(0, 10)),
                                 color: m.color,

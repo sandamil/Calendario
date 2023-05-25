@@ -1,10 +1,10 @@
 import 'dart:developer';
 
-import 'package:alarm/model/alarm_settings.dart';
+import 'package:calendario2/app/data/local/calendarDatabase.dart';
 import 'package:calendario2/app/data/local/my_shared_pref.dart';
 import 'package:calendario2/app/data/model/language.dart';
 import 'package:calendario2/app/modules/ajustes/views/pages/util/connector_parameter.dart';
-import 'package:calendario2/app/modules/ajustes/views/widgets/language_screen.dart';
+import 'package:calendario2/app/modules/ajustes/views/pages/language_screen.dart';
 import 'package:calendario2/config/theme/my_theme.dart';
 import 'package:calendario2/config/translations/localization_service.dart';
 import 'package:calendario2/config/util/constant.dart';
@@ -14,12 +14,14 @@ import 'package:get/get.dart';
 import 'package:rive/rive.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../../config/util/backup_restore.dart';
 import '../../../../debug/log/log.dart';
+import '../../../data/local/taskDatabase.dart';
+import '../views/pages/backup_screen.dart';
 import '../views/pages/util/dio_connector.dart';
 import '../views/widgets/alarm_settings.dart';
 
 class AjustesController extends GetxController {
-  AlarmSettings? settings;
 
 
   RxBool isDark = true.obs;
@@ -33,7 +35,6 @@ class AjustesController extends GetxController {
   final artboard = Rxn<RuntimeArtboard>();
   final artboard2 = Rxn<RuntimeArtboard>();
 
-  AlarmSettings? alarmSettings;
 
 
   // var islight = true;
@@ -44,8 +45,6 @@ class AjustesController extends GetxController {
     loadShippingTypes();
     final currentLanguageCode = MySharedPref.getCurrentLocal().languageCode;
     log('curent language code: $currentLanguageCode');
-    Log.e("curent language code: $currentLanguageCode");
-    Log.d("curent language code: $currentLanguageCode");
 
     selectedLanguage = languages
         .firstWhere((element) => element.languageCode == currentLanguageCode)
@@ -109,6 +108,16 @@ class AjustesController extends GetxController {
       MyTheme.changeTheme();
     }
   }
+
+  void backup() {
+    Get.to(
+          () => const BackupScreen(),
+      transition: Transition.fadeIn,
+      duration: const Duration(milliseconds: 100),
+    );
+  }
+
+
 
   void goToLanguageScreen() {
     Get.to(
@@ -180,7 +189,7 @@ class AjustesController extends GetxController {
 
 
   void editarAlarmas() {
-    Get.to(AlarmSettingsScreen());
+    // Get.to(AlarmSettingsScreen());
   }
 
 
@@ -201,4 +210,32 @@ class AjustesController extends GetxController {
       rethrow;
     }
   }
+
+
+  ///=============Backup==============
+  void backupNotasDb() {
+    NotasDB databaseRepository = NotasDB();
+    print('backupNotasDb');
+    backupDb(databaseRepository);
+  }
+
+  void restoreNotasDb() {
+    NotasDB databaseRepository = NotasDB();
+    print('restoreNotasDb');
+    restaurarDb(databaseRepository);
+  }
+
+  void backupCalendarioDb() {
+    CalendarioDB databaseRepository = CalendarioDB();
+    print('backupCalendarioDb');
+    backupDb(databaseRepository);
+  }
+
+  void restoreCalendarioDb() {
+    CalendarioDB databaseRepository = CalendarioDB();
+    print('restoreCalendarioDb');
+    restaurarDb(databaseRepository);
+  }
+
+
 }

@@ -38,20 +38,20 @@ class _AboutPageState extends State<AboutPage> {
     listViewData.addAll([
       {
         "icon": Icons.refresh,
-        "title": 'Check version',
+        "title": 'Comprobar Actualización',
         "color": Colors.orange,
         "onPress": OnListViewPress.appUpdate
       },
-      {
-        "icon": Icons.noise_aware,
-        "title": 'Contribution',
-        "color": Colors.lightGreen,
-        "onPress": OnListViewPress.contribution
-      },
+      // {
+      //   "icon": Icons.noise_aware,
+      //   "title": 'Contribuciones',
+      //   "color": Colors.lightGreen,
+      //   "onPress": OnListViewPress.contribution
+      // },
       {
         "icon": Icons.privacy_tip_outlined,
         "color": Colors.blueGrey,
-        "title": 'Privacy policy',
+        "title": 'Política de Privacidad',
         "onPress": OnListViewPress.privacyPolicy
       },
       {
@@ -82,7 +82,7 @@ class _AboutPageState extends State<AboutPage> {
   void _onListViewPress(OnListViewPress value) async {
     switch (value) {
       case OnListViewPress.appUpdate:
-        Toast.toast(context, msg: 'Checking version...');
+        Toast.toast(context, msg: 'Comprobando versión...');
         // final result = await APPVersion.checkShouldUpdate();
         // if (!result) {
         //   Toast.toast(context, msg: 'Already the latest version');

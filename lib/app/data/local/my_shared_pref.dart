@@ -63,36 +63,32 @@ class MySharedPref {
 
 
 
-
-
-
-
+/// ________________________TUTORIAL____________________________
   static Future<void> setTutoHomeFirst(bool first) =>
       _sharedPreferences.setBool('tutoHomeFirst', first);
 
   static bool getTutoHomeFirst() {
-    print('estoy aqui');
-    _sharedPreferences.setBool('tutoHomeFirst', true);
-    return _sharedPreferences.getBool("tutoHomeFirst") ?? false;
+
+    return _sharedPreferences.getBool("tutoHomeFirst") ?? true;
   }
 
   static Future<void> setTutoTaskFirst(bool first) =>
       _sharedPreferences.setBool('tutoTask', first);
 
   static bool getTutoTaskFirst() =>
-      _sharedPreferences.getBool("tutoTask") ?? false;
+      _sharedPreferences.getBool("tutoTask") ?? true;
 
   static Future<void> setTutoAddTaskFirst(bool first) =>
       _sharedPreferences.setBool('tutoAddTask', first);
 
   static bool getTutoAddTaskFirst() =>
-      _sharedPreferences.getBool("tutoAddTask") ?? false;
+      _sharedPreferences.getBool("tutoAddTask") ?? true;
 
   static Future<void> setTutoCuadranteFirst(bool first) =>
       _sharedPreferences.setBool('tutoCuadrante', first);
 
   static bool getTutoCuadranteFirst() =>
-      _sharedPreferences.getBool("tutoCuadrante") ?? false;
+      _sharedPreferences.getBool("tutoCuadrante") ?? true;
 
   /// clear all data from shared pref
   static Future<void> clear() async => await _sharedPreferences.clear();

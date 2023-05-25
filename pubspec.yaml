@@ -3,7 +3,7 @@ description: Calendario 2.0.
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 2.0.4+35
+version: 2.0.5+36
 
 environment:
   sdk: '>=2.19.3 <3.0.0'
@@ -35,16 +35,21 @@ dependencies:
 
 # CALENDARIO
   table_calendar: ^3.0.9
+  flutter_local_notifications: ^14.1.0
+  flutter_timezone:
+#  flutter_native_timezone: ^2.0.0
 
-# DATA
+
+  # DATA
   shared_preferences: ^2.1.1
   get_storage: ^2.1.1
   sqflite: ^2.2.8+4
   path_provider: ^2.0.15
+  file_picker: ^5.2.0
+
 
 # FUNCIONALIDADES APP
   tutorial_coach_mark: ^1.2.8
-  alarm: ^1.0.5
   share_plus: ^6.3.0
   url_launcher: ^6.1.11
   youtube_player_iframe: ^4.0.4

@@ -1,12 +1,13 @@
-import 'package:alarm/alarm.dart';
+
 import 'package:calendario2/app/data/local/taskDatabase.dart';
 import 'package:calendario2/app/data/model/taskModel.dart';
 import 'package:calendario2/app/modules/notas/views/alarmas/controllers/alarmas_controller.dart';
+import 'package:calendario2/config/util/dateUtils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class EditNotasController extends GetxController {
-  AlarmasController alarmasController = AlarmasController();
+  // AlarmasController alarmasController = AlarmasController();
 
   RxBool important = false.obs;
 
@@ -23,9 +24,18 @@ class EditNotasController extends GetxController {
   Rx<Task> currentNote = Task().obs;
   late int id;
 
-  AlarmSettings? alarmaCreadaNota;
+  // AlarmSettings? alarmaCreadaNota;
 
   var _alarmaCreada = false.obs;
+
+  DateTime alarmTime = DateTime.now();
+  void setAlarmaTime(DateTime value) {
+    alarmTime = value;
+    alarmaHora = value.formatDateTime24H.toString();
+  }
+  late String alarmaHora;
+
+
   bool get alarmaCreada => _alarmaCreada.value;
   void setAlarmaCreada(bool value) {
     _alarmaCreada.value = value;
@@ -37,6 +47,13 @@ class EditNotasController extends GetxController {
       currentNote.value = Get.arguments['noteData'];
       id = Get.arguments['id'];
     }
+    print( 'onInit()');
+    print( 'onInit()');
+    print( 'onInit()');
+    print( currentNote.value.alarmaHora);
+    print( 'onInit()');
+    print( 'onInit()');
+    print( 'onInit()');
 
     title.value.text = currentNote.value.title!;
     site.value.text = currentNote.value.site!;
@@ -47,9 +64,9 @@ class EditNotasController extends GetxController {
         currentNote.value.endTimeMilliseconds!);
     important.value = currentNote.value.isImportant!;
     alarmaActivadaString.value = currentNote.value.alarmaActivadaString!;
-
+    alarmaHora = currentNote.value.alarmaHora!;
     super.onInit();
-    await loadAlarm(id);
+    // await loadAlarm(id);
 
   }
 
@@ -68,7 +85,7 @@ class EditNotasController extends GetxController {
   }
 
   editNote() async {
-    await DbProvider.instance.update(
+    await NotasDB.instance.update(
       Task(
         id: currentNote.value.id,
         title: title.value.text,
@@ -87,11 +104,11 @@ class EditNotasController extends GetxController {
 
 
 
-  loadAlarm(id) async {
-    alarmaCreadaNota = Alarm.getAlarm(id);
-    // alarms.sort((a, b) => a.dateTime.isBefore(b.dateTime) ? 0 : 1);
-    update();
-  }
+  // loadAlarm(id) async {
+  //   // alarmaCreadaNota = Alarm.getAlarm(id);
+  //   // alarms.sort((a, b) => a.dateTime.isBefore(b.dateTime) ? 0 : 1);
+  //   update();
+  // }
 
 }
 

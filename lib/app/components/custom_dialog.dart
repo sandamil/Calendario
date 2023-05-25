@@ -203,16 +203,16 @@ class MyCustomDialog {
         return AlertDialog(
           title: const Text('Error'),
           titlePadding: const EdgeInsets.all(10),
-          titleTextStyle: const TextStyle(
+          titleTextStyle:  TextStyle(
             color: Colors.red,
-            fontSize: 20,
+            fontSize: 20.sp,
             fontWeight: FontWeight.bold,
           ),
-          content: Text(msj),
+          content: Text(msj,textAlign: TextAlign.center,),
           contentPadding: const EdgeInsets.all(10),
-          contentTextStyle: const TextStyle(
+          contentTextStyle:  TextStyle(
             color: Colors.black,
-            fontSize: 15,
+            fontSize: 15.sp,
             fontWeight: FontWeight.normal,
           ),
           actionsAlignment: MainAxisAlignment.center,

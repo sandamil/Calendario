@@ -135,7 +135,7 @@ class CalendarController extends GetxController {
   }
 
   Future<Map<DateTime, List<CuadranteDay>>> fetchCuadrante() async {
-    cuadrante.value = await DBHelper.db.getItemModels();
+    cuadrante.value = await CalendarioDB.db.getItemModels();
     cuadranteMap.clear();
     for (CuadranteDay turno in cuadrante) {
       cuadranteMap.putIfAbsent(turno.dateTime!, () => <CuadranteDay>[]);
@@ -156,7 +156,7 @@ class CalendarController extends GetxController {
   // }
 
   Future<List<TurnoType>> fetchTurno() async {
-    turno.value = await DBHelper.db.getTypeModels();
+    turno.value = await CalendarioDB.db.getTypeModels();
     return turno;
   }
 
@@ -177,7 +177,7 @@ class CalendarController extends GetxController {
   // RxList<Task> listEvent2 = <Task>[].obs;
 
   getListEvent() async {
-    listEvent.value = await DbProvider.instance.getNotesFromDB();
+    listEvent.value = await NotasDB.instance.getNotesFromDB();
   }
 
   bool hasEvent(DateTime day) {
@@ -209,7 +209,7 @@ class CalendarController extends GetxController {
   deleteTurnoCuadrante(id) {
     adcontroller.staticHomeAd.load();
 
-    DBHelper.db.deleteItemID(id);
+    CalendarioDB.db.deleteItemID(id);
     Get.offAllNamed('/home');
   }
 }

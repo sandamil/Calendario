@@ -63,7 +63,7 @@ class BoardingView extends GetView<BoardingController> {
                         children: <Widget>[
                           SmoothPageIndicator(
                             controller: controller.pageController,
-                            count: 9,
+                            count: 7,
                             effect: WormEffect(
                               activeDotColor: PRIMARY_COLOR,
                               dotWidth: 10.w,

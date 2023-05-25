@@ -103,7 +103,7 @@ class CrearCuadranteView extends GetView<CrearCuadranteController> {
                     }
                   });
                   // Get.toNamed('/notas', (r) => false);
-                  Get.to(const AddCuadranteView()); //   Navigator.push(
+                  Get.to(() => const AddCuadranteView()); //   Navigator.push(
                   //       context,
                   //       MaterialPageRoute(
                   //           builder: (context) =>
@@ -166,69 +166,71 @@ class CrearCuadranteView extends GetView<CrearCuadranteController> {
                       SizedBox(
                         height: 15.h,
                       ),
-                      Container(
-                        height: 200.h,
-                        child: ListView.builder(
-                          physics: const BouncingScrollPhysics(),
-                          itemCount: controller.cuadrantesNameList.length,
-                          itemBuilder: (context, index) {
-                            final name = controller.cuadrantesNameList[index];
+                      Obx(() {
+                        return Container(
+                          height: 200.h,
+                          child: ListView.builder(
+                            physics: const BouncingScrollPhysics(),
+                            itemCount: controller.cuadrantesNameList.value.length,
+                            itemBuilder: (context, index) {
+                              final name = controller.cuadrantesNameList.value[index];
 
-                            return Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 8.h),
-                              child: Card(
-                                child: Row(
-                                  children: [
-                                    SizedBox(width: 10.w),
-                                  Text(
-                                  name,
-                                  style: CustomTextStyle.rowButomText,
-                                ),
-                                    Spacer(),
-                                    IconButton(
-                                      onPressed: () =>
-                                          controller.editarCuadrante(name),
-                                      icon: const Icon(
-                                          Icons.edit_calendar),
-                                    ),
-                                  IconButton(
-                                    onPressed: () =>
-                                        controller.deleteCuadrante(name),
-                                    icon: const Icon(
-                                        Icons.delete_forever_outlined),
-                                  )
+                              return Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 8.h),
+                                child: Card(
+                                  child: Row(
+                                    children: [
+                                      SizedBox(width: 10.w),
+                                      Text(
+                                        name,
+                                        style: CustomTextStyle.rowButomText,
+                                      ),
+                                      Spacer(),
+                                      IconButton(
+                                        onPressed: () =>
+                                            controller.editarCuadrante(name),
+                                        icon: const Icon(
+                                            Icons.edit_calendar),
+                                      ),
+                                      IconButton(
+                                        onPressed: () =>
+                                            controller.deleteCuadrante(name),
+                                        icon: const Icon(
+                                            Icons.delete_forever_outlined),
+                                      )
 
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            );
-                          },
-                          //   RadioListTile(
-                          //     title: Text(controller.languages[index].name),
-                          //     value: controller.languages[index].languageCode,
-                          //     groupValue: controller.selectedLanguage.value.languageCode,
-                          //     onChanged: (value) {
-                          //       log('pressed: ${controller.languages[index].languageCode}');
-                          //       controller.setSelectedShippingTypeIndex(controller.languages[index].languageCode);
-                          //     },
-                          //   ),
-                          // ),
-                          // children: [
-                          //   ...List.generate(
-                          //     controller.languages.length,
-                          //     (index) => RadioListTile(
-                          //       title: Text(controller.languages[index].name),
-                          //       value: controller.languages[index].languageCode,
-                          //       groupValue: controller.selectedLanguage.value.languageCode,
-                          //       onChanged: (value) {
-                          //         controller.setSelectedShippingTypeIndex(controller.languages[index].languageCode);
-                          //       },
-                          //     ),
-                          //     // ListTile(leading: ,trailing: ,)
-                          //   ),
-                          // ],
-                        ),
-                      )
+                              );
+                            },
+                            //   RadioListTile(
+                            //     title: Text(controller.languages[index].name),
+                            //     value: controller.languages[index].languageCode,
+                            //     groupValue: controller.selectedLanguage.value.languageCode,
+                            //     onChanged: (value) {
+                            //       log('pressed: ${controller.languages[index].languageCode}');
+                            //       controller.setSelectedShippingTypeIndex(controller.languages[index].languageCode);
+                            //     },
+                            //   ),
+                            // ),
+                            // children: [
+                            //   ...List.generate(
+                            //     controller.languages.length,
+                            //     (index) => RadioListTile(
+                            //       title: Text(controller.languages[index].name),
+                            //       value: controller.languages[index].languageCode,
+                            //       groupValue: controller.selectedLanguage.value.languageCode,
+                            //       onChanged: (value) {
+                            //         controller.setSelectedShippingTypeIndex(controller.languages[index].languageCode);
+                            //       },
+                            //     ),
+                            //     // ListTile(leading: ,trailing: ,)
+                            //   ),
+                            // ],
+                          ),
+                        );
+                      })
                     ],
                   ),
                 ),
@@ -274,10 +276,10 @@ class CrearCuadranteView extends GetView<CrearCuadranteController> {
       return TextButton(
         child: controller.cuadranteLoading.value
             ? const SizedBox(
-                height: 25,
-                width: 25,
-                child: CircularProgressIndicator(),
-              )
+          height: 25,
+          width: 25,
+          child: CircularProgressIndicator(),
+        )
             : const Text('Calendario'),
         onPressed: () async {
           adcontroller.staticHomeAd.load();

@@ -1,4 +1,4 @@
-import 'package:alarm/alarm.dart';
+
 import 'package:calendario2/app/modules/home/widgets/calendar/widget/line.dart';
 import 'package:calendario2/app/modules/notas/views/alarmas/views/widget/alarmTile.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
@@ -203,7 +203,7 @@ class EditNotasView extends GetView<EditNotasController> {
                 LineWidget(),
                 TextButton(
                     onPressed: () async {
-                      controller.alarmaCreadaNota != null
+                      controller.alarmaCreada
                           ? Get.dialog(Align(
                               alignment: Alignment.center,
                               child: Padding(
@@ -235,24 +235,24 @@ class EditNotasView extends GetView<EditNotasController> {
                                             color:
                                                 theme.scaffoldBackgroundColor,
                                             height: 100.h,
-                                            child: Padding(
-                                              padding: EdgeInsets.all(4.h),
-                                              child: Text(
-                                                'Si continuas se borrara la esta alarma preestablecida para las: ${TimeOfDay(
-                                                  hour: controller
-                                                      .alarmaCreadaNota!
-                                                      .dateTime
-                                                      .hour,
-                                                  minute: controller
-                                                      .alarmaCreadaNota!
-                                                      .dateTime
-                                                      .minute,
-                                                ).format(context)}',
-                                                style: Theme.of(context)
-                                                    .textTheme
-                                                    .headlineMedium,
-                                              ),
-                                            ),
+                                            // child: Padding(
+                                            //   padding: EdgeInsets.all(4.h),
+                                            //   child: Text(
+                                            //     'Si continuas se borrara la esta alarma preestablecida para las: ${TimeOfDay(
+                                            //       hour: controller
+                                            //           .alarmaCreadaNota!
+                                            //           .dateTime
+                                            //           .hour,
+                                            //       minute: controller
+                                            //           .alarmaCreadaNota!
+                                            //           .dateTime
+                                            //           .minute,
+                                            //     ).format(context)}',
+                                            //     style: Theme.of(context)
+                                            //         .textTheme
+                                            //         .headlineMedium,
+                                            //   ),
+                                            // ),
                                           ),
                                           Row(
                                             children: [
@@ -272,15 +272,7 @@ class EditNotasView extends GetView<EditNotasController> {
                                               Expanded(
                                                   child: ElevatedButton(
                                                     onPressed: () {
-                                                      Alarm.stop(controller
-                                                          .alarmaCreadaNota!
-                                                          .id)
-                                                          .then((_) =>
-                                                          alarmasController
-                                                              .loadAlarms());
-                                                      controller
-                                                          .alarmaCreadaNota =
-                                                      null;
+
                                                       Get.toNamed('/alarmas',
                                                           arguments: {
                                                             'isEditing': true,
@@ -335,26 +327,17 @@ class EditNotasView extends GetView<EditNotasController> {
                             ],
                           )
                         ])),
-                controller.alarmaCreadaNota != null
-                    ? ExampleAlarmTile(
-                        key: Key(controller.alarmaCreadaNota!.id.toString()),
-                        title: TimeOfDay(
-                          hour: controller.alarmaCreadaNota!.dateTime.hour,
-                          minute: controller.alarmaCreadaNota!.dateTime.minute,
-                        ).format(context),
-                        onPressed: () {
-                          null;
-                          // alarmasController.navigateToAlarmScreen(
-                          //     controller.alarmaCreadaNota, context);
-                        },
-                        // onDismissed: () {
-                        //   Alarm.stop(alarmasController
-                        //       .alarmaCreada!.id)
-                        //       .then((_) => alarmasController
-                        //       .loadAlarms());
-                        // },
-                      )
-                    : Container(),
+                !controller.alarmaCreada
+                    ?  Container()
+                    : ExampleAlarmTile(
+                  key: Key(controller.alarmTime.toString()),
+                  title: controller.alarmaHora,
+                  onPressed: () {
+                    null;
+                    // alarmasController.navigateToAlarmScreen(
+                    //     controller.alarmaCreadaNota, context);
+                  },
+                ),
                 LineWidget(),
                 SizedBox(
                   height: 2.h,

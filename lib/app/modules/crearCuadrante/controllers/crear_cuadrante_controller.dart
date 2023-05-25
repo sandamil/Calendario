@@ -14,7 +14,7 @@ class CrearCuadranteController extends GetxController {
 
   RxString cuadranteNameString = "".obs;
 
-  List<String> cuadrantesNameList = [];
+  RxList<String> cuadrantesNameList = <String>[].obs;
 
   get getCuadranteNameString => cuadranteNameString.value;
 
@@ -37,7 +37,7 @@ class CrearCuadranteController extends GetxController {
 
   @override
   void onInit() async {
-    cuadrantesNameList = MySharedPref.getStringList() ?? [];
+    cuadrantesNameList.value = MySharedPref.getStringList() ?? [];
 
     // inicialDate = Rxn(DateTime.now());
     // endDate = Rxn(DateTime.now().add(const Duration(days: 365)));
@@ -79,7 +79,7 @@ class CrearCuadranteController extends GetxController {
   }
 
   Rotation(DateTime start, DateTime end) async {
-    if (cuadrantesNameList.contains(cuadranteNameString.value)) {
+    if (cuadrantesNameList.value.contains(cuadranteNameString.value)) {
       DateTime date;
       var x = 0;
       var difference = end.difference(start).inDays;
@@ -89,7 +89,7 @@ class CrearCuadranteController extends GetxController {
         if (x >= list.length) {
           x = 0;
         }
-        await DBHelper.db.updateItem(
+        await CalendarioDB.db.updateItem(
           CuadranteDay(
             dateTime: date,
             color: list[x].color,
@@ -114,7 +114,7 @@ class CrearCuadranteController extends GetxController {
       if (x >= list.length) {
         x = 0;
       }
-      await DBHelper.db.addItem(
+      await CalendarioDB.db.addItem(
         CuadranteDay(
           dateTime: date,
           color: list[x].color,
@@ -122,34 +122,36 @@ class CrearCuadranteController extends GetxController {
           endHour: list[x].endHour,
           startHour: list[x].startHour,
           title: list[x].title,
-          cuadranteName: cuadranteNameString.value,
+          cuadranteName: cuadranteNameString.toString(),
         ),
       );
       x = x + 1;
     }
     cuadrantesNameList.add(cuadranteNameString.value);
-    MySharedPref.setCuadrantesList(cuadrantesNameList);
+    MySharedPref.setCuadrantesList(cuadrantesNameList.value);
   }
 
   Future<List<TurnoType>> fetchTurnosType() async {
-    turnoType.value = await DBHelper.db.getTypeModels();
+    turnoType.value = await CalendarioDB.db.getTypeModels();
     return turnoType;
   }
 
   editarCuadrante(String name) {
-    Get.to(const AddCuadranteView());
+    Get.to(() =>  AddCuadranteView());
     cuadranteName.text = name;
     cuadranteNameString.value = name;
   }
 
   deleteCuadrante(cuadranteName) async {
-    await DBHelper.db.deleteCuadrante(cuadranteName);
+    await CalendarioDB.db.deleteCuadrante(cuadranteName);
     cuadrantesNameList.remove(cuadranteName);
-    MySharedPref.setCuadrantesList(cuadrantesNameList);
+    MySharedPref.setCuadrantesList(cuadrantesNameList.value);
+    cuadrantesNameList.value = MySharedPref.getStringList();
+    update();
   }
 
   deleteAllCuadrante() async {
-    await DBHelper.db.deleteALlCuadrante();
+    await CalendarioDB.db.deleteALlCuadrante();
     cuadrantesNameList.clear();
     MySharedPref.deleteCuadrantesList();
   }

@@ -8,6 +8,7 @@ import 'package:calendario2/app/modules/versionAnterior/views/widgets/notasBkpCa
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import '../../../data/model/previousDatabase/customShiftTemplate.dart';
 import '../../../data/model/previousDatabase/previousShift.dart';
@@ -130,9 +131,17 @@ void goToTurnosPersonalizadosScreen() {
   }
 
   Future<void>  descargaVersionAnterior() async{
-      if (!await launchUrl(_url)) {
-        throw Exception('Could not launch $_url');
-      }
+    final Uri params = Uri(
+      scheme: 'mailto',
+      path: 'ajatsoft@gmail.com',
+      queryParameters: {'subject': "VersionAnterior", 'body': "Enviame version anterior de calendario, por favor¡"}
+      // query: 'subject= Enviame version anterior de calendario, por favor¡ = 'body': "Hey Kashish here goes the body"',
+    );
+    String url = params.toString();
+    if (await launchUrlString(url)) {
+      await launchUrlString(url);
+    } else {
+    }
 
   }
 

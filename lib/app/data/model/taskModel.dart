@@ -8,6 +8,7 @@ class Task {
   // String? time;
   bool? isImportant;
   int? idAlarma;
+  String? alarmaHora;
   String? alarmaActivadaString;
   bool? isAlarmaCreated;
 
@@ -21,6 +22,7 @@ class Task {
       // this.time,
       this.isImportant,
       this.idAlarma,
+      this.alarmaHora,
       this.alarmaActivadaString,
       this.isAlarmaCreated
       });
@@ -36,6 +38,7 @@ class Task {
       // 'time': time,
       'isImportant': isImportant == true ? 1 : 0,
       'idAlarma': idAlarma,
+      'alarmaHora': alarmaHora,
       'alarmaActivadaString': alarmaActivadaString,
       'isAlarmaCreated': isAlarmaCreated == true ? 1 : 0,
     };
@@ -51,6 +54,7 @@ class Task {
     // this.time = map['time'];
     isImportant = map['isImportant'] == 1 ? true : false;
     idAlarma = map['idAlarma'];
+    alarmaHora = map['alarmaHora'];
     alarmaActivadaString = map['alarmaActivadaString'];
     isAlarmaCreated = map['isAlarmaCreated'] == 1 ? true : false;
   }
@@ -66,6 +70,7 @@ class Task {
         'endTimeMilliseconds: $endTimeMilliseconds, '
         'isImportant: $isImportant, '
         'idAlarma: $idAlarma, '
+        'alarmaHora: $alarmaHora, '
         'alarmaActivadaString: $alarmaActivadaString, '
         'isAlarmaCreated: $isAlarmaCreated}, '
         '';

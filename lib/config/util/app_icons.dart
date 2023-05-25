@@ -29,8 +29,10 @@ class AppIcon extends StatelessWidget {
 enum AppIcons {
   close,
   info,
+  informacion,
   menu,
   prev,
+  telefono_alarma,
   share_android,
   share_ios
 }

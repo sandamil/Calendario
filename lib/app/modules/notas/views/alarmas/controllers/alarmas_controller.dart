@@ -1,4 +1,5 @@
-import 'package:alarm/alarm.dart';
+
+import 'package:calendario2/app/components/custom_dialog.dart';
 import 'package:calendario2/app/components/custom_snackbar.dart';
 import 'package:calendario2/app/data/model/taskModel.dart';
 import 'package:calendario2/app/modules/notas/views/AddNotas/controllers/add_notas_controller.dart';
@@ -7,29 +8,39 @@ import 'package:calendario2/app/modules/notas/views/EditNotas/controllers/edit_n
 import 'package:calendario2/app/modules/notas/views/EditNotas/views/edit_notas_view.dart';
 import 'package:calendario2/app/modules/notas/views/alarmas/views/edit_alarm.dart';
 import 'package:calendario2/config/util/constant.dart';
+import 'package:calendario2/config/util/dateUtils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
+
 
 class AlarmasController extends GetxController {
-  final addNotasController = Get.put(AddNotasController());
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+  FlutterLocalNotificationsPlugin();
 
 
-  RxList<AlarmSettings> alarms = <AlarmSettings>[].obs;
+
+  // RxList<AlarmSettings> alarms = <AlarmSettings>[].obs;
 
   late int id;
   var startTime;
   String? title;
   String? notes;
 
-  AlarmSettings? alarmaCreada;
+  // AlarmSettings? alarmaCreada;
 
   // Rx<Task> currentNote = Task().obs;
 
   RxBool isEditing = false.obs;
 
+  RxList<ActiveNotification> pastNotifications = <ActiveNotification>[].obs;
+  RxList<PendingNotificationRequest> pendingNotifications = <PendingNotificationRequest>[].obs;
 
   @override
-  void onInit() {
+   onInit()  async {
+
     if (Get.arguments != null) {
       if (Get.arguments['isEditing'] == true) {
         // currentNote.value = Get.arguments['currentNote'];
@@ -40,12 +51,14 @@ class AlarmasController extends GetxController {
         // notes = currentNote.value.notes;
         // id = currentNote.value.id!;
         startTime = Get.arguments['startTime'];
+        alarmTime = DateTime(2000);
         title = Get.arguments['title'];
         notes = Get.arguments['notes'];
         id = Get.arguments['id'];
 
       } else {
         startTime = Get.arguments['startTime'];
+        alarmTime = DateTime(2000);
         title = Get.arguments['title'];
         notes = Get.arguments['notes'];
         id = Get.arguments['id'];
@@ -55,6 +68,10 @@ class AlarmasController extends GetxController {
       // notes = Get.arguments['notes'];
       // id = Get.arguments['id'];
     }
+
+    tz.initializeTimeZones();
+    // final String timeZone = await FlutterNativeTimezone.getLocalTimezone();
+    // tz.setLocalLocation(tz.getLocation(timeZone));
 
     super.onInit();
     textController.addListener(() {
@@ -73,31 +90,20 @@ class AlarmasController extends GetxController {
     dias1(false);
   }
 
-  Future<void> navigateToAlarmScreen(AlarmSettings? settings, context) async {
-    final res = await showModalBottomSheet<bool?>(
-        context: context,
-        isScrollControlled: true,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        builder: (context) {
-          return FractionallySizedBox(
-            heightFactor: 0.6,
-            child: ExampleAlarmEditScreen(alarmSettings: settings, isEditing: isEditing),
-          );
-        });
+  getPastNotification() async {
+    pastNotifications.value =
+        await flutterLocalNotificationsPlugin.getActiveNotifications();
 
-    if (res != null && res == true) loadAlarms();
+    print(pastNotifications.value.length);
+
   }
+  getPendingNotification() async {
+    pendingNotifications.value =
+        await flutterLocalNotificationsPlugin.pendingNotificationRequests();
 
-  loadAlarms() async {
-    alarms.value = Alarm.getAlarms();
-    // alarms.sort((a, b) => a.dateTime.isBefore(b.dateTime) ? 0 : 1);
-    // searchIdAlarma();
-    update();
+    print(pendingNotifications.value.length);
+
   }
-
-
 
 
 
@@ -136,33 +142,40 @@ class AlarmasController extends GetxController {
   RxString subtractTimeString = ''.obs;
   // RxInt subtractTime = 0.obs;
 
-  RxString assetAudioPathAddNotas = ConstantData.nokiaAlarm.obs;
-
-  bool showNotifOnRing = true;
-  bool showNotifOnKill = true;
-  bool isRinging = false;
-  bool loopAudio = false;
-  bool fadeVolume = false;
 
   Duration duracion = const Duration(microseconds: 2);
 
-  setAlarmTime([bool enableNotif = true]) async {
-    alarmTime = startTime.subtract(duracion);
-    final alarmSettings = AlarmSettings(
-      id: id,
-      dateTime: alarmTime,
-      assetAudioPath: assetAudioPathAddNotas.value,
-      loopAudio: loopAudio,
-      fadeDuration: fadeVolume ? 5.0 : 0.0,
-      notificationTitle:
-          showNotifOnRing && enableNotif ? 'Nota: $title' : null,
-      notificationBody:
-          showNotifOnRing && enableNotif ? 'Mensaje: $notes' : null,
-      enableNotificationOnKill: showNotifOnKill,
-    );
 
-    Alarm.set(alarmSettings: alarmSettings);
-    await Alarm.setNotificationOnAppKillContent(title ?? '', notes ?? '');
+  setNotification([bool enableNotif = true]) async {
+    print('setNotification');
+    alarmTime = startTime.subtract(duracion);
+
+    print('alarmTime  ${alarmTime}');
+
+    if (alarmTime.isBefore(DateTime.now())) {
+      alarmaActivada.value = sinRecordatorio;
+      print('alarmaActivada.value  ${alarmaActivada.value}');
+
+      return;
+    }
+    var tzdatetime = tz.TZDateTime.from(alarmTime, tz.local);
+    print('tzdatetime  ${tzdatetime}');
+
+    await flutterLocalNotificationsPlugin.zonedSchedule(
+        id,
+        'Nota: $title',
+        'Mensaje: $notes',
+        tzdatetime,
+        const NotificationDetails(
+            android: AndroidNotificationDetails(
+                'your channel id', 'your channel name',
+                channelDescription: 'your channel description')),
+        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+        uiLocalNotificationDateInterpretation:
+        UILocalNotificationDateInterpretation.absoluteTime);
+
+    print('fin ==================');
+
   }
 
   String? selectedHMD;
@@ -195,7 +208,7 @@ class AlarmasController extends GetxController {
   goToEditingNotas() async {
     final editNotasController = Get.find<EditNotasController>();
     noRemind.value
-        ? await setAlarmTime()
+        ? await setNotification()
         : CustomSnackBar.showCustomSnackBar(
             title: 'No has añadido Alarma',
             message: ' Vuelve a entrar si queires añadir recordatorio');
@@ -208,27 +221,50 @@ class AlarmasController extends GetxController {
   }
 
   goToAddNotas() async {
+    final addNotasController = Get.put(AddNotasController());
+
     noRemind.value
-        ? await setAlarmTime()
+        ? await setNotification()
         : CustomSnackBar.showCustomSnackBar(
             title: 'No has añadido Alarma',
             message: ' Vuelve a entrar si queires añadir recordatorio');
     await loadAlarmCreada();
     await updatealarmaActivadaString();
     addNotasController.setAlarmaCreada(noRemind.value);
+    print('goToAddNotas ========= noRemind.value  ${noRemind.value}');
+
+    addNotasController.setAlarmaTime(alarmTime);
     await Get.to(() => AddNotasView());
   }
 
   loadAlarmCreada() {
       AddNotasController adNotasController = Get.find();
-      AlarmSettings? alarm = Alarm.getAlarm(id);
-      adNotasController.alarmaCreadaNota = alarm;
+      // AlarmSettings? alarm = Alarm.getAlarm(id);
+      // adNotasController.alarmaCreadaNota = alarm;
   }
 
   loadAlarmCreadaEdit() {
     EditNotasController editNotasController = Get.find();
-    AlarmSettings? alarm = Alarm.getAlarm(id);
-    editNotasController.alarmaCreadaNota = alarm;
+    // AlarmSettings? alarm = Alarm.getAlarm(id);
+    // editNotasController.alarmaCreadaNota = alarm;
+  }
+
+  Future<void> noti() async {
+
+    print('=============== prueba ==================');
+    const AndroidNotificationDetails androidNotificationDetails =
+    AndroidNotificationDetails('your channel id', 'your channel name',
+        channelDescription: 'your channel description',
+        importance: Importance.max,
+        priority: Priority.high,
+        ticker: 'ticker');
+    const NotificationDetails notificationDetails =
+    NotificationDetails(android: androidNotificationDetails);
+    await flutterLocalNotificationsPlugin.show(
+        id++, 'plain title', 'plain body', notificationDetails,
+        payload: 'item x');
+    print('=============== prueba ==================');
+
   }
 
 // searchIdAlarma() {

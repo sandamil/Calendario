@@ -82,9 +82,9 @@ class HomeView extends GetView<HomeController> {
                     ),
                     tooltip: 'today',
                     onPressed: () {
-                      controller.firstTime.value = true;
-                      controller.tutorialController.showTutorial(context, 'home');
-                      // Get.toNamed('/version-anterior');
+                      // controller.firstTime.value = true;
+                      // controller.tutorialController.showTutorial(context, 'home');
+                      Get.toNamed('/version-anterior');
                       // CustomDialog.showPopUpInfo(
                       //   title: 'Volver a HOY',
                       //   description: 'Selecciona Mes al que quieres ir',

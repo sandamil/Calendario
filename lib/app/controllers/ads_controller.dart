@@ -6,11 +6,15 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 class AdsController extends GetxController {
 
   final String _adHomeId = Platform.isAndroid
-      ? 'ca-app-pub-5849370961147264/3151373239'
+      // ? 'ca-app-pub-5849370961147264/3151373239'
+      // : 'ca-app-pub-3940256099942544/2934735716';
+      ? 'ca-app-pub-3940256099942544/6300978111'
       : 'ca-app-pub-3940256099942544/2934735716';
 
   final String _adNotesListId = Platform.isAndroid
-      ? 'ca-app-pub-5849370961147264/4637413038'
+      // ? 'ca-app-pub-5849370961147264/4637413038'
+      // : 'ca-app-pub-3940256099942544/2934735716';
+      ? 'ca-app-pub-3940256099942544/6300978111'
       : 'ca-app-pub-3940256099942544/2934735716';
 
   final String _adCuadrantesListId = Platform.isAndroid

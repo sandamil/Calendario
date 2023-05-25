@@ -59,7 +59,7 @@ class NotasListController extends GetxController {
 
   ///Todo update notes sin cargar toda la base de datos
   setNotesFromDB() async {
-    notesList.value = await DbProvider.instance.getNotesFromDB();
+    notesList.value = await NotasDB.instance.getNotesFromDB();
     update();
     return notesList.value;
   }

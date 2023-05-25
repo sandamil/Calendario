@@ -68,7 +68,7 @@ class AyudaController extends GetxController {
       final appId = Platform.isAndroid ? androidPackageName: 'YOUR_IOS_APP_ID';
       final url = Uri.parse(
         Platform.isAndroid
-            ? "market://details?id=$appId"
+            ? "market://details?id=ajat.calendario.turnos"
             : "https://apps.apple.com/app/id$appId",
       );
       bool canLaunchIntent = await canLaunchUrl(url);

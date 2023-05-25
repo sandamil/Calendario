@@ -5,7 +5,7 @@ class CuadranteName {
     required this.name,
   });
 
-  factory CuadranteName.fromJson(Map<String, dynamic> parsedJson) {
+  factory CuadranteName.fromJson(Map<String, String> parsedJson) {
     return CuadranteName(
         name: parsedJson['name'] ?? "");
   }

@@ -1,4 +1,3 @@
-import 'package:alarm/alarm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -32,7 +31,6 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   Get.put(AppController());
-  await Alarm.init(showDebugLogs: true);
   await initMemory();
   initMixpanel();
   Log.init();

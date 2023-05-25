@@ -7,9 +7,17 @@ class MyColors {
       ? const Color(0xffebeaea)
       : const Color(0xff303030);
 
+  static Color get menuCardBackground => MyTheme().getThemeIsLight
+      ? const Color(0xfff5f3f1)
+      : const Color(0xff444444);
+
   static Color get disableBgColorBtn => MyTheme().getThemeIsLight
       ? const Color(0xFFEBEAEF)
       : const Color(0xff525252);
+
+  static Color get botonBgColor => MyTheme().getThemeIsLight
+      ? const Color(0xFFEEEDED)
+      : const Color(0xFF524E4C);
 
   // Color Cell Calendar
   static Color get cellColor => MyTheme().getThemeIsLight
@@ -56,9 +64,7 @@ class MyColors {
       ? const Color(0xffa2a2a2)
       : const Color(0xff676767);
 
-  static Color get menuCardBackground => MyTheme().getThemeIsLight
-      ? const Color(0xfff5f3f1)
-      : const Color(0xff444444);
+
 }
 
 

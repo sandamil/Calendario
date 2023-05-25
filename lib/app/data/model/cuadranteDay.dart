@@ -34,7 +34,7 @@ class CuadranteDay {
   factory CuadranteDay.fromMap(Map<String, dynamic> map) {
     return CuadranteDay(
       id: map['id'] as int,
-      cuadranteName: map['cuadranteName'] as String?,
+      cuadranteName: map['cuadranteName'].toString(),
       title: map['title'] as String?,
       description: map['description'] as String?,
       startHour: map['startHour'] as String?,

@@ -43,7 +43,7 @@ class NotasViewController extends GetxController {
   }
 
   void handleSave() async {
-    await DbProvider.instance.update(
+    await NotasDB.instance.update(
       Task(
           id: currentNote.value.id,
           title: currentNote.value.title,
@@ -69,6 +69,30 @@ class NotasViewController extends GetxController {
   void handleEdit() {
     adcontroller.staticNotesListAd.dispose();
 
+    print('===============================================');
+    print(currentNote.value.alarmaHora);
+
+    print('===============================================');
+    print('===============================================');
+    print('===============================================');
+
+    print(currentNote.value.alarmaHora);
+    print(currentNote.value.alarmaHora);
+    print(currentNote.value.alarmaHora);
+    print(currentNote.value.alarmaHora);
+    print('===============================================');
+    print('===============================================');
+    print('===============================================');
+    print('===============================================');
+    print('===============================================');
+    print('===============================================');
+    print(currentNote.value.alarmaHora);
+    print(currentNote.value.alarmaHora);
+    print(currentNote.value.alarmaHora);
+    print(currentNote.value.alarmaHora);
+    print(currentNote.value.alarmaHora);
+    print(currentNote.value.alarmaHora);
+    print(currentNote.value.alarmaHora);
     Get.toNamed(
       '/edit-notas',
       arguments: {'id': currentNote.value.id!, 'noteData': currentNote.value},
@@ -116,7 +140,7 @@ class NotasViewController extends GetxController {
                         fontWeight: FontWeight.w500,
                         letterSpacing: 1)),
                 onPressed: () async {
-                  await DbProvider.instance.delete(id);
+                  await NotasDB.instance.delete(id);
                   Get.offAllNamed('/notas');
                   notasListController.refetchNotesFromDB();
                   Toast.toast(context, msg: "Eliminado exitosamente!");
@@ -154,7 +178,7 @@ class NotasViewController extends GetxController {
                         fontWeight: FontWeight.w500,
                         letterSpacing: 1)),
                 onPressed: () async {
-                  await DbProvider.instance.delete(id);
+                  await NotasDB.instance.delete(id);
                   Get.offAllNamed('/notas');
                   notasListController.refetchNotesFromDB();
                   Toast.toast(context, msg: "Eliminado exitosamente!");

@@ -43,8 +43,6 @@ class DevPage extends StatelessWidget {
         break;
       case OnListViewPress.appLog:
         RouteUtils.toLogConsolePage();
-        Log.d("file size = ????????????????????????????");
-
         break;
       default:
         Toast.toast(context, msg: 'No function');

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../../../../config/util/app_icons.dart';
+
 class ExampleAlarmTile extends StatelessWidget {
   final String title;
   final void Function() onPressed;
@@ -23,8 +25,9 @@ class ExampleAlarmTile extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            const AppIcon(AppIcons.telefono_alarma,color: Colors.green,),
             Text(
-              ' Alarma creada para las:',
+              '   Notificaión creada para las:',
               style: TextStyle(
                 fontSize: 14.sp,
                 fontWeight: FontWeight.w500,

@@ -6,12 +6,15 @@ import 'package:sqflite/sqflite.dart';
 
 import '../model/taskModel.dart';
 
-class DbProvider {
-  static final DbProvider instance = DbProvider._internal();
-  factory DbProvider() => instance;
-  DbProvider._internal();
+class NotasDB {
+  static final NotasDB instance = NotasDB._internal();
+  factory NotasDB() => instance;
+  NotasDB._internal();
+
   static Database? _db;
+  final String databaseName = 'notas_database.db';
   final String taskTable = 'Notas';
+  static const int _version = 1;
 
 
   get db async {
@@ -23,12 +26,20 @@ class DbProvider {
     }
   }
 
-  Future<Database> init() async {
+
+  Future<String> databasePath() async {
     Directory doucumentDirectory = await getApplicationDocumentsDirectory();
-    String path = join(doucumentDirectory.path, 'notas_database.db');
+    return join(doucumentDirectory.path, databaseName);
+  }
+
+
+  Future<Database> init() async {
+    // Directory doucumentDirectory = await getApplicationDocumentsDirectory();
+    // String path = join(doucumentDirectory.path, 'notas_database.db');
+    final path = await databasePath();
     return await openDatabase(
       path,
-      version: 1,
+      version: _version,
       onCreate: _onCreate,
     );
   }
@@ -43,6 +54,7 @@ class DbProvider {
         'time TEXT, '
         'isImportant INTEGER, '
         'idAlarma INTEGER, '
+        'alarmaHora TEXT, '
         'alarmaActivadaString TEXT, '
         'isAlarmaCreated INTEGER)'
     );
@@ -55,6 +67,7 @@ class DbProvider {
       notas.toMap(),
       conflictAlgorithm: ConflictAlgorithm.ignore,
     );
+
     return res;
   }
 
@@ -128,7 +141,14 @@ class DbProvider {
     );
   }
 
-  close() async {
-    await db.close();
-  }
+  // close() async {
+  //   await db.close();
+  // }
+
+  // Future close() async {
+  //   final db = await instance.db;
+  //   _db = null;
+  //   return db.close();
+  // }
+
 }

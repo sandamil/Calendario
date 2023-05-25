@@ -12,10 +12,10 @@ class LightThemeColors
   static const Color appBarColor = Color(0x00ffa500);
 
   //SCAFFOLD
-  static const Color scaffoldBackgroundColor = Color(0xffebeaea);
-  static const Color backgroundColor = Color(0xffe5e5e5);
+  static const Color scaffoldBackgroundColor = Color(0xfffefefe);
+  static const Color backgroundColor = Color(0xfff3f3f3);
   static const Color dividerColor = Color(0xffd2d0d0);
-  static const Color cardColor = Color(0xfff7f6f6);
+  static const Color cardColor = Color(0xffe5e5e5);
 
   //ICONS
   static const Color appBarIconsColor = Colors.black;

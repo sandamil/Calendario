@@ -6,11 +6,13 @@ import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/config/theme/my_fonts.dart';
 import 'package:calendario2/config/util/hexColor.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart' as dp;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
 
+import '../../../../config/util/app_icons.dart';
 import '../controllers/crear_cuadrante_controller.dart';
 
 class AddCuadranteView extends GetView<CrearCuadranteController> {
@@ -92,7 +94,7 @@ class AddCuadranteView extends GetView<CrearCuadranteController> {
                           ),
                         ),
                         IconButton(
-                          icon: const Icon(Icons.info, color: Colors.redAccent),
+                          icon: const AppIcon(AppIcons.informacion, color: Colors.green),
                           tooltip: '',
                           onPressed: () {
                             controller.firstTime.value = true;
@@ -106,7 +108,11 @@ class AddCuadranteView extends GetView<CrearCuadranteController> {
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 12.h),
                       child: TextField(
-
+                        // inputFormatters: [
+                        //   FilteringTextInputFormatter.deny(
+                        //     RegExp("[0-9]"),
+                        //   ),
+                        // ],
                         controller: controller.cuadranteName,
                         onChanged: (value) => controller.setCuadranteName(value),
                         decoration: const InputDecoration(

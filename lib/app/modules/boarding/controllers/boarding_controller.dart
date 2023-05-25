@@ -30,20 +30,23 @@ class BoardingController extends GetxController {
           subTitle: 'Bienvenidos a la aplicación',
           description:
               "En esta app podrás llevar un control de tus turnos y horarios de trabajo y anotar todo lo que necesites."
-              "\n\nEste tutorial solo se verá la primera vez que inicies la aplicacion, "
+                  "\n\nPonte en contacto con nosotros ante cualquier duda o sugerencia.\nANTES DE UNA VALORACION NEGATIVA CONTACTA CON NOSOTROS¡\nResolveremos cualquier problema."
+
+
+              "\n\nAntes de nada, si vienes de una versión anterior de esta aplicación, puedes acceder a los datos guardados desde la pantalla principal o desde el menu ayuda/version anterior."
+              "\n\nSi te gusta más la Versión anterior, tambien la puedes descargar desde esa pantalla del menu."
+                  "\n\nEste tutorial solo se verá la primera vez que inicies la aplicacion, "
                   "si tienes dudas, puedes ir desde menú, a la pantalla ayuda,"
                   " donde podrás ver este tutorial "
                   "y también a un monton de videotutoriales, en los que ver como usar cualquier función de la aplicación"
-              "\n\nPonte en contacto con nosotros ante cualquier duda o sugerencia."
-              "\n\nAntes de nada, si vienes de una versión anterior de esta aplicación, puedes acceder a los datos guardados desde la pantalla principal o desde el menu ayuda/version anterior."
               "\n\nVamos a empezar, "
               "\n¡Desliza la pantalla hacia la izquierda!",
           imagePath: 'assets/other/vacio.png'),
-      const BoardingModel(
-          title: '',
-          subTitle: '',
-          description: '',
-          imagePath: 'assets/other/versionAnterior.png'),
+      // const BoardingModel(
+      //     title: '',
+      //     subTitle: '',
+      //     description: '',
+      //     imagePath: 'assets/other/versionAnterior.png'),
       const BoardingModel(
           title: 'Un pequeño tutorial',
           subTitle: 'Como usar la app:',

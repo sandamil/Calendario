@@ -11,6 +11,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
+import '../../../../config/util/app_icons.dart';
 import 'widgets/button_row_view.dart';
 
 class NotasListView extends GetView<NotasListController> {
@@ -50,7 +51,7 @@ class NotasListView extends GetView<NotasListController> {
               key: controller.firstTime.value
                   ? controller.tutorialController.keyNotasListAyuda
                   : key,
-              icon: const Icon(Icons.info_rounded, color: Colors.redAccent),
+              icon: const AppIcon(AppIcons.informacion, color: Colors.green),
               tooltip: '',
               onPressed: () {
                 controller.firstTime.value = true;
