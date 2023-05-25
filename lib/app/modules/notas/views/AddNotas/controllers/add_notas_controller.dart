@@ -6,10 +6,12 @@ import 'package:calendario2/app/data/model/taskModel.dart';
 import 'package:calendario2/config/util/constant.dart';
 import 'package:calendario2/config/util/dateUtils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 
 class AddNotasController extends GetxController {
   TutorialController tutorialController = TutorialController();
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
   Map<DateTime, List<Task>> events = <DateTime, List<Task>>{}.obs;
 
@@ -25,6 +27,7 @@ class AddNotasController extends GetxController {
   TextEditingController site = TextEditingController();
   TextEditingController notes = TextEditingController();
   Rx<DateTime> startTime = DateTime.now().obs;
+
   void setStartTime(value) {
     startTime.value = value;
   }
@@ -51,7 +54,7 @@ class AddNotasController extends GetxController {
     alarmTime = value;
     alarmaHora = value.formatDateTime24H.toString();
   }
-  late String alarmaHora;
+  String alarmaHora = '';
 
   RxBool firstTime = false.obs;
 
@@ -159,7 +162,6 @@ class AddNotasController extends GetxController {
   saveNota() async {
 
 
-    print( alarmaHora);
 
     await NotasDB.instance.insertNotas(
         Task(

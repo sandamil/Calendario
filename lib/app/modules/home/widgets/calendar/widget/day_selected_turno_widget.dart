@@ -78,20 +78,23 @@ class DaySelecetedTurnoWidget extends StatelessWidget {
                                   // SizedBox(
                                   //   width: 20.w,
                                   // ),
-                                  FittedBox(
-                                    child: Text(
-                                      c.selectedEvents[index]
-                                          .description!,
-                                      style: TextStyle(
-                                          height: 1.2.h,
-                                          fontSize: 14.sp,
-                                          fontWeight: FontWeight.bold,
-                                          color: HexColor(c.selectedEvents
-                                                          [index].color!)
-                                                      .computeLuminance() >
-                                                  0.5
-                                              ? Colors.black
-                                              : Colors.white),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 6.0),
+                                    child: FittedBox(
+                                      child: Text(
+                                        c.selectedEvents[index]
+                                            .description!,
+                                        style: TextStyle(
+                                            height: 1.2.h,
+                                            fontSize: 14.sp,
+                                            fontWeight: FontWeight.bold,
+                                            color: HexColor(c.selectedEvents
+                                                            [index].color!)
+                                                        .computeLuminance() >
+                                                    0.5
+                                                ? Colors.black
+                                                : Colors.white),
+                                      ),
                                     ),
                                   ),
                                   // SizedBox(
@@ -123,7 +126,10 @@ class DaySelecetedTurnoWidget extends StatelessWidget {
                                         )
                                       : Container(
                                           padding: EdgeInsets.only(right: 20.w),
-                                        )
+                                        ),
+                                  Spacer(),
+                                  Icon(Icons.arrow_back,size: 16, color: MyColors.textColor,),
+                                  Icon(Icons.delete_forever,size: 18, color: MyColors.textColor,),
                                 ],
                               ),
                             ),

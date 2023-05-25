@@ -26,34 +26,28 @@ class EditNotasController extends GetxController {
 
   // AlarmSettings? alarmaCreadaNota;
 
-  var _alarmaCreada = false.obs;
 
   DateTime alarmTime = DateTime.now();
   void setAlarmaTime(DateTime value) {
     alarmTime = value;
-    alarmaHora = value.formatDateTime24H.toString();
+    alarmaHora.value = value.formatDateTime24H.toString();
   }
-  late String alarmaHora;
+  RxString alarmaHora = ''.obs;
 
-
-  bool get alarmaCreada => _alarmaCreada.value;
+  RxBool alarmaCreada = false.obs;
+  // bool get alarmaCreada => _alarmaCreada.value;
   void setAlarmaCreada(bool value) {
-    _alarmaCreada.value = value;
+    alarmaCreada.value = value;
   }
 
   @override
   void onInit() async {
     if (Get.arguments != null) {
-      currentNote.value = Get.arguments['noteData'];
+      // currentNote.value = Get.arguments['noteData'];
       id = Get.arguments['id'];
     }
-    print( 'onInit()');
-    print( 'onInit()');
-    print( 'onInit()');
-    print( currentNote.value.alarmaHora);
-    print( 'onInit()');
-    print( 'onInit()');
-    print( 'onInit()');
+    currentNote.value = await NotasDB.instance.select(id);
+
 
     title.value.text = currentNote.value.title!;
     site.value.text = currentNote.value.site!;
@@ -63,12 +57,14 @@ class EditNotasController extends GetxController {
     endTime.value = DateTime.fromMillisecondsSinceEpoch(
         currentNote.value.endTimeMilliseconds!);
     important.value = currentNote.value.isImportant!;
+    alarmaCreada.value = currentNote.value.isAlarmaCreated!;
     alarmaActivadaString.value = currentNote.value.alarmaActivadaString!;
-    alarmaHora = currentNote.value.alarmaHora!;
+    alarmaHora.value = currentNote.value.alarmaHora!;
     super.onInit();
     // await loadAlarm(id);
 
   }
+
 
 
   @override
@@ -96,7 +92,7 @@ class EditNotasController extends GetxController {
         endTimeMilliseconds: endTime.value.millisecondsSinceEpoch,
         idAlarma: id,
         alarmaActivadaString: alarmaActivadaString.value,
-        isAlarmaCreated: alarmaCreada,
+        isAlarmaCreated: alarmaCreada.value,
         // time: currentNote.value.time
       ),
     );

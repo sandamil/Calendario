@@ -1,17 +1,18 @@
 import 'dart:io';
 
-
 import 'package:calendario2/app/modules/home/widgets/calendar/widget/line.dart';
 import 'package:calendario2/app/modules/notas/views/alarmas/controllers/alarmas_controller.dart';
 import 'package:calendario2/app/modules/notas/views/alarmas/views/widget/alarmTile.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/config/theme/my_fonts.dart';
+import 'package:calendario2/config/theme/my_styles.dart';
 import 'package:calendario2/config/util/app_utils.dart';
 import 'package:calendario2/config/util/dateUtils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart' as dp;
+import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
+    as dp;
 
 import 'package:get/get.dart';
 
@@ -22,7 +23,6 @@ import '../controllers/add_notas_controller.dart';
 class AddNotasView extends GetView<AddNotasController> {
   AddNotasView({Key? key}) : super(key: key);
   final adcontroller = Get.find<AdsController>();
-
 
   @override
   Widget build(BuildContext context) {
@@ -95,8 +95,7 @@ class AddNotasView extends GetView<AddNotasController> {
                         : key,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      _buildGeneralFormField(
-                          controller.site, 'Ubicación', 2),
+                      _buildGeneralFormField(controller.site, 'Ubicación', 2),
                       SizedBox(
                         height: 4.h,
                       ),
@@ -145,7 +144,6 @@ class AddNotasView extends GetView<AddNotasController> {
                           },
                           child: Column(
                             children: [
-
                               SizedBox(
                                 height: 6.h,
                               ),
@@ -208,11 +206,9 @@ class AddNotasView extends GetView<AddNotasController> {
                                 locale: dp.LocaleType.es);
                           },
                           child: Row(
-
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
-
                                 Text('Hora final',
                                     style: CustomTextStyle.rowButomText),
                                 Row(
@@ -243,103 +239,7 @@ class AddNotasView extends GetView<AddNotasController> {
                   TextButton(
                       onPressed: () async {
                         controller.alarmaCreada
-                            ? Get.dialog(Align(
-                                alignment: Alignment.center,
-                                child: Padding(
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: 10.w),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Container(
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 10.w),
-                                        decoration: BoxDecoration(
-                                          color: theme.scaffoldBackgroundColor,
-                                          borderRadius: BorderRadius.all(
-                                            Radius.circular(5.r),
-                                          ),
-                                        ),
-                                        child: Column(
-                                          children: [
-                                            Padding(
-                                              padding: EdgeInsets.all(8.h),
-                                              child: AppIcon(AppIcons.informacion,
-                                                color: Colors.green,
-                                                size: 38.sp,
-                                              ),
-                                            ),
-                                            Container(
-                                              padding: EdgeInsets.all(6.h),
-                                              color:
-                                                  theme.scaffoldBackgroundColor,
-                                              height: 100.h,
-                                              // child: Padding(
-                                              //   padding: EdgeInsets.all(4.h),
-                                              //   child: Text(
-                                              //     'Si continuas se borrara la esta alarma preestablecida para las: ${TimeOfDay(
-                                              //       hour: controller
-                                              //           .alarmaCreadaNota!
-                                              //           .dateTime
-                                              //           .hour,
-                                              //       minute: controller
-                                              //           .alarmaCreadaNota!
-                                              //           .dateTime
-                                              //           .minute,
-                                              //     ).format(context)}',
-                                              //     style: Theme.of(context)
-                                              //         .textTheme
-                                              //         .headlineMedium,
-                                              //   ),
-                                              // ),
-                                            ),
-                                            Row(
-                                              children: [
-                                                Expanded(
-                                                  child: ElevatedButton(
-                                                    onPressed: () {
-                                                      Get.back();
-                                                      // Get.toNamed('/add-notas', arguments: selectedDate);
-                                                    },
-                                                    child:
-                                                        const Text("Cancelar"),
-                                                  ),
-                                                ),
-                                                SizedBox(
-                                                  width: 8.w,
-                                                ),
-
-
-                                                Expanded(
-                                                    child: ElevatedButton(
-                                                  onPressed: () async {
-                                                    // controller.alarmTime = DateTime(2020);
-                                                    // await alarmasController.flutterLocalNotificationsPlugin.cancel(controller.idGenerated);  // 0 is your notification id
-                                                    Get.toNamed('/alarmas',
-                                                        arguments: {
-                                                          'id': controller
-                                                              .idGenerated!,
-                                                          'startTime':
-                                                              controller
-                                                                  .startTime
-                                                                  .value,
-                                                          'notes': controller
-                                                              .notes.value,
-                                                          'title': controller
-                                                              .title.value
-                                                        });
-                                                  },
-                                                  child: const Text("Borrar"),
-                                                )),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ))
+                            ? buildDialogAlarma(theme)
                             : Get.toNamed(
                                 '/alarmas',
                                 arguments: {
@@ -380,23 +280,22 @@ class AddNotasView extends GetView<AddNotasController> {
                               ],
                             )
                           ])),
-                  controller.alarmTime.isBefore(DateTime.now())
-              // || alarmasController.pendingNotifications.contains(id: '${controller.idGenerated}')
-                      ?  Container()
-                  : ExampleAlarmTile(
+                  controller.alarmaCreada
+                      // || alarmasController.pendingNotifications.contains(id: '${controller.idGenerated}')
+                      ? ExampleAlarmTile(
                           key: Key(controller.alarmTime.toString()),
                           title: TimeOfDay(
                             hour: controller.alarmTime.hour,
-                            minute:
-                            controller.alarmTime.minute,
+                            minute: controller.alarmTime.minute,
                           ).format(context),
                           onPressed: () {
                             null;
                             // alarmasController.navigateToAlarmScreen(
                             //     controller.alarmaCreadaNota, context);
                           },
-                        ),
-                      // : Container(child: Text(controller.alarmTime.toString()),),
+                        )
+                      : Container(),
+                  // : Container(child: Text(controller.alarmTime.toString()),),
                   LineWidget(),
                   SizedBox(
                     height: 2.h,
@@ -441,7 +340,8 @@ class AddNotasView extends GetView<AddNotasController> {
                           key: controller.firstTime.value
                               ? controller.tutorialController.keyNotasAyuda
                               : key,
-                          icon: const AppIcon(AppIcons.informacion, color: Colors.green),
+                          icon: const AppIcon(AppIcons.informacion,
+                              color: Colors.green),
                           tooltip: '',
                           onPressed: () {
                             controller.firstTime.value = true;
@@ -459,6 +359,98 @@ class AddNotasView extends GetView<AddNotasController> {
         ),
       ),
     );
+  }
+
+  Future<dynamic> buildDialogAlarma(ThemeData theme) {
+    return Get.dialog(Align(
+      alignment: Alignment.center,
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 10.w),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 10.w),
+              decoration: BoxDecoration(
+                color: theme.scaffoldBackgroundColor,
+                borderRadius: BorderRadius.all(
+                  Radius.circular(5.r),
+                ),
+              ),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.all(8.h),
+                    child: AppIcon(
+                      AppIcons.informacion,
+                      color: Colors.green,
+                      size: 38.sp,
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.all(6.h),
+                    color: theme.scaffoldBackgroundColor,
+                    height: 100.h,
+                    child: Padding(
+                      padding: EdgeInsets.all(4.h),
+                      child: Text(
+                        'Tienes una alarma creada en esta nota para las: '
+                            '${controller.alarmaHora}'
+                        //     '${TimeOfDay(
+                        //   hour: controller
+                        //       .alarmaCreadaNota!
+                        //       .dateTime
+                        //       .hour,
+                        //   minute: controller
+                        //       .alarmaCreadaNota!
+                        //       .dateTime
+                        //       .minute,
+                        // ).format(context)}'
+                            ''
+                            ', quieres borrarla?',
+                        style: Theme.of(Get.context!)
+                            .textTheme
+                            .headlineSmall,
+                      ),
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Get.back();
+                            // Get.toNamed('/add-notas', arguments: selectedDate);
+                          },
+                          child: const Text("Cancelar"),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 8.w,
+                      ),
+                      Expanded(
+                          child: ElevatedButton(
+                        onPressed: () async {
+                          // controller.alarmTime = DateTime(2020);
+                          await controller.flutterLocalNotificationsPlugin.cancel(controller.idGenerated);  // 0 is your notification id
+                          Get.toNamed('/alarmas', arguments: {
+                            'id': controller.idGenerated!,
+                            'startTime': controller.startTime.value,
+                            'notes': controller.notes.value,
+                            'title': controller.title.value
+                          });
+                        },
+                        child: const Text("Borrar"),
+                      )),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    ));
   }
 
   TextFormField _buildGeneralFormField(

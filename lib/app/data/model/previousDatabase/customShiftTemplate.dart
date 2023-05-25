@@ -29,7 +29,7 @@ class CustomShitTemplate {
   CustomShitTemplate.fromMap(Map<dynamic, dynamic> map) {
     id = map['id'];
     day = map['day'];
-    month = map['month'];
+    month = map['month'] + 1;
     year = map['year'];
     position = map['shift'];
     alarm = map['alarm'];

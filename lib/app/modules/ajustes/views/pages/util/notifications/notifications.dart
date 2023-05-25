@@ -29,7 +29,7 @@ class Notifications {
     // final notificationAppLaunchDetails =
     //     await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
 
-    const initializationSettingsAndroid = AndroidInitializationSettings('app_icon');
+    const initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/launcher_icon');
     // Note: permissions aren't requested here just to demonstrate that can be done later using the `requestPermissions()` method
     // of the `IOSFlutterLocalNotificationsPlugin` class
     final initializationSettingsIOS = DarwinInitializationSettings(

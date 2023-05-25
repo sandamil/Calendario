@@ -25,89 +25,116 @@ class AlarmasView extends GetView<AlarmasController> {
               onPressed: () async {
                 if (controller.noRemind.value) {
                   if (controller.duracion == const Duration(microseconds: 2)) {
-                    CustomSnackBar.showCustomErrorSnackBar(title: 'No has añadido recordatorio', message: 'Selecciona una de las opciones, o desmarca la opcion recordar.');
-                  return;
+                    CustomSnackBar.showCustomErrorSnackBar(
+                        title: 'No has añadido recordatorio',
+                        message:
+                            'Selecciona una de las opciones, o desmarca la opcion recordar.');
+                    return;
                   }
-                } controller.isEditing.value
+                }
+                controller.isEditing.value
                     ? controller.goToEditingNotas()
                     : controller.goToAddNotas();
-
-
               }),
           actions: [
-    IconButton(
-    icon:
-    Icon(Icons.alarm, color: theme.primaryColor),
-    onPressed: () async {
-      await controller.noti();
-
-
-
-    }),
-
             IconButton(
-                icon:
-            Icon(Icons.alarm, color: theme.primaryColor),
-          onPressed: () async {
-           await controller.getPastNotification();
-                 CustomDialog(
-                  child: Column(
-                    children: <Widget>[
-                      if (controller.pendingNotifications.value.isEmpty)
-                        const Text('No active notifications'),
-                      if (controller.pendingNotifications.value.isNotEmpty)
-                        for (PendingNotificationRequest activeNotification in controller.pendingNotifications.value)
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                'id: ${activeNotification.id}\n'
-                                    // 'channelId: ${activeNotification.channelId}\n'
-                                    // 'groupKey: ${activeNotification.groupKey}\n'
-                                    // 'tag: ${activeNotification.tag}\n'
-                                    'title: ${activeNotification.title}\n'
-                                    'body: ${activeNotification.body}',
-                              ),
-                              if (Platform.isAndroid && activeNotification.id != null)
-                                TextButton(
-                                  child: const Text('Get messaging style'),
-                                  onPressed: () {
-                                    // _getActiveNotificationMessagingStyle(
-                                    //     activeNotification.id!, activeNotification.tag);
-                                  },
+                icon: Icon(Icons.alarm, color: theme.primaryColor),
+                onPressed: () async {
+                  await controller.noti();
+                }),
+            IconButton(
+                icon: Icon(Icons.alarm, color: theme.primaryColor),
+                onPressed: () async {
+                  await controller.getPendingNotification();
+                  CustomDialog(
+                    child: Column(
+                      children: <Widget>[
+                        if (controller.pendingNotifications.value.isEmpty)
+                          const Text('No active notifications'),
+                        if (controller.pendingNotifications.value.isEmpty)
+                          for (PendingNotificationRequest activeNotification
+                              in controller.pendingNotifications.value)
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  'id: ${activeNotification.id}\n'
+                                  // 'channelId: ${activeNotification.channelId}\n'
+                                  // 'groupKey: ${activeNotification.groupKey}\n'
+                                  // 'tag: ${activeNotification.tag}\n'
+                                  'title: ${activeNotification.title}\n'
+                                  'body: ${activeNotification.body}',
                                 ),
-                              const Divider(color: Colors.black),
-                            ],
-                          ),
-                    ],
-
-
-                  ),
-                );
-
-
-
-          }),],
+                                if (Platform.isAndroid &&
+                                    activeNotification.id != null)
+                                  TextButton(
+                                    child: const Text('Get messaging style'),
+                                    onPressed: () {
+                                      // _getActiveNotificationMessagingStyle(
+                                      //     activeNotification.id!, activeNotification.tag);
+                                    },
+                                  ),
+                                const Divider(color: Colors.black),
+                              ],
+                            ),
+                      ],
+                    ),
+                  );
+                }),
+          ],
         ),
         body: Obx(() {
           return SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                // if (controller.pendingNotifications.value.isEmpty)
-                //   const Text('No active notifications'),
-                if (controller.pendingNotifications.value.isNotEmpty)
-                  for (PendingNotificationRequest activeNotification in controller.pendingNotifications.value)
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          'id: ${activeNotification.id}\n'
+                Column(
+                  children: <Widget>[
+                    if (controller.pendingNotifications.value.isEmpty)
+                      const Text('No active notifications'),
+                    if (controller.pendingNotifications.value.isNotEmpty)
+                      for (PendingNotificationRequest activeNotification
+                          in controller.pendingNotifications.value)
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              'id: ${activeNotification.id}\n'
                               // 'channelId: ${activeNotification.channelId}\n'
                               // 'groupKey: ${activeNotification.groupKey}\n'
                               // 'tag: ${activeNotification.tag}\n'
                               'title: ${activeNotification.title}\n'
                               'body: ${activeNotification.body}',
+                            ),
+                            if (Platform.isAndroid &&
+                                activeNotification.id != null)
+                              TextButton(
+                                child: const Text('Get messaging style'),
+                                onPressed: () {
+                                  // _getActiveNotificationMessagingStyle(
+                                  //     activeNotification.id!, activeNotification.tag);
+                                },
+                              ),
+                            const Divider(color: Colors.black),
+                          ],
+                        ),
+                  ],
+                ),
+                // if (controller.pendingNotifications.value.isEmpty)
+                //   const Text('No active notifications'),
+                if (controller.pendingNotifications.value.isNotEmpty)
+                  for (PendingNotificationRequest activeNotification
+                      in controller.pendingNotifications.value)
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          'id: ${activeNotification.id}\n'
+                          // 'channelId: ${activeNotification.channelId}\n'
+                          // 'groupKey: ${activeNotification.groupKey}\n'
+                          // 'tag: ${activeNotification.tag}\n'
+                          'title: ${activeNotification.title}\n'
+                          'body: ${activeNotification.body}',
                         ),
                         if (Platform.isAndroid && activeNotification.id != null)
                           TextButton(
@@ -121,7 +148,8 @@ class AlarmasView extends GetView<AlarmasController> {
                       ],
                     ),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 2.h),
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 20.w, vertical: 2.h),
                   child: SwitchListTile(
                     title: controller.noRemind.value
                         ? const Text('Recordar')
@@ -161,6 +189,7 @@ class AlarmasView extends GetView<AlarmasController> {
                                   onChanged: controller.masOpcionesAlarma.value
                                       ? null
                                       : (value) {
+                                    print(controller.duracion);
                                           controller.minutos5(false);
                                           controller.minutos30(false);
                                           controller.horas1(false);
@@ -170,16 +199,23 @@ class AlarmasView extends GetView<AlarmasController> {
                                               controller.alPrincipioString;
                                           controller.duracion =
                                               const Duration(minutes: 0);
-
                                         },
                                 ),
                                 CheckboxListTile(
-                                  title: const Text('5 minutos de anticipación'),
+                                  title:
+                                      const Text('5 minutos de anticipación'),
                                   value: controller.minutos5.value,
                                   onChanged: controller.masOpcionesAlarma.value
                                       ? null
                                       : (value) {
-                                          controller.alPrincipio(false);
+                                    print(controller.duracion);
+                                    print(controller.startTime);
+                                    print(controller.alarmTime);
+                                    print(controller.title);
+                                    print(controller.notes);
+
+
+                                    controller.alPrincipio(false);
                                           controller.minutos30(false);
                                           controller.horas1(false);
                                           controller.dias1(false);
@@ -191,7 +227,8 @@ class AlarmasView extends GetView<AlarmasController> {
                                         },
                                 ),
                                 CheckboxListTile(
-                                  title: const Text('30 minutos de anticipación'),
+                                  title:
+                                      const Text('30 minutos de anticipación'),
                                   value: controller.minutos30.value,
                                   onChanged: controller.masOpcionesAlarma.value
                                       ? null
@@ -298,12 +335,14 @@ class AlarmasView extends GetView<AlarmasController> {
                                           ),
                                           focusedBorder: UnderlineInputBorder(
                                             borderSide: BorderSide(
-                                                color: MyColors.borderAccentLine),
+                                                color:
+                                                    MyColors.borderAccentLine),
                                           ),
                                         ),
                                         keyboardType: TextInputType.number,
                                         inputFormatters: [
-                                          FilteringTextInputFormatter.digitsOnly,
+                                          FilteringTextInputFormatter
+                                              .digitsOnly,
                                           LengthLimitingTextInputFormatter(2),
                                         ],
                                       ),

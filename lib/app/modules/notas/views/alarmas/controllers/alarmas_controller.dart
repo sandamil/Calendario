@@ -17,10 +17,13 @@ import 'package:timezone/timezone.dart' as tz;
 
 
 class AlarmasController extends GetxController {
+
+
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
   FlutterLocalNotificationsPlugin();
 
 
+  Rx<Task> currentNote = Task().obs;
 
   // RxList<AlarmSettings> alarms = <AlarmSettings>[].obs;
 
@@ -40,9 +43,14 @@ class AlarmasController extends GetxController {
 
   @override
    onInit()  async {
+    print('        ${Get.arguments['isEditing']}');
+    print('        ${Get.arguments['currentNota']}');
 
     if (Get.arguments != null) {
+
       if (Get.arguments['isEditing'] == true) {
+        final editNotasController = Get.find<EditNotasController>();
+
         // currentNote.value = Get.arguments['currentNote'];
         isEditing.value = true;
         // startTime = DateTime.fromMillisecondsSinceEpoch(
@@ -50,11 +58,14 @@ class AlarmasController extends GetxController {
         // title = currentNote.value.title;
         // notes = currentNote.value.notes;
         // id = currentNote.value.id!;
-        startTime = Get.arguments['startTime'];
-        alarmTime = DateTime(2000);
-        title = Get.arguments['title'];
-        notes = Get.arguments['notes'];
-        id = Get.arguments['id'];
+
+
+        currentNote.value = editNotasController.currentNote.value;
+
+        id = currentNote.value.id!;
+        title = currentNote.value.title;
+        notes = currentNote.value.notes;
+        startTime = DateTime.fromMillisecondsSinceEpoch(currentNote.value.startTimeMilliseconds!);
 
       } else {
         startTime = Get.arguments['startTime'];
@@ -147,7 +158,9 @@ class AlarmasController extends GetxController {
 
 
   setNotification([bool enableNotif = true]) async {
+    print(duracion);
     print('setNotification');
+
     alarmTime = startTime.subtract(duracion);
 
     print('alarmTime  ${alarmTime}');
@@ -213,10 +226,13 @@ class AlarmasController extends GetxController {
             title: 'No has añadido Alarma',
             message: ' Vuelve a entrar si queires añadir recordatorio');
     // await loadAlarmCreada();
-    await updatealarmaActivadaString();
     await loadAlarmCreadaEdit();
+    await updatealarmaActivadaString();
 
     editNotasController.setAlarmaCreada(noRemind.value);
+    (noRemind.value)
+        ? editNotasController.setAlarmaTime(alarmTime) : null;
+
     await Get.to(() => EditNotasView());
   }
 
@@ -231,8 +247,6 @@ class AlarmasController extends GetxController {
     await loadAlarmCreada();
     await updatealarmaActivadaString();
     addNotasController.setAlarmaCreada(noRemind.value);
-    print('goToAddNotas ========= noRemind.value  ${noRemind.value}');
-
     addNotasController.setAlarmaTime(alarmTime);
     await Get.to(() => AddNotasView());
   }

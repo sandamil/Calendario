@@ -68,31 +68,6 @@ class NotasViewController extends GetxController {
 
   void handleEdit() {
     adcontroller.staticNotesListAd.dispose();
-
-    print('===============================================');
-    print(currentNote.value.alarmaHora);
-
-    print('===============================================');
-    print('===============================================');
-    print('===============================================');
-
-    print(currentNote.value.alarmaHora);
-    print(currentNote.value.alarmaHora);
-    print(currentNote.value.alarmaHora);
-    print(currentNote.value.alarmaHora);
-    print('===============================================');
-    print('===============================================');
-    print('===============================================');
-    print('===============================================');
-    print('===============================================');
-    print('===============================================');
-    print(currentNote.value.alarmaHora);
-    print(currentNote.value.alarmaHora);
-    print(currentNote.value.alarmaHora);
-    print(currentNote.value.alarmaHora);
-    print(currentNote.value.alarmaHora);
-    print(currentNote.value.alarmaHora);
-    print(currentNote.value.alarmaHora);
     Get.toNamed(
       '/edit-notas',
       arguments: {'id': currentNote.value.id!, 'noteData': currentNote.value},

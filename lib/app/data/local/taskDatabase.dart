@@ -89,6 +89,7 @@ class NotasDB {
         // time: maps[0]['time'],
         isImportant: maps[0]['isImportant'] == 1 ? true : false,
         idAlarma: maps[0]['idAlarma'],
+        alarmaHora: maps[0]['alarmaHora'],
         alarmaActivadaString: maps[0]['alarmaActivadaString'],
         isAlarmaCreated: maps[0]['isAlarmaCreated'] == 1 ? true : false,
       );
@@ -120,6 +121,16 @@ class NotasDB {
       }
     }
     return notesList;
+  }
+
+  Future<void> getNotaID(Task notas) async {
+    var dbClient = await db;
+    await dbClient.update(
+      taskTable,
+      notas.toMap(),
+      where: "id = ?",
+      whereArgs: [notas.id],
+    );
   }
 
   Future<void> update(Task notas) async {
