@@ -9,6 +9,7 @@ import '../../../../config/theme/my_fonts.dart';
 import '../../../../config/util/hexColor.dart';
 import '../controllers/crear_turno_controller.dart';
 import 'add_turno_view.dart';
+import 'edit_turno_view.dart';
 
 class TurnoView extends GetView<CrearTurnoController> {
   const TurnoView({Key? key}) : super(key: key);
@@ -48,12 +49,12 @@ class TurnoView extends GetView<CrearTurnoController> {
           Obx(() {
             return ListView.builder(
               shrinkWrap: true,
-              itemCount: controller.turnoType.length,
+              itemCount: controller.turnoTypeList.length,
               itemBuilder: (context, index) {
                 return Container(
                   padding: const EdgeInsets.all(8.0),
                   decoration: BoxDecoration(
-                      color: HexColor(controller.turnoType[index].color!),
+                      color: HexColor(controller.turnoTypeList[index].color!),
                       border: Border.all(width: 0.8),
                       borderRadius: BorderRadius.circular(5.r),
                       boxShadow: const <BoxShadow>[
@@ -71,7 +72,7 @@ class TurnoView extends GetView<CrearTurnoController> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
                           Text(
-                            controller.turnoType[index].description!,
+                            controller.turnoTypeList[index].description!,
                             style: TextStyle(
                                 fontSize: 19,
                                 fontWeight: FontWeight.bold,
@@ -89,7 +90,7 @@ class TurnoView extends GetView<CrearTurnoController> {
                           //         controller.turnoType[index].endHour != ''
                           //     ?
                           Text(
-                                  'De ${controller.turnoType[index].startHour} a ${controller.turnoType[index].endHour}',
+                                  'De ${controller.turnoTypeList[index].startHour} a ${controller.turnoTypeList[index].endHour}',
                             style: TextStyle(
                                 fontSize: 15,
                                 color: Theme.of(context)
@@ -99,6 +100,25 @@ class TurnoView extends GetView<CrearTurnoController> {
                           )
                               // : Container()
                         ],
+                      ),
+                      Spacer(),
+                      IconButton(
+                        icon: Icon(Icons.edit,
+                            color: Theme.of(context)
+                                .primaryTextTheme
+                                .titleLarge!
+                                .color),
+                        onPressed: () async {
+                          await controller.editEventsType(index);
+                          await controller.updateEditScreen();
+                          await Future.delayed(Duration(milliseconds: 200));
+                          Get.to(
+                                () =>  EditTurnoView(controller.turnoType),
+                            transition: Transition.fadeIn,
+                            duration: const Duration(milliseconds: 100),
+                            // arguments: controller.turnoType
+                          );
+                        },
                       ),
                       IconButton(
                         icon: Icon(Icons.delete,

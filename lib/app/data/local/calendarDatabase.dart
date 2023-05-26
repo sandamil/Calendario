@@ -182,6 +182,31 @@ class CalendarioDB {
     return res;
   }
 
+  Future<TurnoType?> fetchTurnoType(int id) async {
+    final dbClient = await database;
+    List result =
+    await dbClient!.query(_turnosTable, where: "id = ?", whereArgs: [id]);
+    if (result.isEmpty) {
+      return null;
+    } else {
+      return TurnoType.fromMap(result.first);
+    }
+  }
+
+
+  Future<void> updateTurno(TurnoType turno) async {
+    var dbClient = await database;
+    await dbClient?.update(
+      _turnosTable,
+      turno.toMap(),
+      where: "id = ?",
+      whereArgs: [turno.id],
+    );
+  }
+
+
+
+
   Future<void> deleteTypeId(int id) async {
     final dbClient = await database;
     await dbClient!.delete(_turnosTable, where: "id = ?", whereArgs: [id]);
@@ -196,4 +221,5 @@ class CalendarioDB {
     Database? dbClient = await database;
     return await dbClient!.delete(_cuadrantesTable);
   }
+
 }

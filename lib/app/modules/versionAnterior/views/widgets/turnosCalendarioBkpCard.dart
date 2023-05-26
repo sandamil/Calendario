@@ -29,12 +29,13 @@ class TurnosCalendarioBkpCard extends StatelessWidget {
   final CustomShitTemplate noteData;
   // final Function(PreviousTask noteData) onTapAction;
   final controller = Get.find<VersionAnteriorController>();
-
   @override
   Widget build(BuildContext context) {
     Color color = colorList.elementAt(Random().nextInt(colorList.length));
     controller.getShiftFromDB(noteData.position);
+String fecha = noteData.month.toString();
 
+print(fecha);
     return Container(
       // padding: EdgeInsets.only(left: 4.w, right: 4.w),
       decoration: BoxDecoration(
@@ -85,7 +86,7 @@ class TurnosCalendarioBkpCard extends StatelessWidget {
                           Container(
                             margin: EdgeInsets.only(bottom: 3.h, right: 4.w),
                             child: Text(
-                              '${noteData.day}  ${noteData.month} ${noteData.year}',
+                              '${noteData.day}  ${noteData.month! + 1} ${noteData.year}',
                               textAlign: TextAlign.right,
                               style: TextStyle(
                                   fontSize: 11.sp,

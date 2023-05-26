@@ -1,5 +1,6 @@
 import 'package:calendario2/app/modules/home/controllers/calendar_controller.dart';
 import 'package:calendario2/config/util/dateUtils.dart';
+import 'package:calendario2/config/util/hexColor.dart';
 import 'package:calendario2/config/util/validation_utils.dart';
 import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -12,7 +13,9 @@ import '../../../data/model/turnoType.dart';
 
 class CrearTurnoController extends GetxController {
 
-  RxList<TurnoType> turnoType = <TurnoType>[].obs;
+  RxList<TurnoType> turnoTypeList = <TurnoType>[].obs;
+  // Rx<TurnoType> turnoType = i.obs;
+  final turnoType = Rxn<TurnoType>();
 
 
   CalendarController calendarController = CalendarController();
@@ -32,9 +35,11 @@ class CrearTurnoController extends GetxController {
       description.value = descriptionString;
   var descriptionValueController = TextEditingController();
 
-  var selectedTime = TimeOfDay.now().obs;
 
   Rx<Color> turnoColor = Rx<Color>(Colors.orangeAccent);
+
+
+  // var selectedTime = TimeOfDay.now().obs;
 
   @override
   void onInit() {
@@ -61,14 +66,16 @@ class CrearTurnoController extends GetxController {
   }
 
   Future<List<TurnoType>> fetchEventsType() async {
-    turnoType.value = await CalendarioDB.db.getTypeModels();
-    return turnoType;
+    turnoTypeList.value = await CalendarioDB.db.getTypeModels();
+    return turnoTypeList;
   }
 
+
+
   Future<List<TurnoType>> deleteEventsType(index) async {
-    await CalendarioDB.db.deleteTypeId(turnoType[index].id!);
+    await CalendarioDB.db.deleteTypeId(turnoTypeList[index].id!);
     await fetchEventsType();
-    return turnoType;
+    return turnoTypeList;
   }
 
   addTurno() async {
@@ -86,6 +93,7 @@ class CrearTurnoController extends GetxController {
 
   updateDrawerColor(Color newColor) {
     turnoColor.value = newColor;
+    eturnoColor.value = newColor;
     update();
   }
 
@@ -128,5 +136,63 @@ class CrearTurnoController extends GetxController {
       constraints:
           const BoxConstraints(minHeight: 480, minWidth: 300, maxWidth: 320),
     );
+  }
+
+
+
+  ///Edit turno
+
+  int? id;
+  RxString etitle = "".obs;
+  get egetTitle => etitle.value;
+  void esetTitle(String titleString) => etitle.value = titleString;
+  var etitleValueController = TextEditingController();
+
+   RxString estartDate = ''.obs;
+   RxString eendDate = ''.obs;
+
+  RxString edescription = "".obs;
+  get egetDescription => description.value;
+  void esetDescription(String descriptionString) =>
+      edescription.value = descriptionString;
+  var edescriptionValueController = TextEditingController();
+
+
+  Rx<Color> eturnoColor = Rx<Color>(Colors.orangeAccent);
+
+  bool isValidEditResponse() {
+    return ValidationUtils.isValidString(edescription.value);
+  }
+
+  Future<void> editEventsType(int index) async {
+    turnoType.value = await CalendarioDB.db.fetchTurnoType(turnoTypeList[index].id!);
+  }
+
+
+   updateEditScreen() {
+    id = turnoType.value!.id;
+    etitle.value = turnoType.value!.title!;
+    etitleValueController.text = turnoType.value!.title!;
+    edescription.value = turnoType.value!.description!;
+    edescriptionValueController.text = turnoType.value!.description!;
+    estartDate.value = turnoType.value!.startHour!;
+    eendDate.value = turnoType.value!.endHour!;
+    eturnoColor.value = HexColor(turnoType.value!.color!);
+  }
+
+  updateTurno() async {
+    await CalendarioDB.db.updateTurno(
+      TurnoType(
+        id: id,
+        title: etitle.value,
+        description: edescription.value,
+        startHour: estartDate.value,
+        endHour: eendDate.value,
+        color: eturnoColor.value.value.toRadixString(16),
+      ),
+    );
+    await  fetchEventsType();
+calendarController.fetchTurno();
+calendarController.fetchCuadrante();
   }
 }
