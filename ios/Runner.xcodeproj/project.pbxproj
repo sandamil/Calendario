@@ -15,10 +15,6 @@
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
 		9C102F9D8322F70F148258AD /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F3610256DA973171F3A99F7B /* Pods_Runner.framework */; };
-		FA6ED3B729E2BB9B00BF8340 /* mozart.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = FA6ED3B329E2BB9A00BF8340 /* mozart.mp3 */; };
-		FA6ED3B829E2BB9B00BF8340 /* nokia.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = FA6ED3B429E2BB9B00BF8340 /* nokia.mp3 */; };
-		FA6ED3B929E2BB9B00BF8340 /* star_wars.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = FA6ED3B529E2BB9B00BF8340 /* star_wars.mp3 */; };
-		FA6ED3BA29E2BB9B00BF8340 /* one_piece.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = FA6ED3B629E2BB9B00BF8340 /* one_piece.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -53,10 +49,6 @@
 		BBCF18426C4DE5F56C4DAD52 /* Pods-Runner.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.profile.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.profile.xcconfig"; sourceTree = "<group>"; };
 		C8BC290CD328B6CE8DB978CC /* Pods-Runner.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Runner.release.xcconfig"; path = "Target Support Files/Pods-Runner/Pods-Runner.release.xcconfig"; sourceTree = "<group>"; };
 		F3610256DA973171F3A99F7B /* Pods_Runner.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Runner.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		FA6ED3B329E2BB9A00BF8340 /* mozart.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = mozart.mp3; path = ../../assets/alarmas/mozart.mp3; sourceTree = "<group>"; };
-		FA6ED3B429E2BB9B00BF8340 /* nokia.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = nokia.mp3; path = ../../assets/alarmas/nokia.mp3; sourceTree = "<group>"; };
-		FA6ED3B529E2BB9B00BF8340 /* star_wars.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = star_wars.mp3; path = ../../assets/alarmas/star_wars.mp3; sourceTree = "<group>"; };
-		FA6ED3B629E2BB9B00BF8340 /* one_piece.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; name = one_piece.mp3; path = ../../assets/alarmas/one_piece.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,10 +105,6 @@
 		97C146F01CF9000F007C117D /* Runner */ = {
 			isa = PBXGroup;
 			children = (
-				FA6ED3B329E2BB9A00BF8340 /* mozart.mp3 */,
-				FA6ED3B429E2BB9B00BF8340 /* nokia.mp3 */,
-				FA6ED3B629E2BB9B00BF8340 /* one_piece.mp3 */,
-				FA6ED3B529E2BB9B00BF8340 /* star_wars.mp3 */,
 				97C146FA1CF9000F007C117D /* Main.storyboard */,
 				97C146FD1CF9000F007C117D /* Assets.xcassets */,
 				97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */,
@@ -205,11 +193,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */,
-				FA6ED3B929E2BB9B00BF8340 /* star_wars.mp3 in Resources */,
-				FA6ED3BA29E2BB9B00BF8340 /* one_piece.mp3 in Resources */,
-				FA6ED3B729E2BB9B00BF8340 /* mozart.mp3 in Resources */,
 				3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */,
-				FA6ED3B829E2BB9B00BF8340 /* nokia.mp3 in Resources */,
 				97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */,
 				97C146FC1CF9000F007C117D /* Main.storyboard in Resources */,
 				84F401067F78269FB6AC9CBA /* GoogleService-Info.plist in Resources */,

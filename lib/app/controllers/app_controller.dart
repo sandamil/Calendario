@@ -3,7 +3,9 @@ import 'package:calendario2/app/modules/ajustes/views/pages/util/notifications/n
 import 'package:calendario2/config/util/app_utils.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:mixpanel_flutter/mixpanel_flutter.dart';
 
+late Mixpanel mixPanel;
 
 class AppController extends GetxController {
   String appVersion = 'version 1.0.0';
@@ -27,7 +29,7 @@ class AppController extends GetxController {
   @override
   void onReady() {
    Notifications.instance.init();
-
+   initMixpanel();
     super.onReady();
   }
 
@@ -45,6 +47,12 @@ class AppController extends GetxController {
 
 
 
+  Future<void> initMixpanel() async {
+    String mixPanelToken = "7393b8c55d34833deaff8da840c887b2";
+    mixPanel = await Mixpanel.init(mixPanelToken, trackAutomaticEvents: true);
+    var distinctId = await mixPanel.getDistinctId();
+    mixPanel.identify(distinctId);
+  }
 
 
 

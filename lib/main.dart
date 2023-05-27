@@ -22,18 +22,19 @@ import 'debug/log/log.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 
-late Mixpanel mixPanel;
 
 Future<void> main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
+  MySharedPref.init();
+  GetStorage.init();
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
   Get.put(AppController());
-  await initMemory();
-  initMixpanel();
-  Log.init();
+  // await initMemory();
+  // Log.init();
 
   MobileAds.instance.initialize();
 
@@ -44,25 +45,20 @@ Future<void> main() async {
   );
 }
 
-Future<void> initMixpanel() async {
-  String mixPanelToken = "7393b8c55d34833deaff8da840c887b2";
-  mixPanel = await Mixpanel.init(mixPanelToken, trackAutomaticEvents: true);
-  var distinctId = await mixPanel.getDistinctId();
-  mixPanel.identify(distinctId);
-}
+
 
 
 Future<void> initMemory() async {
   await MySharedPref.init();
   await GetStorage.init();
-  var status = await Permission.storage.status;
-  if (status.isDenied) {
-    // You can request multiple permissions at once.
-    Map<Permission, PermissionStatus> statuses = await [
-      Permission.storage,
-      // Permission.camera,
-    ].request();
-  }
+  // var status = await Permission.storage.status;
+  // if (status.isDenied) {
+  //   // You can request multiple permissions at once.
+  //   Map<Permission, PermissionStatus> statuses = await [
+  //     Permission.storage,
+  //     // Permission.camera,
+  //   ].request();
+  // }
 }
 
 buildApp() {

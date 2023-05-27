@@ -20,10 +20,10 @@ class ConstantData {
   ///alarmas
   static const BASEALARMURL = "assets/alarmas/";
 
-  static const nokiaAlarm = "${BASEALARMURL}nokia.mp3";
-  static const mozartAlarm = "${BASEALARMURL}mozart.mp3";
-  static const onepieceAlarm = "${BASEALARMURL}one_piece.mp3";
-  static const starwarsAlarm = "${BASEALARMURL}star_wars.mp3";
+  // static const nokiaAlarm = "${BASEALARMURL}nokia.mp3";
+  // static const mozartAlarm = "${BASEALARMURL}mozart.mp3";
+  // static const onepieceAlarm = "${BASEALARMURL}one_piece.mp3";
+  // static const starwarsAlarm = "${BASEALARMURL}star_wars.mp3";
 
 // ///fonts
 //   static const ralewayFont = 'Raleway';

@@ -1,6 +1,7 @@
-import 'package:calendario2/main.dart';
+import 'package:calendario2/app/controllers/app_controller.dart';
 
 class AnalyticsHelper {
+
   static logEvent({required String event, Map<String, Object?>? params}) {
     mixPanel.track(event, properties: params);
   }
