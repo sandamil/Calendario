@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:calendario2/app/controllers/app_controller.dart';
+import 'package:calendario2/app/controllers/app_controller.dart';
 import 'package:calendario2/app/data/model/taskModel.dart';
 import 'package:calendario2/app/modules/notas/views/widgets/taskCard.dart';
 import 'package:calendario2/app/modules/home/controllers/calendar_controller.dart';
@@ -12,6 +14,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import '../../../controllers/ads_controller.dart';
+import '../../../controllers/app_controller.dart';
+import '../../../controllers/app_controller.dart';
 import '../../menu/views/menu_view.dart';
 import '../controllers/home_controller.dart';
 
@@ -100,25 +104,28 @@ class HomeView extends GetView<HomeController> {
               ),
               floatingActionButtonLocation:
                   FloatingActionButtonLocation.centerDocked,
-              floatingActionButton: Platform.isAndroid
+              floatingActionButton: Platform.isIOS
                   ? FloatingActionButton.extended(
                       backgroundColor: Colors.transparent,
                       elevation: 0,
                       onPressed: () {
                         // MyTheme.changeTheme();
                       },
-                      label: adcontroller.staticAdHomeLoaded.value
-                          ? Container(
-                              color: Colors.transparent,
-                              width: adcontroller.staticHomeAd.size.width
-                                  .toDouble(),
-                              height: adcontroller.staticHomeAd.size.height
-                                  .toDouble(),
-                              alignment: Alignment.bottomCenter,
-                              child: AdWidget(
-                                ad: adcontroller.staticHomeAd,
-                              ),
-                            )
+                      label:
+                staticAdHomeLoaded2.value
+                          ?                       loadBanner()
+
+                  // Container(
+                //               color: Colors.transparent,
+                //               width: adcontroller.staticHomeAd.size.width
+                //                   .toDouble(),
+                //               height: adcontroller.staticHomeAd.size.height
+                //                   .toDouble(),
+                //               alignment: Alignment.bottomCenter,
+                //               child: AdWidget(
+                //                 ad: adcontroller.staticHomeAd,
+                //               ),
+                //             )
                           : const SizedBox(),
                     )
                   : null,
