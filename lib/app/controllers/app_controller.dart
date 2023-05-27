@@ -46,7 +46,19 @@ loadBanner() {
 }
 
 class AppController extends GetxController {
+
+  factory AppController() {
+    return _instance;
+  }
+  AppController._internal() {
+    logSys('AppCylceService Initialized');
+  }
+
+  static final AppController _instance = AppController._internal();
+
+
   String appVersion = 'version 1.0.0';
+  final focusDayRx = DateTime.now().toLocal().obs;
 
   // RxBool isShowLog = true.obs;
   // RxString currentPage = ''.obs;

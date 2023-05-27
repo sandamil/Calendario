@@ -126,7 +126,7 @@ class NotasListController extends GetxController {
                 .contains(searchController.value.text.toLowerCase())) {
           noteComponentsList.add(TaskCard(
             noteData: note,
-            onTapAction: openNoteToRead,
+            onTapAction: openNoteToRead, routeToNotas: true
           ));
         }
       }
@@ -137,7 +137,7 @@ class NotasListController extends GetxController {
         if (note.isImportant!) {
           noteComponentsList.add(TaskCard(
             noteData: note,
-            onTapAction: openNoteToRead,
+            onTapAction: openNoteToRead, routeToNotas: true
           ));
         }
       }
@@ -145,7 +145,7 @@ class NotasListController extends GetxController {
       for (var note in notesList.value) {
         noteComponentsList.add(TaskCard(
           noteData: note,
-          onTapAction: openNoteToRead,
+          onTapAction: openNoteToRead, routeToNotas: true
         ));
       }
     }

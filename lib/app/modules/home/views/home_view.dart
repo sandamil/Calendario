@@ -178,7 +178,7 @@ class HomeView extends GetView<HomeController> {
                         TaskCard(
                             noteData: event,
                             onTapAction:
-                                controller.notasController.openNoteToRead)
+                                controller.notasController.openNoteToRead, routeToNotas: false)
                       ],
                     ),
                   )
