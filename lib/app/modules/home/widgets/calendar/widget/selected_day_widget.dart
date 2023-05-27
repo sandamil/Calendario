@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../../controllers/app_controller.dart';
+
 class SelectedDayWidget extends StatelessWidget {
   const SelectedDayWidget({super.key});
 
@@ -14,7 +16,7 @@ class SelectedDayWidget extends StatelessWidget {
         child: GetBuilder<CalendarController>(
           builder: (controller) {
             return Text(
-              DateFormat.MMMM('es').add_y().format(controller.focusDayRx.value).toUpperCase(),
+              DateFormat.MMMM('es').add_y().format(AppController().focusDayRx.value).toUpperCase(),
               style: CustomTextStyle.appBarTitle(context: context),
             );
           },

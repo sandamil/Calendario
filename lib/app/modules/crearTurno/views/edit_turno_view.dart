@@ -96,7 +96,7 @@ class EditTurnoView extends GetView<CrearTurnoController> {
                                     border: Border.all(
                                         color: MyColors.borderCellColor,
                                         width: 2),
-                                    color: MyColors.cellColor,
+                                    color: MyColors.backgroundLowAccent,
                                     borderRadius: BorderRadius.circular(5.r)),
                                 child: SizedBox(
                                   width: 50,

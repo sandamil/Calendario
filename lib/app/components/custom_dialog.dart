@@ -57,7 +57,7 @@ class MyCustomDialog {
                             width: horizontal ? 0.26.sw : 0.7.sw,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(20.r),
-                              color: MyColors.cellColor,
+                              color: MyColors.backgroundLowAccent,
                             ),
                             child: Container(
                               width: horizontal ? 0.26.sw : 0.7.sw,
@@ -119,7 +119,7 @@ class MyCustomDialog {
                           child: CircleAvatar(
                             minRadius: 26.r,
                             maxRadius: 38.r,
-                            backgroundColor: MyColors.cellColor,
+                            backgroundColor: MyColors.backgroundLowAccent,
                             child: Icon(
                               Icons.question_mark_sharp,
                               size: 38.sp,
@@ -260,7 +260,7 @@ class MyCustomDialog {
               padding: EdgeInsets.fromLTRB(20.w.w, 20.w, 20.w, 4.w),
               decoration:
               BoxDecoration(
-                  borderRadius: Corners.smBorder, color: MyColors.cellColor),
+                  borderRadius: Corners.smBorder, color: MyColors.backgroundLowAccent),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [

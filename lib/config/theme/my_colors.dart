@@ -1,7 +1,6 @@
 import 'package:calendario2/config/theme/my_theme.dart';
 import 'package:flutter/material.dart';
 
-
 class MyColors {
   static Color get backgroundColor => MyTheme().getThemeIsLight
       ? const Color(0xffebeaea)
@@ -19,9 +18,13 @@ class MyColors {
       ? const Color(0xFFEEEDED)
       : const Color(0xFF524E4C);
 
+  static Color get backgroundLowAccent => MyTheme().getThemeIsLight
+      ? const Color(0xFFefeeee)
+      : const Color(0xFF2b2b2b);
+
   // Color Cell Calendar
   static Color get cellColor => MyTheme().getThemeIsLight
-      ? const Color(0xFFefeeee)
+      ? const Color(0xffffffff)
       : const Color(0xFF2b2b2b);
   static Color get cellTodayColor => MyTheme().getThemeIsLight
       ? const Color(0xFFefeeee)

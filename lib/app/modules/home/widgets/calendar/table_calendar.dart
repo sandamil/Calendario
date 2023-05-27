@@ -10,6 +10,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:table_calendar/table_calendar.dart';
 
+import '../../../../controllers/app_controller.dart';
+import '../../../../data/model/taskModel.dart';
+
 class CalendarWidget extends StatelessWidget {
   final calendarController = Get.put(CalendarController());
 
@@ -44,7 +47,7 @@ class CalendarWidget extends StatelessWidget {
                       // },
                       firstDay: DateTime(2000),
                       lastDay: DateTime(2050),
-                      focusedDay: calendarController.focusDayRx.value,
+                      focusedDay: AppController().focusDayRx.value,
                       // calendarFormat: controller.calendarFormat,
                       eventLoader: calendarController.getEventForDay,
                       startingDayOfWeek: StartingDayOfWeek.monday,
@@ -79,12 +82,13 @@ class CalendarWidget extends StatelessWidget {
         /// =       markerBuilder:          =======================================
 
         markerBuilder: (context, day, List<CuadranteDay> events) {
-          final notas = calendarController.getEventsOfDay(day);
+          List<Task> notas = calendarController.getEventsOfDay(day);
           return Container(
             alignment: Alignment.topCenter,
             margin: EdgeInsets.only(top: 20.h),
             child: SingleChildScrollView(
               child: Column(
+
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   ...events.map((turno) => Padding(
@@ -114,12 +118,13 @@ class CalendarWidget extends StatelessWidget {
                   ),
                   ...notas.map((nota) => Padding(
                         padding: EdgeInsets.symmetric(
-                            vertical: 0.5.h, horizontal: 3.w),
+                            vertical: 0.5.h, horizontal: 1.w),
                         child: Container(
                             decoration: BoxDecoration(
-                              color: PRIMARY_COLOR_TRANSPARENTE,
-                              border: Border.all(
-                                  color: PRIMARY_COLOR, width: 1.h),
+                              color: MyColors.menuCardBackground,
+                              // color: PRIMARY_COLOR_TRANSPARENTE,
+                              // border: Border.all(
+                              //     color: PRIMARY_COLOR_TRANSPARENTE, width: 1.h),
                               borderRadius: BorderRadius.circular(3.r),
                             ),
                             height: 15.h,

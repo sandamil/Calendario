@@ -136,7 +136,21 @@ class NotasViewController extends GetxController {
         });
   }
 
-  void handleDeleteCalendar(id) async{
+  notaNotasDelete(context, id)async{
+    await NotasDB.instance.delete(id);
+    Get.offAllNamed('/notas');
+    notasListController.refetchNotesFromDB();
+    Toast.toast(context, msg: "Eliminada!");
+  }
+   notaHomeDelete(context, id)async{
+    await NotasDB.instance.delete(id);
+    Get.offAllNamed('/home');
+    notasListController.refetchNotesFromDB();
+    Toast.toast(context, msg: "Eliminada!");
+  }
+
+
+  void handleDeleteCalendar(id, routeToNotas) async{
     showDialog(
         context: Get.context!,
         builder: (BuildContext context) {
@@ -153,10 +167,9 @@ class NotasViewController extends GetxController {
                         fontWeight: FontWeight.w500,
                         letterSpacing: 1)),
                 onPressed: () async {
-                  await NotasDB.instance.delete(id);
-                  Get.offAllNamed('/notas');
-                  notasListController.refetchNotesFromDB();
-                  Toast.toast(context, msg: "Eliminado exitosamente!");
+                  routeToNotas
+                      ? notaNotasDelete(context, id)
+                      : notaHomeDelete(context, id);
                 },
               ),
               TextButton(

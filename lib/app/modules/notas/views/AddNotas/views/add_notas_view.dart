@@ -127,7 +127,7 @@ class AddNotasView extends GetView<AddNotasController> {
                                         color: MyColors.textColorPrimary,
                                         fontSize: 16.sp,
                                         fontWeight: FontWeight.bold),
-                                    backgroundColor: MyColors.cellColor),
+                                    backgroundColor: MyColors.backgroundLowAccent),
                                 showTitleActions: true,
                                 onChanged: (DateTime date) {
                               if (controller
@@ -192,7 +192,7 @@ class AddNotasView extends GetView<AddNotasController> {
                                         color: MyColors.textColorPrimary,
                                         fontSize: 16.sp,
                                         fontWeight: FontWeight.bold),
-                                    backgroundColor: MyColors.cellColor),
+                                    backgroundColor: MyColors.backgroundLowAccent),
                                 showTitleActions: true,
                                 onChanged: (DateTime date) {
                               if (controller
@@ -467,7 +467,7 @@ class AddNotasView extends GetView<AddNotasController> {
           // ),
           filled: true,
           contentPadding: EdgeInsets.only(left: 10.w, top: 20.h),
-          fillColor: MyColors.cellColor,
+          fillColor: MyColors.backgroundLowAccent,
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.all(
               Radius.circular(_radiusNum),

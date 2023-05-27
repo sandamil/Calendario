@@ -320,7 +320,7 @@ class AlarmasView extends GetView<AlarmasController> {
                                       decoration: BoxDecoration(
                                           border: Border.all(
                                               color: MyColors.borderCellColor),
-                                          color: MyColors.cellColor,
+                                          color: MyColors.backgroundLowAccent,
                                           borderRadius:
                                               BorderRadius.circular(10)),
                                       child: TextFormField(

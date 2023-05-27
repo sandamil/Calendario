@@ -27,7 +27,7 @@ class BeautifulAlertDialog extends StatelessWidget {
               SizedBox(width: 20.w),
               CircleAvatar(
                 radius: 55.r,
-                backgroundColor: MyColors.cellColor,
+                backgroundColor: MyColors.backgroundLowAccent,
                 child: Icon(
                   Icons.do_not_disturb,
                   color: Colors.red,

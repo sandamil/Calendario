@@ -152,7 +152,7 @@ class AddCuadranteView extends GetView<CrearCuadranteController> {
                                             color: MyColors.textColorPrimary,
                                             fontSize: 16.sp,
                                             fontWeight: FontWeight.bold),
-                                        backgroundColor: MyColors.cellColor),
+                                        backgroundColor: MyColors.backgroundLowAccent),
                                     showTitleActions: true,
                                     minTime: DateTime(2020),
                                     maxTime: DateTime(2050), onChanged: (date) {
@@ -201,7 +201,7 @@ class AddCuadranteView extends GetView<CrearCuadranteController> {
                                             color: MyColors.textColorPrimary,
                                             fontSize: 16.sp,
                                             fontWeight: FontWeight.bold),
-                                        backgroundColor: MyColors.cellColor),
+                                        backgroundColor: MyColors.backgroundLowAccent),
                                     context,
                                     showTitleActions: true,
                                     minTime: DateTime(2020),

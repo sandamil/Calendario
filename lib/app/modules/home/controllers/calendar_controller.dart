@@ -1,6 +1,7 @@
 import 'dart:collection';
 
 import 'package:calendario2/app/controllers/ads_controller.dart';
+import 'package:calendario2/app/controllers/app_controller.dart';
 import 'package:calendario2/app/data/local/calendarDatabase.dart';
 import 'package:calendario2/app/data/local/taskDatabase.dart';
 import 'package:calendario2/app/data/model/taskModel.dart';
@@ -26,7 +27,6 @@ class CalendarController extends GetxController {
   ///============================
 //============================= Todo Rendimiento de app con obs =============================
 //
-  final focusDayRx = DateTime.now().toLocal().obs;
   final selectedDayRx = DateTime.now().toLocal().obs;
 //   // Rx<DateTime> get selectedDay => _selectedDay;
 //   Rx<DateTime> selectedDay = DateTime.now().obs;
@@ -74,7 +74,7 @@ class CalendarController extends GetxController {
   onDaySelected(DateTime selectedDate, DateTime focusedDate) async {
     if (!isSameDay(selectedDate, selectedDayRx.value)) {
       selectedDayRx.value = selectedDate;
-      focusDayRx.value = focusedDate;
+      AppController().focusDayRx.value = focusedDate;
       selectedEvents.value = getEventForDay(selectedDate);
       selectedNotas.value = getEventsOfDay(selectedDate);
       update();
@@ -94,7 +94,7 @@ class CalendarController extends GetxController {
   onDaySelectedLongPress(DateTime selectedDate, DateTime focusedDate) async {
     if (!isSameDay(selectedDate, selectedDayRx.value)) {
       selectedDayRx.value = selectedDate;
-      focusDayRx.value = focusedDate;
+      AppController().focusDayRx.value = focusedDate;
     }
     selectedEvents.value = getEventForDay(selectedDate);
     selectedNotas.value = getEventsOfDay(selectedDate);
@@ -105,7 +105,7 @@ class CalendarController extends GetxController {
 
 //TODO Comprobar rendimiento focusedday obs
   onPageChanged(focusedDay) {
-    focusDayRx.value = focusedDay;
+    AppController().focusDayRx.value = focusedDay;
 
     // change the selected day to the first day of current month.
     selectedDayRx.value = DateTime(focusedDay.year, focusedDay.month, 1);
