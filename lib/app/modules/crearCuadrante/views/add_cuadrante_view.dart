@@ -258,10 +258,9 @@ class AddCuadranteView extends GetView<CrearCuadranteController> {
                                 style: TextStyle(
                                   fontSize: 22,
                                   fontWeight: FontWeight.bold,
-                                  color: Theme.of(context)
-                                      .textTheme
-                                      .titleLarge!
-                                      .color,
+                                  color: HexColor(controller.list[index].color!).computeLuminance() > 0.5
+                                      ? Colors.black
+                                      : Colors.white,
                                 ),
                               ),
                             ),

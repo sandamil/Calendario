@@ -204,10 +204,9 @@ class CrearCuadranteController extends GetxController {
                                 child: Text(
                                   m.description!,
                                   style: TextStyle(
-                                    color: Theme.of(context)
-                                        .textTheme
-                                        .titleLarge!
-                                        .color,
+                                    color: HexColor(m.color!).computeLuminance() > 0.5
+                                      ? Colors.black
+                                      : Colors.white,
                                   ),
                                 )),
                           ),
