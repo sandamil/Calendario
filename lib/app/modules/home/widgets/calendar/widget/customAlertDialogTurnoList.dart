@@ -84,7 +84,7 @@ class CustomAlertDialogTurnoList extends StatelessWidget {
                                 title: m.title,
                               ),
                             );
-                            await calendarController.fetchCuadrante();
+                            await calendarController.getCuadrante();
                             adcontroller.staticHomeAd.load();
 
                             Get.offAllNamed('/home');

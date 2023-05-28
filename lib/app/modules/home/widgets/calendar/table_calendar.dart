@@ -25,49 +25,51 @@ class CalendarWidget extends StatelessWidget {
         Container(
           alignment: Alignment.center,
           child: Obx(
-            () {
+                () {
               return calendarController.isReady.value
-                  ? TableCalendar(
-                      locale: 'es_ES',
-                      daysOfWeekHeight: 25.h,
-                      rowHeight: 90.h,
-                      headerVisible: Platform.isMacOS ? true : false,
-                      calendarStyle: const CalendarStyle(
-                        outsideDaysVisible: false,
-                      ),
-                      holidayPredicate: (day) {
-                        // print('comprobar refactor' '${calendarController.hasEvent(day)}'
-                        // );
-                        return calendarController.hasEvent(day);
-                      },
-                      weekendDays: const [DateTime.saturday, DateTime.sunday],
-                      // enabledDayPredicate: (date) {
-                      //   return (date.weekday != DateTime.sunday &&
-                      //       date.weekday != DateTime.saturday);
-                      // },
-                      firstDay: DateTime(2000),
-                      lastDay: DateTime(2050),
-                      focusedDay: AppController().focusDayRx.value,
-                      // calendarFormat: controller.calendarFormat,
-                      eventLoader: calendarController.getEventForDay,
-                      startingDayOfWeek: StartingDayOfWeek.monday,
-                      selectedDayPredicate: (day) {
-                        return isSameDay(
-                            calendarController.selectedDayRx.value, day);
-                      },
-                      onDaySelected: calendarController.onDaySelected,
-                      onDayLongPressed:
-                          calendarController.onDaySelectedLongPress,
-                      // onFormatChanged: (format) {
-                      //   if (controller.calendarFormat != format) {
-                      //     controller.changeCalendarFormat(format);
-                      //   }
-                      // },
-                      onCalendarCreated: (_) {
-                        calendarController.update;
-                      },
-                      onPageChanged: calendarController.onPageChanged,
-                      calendarBuilders: _calendarBuilders())
+                  ? GetBuilder<CalendarController>(builder: (logic) {
+                return TableCalendar(
+                    locale: 'es_ES',
+                    daysOfWeekHeight: 25.h,
+                    rowHeight: 90.h,
+                    headerVisible: Platform.isMacOS ? true : false,
+                    calendarStyle: const CalendarStyle(
+                      outsideDaysVisible: false,
+                    ),
+                    holidayPredicate: (day) {
+                      // print('comprobar refactor' '${calendarController.hasEvent(day)}'
+                      // );
+                      return calendarController.hasEvent(day);
+                    },
+                    weekendDays: const [DateTime.saturday, DateTime.sunday],
+                    // enabledDayPredicate: (date) {
+                    //   return (date.weekday != DateTime.sunday &&
+                    //       date.weekday != DateTime.saturday);
+                    // },
+                    firstDay: DateTime(2000),
+                    lastDay: DateTime(2050),
+                    focusedDay: AppController().focusDayRx,
+                    // calendarFormat: controller.calendarFormat,
+                    eventLoader: calendarController.getTurnosOfDay,
+                    startingDayOfWeek: StartingDayOfWeek.monday,
+                    selectedDayPredicate: (day) {
+                      return isSameDay(
+                          calendarController.selectedDayRx, day);
+                    },
+                    onDaySelected: calendarController.onDaySelected,
+                    onDayLongPressed:
+                    calendarController.onDaySelectedLongPress,
+                    // onFormatChanged: (format) {
+                    //   if (controller.calendarFormat != format) {
+                    //     controller.changeCalendarFormat(format);
+                    //   }
+                    // },
+                    onCalendarCreated: (_) {
+                      calendarController.update;
+                    },
+                    onPageChanged: calendarController.onPageChanged,
+                    calendarBuilders: _calendarBuilders());
+              })
                   : const Center(child: CircularProgressIndicator());
             },
           ),
@@ -78,11 +80,13 @@ class CalendarWidget extends StatelessWidget {
 
   /// ===        Calendar builders     ========================================
 
-  _calendarBuilders() => CalendarBuilders(
+  _calendarBuilders() =>
+      CalendarBuilders(
+
         /// =       markerBuilder:          =======================================
 
         markerBuilder: (context, day, List<CuadranteDay> events) {
-          List<Task> notas = calendarController.getEventsOfDay(day);
+          List<Task> notas = calendarController.getNotasOfDay(day);
           return Container(
             alignment: Alignment.topCenter,
             margin: EdgeInsets.only(top: 20.h),
@@ -91,7 +95,8 @@ class CalendarWidget extends StatelessWidget {
 
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  ...events.map((turno) => Padding(
+                  ...events.map((turno) =>
+                      Padding(
                         padding: EdgeInsets.symmetric(
                             vertical: 0.5.h, horizontal: 3.w),
                         child: Container(
@@ -116,7 +121,8 @@ class CalendarWidget extends StatelessWidget {
                   SizedBox(
                     height: 3.h,
                   ),
-                  ...notas.map((nota) => Padding(
+                  ...notas.map((nota) =>
+                      Padding(
                         padding: EdgeInsets.symmetric(
                             vertical: 0.5.h, horizontal: 1.w),
                         child: Container(
@@ -132,7 +138,7 @@ class CalendarWidget extends StatelessWidget {
                               alignment: Alignment.center,
                               child: Text(
                                 nota.title!.toUpperCase(),
-                                maxLines:1,
+                                maxLines: 1,
                                 style: TextStyle(
                                     height: 1.h,
                                     fontSize: 11.sp,
@@ -224,7 +230,8 @@ class CalendarWidget extends StatelessWidget {
                 alignment: Alignment.topCenter,
                 child: Text(
                   day.day.toString(),
-                  style: CustomTextStyle.numberCalendar.copyWith(fontSize: 15.sp),
+                  style: CustomTextStyle.numberCalendar.copyWith(
+                      fontSize: 15.sp),
 
                 ),
               ),
@@ -268,7 +275,7 @@ class CalendarWidget extends StatelessWidget {
         dowBuilder: (context, day) {
           final text = DateFormat.E('es').format(day);
           if (day.weekday == DateTime.sunday
-              // || day.weekday == DateTime.saturday
+          // || day.weekday == DateTime.saturday
           ) {
             return Center(
               child: Text(

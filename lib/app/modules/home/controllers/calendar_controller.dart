@@ -27,7 +27,7 @@ class CalendarController extends GetxController {
   ///============================
 //============================= Todo Rendimiento de app con obs =============================
 //
-  final selectedDayRx = DateTime.now().toLocal().obs;
+  DateTime selectedDayRx = DateTime.now().toLocal();
 //   // Rx<DateTime> get selectedDay => _selectedDay;
 //   Rx<DateTime> selectedDay = DateTime.now().obs;
 //   // DateTime _selectedDay = DateTime.now();
@@ -40,18 +40,18 @@ class CalendarController extends GetxController {
 // //   DateTime _focusedDay = DateTime.now();
 // //   var focusedDay = DateTime.now();
 
-  final selectedEvents = <CuadranteDay>[].obs;
+  final selectedTurnos = <CuadranteDay>[].obs;
   RxList<Task> selectedNotas = <Task>[].obs;
   // get selectedEvents => _selectedEvents;
 
-  RxMap<DateTime, List<CuadranteDay>> cuadranteMap =
-      <DateTime, List<CuadranteDay>>{}.obs;
+  Map<DateTime, List<CuadranteDay>> cuadranteMap =
+      <DateTime, List<CuadranteDay>>{};
 
-  RxMap<DateTime, List<Task>> notasMap = <DateTime, List<Task>>{}.obs;
+  // RxMap<DateTime, List<Task>> notasMap = <DateTime, List<Task>>{}.obs;
 
-  RxList<CuadranteDay> cuadrante = <CuadranteDay>[].obs;
+  List<CuadranteDay> cuadrante = <CuadranteDay>[];
 
-  RxList<TurnoType> turno = <TurnoType>[].obs;
+  List<TurnoType> turno = <TurnoType>[];
 
   RxBool isReady = false.obs;
 
@@ -59,11 +59,16 @@ class CalendarController extends GetxController {
   /// ==
 
   @override
-  void onInit() async {
-    await fetchCuadrante();
-    await fetchTurno();
-    await getListEvent();
+  void onInit()  {
+     getCuadrante();
+     getNotasList();
     super.onInit();
+  }
+
+  @override
+  void onReady() {
+    fetchTurno();
+    super.onReady();
   }
 
   onTapDown(TapDownDetails details) {
@@ -72,11 +77,12 @@ class CalendarController extends GetxController {
   }
 
   onDaySelected(DateTime selectedDate, DateTime focusedDate) async {
-    if (!isSameDay(selectedDate, selectedDayRx.value)) {
-      selectedDayRx.value = selectedDate;
-      AppController().focusDayRx.value = focusedDate;
-      selectedEvents.value = getEventForDay(selectedDate);
-      selectedNotas.value = getEventsOfDay(selectedDate);
+    if (!isSameDay(selectedDate, selectedDayRx)) {
+      selectedDayRx = selectedDate;
+      AppController().focusDayRx = focusedDate;
+      selectedTurnos.value = getTurnosOfDay(selectedDate);
+      selectedNotas.value = getNotasOfDay(selectedDate);
+
       update();
     }
     // else {
@@ -92,26 +98,26 @@ class CalendarController extends GetxController {
   }
 
   onDaySelectedLongPress(DateTime selectedDate, DateTime focusedDate) async {
-    if (!isSameDay(selectedDate, selectedDayRx.value)) {
-      selectedDayRx.value = selectedDate;
-      AppController().focusDayRx.value = focusedDate;
+    if (!isSameDay(selectedDate, selectedDayRx)) {
+      selectedDayRx = selectedDate;
+      AppController().focusDayRx = focusedDate;
     }
-    selectedEvents.value = getEventForDay(selectedDate);
-    selectedNotas.value = getEventsOfDay(selectedDate);
+    selectedTurnos.value = getTurnosOfDay(selectedDate);
+    selectedNotas.value = getNotasOfDay(selectedDate);
 
     Get.dialog(CustomAlertDilogDaySelected(
-        x: currentX, y: currentY, selectedDate: selectedDayRx.value, turno: turno));
+        x: currentX, y: currentY, selectedDate: selectedDayRx, turno: turno));
   }
 
 //TODO Comprobar rendimiento focusedday obs
   onPageChanged(focusedDay) {
-    AppController().focusDayRx.value = focusedDay;
+    AppController().focusDayRx = focusedDay;
 
     // change the selected day to the first day of current month.
-    selectedDayRx.value = DateTime(focusedDay.year, focusedDay.month, 1);
+    // selectedDayRx = DateTime(focusedDay.year, focusedDay.month, 1);
 
     // change the selected events to the first day of current month.
-    selectedNotas.value = getEventsOfDay(selectedDayRx.value);
+    // selectedNotas.value = getNotasOfDay(selectedDayRx);
 
     update();
   }
@@ -126,7 +132,7 @@ class CalendarController extends GetxController {
     return key.day * 1000000 + key.month * 10000 + key.year;
   }
 
-  List<CuadranteDay> getEventForDay(DateTime day) {
+  List<CuadranteDay> getTurnosOfDay(DateTime day) {
     final events = LinkedHashMap<DateTime, List<CuadranteDay>>(
       equals: isSameDay,
       hashCode: getHashCode,
@@ -134,8 +140,8 @@ class CalendarController extends GetxController {
     return events[day] ?? [];
   }
 
-  Future<Map<DateTime, List<CuadranteDay>>> fetchCuadrante() async {
-    cuadrante.value = await CalendarioDB.db.getItemModels();
+  Future<Map<DateTime, List<CuadranteDay>>> getCuadrante() async {
+    cuadrante = await CalendarioDB.db.getItemModels();
     cuadranteMap.clear();
     for (CuadranteDay turno in cuadrante) {
       cuadranteMap.putIfAbsent(turno.dateTime!, () => <CuadranteDay>[]);
@@ -156,7 +162,7 @@ class CalendarController extends GetxController {
   // }
 
   Future<List<TurnoType>> fetchTurno() async {
-    turno.value = await CalendarioDB.db.getTypeModels();
+    turno = await CalendarioDB.db.getTypeModels();
     return turno;
   }
 
@@ -176,7 +182,7 @@ class CalendarController extends GetxController {
   RxList<Task> listEvent = <Task>[].obs;
   // RxList<Task> listEvent2 = <Task>[].obs;
 
-  getListEvent() async {
+  getNotasList() async {
     listEvent.value = await NotasDB.instance.getNotesFromDB();
   }
 
@@ -194,7 +200,7 @@ class CalendarController extends GetxController {
     return check;
   }
 
-  List<Task> getEventsOfDay(DateTime day) {
+  List<Task> getNotasOfDay(DateTime day) {
     List<Task> list = [];
     for (var event in listEvent) {
       if (DataValidator.isSameDay(

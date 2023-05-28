@@ -193,6 +193,6 @@ class CrearTurnoController extends GetxController {
     );
     await  fetchEventsType();
 calendarController.fetchTurno();
-calendarController.fetchCuadrante();
+calendarController.getCuadrante();
   }
 }

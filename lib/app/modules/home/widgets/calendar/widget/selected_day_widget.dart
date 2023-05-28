@@ -16,7 +16,7 @@ class SelectedDayWidget extends StatelessWidget {
         child: GetBuilder<CalendarController>(
           builder: (controller) {
             return Text(
-              DateFormat.MMMM('es').add_y().format(AppController().focusDayRx.value).toUpperCase(),
+              DateFormat.MMMM('es').add_y().format(AppController().focusDayRx).toUpperCase(),
               style: CustomTextStyle.appBarTitle(context: context),
             );
           },

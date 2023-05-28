@@ -26,11 +26,11 @@ class DaySelecetedTurnoWidget extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                c.selectedEvents.isEmpty
+                c.selectedTurnos.isEmpty
                     ? Container()
                     : ListView.builder(
                         shrinkWrap: true,
-                        itemCount: c.selectedEvents.length,
+                        itemCount: c.selectedTurnos.length,
                         itemBuilder: (context, index) {
                           return Slidable(
                             endActionPane: ActionPane(
@@ -43,7 +43,7 @@ class DaySelecetedTurnoWidget extends StatelessWidget {
                                   backgroundColor: Colors.redAccent,
                                   // icon: Icons.send,
                                   onPressed: (context) { c.deleteTurnoCuadrante(
-                                      c.selectedEvents[index].id);},
+                                      c.selectedTurnos[index].id);},
                                 ),
                               ],
                             ),
@@ -53,7 +53,7 @@ class DaySelecetedTurnoWidget extends StatelessWidget {
                                   vertical: 1.h, horizontal: 2.w),
                               decoration: BoxDecoration(
                                 color: HexColor(
-                                    c.selectedEvents[index].color!),
+                                    c.selectedTurnos[index].color!),
                                 border: Border.all(width: 0.8.r),
                                 borderRadius: BorderRadius.circular(5.r),
                               ),
@@ -82,13 +82,13 @@ class DaySelecetedTurnoWidget extends StatelessWidget {
                                     padding: const EdgeInsets.only(left: 6.0),
                                     child: FittedBox(
                                       child: Text(
-                                        c.selectedEvents[index]
+                                        c.selectedTurnos[index]
                                             .description!,
                                         style: TextStyle(
                                             height: 1.2.h,
                                             fontSize: 14.sp,
                                             fontWeight: FontWeight.bold,
-                                            color: HexColor(c.selectedEvents
+                                            color: HexColor(c.selectedTurnos
                                                             [index].color!)
                                                         .computeLuminance() >
                                                     0.5
@@ -100,21 +100,21 @@ class DaySelecetedTurnoWidget extends StatelessWidget {
                                   // SizedBox(
                                   //   width: 20.w,
                                   // ),
-                                  c.selectedEvents[index].startHour !=
+                                  c.selectedTurnos[index].startHour !=
                                               null &&
-                                          c.selectedEvents[index]
+                                          c.selectedTurnos[index]
                                                   .endHour !=
                                               null
                                       ? Padding(
                                           padding: EdgeInsets.only(left: 15.w),
                                           child: FittedBox(
                                             child: Text(
-                                              'de ${c.selectedEvents[index].startHour.toString()} a ${c.selectedEvents[index].endHour.toString()}',
+                                              'de ${c.selectedTurnos[index].startHour.toString()} a ${c.selectedTurnos[index].endHour.toString()}',
                                               style: TextStyle(
                                                   height: 1.2.h,
                                                   fontSize: 14.sp,
                                                   color: HexColor(c
-                                                                  .selectedEvents
+                                                                  .selectedTurnos
                                                                   [index]
                                                                   .color!)
                                                               .computeLuminance() >
