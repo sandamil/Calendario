@@ -94,12 +94,17 @@ class CalendarioDB {
     }
   }
 
-  Future<List<CuadranteDay>> getItemModels() async {
+  getCuadrantesName (){
+
+
+  }
+
+  Future<List<CuadranteDay>> getCuadranteList() async {
     final dbClient = await database;
 
-    var day = DateTime.now();
-    DateTime dayStart = day.subtract(const Duration(days: 60));
-    DateTime dayEnd = day.add(const Duration(days: 300));
+    // var day = DateTime.now();
+    // DateTime dayStart = day.subtract(const Duration(days: 60));
+    // DateTime dayEnd = day.add(const Duration(days: 300));
 
     List<Map<String, dynamic>> result =
         await dbClient!.rawQuery("SELECT * FROM $_cuadrantesTable");
@@ -107,7 +112,7 @@ class CalendarioDB {
     return result.map((m) => CuadranteDay.fromMap(m)).toList();
   }
 
-  Future<int> addItem(CuadranteDay item) async {
+  Future<int> addCuadranteItem(CuadranteDay item) async {
     final dbClient = await database;
     int res = await dbClient!.insert("Cuadrante", item.toMap(),
         conflictAlgorithm: ConflictAlgorithm.ignore);

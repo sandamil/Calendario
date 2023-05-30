@@ -26,11 +26,11 @@ class DaySelecetedTurnoWidget extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                c.selectedTurnos.isEmpty
+                c.selectedDayTurnos.isEmpty
                     ? Container()
                     : ListView.builder(
                         shrinkWrap: true,
-                        itemCount: c.selectedTurnos.length,
+                        itemCount: c.selectedDayTurnos.length,
                         itemBuilder: (context, index) {
                           return Slidable(
                             endActionPane: ActionPane(
@@ -43,7 +43,7 @@ class DaySelecetedTurnoWidget extends StatelessWidget {
                                   backgroundColor: Colors.redAccent,
                                   // icon: Icons.send,
                                   onPressed: (context) { c.deleteTurnoCuadrante(
-                                      c.selectedTurnos[index].id);},
+                                      c.selectedDayTurnos[index].id);},
                                 ),
                               ],
                             ),
@@ -53,7 +53,7 @@ class DaySelecetedTurnoWidget extends StatelessWidget {
                                   vertical: 1.h, horizontal: 2.w),
                               decoration: BoxDecoration(
                                 color: HexColor(
-                                    c.selectedTurnos[index].color!),
+                                    c.selectedDayTurnos[index].color!),
                                 border: Border.all(width: 0.8.r),
                                 borderRadius: BorderRadius.circular(5.r),
                               ),
@@ -82,13 +82,13 @@ class DaySelecetedTurnoWidget extends StatelessWidget {
                                     padding: const EdgeInsets.only(left: 6.0),
                                     child: FittedBox(
                                       child: Text(
-                                        c.selectedTurnos[index]
+                                        c.selectedDayTurnos[index]
                                             .description!,
                                         style: TextStyle(
                                             height: 1.2.h,
                                             fontSize: 14.sp,
                                             fontWeight: FontWeight.bold,
-                                            color: HexColor(c.selectedTurnos
+                                            color: HexColor(c.selectedDayTurnos
                                                             [index].color!)
                                                         .computeLuminance() >
                                                     0.5
@@ -100,21 +100,21 @@ class DaySelecetedTurnoWidget extends StatelessWidget {
                                   // SizedBox(
                                   //   width: 20.w,
                                   // ),
-                                  c.selectedTurnos[index].startHour !=
+                                  c.selectedDayTurnos[index].startHour !=
                                               null &&
-                                          c.selectedTurnos[index]
+                                          c.selectedDayTurnos[index]
                                                   .endHour !=
                                               null
                                       ? Padding(
                                           padding: EdgeInsets.only(left: 15.w),
                                           child: FittedBox(
                                             child: Text(
-                                              'de ${c.selectedTurnos[index].startHour.toString()} a ${c.selectedTurnos[index].endHour.toString()}',
+                                              'de ${c.selectedDayTurnos[index].startHour.toString()} a ${c.selectedDayTurnos[index].endHour.toString()}',
                                               style: TextStyle(
                                                   height: 1.2.h,
                                                   fontSize: 14.sp,
                                                   color: HexColor(c
-                                                                  .selectedTurnos
+                                                                  .selectedDayTurnos
                                                                   [index]
                                                                   .color!)
                                                               .computeLuminance() >
@@ -139,7 +139,7 @@ class DaySelecetedTurnoWidget extends StatelessWidget {
                 SizedBox(
                   height: 3.h,
                 ),
-                ...c.selectedNotas.map((nota) => Padding(
+                ...c.selectedDayNotas.map((nota) => Padding(
                       padding:
                           EdgeInsets.symmetric(vertical: 1.h, horizontal: 2.w),
                       child: GestureDetector(

@@ -4,6 +4,9 @@ import 'dart:math';
 
 const String APP_FIRST_TIME_OPEN = 'app_first_time_open';
 
+int getHashCode(DateTime key) {
+  return key.day * 1000000 + key.month * 10000 + key.year;
+}
 
 class ConstantData {
   ///icons

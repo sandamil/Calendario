@@ -1,7 +1,6 @@
 import 'dart:collection';
 
 import 'package:calendario2/app/controllers/ads_controller.dart';
-import 'package:calendario2/app/controllers/app_controller.dart';
 import 'package:calendario2/app/data/local/calendarDatabase.dart';
 import 'package:calendario2/app/data/local/taskDatabase.dart';
 import 'package:calendario2/app/data/model/taskModel.dart';
@@ -17,17 +16,18 @@ import '../widgets/calendar/widget/customAlertDialogDaySelected.dart';
 class CalendarController extends GetxController {
   final adcontroller = Get.find<AdsController>();
 
-  final Rx<CalendarFormat> _calendarFormat = CalendarFormat.month.obs;
+  // final Rx<CalendarFormat> _calendarFormat = CalendarFormat.month.obs;
 
   var currentX = 0.0;
   var currentY = 0.0;
 
-  Rx<CalendarFormat> get calendarFormat => _calendarFormat;
+  // Rx<CalendarFormat> get calendarFormat => _calendarFormat;
 
   ///============================
 //============================= Todo Rendimiento de app con obs =============================
 //
-  DateTime selectedDayRx = DateTime.now().toLocal();
+  final focusDayRx = DateTime.now().obs;
+  final selectedDayRx = DateTime.now().toLocal().obs;
 //   // Rx<DateTime> get selectedDay => _selectedDay;
 //   Rx<DateTime> selectedDay = DateTime.now().obs;
 //   // DateTime _selectedDay = DateTime.now();
@@ -40,16 +40,16 @@ class CalendarController extends GetxController {
 // //   DateTime _focusedDay = DateTime.now();
 // //   var focusedDay = DateTime.now();
 
-  final selectedTurnos = <CuadranteDay>[].obs;
-  RxList<Task> selectedNotas = <Task>[].obs;
+  final selectedDayTurnos = <CuadranteDay>[].obs;
+  RxList<Task> selectedDayNotas = <Task>[].obs;
   // get selectedEvents => _selectedEvents;
 
-  Map<DateTime, List<CuadranteDay>> cuadranteMap =
-      <DateTime, List<CuadranteDay>>{};
+  RxMap<DateTime, List<CuadranteDay>> cuadranteMap =
+      <DateTime, List<CuadranteDay>>{}.obs;
 
-  // RxMap<DateTime, List<Task>> notasMap = <DateTime, List<Task>>{}.obs;
+  RxMap<DateTime, List<Task>> notasMap = <DateTime, List<Task>>{}.obs;
 
-  List<CuadranteDay> cuadrante = <CuadranteDay>[];
+  RxList<CuadranteDay> cuadrante = <CuadranteDay>[].obs;
 
   List<TurnoType> turno = <TurnoType>[];
 
@@ -59,74 +59,73 @@ class CalendarController extends GetxController {
   /// ==
 
   @override
-  void onInit()  {
-     getCuadrante();
-     getNotasList();
+  void onInit() async {
+    // getCuadrante();
+    //  getListEvent();
     super.onInit();
   }
 
   @override
-  void onReady() {
-    fetchTurno();
+  void onReady() async {
+     fetchTurno();
     super.onReady();
   }
+
 
   onTapDown(TapDownDetails details) {
     currentX = details.globalPosition.dx;
     currentY = details.globalPosition.dy;
   }
 
-  onDaySelected(DateTime selectedDate, DateTime focusedDate) async {
-    if (!isSameDay(selectedDate, selectedDayRx)) {
-      selectedDayRx = selectedDate;
-      AppController().focusDayRx = focusedDate;
-      selectedTurnos.value = getTurnosOfDay(selectedDate);
-      selectedNotas.value = getNotasOfDay(selectedDate);
-
-      update();
-    }
-    // else {
-    //   selectedDay.value = selectedDate;
-    //   _focusedDay.value = focusedDate;
-    //   // Get.dialog(CustomAlertDilogDaySelected(
-    //   //     x: currentX, y: currentY, selectedDate: selectedDate, turno: turno));
-    // }
-    // selectedEvents.value = getEventForDay(selectedDay.value);
-    // selectedNotas.value = getEventsOfDay(selectedDay.value);
-    // // Get.dialog(CustomAlertDilogDaySelected(
-    // //     x: currentX, y: currentY, selectedDate: selectedDate, turno: turno));
-  }
+  // onDaySelected(DateTime selectedDate, DateTime focusedDate) async {
+  //   if (!isSameDay(selectedDate, selectedDayRx.value)) {
+  //     selectedDayRx.value = selectedDate;
+  //     focusDayRx = focusedDate;
+  //     selectedDayTurnos.value = getTurnosOfDay(selectedDate);
+  //     selectedDayNotas.value = getNotasOfDay(selectedDate);
+  //     update();
+  //   }
+  //   // else {
+  //   //   selectedDay.value = selectedDate;
+  //   //   _focusedDay.value = focusedDate;
+  //   //   // Get.dialog(CustomAlertDilogDaySelected(
+  //   //   //     x: currentX, y: currentY, selectedDate: selectedDate, turno: turno));
+  //   // }
+  //   // selectedEvents.value = getEventForDay(selectedDay.value);
+  //   // selectedNotas.value = getEventsOfDay(selectedDay.value);
+  //   // // Get.dialog(CustomAlertDilogDaySelected(
+  //   // //     x: currentX, y: currentY, selectedDate: selectedDate, turno: turno));
+  // }
 
   onDaySelectedLongPress(DateTime selectedDate, DateTime focusedDate) async {
-    if (!isSameDay(selectedDate, selectedDayRx)) {
-      selectedDayRx = selectedDate;
-      AppController().focusDayRx = focusedDate;
+    if (!isSameDay(selectedDate, selectedDayRx.value)) {
+      selectedDayRx.value = selectedDate;
+      // focusDayRx.value = focusedDate;
     }
-    selectedTurnos.value = getTurnosOfDay(selectedDate);
-    selectedNotas.value = getNotasOfDay(selectedDate);
+    selectedDayTurnos.value = getTurnosOfDay(selectedDate);
+    selectedDayNotas.value = getNotasOfDay(selectedDate);
 
     Get.dialog(CustomAlertDilogDaySelected(
-        x: currentX, y: currentY, selectedDate: selectedDayRx, turno: turno));
+        x: currentX, y: currentY, selectedDate: selectedDayRx.value, turno: turno));
   }
 
-//TODO Comprobar rendimiento focusedday obs
-  onPageChanged(focusedDay) {
-    AppController().focusDayRx = focusedDay;
+  // onPageChanged(focusedDay) {
+  //   focusDayRx.value = focusedDay;
+  //
+  //   // change the selected day to the first day of current month.
+  //   selectedDayRx.value = DateTime(focusedDay.year, focusedDay.month, 1);
+  //
+  //   // change the selected events to the first day of current month.
+  //   selectedDayNotas.value = getNotasOfDay(selectedDayRx.value);
+  //
+  //   update();
+  // }
 
-    // change the selected day to the first day of current month.
-    // selectedDayRx = DateTime(focusedDay.year, focusedDay.month, 1);
-
-    // change the selected events to the first day of current month.
-    // selectedNotas.value = getNotasOfDay(selectedDayRx);
-
-    update();
-  }
-
-  onFormatChanged(CalendarFormat format) {
-    if (_calendarFormat.value != format) {
-      _calendarFormat.value = format;
-    }
-  }
+  // onFormatChanged(CalendarFormat format) {
+  //   if (_calendarFormat.value != format) {
+  //     _calendarFormat.value = format;
+  //   }
+  // }
 
   int getHashCode(DateTime key) {
     return key.day * 1000000 + key.month * 10000 + key.year;
@@ -141,7 +140,8 @@ class CalendarController extends GetxController {
   }
 
   Future<Map<DateTime, List<CuadranteDay>>> getCuadrante() async {
-    cuadrante = await CalendarioDB.db.getItemModels();
+
+    cuadrante.value = await CalendarioDB.db.getCuadranteList();
     cuadranteMap.clear();
     for (CuadranteDay turno in cuadrante) {
       cuadranteMap.putIfAbsent(turno.dateTime!, () => <CuadranteDay>[]);
@@ -152,6 +152,8 @@ class CalendarController extends GetxController {
       });
     }
     isReady.value = true;
+
+    print('get cuadrante =============');
     return cuadranteMap;
   }
 
@@ -170,6 +172,8 @@ class CalendarController extends GetxController {
     return showDialog(
       context: context,
       builder: (context) {
+        // adcontroller.staticHomeAd.dispose();
+
         return CustomAlertDialogTurnoList(
             selectedDate: selectedDate, turno: turno);
       },
@@ -182,7 +186,7 @@ class CalendarController extends GetxController {
   RxList<Task> listEvent = <Task>[].obs;
   // RxList<Task> listEvent2 = <Task>[].obs;
 
-  getNotasList() async {
+  getListEvent() async {
     listEvent.value = await NotasDB.instance.getNotesFromDB();
   }
 
