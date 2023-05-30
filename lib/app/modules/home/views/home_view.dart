@@ -439,98 +439,95 @@ class _HomeViewState extends State<HomeView> {
                                       child: ElevatedButton(
                                         onPressed: () async {
                                           await calendarController.fetchTurno();
-                                          if(mounted) {
-                                            Navigator.pop(context);
-                                            showDialog(
-                                              context: context,
-                                              builder: (context) {
-                                                // adcontroller.staticHomeAd.dispose();
-                                                return Align(
-                                                  alignment: Alignment.center,
-                                                  child: Padding(
-                                                    padding: EdgeInsets.symmetric(horizontal: 10.w),
-                                                    child: Column(
-                                                      mainAxisSize: MainAxisSize.min,
-                                                      children: <Widget>[
-                                                        Container(
-                                                          padding: EdgeInsets.symmetric(horizontal: 10.w),
-                                                          decoration: BoxDecoration(
-                                                            border: Border.all(color: PRIMARY_COLOR),
-                                                            // color: theme.scaffoldBackgroundColor,
-                                                            borderRadius: BorderRadius.all(
-                                                              Radius.circular(5.r),
-                                                            ),
-                                                          ),
-                                                          child: SingleChildScrollView(
-                                                            child: Wrap(
-                                                              alignment: WrapAlignment.spaceAround,
-                                                              // runSpacing: 1.h,
-                                                              children: <Widget>[
-                                                                ...calendarController.turno.map((m) {
-                                                                  return Padding(
-                                                                    padding: EdgeInsets.symmetric(horizontal: 2.w),
-                                                                    child: ElevatedButton(
-                                                                      style: ElevatedButton.styleFrom(
-
-                                                                        side: BorderSide(width: 0.8.r),
-
-                                                                        shape: RoundedRectangleBorder(
-                                                                          borderRadius: BorderRadius.circular(5.r),
-                                                                        ),
-                                                                        backgroundColor: HexColor(m.color!),
-                                                                      ),
-                                                                      child: Container(
-
-                                                                        alignment: Alignment.center,
-                                                                        height: 20.h,
-                                                                        width: 75.w,
-                                                                        child: Text(
-                                                                          m.description!,
-                                                                          style: TextStyle(
-                                                                              fontSize: 12.sp,
-                                                                              fontWeight: FontWeight.bold,
-                                                                              color: HexColor(m.color!).computeLuminance() > 0.5 ? Colors.black : Colors.white
-                                                                          ),
-                                                                        ),
-                                                                      ),
-                                                                      onPressed: () async {
-
-                                                                        await CalendarioDB.db.addCuadranteItem(
-                                                                          CuadranteDay(
-                                                                            cuadranteName: 'Turnos sueltos',
-                                                                            dateTime: DateTime.parse(selectedDate.toString().substring(0, 10)),
-                                                                            color: m.color,
-                                                                            description: m.description,
-                                                                            endHour: m.endHour,
-                                                                            startHour: m.startHour,
-                                                                            title: m.title,
-                                                                          ),
-                                                                        );
-                                                                        // await calendarController.getCuadrante();
-                                                                        // adcontroller.staticHomeAd.load();
-                                                                        await getCuadrante();
-                                                                        setState(() => _focusedDay.value = selectedDate);
-
-                                                                        Navigator.pop(context);                                                                      // Get.offAllNamed('/home');
-                                                                      },
-                                                                    ),
-                                                                  );
-                                                                }),
-                                                              ],
-                                                            ),
+                                          
+                                          Navigator.pop(context);
+                                          showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              // adcontroller.staticHomeAd.dispose();
+                                              return Align(
+                                                alignment: Alignment.center,
+                                                child: Padding(
+                                                  padding: EdgeInsets.symmetric(horizontal: 10.w),
+                                                  child: Column(
+                                                    mainAxisSize: MainAxisSize.min,
+                                                    children: <Widget>[
+                                                      Container(
+                                                        padding: EdgeInsets.symmetric(horizontal: 10.w),
+                                                        decoration: BoxDecoration(
+                                                          border: Border.all(color: PRIMARY_COLOR),
+                                                          // color: theme.scaffoldBackgroundColor,
+                                                          borderRadius: BorderRadius.all(
+                                                            Radius.circular(5.r),
                                                           ),
                                                         ),
-                                                      ],
-                                                    ),
+                                                        child: SingleChildScrollView(
+                                                          child: Wrap(
+                                                            alignment: WrapAlignment.spaceAround,
+                                                            // runSpacing: 1.h,
+                                                            children: <Widget>[
+                                                              ...calendarController.turno.map((m) {
+                                                                return Padding(
+                                                                  padding: EdgeInsets.symmetric(horizontal: 2.w),
+                                                                  child: ElevatedButton(
+                                                                    style: ElevatedButton.styleFrom(
+
+                                                                      side: BorderSide(width: 0.8.r),
+
+                                                                      shape: RoundedRectangleBorder(
+                                                                        borderRadius: BorderRadius.circular(5.r),
+                                                                      ),
+                                                                      backgroundColor: HexColor(m.color!),
+                                                                    ),
+                                                                    child: Container(
+
+                                                                      alignment: Alignment.center,
+                                                                      height: 20.h,
+                                                                      width: 75.w,
+                                                                      child: Text(
+                                                                        m.description!,
+                                                                        style: TextStyle(
+                                                                            fontSize: 12.sp,
+                                                                            fontWeight: FontWeight.bold,
+                                                                            color: HexColor(m.color!).computeLuminance() > 0.5 ? Colors.black : Colors.white
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                    onPressed: () async {
+
+                                                                      await CalendarioDB.db.addCuadranteItem(
+                                                                        CuadranteDay(
+                                                                          cuadranteName: 'Turnos sueltos',
+                                                                          dateTime: DateTime.parse(selectedDate.toString().substring(0, 10)),
+                                                                          color: m.color,
+                                                                          description: m.description,
+                                                                          endHour: m.endHour,
+                                                                          startHour: m.startHour,
+                                                                          title: m.title,
+                                                                        ),
+                                                                      );
+                                                                      // await calendarController.getCuadrante();
+                                                                      // adcontroller.staticHomeAd.load();
+                                                                      await getCuadrante();
+                                                                      setState(() => _focusedDay.value = selectedDate);
+
+                                                                      Navigator.pop(context);                                                                      // Get.offAllNamed('/home');
+                                                                    },
+                                                                  ),
+                                                                );
+                                                              }),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
-                                                );
+                                                ),
+                                              );
 
 
-                                              },
-                                            );
-
-                                          }
-
+                                            },
+                                          );
 
 
                                         },
