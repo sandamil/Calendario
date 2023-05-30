@@ -14,18 +14,20 @@ import '../widgets/calendar/widget/customAlertDialogTurnoList.dart';
 import '../widgets/calendar/widget/customAlertDialogDaySelected.dart';
 
 class CalendarController extends GetxController {
-  // final adcontroller = Get.find<AdsController>();
+  final adcontroller = Get.find<AdsController>();
 
   // final Rx<CalendarFormat> _calendarFormat = CalendarFormat.month.obs;
 
-  // var currentX = 0.0;
-  // var currentY = 0.0;
+  var currentX = 0.0;
+  var currentY = 0.0;
 
   // Rx<CalendarFormat> get calendarFormat => _calendarFormat;
 
-
+  ///============================
+//============================= Todo Rendimiento de app con obs =============================
+//
   final focusDayRx = DateTime.now().obs;
-  // final selectedDayRx = DateTime.now().toLocal().obs;
+  final selectedDayRx = DateTime.now().toLocal().obs;
 //   // Rx<DateTime> get selectedDay => _selectedDay;
 //   Rx<DateTime> selectedDay = DateTime.now().obs;
 //   // DateTime _selectedDay = DateTime.now();
@@ -39,13 +41,13 @@ class CalendarController extends GetxController {
 // //   var focusedDay = DateTime.now();
 
   final selectedDayTurnos = <CuadranteDay>[].obs;
-  // List<Task> selectedDayNotas = <Task>[];
+  RxList<Task> selectedDayNotas = <Task>[].obs;
   // get selectedEvents => _selectedEvents;
 
   RxMap<DateTime, List<CuadranteDay>> cuadranteMap =
       <DateTime, List<CuadranteDay>>{}.obs;
 
-  // RxMap<DateTime, List<Task>> notasMap = <DateTime, List<Task>>{}.obs;
+  RxMap<DateTime, List<Task>> notasMap = <DateTime, List<Task>>{}.obs;
 
   RxList<CuadranteDay> cuadrante = <CuadranteDay>[].obs;
 
@@ -70,12 +72,10 @@ class CalendarController extends GetxController {
   }
 
 
-  // onTapDown(TapDownDetails details) {
-  //   currentX = details.globalPosition.dx;
-  //   currentY = details.globalPosition.dy;
-  //   print(currentX);
-  //   print(currentY);
-  // }
+  onTapDown(TapDownDetails details) {
+    currentX = details.globalPosition.dx;
+    currentY = details.globalPosition.dy;
+  }
 
   // onDaySelected(DateTime selectedDate, DateTime focusedDate) async {
   //   if (!isSameDay(selectedDate, selectedDayRx.value)) {
@@ -97,17 +97,17 @@ class CalendarController extends GetxController {
   //   // //     x: currentX, y: currentY, selectedDate: selectedDate, turno: turno));
   // }
 
-  // onDaySelectedLongPress(DateTime selectedDate, DateTime focusedDate) async {
-  //   if (!isSameDay(selectedDate, selectedDayRx.value)) {
-  //     selectedDayRx.value = selectedDate;
-  //     // focusDayRx.value = focusedDate;
-  //   }
-  //   selectedDayTurnos.value = getTurnosOfDay(selectedDate);
-  //   selectedDayNotas.value = getNotasOfDay(selectedDate);
-  //
-  //   Get.dialog(CustomAlertDilogDaySelected(
-  //       x: currentX, y: currentY, selectedDate: selectedDayRx.value, turno: turno));
-  // }
+  onDaySelectedLongPress(DateTime selectedDate, DateTime focusedDate) async {
+    if (!isSameDay(selectedDate, selectedDayRx.value)) {
+      selectedDayRx.value = selectedDate;
+      // focusDayRx.value = focusedDate;
+    }
+    selectedDayTurnos.value = getTurnosOfDay(selectedDate);
+    selectedDayNotas.value = getNotasOfDay(selectedDate);
+
+    Get.dialog(CustomAlertDilogDaySelected(
+        x: currentX, y: currentY, selectedDate: selectedDayRx.value, turno: turno));
+  }
 
   // onPageChanged(focusedDay) {
   //   focusDayRx.value = focusedDay;
@@ -168,17 +168,17 @@ class CalendarController extends GetxController {
     return turno;
   }
 
-  // showPopUp(context, selectedDate, turno) {
-  //   return showDialog(
-  //     context: context,
-  //     builder: (context) {
-  //       // adcontroller.staticHomeAd.dispose();
-  //
-  //       return CustomAlertDialogTurnoList(
-  //           selectedDate: selectedDate, turno: turno);
-  //     },
-  //   );
-  // }
+  showPopUp(context, selectedDate, turno) {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        // adcontroller.staticHomeAd.dispose();
+
+        return CustomAlertDialogTurnoList(
+            selectedDate: selectedDate, turno: turno);
+      },
+    );
+  }
 
 ///////////////     Notas
   /// ==
@@ -216,14 +216,12 @@ class CalendarController extends GetxController {
     return list;
   }
 
+  deleteTurnoCuadrante(id) {
+    adcontroller.staticHomeAd.load();
 
-
-  // deleteTurnoCuadrante(id) {
-  //   adcontroller.staticHomeAd.load();
-  //
-  //   CalendarioDB.db.deleteItemID(id);
-  //   Get.offAllNamed('/home');
-  // }
+    CalendarioDB.db.deleteItemID(id);
+    Get.offAllNamed('/home');
+  }
 }
 
 class DataValidator {
