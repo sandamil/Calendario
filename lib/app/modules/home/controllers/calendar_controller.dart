@@ -16,17 +16,17 @@ import '../widgets/calendar/widget/customAlertDialogDaySelected.dart';
 class CalendarController extends GetxController {
   final adcontroller = Get.find<AdsController>();
 
-  final Rx<CalendarFormat> _calendarFormat = CalendarFormat.month.obs;
+  // final Rx<CalendarFormat> _calendarFormat = CalendarFormat.month.obs;
 
   var currentX = 0.0;
   var currentY = 0.0;
 
-  Rx<CalendarFormat> get calendarFormat => _calendarFormat;
+  // Rx<CalendarFormat> get calendarFormat => _calendarFormat;
 
   ///============================
 //============================= Todo Rendimiento de app con obs =============================
 //
-  final focusDayRx = DateTime.now().toLocal().obs;
+  final focusDayRx = DateTime.now().obs;
   final selectedDayRx = DateTime.now().toLocal().obs;
 //   // Rx<DateTime> get selectedDay => _selectedDay;
 //   Rx<DateTime> selectedDay = DateTime.now().obs;
@@ -60,8 +60,8 @@ class CalendarController extends GetxController {
 
   @override
   void onInit() async {
-    getCuadrante();
-     getListEvent();
+    // getCuadrante();
+    //  getListEvent();
     super.onInit();
   }
 
@@ -77,30 +77,30 @@ class CalendarController extends GetxController {
     currentY = details.globalPosition.dy;
   }
 
-  onDaySelected(DateTime selectedDate, DateTime focusedDate) async {
-    if (!isSameDay(selectedDate, selectedDayRx.value)) {
-      selectedDayRx.value = selectedDate;
-      focusDayRx.value = focusedDate;
-      selectedDayTurnos.value = getTurnosOfDay(selectedDate);
-      selectedDayNotas.value = getNotasOfDay(selectedDate);
-      update();
-    }
-    // else {
-    //   selectedDay.value = selectedDate;
-    //   _focusedDay.value = focusedDate;
-    //   // Get.dialog(CustomAlertDilogDaySelected(
-    //   //     x: currentX, y: currentY, selectedDate: selectedDate, turno: turno));
-    // }
-    // selectedEvents.value = getEventForDay(selectedDay.value);
-    // selectedNotas.value = getEventsOfDay(selectedDay.value);
-    // // Get.dialog(CustomAlertDilogDaySelected(
-    // //     x: currentX, y: currentY, selectedDate: selectedDate, turno: turno));
-  }
+  // onDaySelected(DateTime selectedDate, DateTime focusedDate) async {
+  //   if (!isSameDay(selectedDate, selectedDayRx.value)) {
+  //     selectedDayRx.value = selectedDate;
+  //     focusDayRx = focusedDate;
+  //     selectedDayTurnos.value = getTurnosOfDay(selectedDate);
+  //     selectedDayNotas.value = getNotasOfDay(selectedDate);
+  //     update();
+  //   }
+  //   // else {
+  //   //   selectedDay.value = selectedDate;
+  //   //   _focusedDay.value = focusedDate;
+  //   //   // Get.dialog(CustomAlertDilogDaySelected(
+  //   //   //     x: currentX, y: currentY, selectedDate: selectedDate, turno: turno));
+  //   // }
+  //   // selectedEvents.value = getEventForDay(selectedDay.value);
+  //   // selectedNotas.value = getEventsOfDay(selectedDay.value);
+  //   // // Get.dialog(CustomAlertDilogDaySelected(
+  //   // //     x: currentX, y: currentY, selectedDate: selectedDate, turno: turno));
+  // }
 
   onDaySelectedLongPress(DateTime selectedDate, DateTime focusedDate) async {
     if (!isSameDay(selectedDate, selectedDayRx.value)) {
       selectedDayRx.value = selectedDate;
-      focusDayRx.value = focusedDate;
+      // focusDayRx.value = focusedDate;
     }
     selectedDayTurnos.value = getTurnosOfDay(selectedDate);
     selectedDayNotas.value = getNotasOfDay(selectedDate);
@@ -109,23 +109,23 @@ class CalendarController extends GetxController {
         x: currentX, y: currentY, selectedDate: selectedDayRx.value, turno: turno));
   }
 
-  onPageChanged(focusedDay) {
-    focusDayRx.value = focusedDay;
+  // onPageChanged(focusedDay) {
+  //   focusDayRx.value = focusedDay;
+  //
+  //   // change the selected day to the first day of current month.
+  //   selectedDayRx.value = DateTime(focusedDay.year, focusedDay.month, 1);
+  //
+  //   // change the selected events to the first day of current month.
+  //   selectedDayNotas.value = getNotasOfDay(selectedDayRx.value);
+  //
+  //   update();
+  // }
 
-    // change the selected day to the first day of current month.
-    selectedDayRx.value = DateTime(focusedDay.year, focusedDay.month, 1);
-
-    // change the selected events to the first day of current month.
-    selectedDayNotas.value = getNotasOfDay(selectedDayRx.value);
-
-    update();
-  }
-
-  onFormatChanged(CalendarFormat format) {
-    if (_calendarFormat.value != format) {
-      _calendarFormat.value = format;
-    }
-  }
+  // onFormatChanged(CalendarFormat format) {
+  //   if (_calendarFormat.value != format) {
+  //     _calendarFormat.value = format;
+  //   }
+  // }
 
   int getHashCode(DateTime key) {
     return key.day * 1000000 + key.month * 10000 + key.year;
@@ -140,6 +140,7 @@ class CalendarController extends GetxController {
   }
 
   Future<Map<DateTime, List<CuadranteDay>>> getCuadrante() async {
+
     cuadrante.value = await CalendarioDB.db.getCuadranteList();
     cuadranteMap.clear();
     for (CuadranteDay turno in cuadrante) {
@@ -152,6 +153,7 @@ class CalendarController extends GetxController {
     }
     isReady.value = true;
 
+    print('get cuadrante =============');
     return cuadranteMap;
   }
 
@@ -170,7 +172,7 @@ class CalendarController extends GetxController {
     return showDialog(
       context: context,
       builder: (context) {
-        adcontroller.staticHomeAd.dispose();
+        // adcontroller.staticHomeAd.dispose();
 
         return CustomAlertDialogTurnoList(
             selectedDate: selectedDate, turno: turno);
