@@ -97,17 +97,17 @@ class CalendarController extends GetxController {
   //   // //     x: currentX, y: currentY, selectedDate: selectedDate, turno: turno));
   // }
 
-  onDaySelectedLongPress(DateTime selectedDate, DateTime focusedDate) async {
-    if (!isSameDay(selectedDate, selectedDayRx.value)) {
-      selectedDayRx.value = selectedDate;
-      // focusDayRx.value = focusedDate;
-    }
-    selectedDayTurnos.value = getTurnosOfDay(selectedDate);
-    selectedDayNotas.value = getNotasOfDay(selectedDate);
-
-    Get.dialog(CustomAlertDilogDaySelected(
-        x: currentX, y: currentY, selectedDate: selectedDayRx.value, turno: turno));
-  }
+  // onDaySelectedLongPress(DateTime selectedDate, DateTime focusedDate) async {
+  //   if (!isSameDay(selectedDate, selectedDayRx.value)) {
+  //     selectedDayRx.value = selectedDate;
+  //     // focusDayRx.value = focusedDate;
+  //   }
+  //   selectedDayTurnos.value = getTurnosOfDay(selectedDate);
+  //   selectedDayNotas.value = getNotasOfDay(selectedDate);
+  //
+  //   Get.dialog(CustomAlertDilogDaySelected(
+  //       x: currentX, y: currentY, selectedDate: selectedDayRx.value, turno: turno));
+  // }
 
   // onPageChanged(focusedDay) {
   //   focusDayRx.value = focusedDay;
