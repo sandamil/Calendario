@@ -36,117 +36,117 @@ class AlarmasView extends GetView<AlarmasController> {
                     ? controller.goToEditingNotas()
                     : controller.goToAddNotas();
               }),
-          actions: [
-            IconButton(
-                icon: Icon(Icons.alarm, color: theme.primaryColor),
-                onPressed: () async {
-                  await controller.noti();
-                }),
-            IconButton(
-                icon: Icon(Icons.alarm, color: theme.primaryColor),
-                onPressed: () async {
-                  await controller.getPendingNotification();
-                  CustomDialog(
-                    child: Column(
-                      children: <Widget>[
-                        if (controller.pendingNotifications.value.isEmpty)
-                          const Text('No active notifications'),
-                        if (controller.pendingNotifications.value.isEmpty)
-                          for (PendingNotificationRequest activeNotification
-                              in controller.pendingNotifications.value)
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Text(
-                                  'id: ${activeNotification.id}\n'
-                                  // 'channelId: ${activeNotification.channelId}\n'
-                                  // 'groupKey: ${activeNotification.groupKey}\n'
-                                  // 'tag: ${activeNotification.tag}\n'
-                                  'title: ${activeNotification.title}\n'
-                                  'body: ${activeNotification.body}',
-                                ),
-                                if (Platform.isAndroid &&
-                                    activeNotification.id != null)
-                                  TextButton(
-                                    child: const Text('Get messaging style'),
-                                    onPressed: () {
-                                      // _getActiveNotificationMessagingStyle(
-                                      //     activeNotification.id!, activeNotification.tag);
-                                    },
-                                  ),
-                                const Divider(color: Colors.black),
-                              ],
-                            ),
-                      ],
-                    ),
-                  );
-                }),
-          ],
+          // actions: [
+          //   IconButton(
+          //       icon: Icon(Icons.alarm, color: theme.primaryColor),
+          //       onPressed: () async {
+          //         await controller.noti();
+          //       }),
+          //   IconButton(
+          //       icon: Icon(Icons.alarm, color: theme.primaryColor),
+          //       onPressed: () async {
+          //         await controller.getPendingNotification();
+          //         CustomDialog(
+          //           child: Column(
+          //             children: <Widget>[
+          //               if (controller.pendingNotifications.value.isEmpty)
+          //                 const Text('No active notifications'),
+          //               if (controller.pendingNotifications.value.isEmpty)
+          //                 for (PendingNotificationRequest activeNotification
+          //                     in controller.pendingNotifications.value)
+          //                   Column(
+          //                     crossAxisAlignment: CrossAxisAlignment.start,
+          //                     children: <Widget>[
+          //                       Text(
+          //                         'id: ${activeNotification.id}\n'
+          //                         // 'channelId: ${activeNotification.channelId}\n'
+          //                         // 'groupKey: ${activeNotification.groupKey}\n'
+          //                         // 'tag: ${activeNotification.tag}\n'
+          //                         'title: ${activeNotification.title}\n'
+          //                         'body: ${activeNotification.body}',
+          //                       ),
+          //                       if (Platform.isAndroid &&
+          //                           activeNotification.id != null)
+          //                         TextButton(
+          //                           child: const Text('Get messaging style'),
+          //                           onPressed: () {
+          //                             // _getActiveNotificationMessagingStyle(
+          //                             //     activeNotification.id!, activeNotification.tag);
+          //                           },
+          //                         ),
+          //                       const Divider(color: Colors.black),
+          //                     ],
+          //                   ),
+          //             ],
+          //           ),
+          //         );
+          //       }),
+          // ],
         ),
         body: Obx(() {
           return SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                Column(
-                  children: <Widget>[
-                    if (controller.pendingNotifications.value.isEmpty)
-                      const Text('No active notifications'),
-                    if (controller.pendingNotifications.value.isNotEmpty)
-                      for (PendingNotificationRequest activeNotification
-                          in controller.pendingNotifications.value)
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              'id: ${activeNotification.id}\n'
-                              // 'channelId: ${activeNotification.channelId}\n'
-                              // 'groupKey: ${activeNotification.groupKey}\n'
-                              // 'tag: ${activeNotification.tag}\n'
-                              'title: ${activeNotification.title}\n'
-                              'body: ${activeNotification.body}',
-                            ),
-                            if (Platform.isAndroid &&
-                                activeNotification.id != null)
-                              TextButton(
-                                child: const Text('Get messaging style'),
-                                onPressed: () {
-                                  // _getActiveNotificationMessagingStyle(
-                                  //     activeNotification.id!, activeNotification.tag);
-                                },
-                              ),
-                            const Divider(color: Colors.black),
-                          ],
-                        ),
-                  ],
-                ),
-                // if (controller.pendingNotifications.value.isEmpty)
-                //   const Text('No active notifications'),
-                if (controller.pendingNotifications.value.isNotEmpty)
-                  for (PendingNotificationRequest activeNotification
-                      in controller.pendingNotifications.value)
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          'id: ${activeNotification.id}\n'
-                          // 'channelId: ${activeNotification.channelId}\n'
-                          // 'groupKey: ${activeNotification.groupKey}\n'
-                          // 'tag: ${activeNotification.tag}\n'
-                          'title: ${activeNotification.title}\n'
-                          'body: ${activeNotification.body}',
-                        ),
-                        if (Platform.isAndroid && activeNotification.id != null)
-                          TextButton(
-                            child: const Text('Get messaging style'),
-                            onPressed: () {
-                              // _getActiveNotificationMessagingStyle(
-                              //     activeNotification.id!, activeNotification.tag);
-                            },
-                          ),
-                        const Divider(color: Colors.black),
-                      ],
-                    ),
+                // Column(
+                //   children: <Widget>[
+                //     if (controller.pendingNotifications.value.isEmpty)
+                //       const Text('No active notifications'),
+                //     if (controller.pendingNotifications.value.isNotEmpty)
+                //       for (PendingNotificationRequest activeNotification
+                //           in controller.pendingNotifications.value)
+                //         Column(
+                //           crossAxisAlignment: CrossAxisAlignment.start,
+                //           children: <Widget>[
+                //             Text(
+                //               'id: ${activeNotification.id}\n'
+                //               // 'channelId: ${activeNotification.channelId}\n'
+                //               // 'groupKey: ${activeNotification.groupKey}\n'
+                //               // 'tag: ${activeNotification.tag}\n'
+                //               'title: ${activeNotification.title}\n'
+                //               'body: ${activeNotification.body}',
+                //             ),
+                //             if (Platform.isAndroid &&
+                //                 activeNotification.id != null)
+                //               TextButton(
+                //                 child: const Text('Get messaging style'),
+                //                 onPressed: () {
+                //                   // _getActiveNotificationMessagingStyle(
+                //                   //     activeNotification.id!, activeNotification.tag);
+                //                 },
+                //               ),
+                //             const Divider(color: Colors.black),
+                //           ],
+                //         ),
+                //   ],
+                // ),
+                // // if (controller.pendingNotifications.value.isEmpty)
+                // //   const Text('No active notifications'),
+                // if (controller.pendingNotifications.value.isNotEmpty)
+                //   for (PendingNotificationRequest activeNotification
+                //       in controller.pendingNotifications.value)
+                //     Column(
+                //       crossAxisAlignment: CrossAxisAlignment.start,
+                //       children: <Widget>[
+                //         Text(
+                //           'id: ${activeNotification.id}\n'
+                //           // 'channelId: ${activeNotification.channelId}\n'
+                //           // 'groupKey: ${activeNotification.groupKey}\n'
+                //           // 'tag: ${activeNotification.tag}\n'
+                //           'title: ${activeNotification.title}\n'
+                //           'body: ${activeNotification.body}',
+                //         ),
+                //         if (Platform.isAndroid && activeNotification.id != null)
+                //           TextButton(
+                //             child: const Text('Get messaging style'),
+                //             onPressed: () {
+                //               // _getActiveNotificationMessagingStyle(
+                //               //     activeNotification.id!, activeNotification.tag);
+                //             },
+                //           ),
+                //         const Divider(color: Colors.black),
+                //       ],
+                //     ),
                 Padding(
                   padding:
                       EdgeInsets.symmetric(horizontal: 20.w, vertical: 2.h),

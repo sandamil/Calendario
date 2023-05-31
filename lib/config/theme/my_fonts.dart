@@ -79,7 +79,7 @@ class CustomTextStyle {
   }
 
   static TextStyle numberCalendar = GoogleFonts.lato(
-    fontWeight: FontWeight.w500,
+    fontWeight: FontWeight.w600,
     fontSize: 14.w,
   );
   static TextStyle textMenu = GoogleFonts.firaSans(

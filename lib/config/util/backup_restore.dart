@@ -2,6 +2,7 @@
 import 'dart:io';
 import 'dart:convert';
 import 'package:calendario2/app/components/toast.dart';
+import 'package:calendario2/app/modules/ajustes/controllers/ajustes_controller.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
@@ -10,7 +11,10 @@ import 'package:intl/intl.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import '../../app/components/custom_snackbar.dart';
 import '../../app/data/local/taskDatabase.dart';
+
+final ajustesController = Get.find<AjustesController>();
 
 const ENCRYPT_DB = false;
 
@@ -70,7 +74,8 @@ Future<bool> restoreJson(databaseRepository) async {
   return false;
 }
 
- backupDb(databaseRepository) async {
+
+  backupDb(databaseRepository) async {
   print('backupDb');
   final Directory downloadDirectory = Directory('/sdcard/Download/');
   final DateTime now = DateTime.now();
@@ -84,20 +89,29 @@ Future<bool> restoreJson(databaseRepository) async {
     final androidInfo = await DeviceInfoPlugin().androidInfo;
     if (androidInfo.version.sdkInt <= 32) {
       if (await Permission.storage.request().isGranted) {
+
         print('yes <<<<<32');
         await file.copy(newPath);
+        ajustesController.errorBackup = false;
+
         return true;
       } else {
         print('nooooooooo <<<<<32');
+        ajustesController.errorBackup = true;
+
         return false;
       }
     }  else {
       if (await Permission.photos.request().isGranted) {
         print('yes > 32');
         await file.copy(newPath);
+        ajustesController.errorBackup = false;
+
         return true;
       } else {
         print('nooooooooo  >>>>>32');
+        ajustesController.errorBackup = true;
+
         return false;
       }
     }
