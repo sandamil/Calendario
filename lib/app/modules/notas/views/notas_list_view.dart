@@ -75,7 +75,7 @@ class NotasListView extends GetView<NotasListController> {
             backgroundColor: PRIMARY_COLOR,
             onPressed: () {
               controller.gotoEditNote();
-              // adcontroller.staticNotesListAd.dispose();
+              adcontroller.staticNotesListAd.dispose();
             },
             label: Text(
               'Añade Nota'.toUpperCase(),
@@ -85,19 +85,21 @@ class NotasListView extends GetView<NotasListController> {
             ),
             icon: const Icon(Icons.add),
           ),
-          // bottomNavigationBar: Platform.isAndroid
-          //     ? adcontroller.staticAdNotesListLoaded.value
-          //     ? Container(
-          //         color: Colors.transparent,
-          //         width: adcontroller.staticNotesListAd.size.width.toDouble(),
-          //         height: adcontroller.staticNotesListAd.size.height.toDouble(),
-          //         alignment: Alignment.bottomCenter,
-          //         child: AdWidget(
-          //           ad: adcontroller.staticNotesListAd,
-          //         ),
-          //       )
-          //     : const SizedBox(
-          //       ): null,
+          bottomNavigationBar: Platform.isAndroid
+              ?
+
+          adcontroller.staticAdNotesListLoaded.value
+              ? Container(
+                  color: Colors.transparent,
+                  width: adcontroller.staticNotesListAd.size.width.toDouble(),
+                  height: adcontroller.staticNotesListAd.size.height.toDouble(),
+                  alignment: Alignment.bottomCenter,
+                  child: AdWidget(
+                    ad: adcontroller.staticNotesListAd,
+                  ),
+                )
+              : const SizedBox(
+                ): null,
           body: AnimatedContainer(
             duration: const Duration(milliseconds: 200),
             margin: EdgeInsets.only(top: 6.h),
