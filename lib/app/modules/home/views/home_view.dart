@@ -225,30 +225,30 @@ class _HomeViewState extends State<HomeView> {
                   ),
                 ],
               ),
-              floatingActionButtonLocation:
-                  FloatingActionButtonLocation.centerDocked,
-              floatingActionButton: Platform.isAndroid
-                  ? FloatingActionButton.extended(
-                      backgroundColor: Colors.transparent,
-                      elevation: 0,
-                      onPressed: () {
-                        // MyTheme.changeTheme();
-                      },
-                      label: adcontroller.staticAdHomeLoaded.value
-                          ? Container(
-                              color: Colors.transparent,
-                              width: adcontroller.staticHomeAd.size.width
-                                  .toDouble(),
-                              height: adcontroller.staticHomeAd.size.height
-                                  .toDouble(),
-                              alignment: Alignment.bottomCenter,
-                              child: AdWidget(
-                                ad: adcontroller.staticHomeAd,
-                              ),
-                            )
-                          : const SizedBox(),
-                    )
-                  : null,
+              // floatingActionButtonLocation:
+              //     FloatingActionButtonLocation.centerDocked,
+              // floatingActionButton: Platform.isAndroid
+              //     ? FloatingActionButton.extended(
+              //         backgroundColor: Colors.transparent,
+              //         elevation: 0,
+              //         onPressed: () {
+              //           // MyTheme.changeTheme();
+              //         },
+              //         label: adcontroller.staticAdHomeLoaded.value
+              //             ? Container(
+              //                 color: Colors.transparent,
+              //                 width: adcontroller.staticHomeAd.size.width
+              //                     .toDouble(),
+              //                 height: adcontroller.staticHomeAd.size.height
+              //                     .toDouble(),
+              //                 alignment: Alignment.bottomCenter,
+              //                 child: AdWidget(
+              //                   ad: adcontroller.staticHomeAd,
+              //                 ),
+              //               )
+              //             : const SizedBox(),
+              //       )
+              //     : null,
               body: Column(
                 children: [
                   SizedBox(height: 2.h),
@@ -355,8 +355,8 @@ class _HomeViewState extends State<HomeView> {
                             child: Text(turno.title!.toUpperCase(),
                                 style: TextStyle(
                                     height: 1.2.h,
-                                    fontSize: 14.sp,
-                                    // color: HexColor(turno.color!),
+                                    fontSize: 12.sp,
+                                    color: HexColor(turno.color!),
                                     fontWeight: FontWeight.w900)),
                           ),
                         ),
@@ -388,9 +388,11 @@ class _HomeViewState extends State<HomeView> {
                               ),
                             )),
                       )),
+
                 ],
               ),
             ),
+
           );
         },
 
@@ -411,7 +413,8 @@ class _HomeViewState extends State<HomeView> {
                   children: [
                     Text(
                       day.day.toString(),
-                      style: CustomTextStyle.numberCalendar.copyWith(),
+                      style: CustomTextStyle.numberCalendar.copyWith(   color: MyColors.cellTextColor,
+                      ),
                     ),
                   ],
                 ),
@@ -442,7 +445,8 @@ class _HomeViewState extends State<HomeView> {
                   children: [
                     Text(
                       day.day.toString(),
-                      style: CustomTextStyle.numberCalendar,
+                      style: CustomTextStyle.numberCalendar.copyWith(   color: MyColors.cellTextColor,
+                      ),
                     ),
                   ],
                 ),
@@ -471,8 +475,8 @@ class _HomeViewState extends State<HomeView> {
                 child: Text(
                   day.day.toString(),
                   style:
-                      CustomTextStyle.numberCalendar.copyWith(fontSize: 15.sp),
-                ),
+                      CustomTextStyle.numberCalendar.copyWith(fontSize: 15.sp,color: MyColors.cellTextColor,), ),
+
               ),
             ),
           );
