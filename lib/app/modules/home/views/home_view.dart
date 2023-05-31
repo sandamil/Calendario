@@ -687,30 +687,30 @@ class _HomeViewState extends State<HomeView> {
                   ),
                 ],
               ),
-              // floatingActionButtonLocation:
-              //     FloatingActionButtonLocation.centerDocked,
-              // floatingActionButton: Platform.isAndroid
-              //     ? FloatingActionButton.extended(
-              //         backgroundColor: Colors.transparent,
-              //         elevation: 0,
-              //         onPressed: () {
-              //           // MyTheme.changeTheme();
-              //         },
-              //         label: adcontroller.staticAdHomeLoaded.value
-              //             ? Container(
-              //                 color: Colors.transparent,
-              //                 width: adcontroller.staticHomeAd.size.width
-              //                     .toDouble(),
-              //                 height: adcontroller.staticHomeAd.size.height
-              //                     .toDouble(),
-              //                 alignment: Alignment.bottomCenter,
-              //                 child: AdWidget(
-              //                   ad: adcontroller.staticHomeAd,
-              //                 ),
-              //               )
-              //             : const SizedBox(),
-              //       )
-              //     : null,
+              floatingActionButtonLocation:
+                  FloatingActionButtonLocation.centerDocked,
+              floatingActionButton: Platform.isAndroid
+                  ? FloatingActionButton.extended(
+                      backgroundColor: Colors.transparent,
+                      elevation: 0,
+                      onPressed: () {
+                        // MyTheme.changeTheme();
+                      },
+                      label: adcontroller.staticAdHomeLoaded.value
+                          ? Container(
+                              color: Colors.transparent,
+                              width: adcontroller.staticHomeAd.size.width
+                                  .toDouble(),
+                              height: adcontroller.staticHomeAd.size.height
+                                  .toDouble(),
+                              alignment: Alignment.bottomCenter,
+                              child: AdWidget(
+                                ad: adcontroller.staticHomeAd,
+                              ),
+                            )
+                          : const SizedBox(),
+                    )
+                  : null,
               body: Column(
                 children: [
                   SizedBox(height: 2.h),
