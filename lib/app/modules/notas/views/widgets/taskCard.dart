@@ -23,6 +23,7 @@ List<Color> colorList = [
 ];
 
 class TaskCard extends StatelessWidget {
+
   const TaskCard({
     required this.noteData,
     required this.onTapAction,

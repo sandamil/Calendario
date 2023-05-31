@@ -144,7 +144,7 @@ class NotasViewController extends GetxController {
   }
    notaHomeDelete(context, id)async{
     await NotasDB.instance.delete(id);
-    Get.offAllNamed('/home');
+    Get.offAllNamed('/home', arguments: DateTime.fromMicrosecondsSinceEpoch(currentNote.value.endTimeMilliseconds!),);
     notasListController.refetchNotesFromDB();
     Toast.toast(context, msg: "Eliminada!");
   }

@@ -18,8 +18,8 @@ class CalendarController extends GetxController {
 
   // final Rx<CalendarFormat> _calendarFormat = CalendarFormat.month.obs;
 
-  var currentX = 0.0;
-  var currentY = 0.0;
+  // var currentX = 0.0;
+  // var currentY = 0.0;
 
   // Rx<CalendarFormat> get calendarFormat => _calendarFormat;
 
@@ -72,10 +72,12 @@ class CalendarController extends GetxController {
   }
 
 
-  onTapDown(TapDownDetails details) {
-    currentX = details.globalPosition.dx;
-    currentY = details.globalPosition.dy;
-  }
+  // onTapDown(TapDownDetails details) {
+  //   currentX = details.globalPosition.dx;
+  //   currentY = details.globalPosition.dy;
+  //   print(currentX);
+  //   print(currentY);
+  // }
 
   // onDaySelected(DateTime selectedDate, DateTime focusedDate) async {
   //   if (!isSameDay(selectedDate, selectedDayRx.value)) {
