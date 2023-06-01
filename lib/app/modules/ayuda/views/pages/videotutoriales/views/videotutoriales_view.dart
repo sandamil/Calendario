@@ -47,8 +47,8 @@ class VideotutorialesView extends GetView<VideotutorialesController> {
                       title: "Acceso a datos guardados",
                       subtitle:
                           "Video mostrando como acceder a datos guardados, de version anterior de aplicación.",
-                      onTap: () => Get.to(
-                          FullscreenVideoViewer(id: controller.urlVersionAnterior)),
+                      onTap: () => Get.to(FullscreenVideoViewer(
+                          id: controller.urlVersionAnterior)),
                       id: controller.urlVersionAnterior),
                 ],
               ),
@@ -61,13 +61,14 @@ class VideotutorialesView extends GetView<VideotutorialesController> {
                       title: "Inicio",
                       subtitle:
                           "Video donde podrás ver alguna de las funciones de la pantalla principal. "
-                              "Acceso a menu, Calendario anterior, uso de calendario, etc..",
-                      onTap: () => Get.to(
-                          FullscreenVideoViewer(id: controller.urlHome)),
+                          "Acceso a menu, Calendario anterior, uso de calendario, etc..",
+                      onTap: () =>
+                          Get.to(FullscreenVideoViewer(id: controller.urlHome)),
                       id: controller.urlHome),
                 ],
               ),
-            ),Card(
+            ),
+            Card(
               child: VideotutorialesViewGroup(
                 title: "Cuadrantes",
                 children: [
@@ -75,27 +76,55 @@ class VideotutorialesView extends GetView<VideotutorialesController> {
                       title: "Crear Cuadrantes",
                       subtitle:
                           "Video mostrando como crear un cuadrante para marcar los días de trabajo en el calendario.",
-                      onTap: () => Get.to(
-                          FullscreenVideoViewer(id: controller.urlCrearCuadrante)),
+                      onTap: () => Get.to(FullscreenVideoViewer(
+                          id: controller.urlCrearCuadrante)),
                       id: controller.urlCrearCuadrante),
+                  VideotutorialesRowWidget(
+                      title: "Editar un dia",
+                      subtitle:
+                      "Video mostrando como editar un día de cuadrante en el calendario.",
+                      onTap: () => Get.to(FullscreenVideoViewer(
+                          id: controller.urlEditarUnDia)),
+                      id: controller.urlEditarUnDia),
+                  VideotutorialesRowWidget(
+                      title: "Editar varios dias",
+                      subtitle:
+                      "Como editar varis días juntos, sin tener que modificar de uno en uno.",
+                      onTap: () => Get.to(FullscreenVideoViewer(
+                          id: controller.urlEditarVariosDias)),
+                      id: controller.urlEditarVariosDias),
                 ],
               ),
             ),
-                Card(
-                  child: VideotutorialesViewGroup(
-                    title: "Turnos",
-                    children: [
-                      VideotutorialesRowWidget(
-                          title: "Crear Turnos",
-                          subtitle:
+            Card(
+              child: VideotutorialesViewGroup(
+                title: "Copia de Seguridad",
+                children: [
+                  VideotutorialesRowWidget(
+                      title: "Backup",
+                      subtitle:
+                          "Video mostrando como hacer copia de seguridad y restaurar datos de app.",
+                      onTap: () => Get.to(FullscreenVideoViewer(
+                          id: controller.urlbackup)),
+                      id: controller.urlbackup),
+                ],
+              ),
+            ),
+            Card(
+              child: VideotutorialesViewGroup(
+                title: "Turnos",
+                children: [
+                  VideotutorialesRowWidget(
+                      title: "Crear Turnos",
+                      subtitle:
                           "Video mostrando como crear un turno para marcar los días en el calendario,"
-                              " o crear cuadrantes con ese turno o tipo de dia.",
-                          onTap: () => Get.to(
-                              FullscreenVideoViewer(id: controller.urlCrearTurno)),
-                          id: controller.urlCrearTurno),
-                    ],
-                  ),
-                ),
+                          " o crear cuadrantes con ese turno o tipo de dia.",
+                      onTap: () => Get.to(
+                          FullscreenVideoViewer(id: controller.urlCrearTurno)),
+                      id: controller.urlCrearTurno),
+                ],
+              ),
+            ),
             Card(
               child: VideotutorialesViewGroup(
                 title: "Notas",
@@ -118,7 +147,7 @@ class VideotutorialesView extends GetView<VideotutorialesController> {
                       title: "Añadir alarma",
                       subtitle:
                           "Video mostrando como añadir alarma y notificacion a las notas creadas, "
-                              "solo funciona si no se cierra app.",
+                          "solo funciona si no se cierra app.",
                       onTap: () => Get.to(
                           FullscreenVideoViewer(id: controller.urlAddAlarma)),
                       id: controller.urlAddAlarma),
@@ -126,7 +155,7 @@ class VideotutorialesView extends GetView<VideotutorialesController> {
                       title: "Vista detalle de Nota",
                       subtitle:
                           "Video mostrando como ver cada nota en detalle, se accede, "
-                              "tanto desde pantalla principal como desde Notas.",
+                          "tanto desde pantalla principal como desde Notas.",
                       onTap: () => Get.to(FullscreenVideoViewer(
                           id: controller.urlVistaNotaDetalle)),
                       id: controller.urlVistaNotaDetalle),

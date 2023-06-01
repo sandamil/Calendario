@@ -33,7 +33,7 @@ Future<void> main() async {
    Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  // Log.init();
+  Log.init();
 
   MobileAds.instance.initialize();
 

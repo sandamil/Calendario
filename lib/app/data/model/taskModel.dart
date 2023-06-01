@@ -53,7 +53,7 @@ class Task {
     endTimeMilliseconds = map['endTimeMilliseconds'];
     // this.time = map['time'];
     isImportant = map['isImportant'] == 1 ? true : false;
-    idAlarma = map['idAlarma'];
+    idAlarma = map['idAlarma'] ?? '';
     alarmaHora = map['alarmaHora'];
     alarmaActivadaString = map['alarmaActivadaString'];
     isAlarmaCreated = map['isAlarmaCreated'] == 1 ? true : false;

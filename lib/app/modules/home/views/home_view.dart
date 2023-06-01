@@ -86,7 +86,10 @@ class _HomeViewState extends State<HomeView> {
   setStateHomeFOcusday(selectedDay, focusedDay){
     print('setStateHomeFOcusday');
     calendarController.getListEvent();
-
+    setState(() {
+      selectedDayNotas =
+          calendarController.getNotasOfDay(selectedDay);
+    });
 
         calendarController.getNotasOfDay(selectedDay);
 

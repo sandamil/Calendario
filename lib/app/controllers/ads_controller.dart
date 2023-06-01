@@ -29,7 +29,7 @@ class AdsController extends GetxController {
       ? 'ca-app-pub-3940256099942544/6300978111'
       : 'ca-app-pub-3940256099942544/2934735716';
 
-  static const unitId = 'ca-app-pub-3940256099942544/6300978111';
+  static const googleId = 'ca-app-pub-3940256099942544/6300978111';
 
 
   late BannerAd staticHomeAd;

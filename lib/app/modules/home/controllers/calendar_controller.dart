@@ -41,7 +41,7 @@ class CalendarController extends GetxController {
 // //   var focusedDay = DateTime.now();
 
   final selectedDayTurnos = <CuadranteDay>[].obs;
-  // RxList<Task> selectedDayNotas = <Task>[].obs;
+  List<Task> selectedDayNotas = <Task>[];
   // get selectedEvents => _selectedEvents;
 
   RxMap<DateTime, List<CuadranteDay>> cuadranteMap =
@@ -218,12 +218,14 @@ class CalendarController extends GetxController {
     return list;
   }
 
-  deleteTurnoCuadrante(id) {
-    adcontroller.staticHomeAd.load();
 
-    CalendarioDB.db.deleteItemID(id);
-    Get.offAllNamed('/home');
-  }
+
+  // deleteTurnoCuadrante(id) {
+  //   adcontroller.staticHomeAd.load();
+  //
+  //   CalendarioDB.db.deleteItemID(id);
+  //   Get.offAllNamed('/home');
+  // }
 }
 
 class DataValidator {
