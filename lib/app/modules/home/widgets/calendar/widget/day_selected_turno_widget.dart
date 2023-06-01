@@ -1,212 +1,212 @@
-import 'package:calendario2/app/components/custom_dialog.dart';
-import 'package:calendario2/app/modules/home/controllers/calendar_controller.dart';
-import 'package:calendario2/config/theme/my_colors.dart';
-import 'package:calendario2/config/util/dateUtils.dart';
-import 'package:calendario2/config/util/hexColor.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:get/get.dart';
-
-
-class DaySelecetedTurnoWidget extends StatelessWidget {
-  const DaySelecetedTurnoWidget({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    var theme = Theme.of(context);
-
-    return Scaffold(
-      extendBody: true,
-      backgroundColor: theme.scaffoldBackgroundColor,
-      body: GetX<CalendarController>(
-        init: CalendarController(),
-        builder: (c) {
-          return SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                c.selectedDayTurnos.isEmpty
-                    ? Container()
-                    : ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: c.selectedDayTurnos.length,
-                        itemBuilder: (context, index) {
-                          return Slidable(
-                            endActionPane: ActionPane(
-                              motion: const DrawerMotion(),
-                              extentRatio: 0.3,
-                              children: [
-                                SlidableAction(
-                                  label: 'Eliminar',
-                                  borderRadius: BorderRadius.all(Radius.circular(5.r)),
-                                  backgroundColor: Colors.redAccent,
-                                  // icon: Icons.send,
-                                  onPressed: (context) { c.deleteTurnoCuadrante(
-                                      c.selectedDayTurnos[index].id);},
-                                ),
-                              ],
-                            ),
-                            child: Container(
-                              height: 22.h,
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 1.h, horizontal: 2.w),
-                              decoration: BoxDecoration(
-                                color: HexColor(
-                                    c.selectedDayTurnos[index].color!),
-                                border: Border.all(width: 0.8.r),
-                                borderRadius: BorderRadius.circular(5.r),
-                              ),
-                              margin: EdgeInsets.symmetric(
-                                  horizontal: 2.w, vertical: 2.h),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  // FittedBox(
-                                  //   child: Text(
-                                  //     '${c.selectedEvents.value[index].dateTime.toString().substring(8, 10)}-${c.selectedEvents.value[index].dateTime.toString().substring(5, 7)}-${c.selectedEvents.value[index].dateTime.toString().substring(0, 4)}',
-                                  //     style: TextStyle(
-                                  //         fontSize: 14.sp,
-                                  //         color: HexColor(c.selectedEvents
-                                  //                         .value[index].color!)
-                                  //                     .computeLuminance() >
-                                  //                 0.5
-                                  //             ? Colors.black
-                                  //             : Colors.white),
-                                  //   ),
-                                  // ),
-                                  // SizedBox(
-                                  //   width: 20.w,
-                                  // ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 6.0),
-                                    child: FittedBox(
-                                      child: Text(
-                                        c.selectedDayTurnos[index]
-                                            .description!,
-                                        style: TextStyle(
-                                            height: 1.2.h,
-                                            fontSize: 14.sp,
-                                            fontWeight: FontWeight.bold,
-                                            color: HexColor(c.selectedDayTurnos
-                                                            [index].color!)
-                                                        .computeLuminance() >
-                                                    0.5
-                                                ? Colors.black
-                                                : Colors.white),
-                                      ),
-                                    ),
-                                  ),
-                                  // SizedBox(
-                                  //   width: 20.w,
-                                  // ),
-                                  c.selectedDayTurnos[index].startHour !=
-                                              null &&
-                                          c.selectedDayTurnos[index]
-                                                  .endHour !=
-                                              null
-                                      ? Padding(
-                                          padding: EdgeInsets.only(left: 15.w),
-                                          child: FittedBox(
-                                            child: Text(
-                                              'de ${c.selectedDayTurnos[index].startHour.toString()} a ${c.selectedDayTurnos[index].endHour.toString()}',
-                                              style: TextStyle(
-                                                  height: 1.2.h,
-                                                  fontSize: 14.sp,
-                                                  color: HexColor(c
-                                                                  .selectedDayTurnos
-                                                                  [index]
-                                                                  .color!)
-                                                              .computeLuminance() >
-                                                          0.5
-                                                      ? Colors.black
-                                                      : Colors.white),
-                                            ),
-                                          ),
-                                        )
-                                      : Container(
-                                          padding: EdgeInsets.only(right: 20.w),
-                                        ),
-                                  Spacer(),
-                                  Icon(Icons.arrow_back,size: 16, color: MyColors.textColor,),
-                                  Icon(Icons.delete_forever,size: 18, color: MyColors.textColor,),
-                                ],
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                SizedBox(
-                  height: 3.h,
-                ),
-                ...c.selectedDayNotas.map((nota) => Padding(
-                      padding:
-                          EdgeInsets.symmetric(vertical: 1.h, horizontal: 2.w),
-                      child: GestureDetector(
-                        onTap: () {
-                          MyCustomDialog.mostrarTask(nota, context);
-                        },
-                        child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 4.w),
-                            decoration: BoxDecoration(
-                              color: MyColors.cellSelectedColor,
-                              border: Border.all(
-                                  color: MyColors.borderAccentLine, width: 1),
-                              borderRadius: BorderRadius.circular(3.r),
-                            ),
-                            height: 22.h,
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                SizedBox(
-                                  width: 4.w,
-                                ),
-                                SizedBox(
-                                  width: 40.w,
-                                  child: Text(
-                                    DateTime.fromMillisecondsSinceEpoch(nota.startTimeMilliseconds!).formatDateTime24H,
-                                    style: TextStyle(
-                                        height: 1.2.h,
-                                        fontSize: 14.sp,
-                                        fontWeight: FontWeight.w600),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 4.w,
-                                ),
-                                SizedBox(
-                                  width: 90.w,
-                                  child: Text(
-                                    nota.title!.toUpperCase(),
-                                    style: TextStyle(
-                                        height: 1.2.h,
-                                        fontSize: 14.sp,
-                                        fontWeight: FontWeight.w600),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 4.w,
-                                ),
-                                SizedBox(
-                                  width: 170.w,
-                                  child: Text(
-                                    nota.notes!,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                        height: 1.2.h,
-                                        fontSize: 14.sp,
-                                        fontWeight: FontWeight.w600),
-                                  ),
-                                ),
-                              ],
-                            )),
-                      ),
-                    )),
-              ],
-            ),
-          );
-        },
-      ),
-    );
-  }
-}
+// import 'package:calendario2/app/components/custom_dialog.dart';
+// import 'package:calendario2/app/modules/home/controllers/calendar_controller.dart';
+// import 'package:calendario2/config/theme/my_colors.dart';
+// import 'package:calendario2/config/util/dateUtils.dart';
+// import 'package:calendario2/config/util/hexColor.dart';
+// import 'package:flutter/material.dart';
+// import 'package:flutter_screenutil/flutter_screenutil.dart';
+// import 'package:flutter_slidable/flutter_slidable.dart';
+// import 'package:get/get.dart';
+//
+//
+// class DaySelecetedTurnoWidget extends StatelessWidget {
+//   const DaySelecetedTurnoWidget({super.key});
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     var theme = Theme.of(context);
+//
+//     return Scaffold(
+//       extendBody: true,
+//       backgroundColor: theme.scaffoldBackgroundColor,
+//       body: GetX<CalendarController>(
+//         init: CalendarController(),
+//         builder: (c) {
+//           return SingleChildScrollView(
+//             child: Column(
+//               mainAxisSize: MainAxisSize.min,
+//               children: [
+//                 c.selectedDayTurnos.isEmpty
+//                     ? Container()
+//                     : ListView.builder(
+//                         shrinkWrap: true,
+//                         itemCount: c.selectedDayTurnos.length,
+//                         itemBuilder: (context, index) {
+//                           return Slidable(
+//                             endActionPane: ActionPane(
+//                               motion: const DrawerMotion(),
+//                               extentRatio: 0.3,
+//                               children: [
+//                                 SlidableAction(
+//                                   label: 'Eliminar',
+//                                   borderRadius: BorderRadius.all(Radius.circular(5.r)),
+//                                   backgroundColor: Colors.redAccent,
+//                                   // icon: Icons.send,
+//                                   onPressed: (context) { c.deleteTurnoCuadrante(
+//                                       c.selectedDayTurnos[index].id);},
+//                                 ),
+//                               ],
+//                             ),
+//                             child: Container(
+//                               height: 22.h,
+//                               padding: EdgeInsets.symmetric(
+//                                   vertical: 1.h, horizontal: 2.w),
+//                               decoration: BoxDecoration(
+//                                 color: HexColor(
+//                                     c.selectedDayTurnos[index].color!),
+//                                 border: Border.all(width: 0.8.r),
+//                                 borderRadius: BorderRadius.circular(5.r),
+//                               ),
+//                               margin: EdgeInsets.symmetric(
+//                                   horizontal: 2.w, vertical: 2.h),
+//                               child: Row(
+//                                 mainAxisAlignment: MainAxisAlignment.center,
+//                                 children: <Widget>[
+//                                   // FittedBox(
+//                                   //   child: Text(
+//                                   //     '${c.selectedEvents.value[index].dateTime.toString().substring(8, 10)}-${c.selectedEvents.value[index].dateTime.toString().substring(5, 7)}-${c.selectedEvents.value[index].dateTime.toString().substring(0, 4)}',
+//                                   //     style: TextStyle(
+//                                   //         fontSize: 14.sp,
+//                                   //         color: HexColor(c.selectedEvents
+//                                   //                         .value[index].color!)
+//                                   //                     .computeLuminance() >
+//                                   //                 0.5
+//                                   //             ? Colors.black
+//                                   //             : Colors.white),
+//                                   //   ),
+//                                   // ),
+//                                   // SizedBox(
+//                                   //   width: 20.w,
+//                                   // ),
+//                                   Padding(
+//                                     padding: const EdgeInsets.only(left: 6.0),
+//                                     child: FittedBox(
+//                                       child: Text(
+//                                         c.selectedDayTurnos[index]
+//                                             .description!,
+//                                         style: TextStyle(
+//                                             height: 1.2.h,
+//                                             fontSize: 14.sp,
+//                                             fontWeight: FontWeight.bold,
+//                                             color: HexColor(c.selectedDayTurnos
+//                                                             [index].color!)
+//                                                         .computeLuminance() >
+//                                                     0.5
+//                                                 ? Colors.black
+//                                                 : Colors.white),
+//                                       ),
+//                                     ),
+//                                   ),
+//                                   // SizedBox(
+//                                   //   width: 20.w,
+//                                   // ),
+//                                   c.selectedDayTurnos[index].startHour !=
+//                                               null &&
+//                                           c.selectedDayTurnos[index]
+//                                                   .endHour !=
+//                                               null
+//                                       ? Padding(
+//                                           padding: EdgeInsets.only(left: 15.w),
+//                                           child: FittedBox(
+//                                             child: Text(
+//                                               'de ${c.selectedDayTurnos[index].startHour.toString()} a ${c.selectedDayTurnos[index].endHour.toString()}',
+//                                               style: TextStyle(
+//                                                   height: 1.2.h,
+//                                                   fontSize: 14.sp,
+//                                                   color: HexColor(c
+//                                                                   .selectedDayTurnos
+//                                                                   [index]
+//                                                                   .color!)
+//                                                               .computeLuminance() >
+//                                                           0.5
+//                                                       ? Colors.black
+//                                                       : Colors.white),
+//                                             ),
+//                                           ),
+//                                         )
+//                                       : Container(
+//                                           padding: EdgeInsets.only(right: 20.w),
+//                                         ),
+//                                   Spacer(),
+//                                   Icon(Icons.arrow_back,size: 16, color: MyColors.textColor,),
+//                                   Icon(Icons.delete_forever,size: 18, color: MyColors.textColor,),
+//                                 ],
+//                               ),
+//                             ),
+//                           );
+//                         },
+//                       ),
+//                 SizedBox(
+//                   height: 3.h,
+//                 ),
+//                 ...c.selectedDayNotas.map((nota) => Padding(
+//                       padding:
+//                           EdgeInsets.symmetric(vertical: 1.h, horizontal: 2.w),
+//                       child: GestureDetector(
+//                         onTap: () {
+//                           MyCustomDialog.mostrarTask(nota, context);
+//                         },
+//                         child: Container(
+//                             padding: EdgeInsets.symmetric(horizontal: 4.w),
+//                             decoration: BoxDecoration(
+//                               color: MyColors.cellSelectedColor,
+//                               border: Border.all(
+//                                   color: MyColors.borderAccentLine, width: 1),
+//                               borderRadius: BorderRadius.circular(3.r),
+//                             ),
+//                             height: 22.h,
+//                             child: Row(
+//                               crossAxisAlignment: CrossAxisAlignment.center,
+//                               children: [
+//                                 SizedBox(
+//                                   width: 4.w,
+//                                 ),
+//                                 SizedBox(
+//                                   width: 40.w,
+//                                   child: Text(
+//                                     DateTime.fromMillisecondsSinceEpoch(nota.startTimeMilliseconds!).formatDateTime24H,
+//                                     style: TextStyle(
+//                                         height: 1.2.h,
+//                                         fontSize: 14.sp,
+//                                         fontWeight: FontWeight.w600),
+//                                   ),
+//                                 ),
+//                                 SizedBox(
+//                                   width: 4.w,
+//                                 ),
+//                                 SizedBox(
+//                                   width: 90.w,
+//                                   child: Text(
+//                                     nota.title!.toUpperCase(),
+//                                     style: TextStyle(
+//                                         height: 1.2.h,
+//                                         fontSize: 14.sp,
+//                                         fontWeight: FontWeight.w600),
+//                                   ),
+//                                 ),
+//                                 SizedBox(
+//                                   width: 4.w,
+//                                 ),
+//                                 SizedBox(
+//                                   width: 170.w,
+//                                   child: Text(
+//                                     nota.notes!,
+//                                     overflow: TextOverflow.ellipsis,
+//                                     style: TextStyle(
+//                                         height: 1.2.h,
+//                                         fontSize: 14.sp,
+//                                         fontWeight: FontWeight.w600),
+//                                   ),
+//                                 ),
+//                               ],
+//                             )),
+//                       ),
+//                     )),
+//               ],
+//             ),
+//           );
+//         },
+//       ),
+//     );
+//   }
+// }

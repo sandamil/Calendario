@@ -1,6 +1,7 @@
 import 'package:calendario2/app/components/toast.dart';
 import 'package:calendario2/app/data/local/taskDatabase.dart';
 import 'package:calendario2/app/data/model/taskModel.dart';
+import 'package:calendario2/app/modules/home/views/home_view.dart';
 import 'package:calendario2/app/modules/notas/controllers/notas_controller.dart';
 import 'package:calendario2/config/util/dateUtils.dart';
 import 'package:flutter/material.dart';
@@ -144,13 +145,12 @@ class NotasViewController extends GetxController {
   }
    notaHomeDelete(context, id)async{
     await NotasDB.instance.delete(id);
-    Get.offAllNamed('/home');
     notasListController.refetchNotesFromDB();
     Toast.toast(context, msg: "Eliminada!");
   }
 
 
-  void handleDeleteCalendar(id, routeToNotas) async{
+  void handleDeleteCalendar(id, routeToNotas, selectedDay, focusedDay) async{
     showDialog(
         context: Get.context!,
         builder: (BuildContext context) {
@@ -166,10 +166,13 @@ class NotasViewController extends GetxController {
                         color: Colors.red.shade300,
                         fontWeight: FontWeight.w500,
                         letterSpacing: 1)),
-                onPressed: () async {
+                onPressed: ()  {
+
                   routeToNotas
                       ? notaNotasDelete(context, id)
-                      : notaHomeDelete(context, id);
+                      : HomeView.notaHomeDelete(context, id, selectedDay, focusedDay);
+                  Navigator.pop(context);
+
                 },
               ),
               TextButton(

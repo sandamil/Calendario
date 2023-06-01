@@ -41,7 +41,7 @@ class CalendarController extends GetxController {
 // //   var focusedDay = DateTime.now();
 
   final selectedDayTurnos = <CuadranteDay>[].obs;
-  RxList<Task> selectedDayNotas = <Task>[].obs;
+  // RxList<Task> selectedDayNotas = <Task>[].obs;
   // get selectedEvents => _selectedEvents;
 
   RxMap<DateTime, List<CuadranteDay>> cuadranteMap =

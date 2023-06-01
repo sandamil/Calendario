@@ -1,5 +1,6 @@
 import 'dart:collection';
 import 'dart:io';
+import 'package:calendario2/app/modules/notas/controllers/notas_controller.dart';
 import 'package:calendario2/config/util/dateUtils.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
@@ -20,8 +21,10 @@ import '../../../../config/theme/my_fonts.dart';
 import '../../../../config/util/constant.dart';
 import '../../../../config/util/hexColor.dart';
 import '../../../components/custom_dialog.dart';
+import '../../../components/toast.dart';
 import '../../../controllers/ads_controller.dart';
 import '../../../data/local/calendarDatabase.dart';
+import '../../../data/local/taskDatabase.dart';
 import '../../../data/model/cuadranteDay.dart';
 import '../../menu/views/menu_view.dart';
 import '../controllers/home_controller.dart';
@@ -33,21 +36,36 @@ typedef HomeCallback2 = void Function();
 typedef HomeCallbackSetState = void Function(DateTime selectedDate);
 
 class HomeView extends StatefulWidget {
+   ValueNotifier<DateTime> focusedDay = ValueNotifier(DateTime.now());
 
-  const HomeView({Key? key}) : super(key: key);
+   HomeView({Key? key}) : super(key: key);
+
+  static get notasListController => Get.put(NotasListController());
 
   State<HomeView> createState() => _HomeViewState();
+
+  static notaHomeDelete(BuildContext context, id, selectedDay, focusedDay) async {
+    print('HomeView');
+    final calendarController = Get.put(CalendarController());
+
+    await NotasDB.instance.delete(id);
+    // Navigator.pop(context);
+
+    Toast.toast(context, msg: "Eliminada!");
+    _HomeViewState().setStateHomeFOcusday(selectedDay, focusedDay);
+  }
 }
 
 class _HomeViewState extends State<HomeView> {
   final isDialOpen = ValueNotifier(false);
   final adcontroller = Get.find<AdsController>();
   final homeController = Get.find<HomeController>();
-
   final calendarController = Get.put(CalendarController());
 
-  final ValueNotifier<DateTime> _focusedDay = ValueNotifier(DateTime.now());
+  List<Task> selectedDayNotas = <Task>[];
+
   DateTime? _selectedDay;
+  DateTime? _focusedDay;
   DateTime? _rangeStart;
   DateTime? _rangeEnd;
   RangeSelectionMode _rangeSelectionMode = RangeSelectionMode.toggledOff;
@@ -62,12 +80,19 @@ class _HomeViewState extends State<HomeView> {
   onTapDown(TapDownDetails details) {
     currentX = details.globalPosition.dx.toInt();
     currentY = details.globalPosition.dy.toInt();
-    print(currentX);
-    print(currentY);
+
   }
 
-  setStateHomeFOcusday(DateTime selectedDate){
-    setState(() => _focusedDay.value = selectedDate);
+  setStateHomeFOcusday(selectedDay, focusedDay){
+    print('setStateHomeFOcusday');
+    calendarController.getListEvent();
+
+
+        calendarController.getNotasOfDay(selectedDay);
+
+    // _onDaySelected(selectedDay, focusedDay);
+    // _selectedEvents.value = _getEventsForDays(_selectedDays);
+
   }
 
   deleteTurnoCuadrante(id, DateTime selectedDate) async {
@@ -75,7 +100,7 @@ class _HomeViewState extends State<HomeView> {
     print('selectedDate :  ${selectedDate}');
 
     await getCuadrante();
-    setState(() => _focusedDay.value = selectedDate);
+    setState(() => widget.focusedDay.value = selectedDate);
 
     Navigator.pop(context);
   }
@@ -84,14 +109,14 @@ class _HomeViewState extends State<HomeView> {
     if (!isSameDay(_selectedDay, selectedDay)) {
       setState(() {
         _selectedDay = selectedDay;
-        _focusedDay.value = focusedDay;
+        widget.focusedDay.value = focusedDay;
         _rangeStart = null; // Important to clean those
         _rangeEnd = null;
         _rangeSelectionMode = RangeSelectionMode.toggledOff;
       });
       calendarController.selectedDayTurnos.value =
           calendarController.getTurnosOfDay(selectedDay);
-      calendarController.selectedDayNotas.value =
+      selectedDayNotas =
           calendarController.getNotasOfDay(selectedDay);
       // _selectedEvents.value = _getEventsForDays(_selectedDays);
     }
@@ -101,7 +126,7 @@ class _HomeViewState extends State<HomeView> {
     if (!isSameDay(_selectedDay, selectedDate)) {
       setState(() {
         _selectedDay = selectedDate;
-        _focusedDay.value = focusedDate;
+        widget.focusedDay.value = focusedDate;
         _rangeStart = null; // Important to clean those
         _rangeEnd = null;
         _rangeSelectionMode = RangeSelectionMode.toggledOff;
@@ -109,7 +134,7 @@ class _HomeViewState extends State<HomeView> {
     }
     calendarController.selectedDayTurnos.value =
         calendarController.getTurnosOfDay(selectedDate);
-    calendarController.selectedDayNotas.value =
+    selectedDayNotas =
         calendarController.getNotasOfDay(selectedDate);
 
     // showDialog(
@@ -300,7 +325,7 @@ class _HomeViewState extends State<HomeView> {
                                                                       // adcontroller.staticHomeAd.load();
                                                                       await getCuadrante();
                                                                       setState(() =>
-                                                                          _focusedDay.value =
+                                                                      widget.focusedDay.value =
                                                                               selectedDate);
 
                                                                       Navigator.pop(
@@ -504,7 +529,7 @@ class _HomeViewState extends State<HomeView> {
             SizedBox(
               height: 3.h,
             ),
-            ...calendarController.selectedDayNotas.map((nota) => Padding(
+            ...selectedDayNotas.map((nota) => Padding(
                   padding: EdgeInsets.symmetric(vertical: 1.h, horizontal: 2.w),
                   child: GestureDetector(
                     onTap: () {
@@ -604,14 +629,14 @@ class _HomeViewState extends State<HomeView> {
   @override
   void initState() {
     super.initState();
-    _selectedDays.add(_focusedDay.value);
+    _selectedDays.add(widget.focusedDay.value);
     getCuadrante();
     calendarController.getListEvent();
     // _selectedEvents = ValueNotifier(_getEventsForDay(_focusedDay.value));
     calendarController.selectedDayTurnos.value =
-        calendarController.getTurnosOfDay(_focusedDay.value);
-    calendarController.selectedDayNotas.value =
-        calendarController.getNotasOfDay(_focusedDay.value);
+        calendarController.getTurnosOfDay(widget.focusedDay.value);
+    selectedDayNotas =
+        calendarController.getNotasOfDay(widget.focusedDay.value);
   }
 
   @override
@@ -736,7 +761,7 @@ class _HomeViewState extends State<HomeView> {
                           },
                           firstDay: DateTime(2000),
                           lastDay: DateTime(2050),
-                          focusedDay: _focusedDay.value,
+                          focusedDay: widget.focusedDay.value,
                           // calendarFormat: controller.calendarFormat,
                           eventLoader: calendarController.getTurnosOfDay,
                           startingDayOfWeek: StartingDayOfWeek.monday,
@@ -757,9 +782,9 @@ class _HomeViewState extends State<HomeView> {
                             calendarController.update;
                           },
                           onPageChanged: (focusedDay) {
-                            _focusedDay.value = focusedDay;
+                            widget.focusedDay.value = focusedDay;
                             calendarController.focusDayRx.value =
-                                _focusedDay.value;
+                                widget.focusedDay.value;
                           },
                           calendarBuilders: _calendarBuilders(),
                         ),
@@ -780,7 +805,7 @@ class _HomeViewState extends State<HomeView> {
                         ? homeController.tutorialController.keyButton9
                         : widget.key,
                     child: _buildListEvent(
-                        context, calendarController.selectedDayNotas),
+                        context, selectedDayNotas),
                   )
                 ],
               )),
@@ -1016,7 +1041,7 @@ class _HomeViewState extends State<HomeView> {
                             noteData: event,
                             onTapAction:
                                 homeController.notasController.openNoteToRead,
-                            routeToNotas: false, )
+                            routeToNotas: false, selectedDay: _selectedDay, focusedDay: widget.focusedDay.value,)
                       ],
                     ),
                   )
