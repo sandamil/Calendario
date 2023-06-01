@@ -48,8 +48,8 @@ class MyColors {
       : const Color.fromRGBO(255, 255, 255, 1);
 
   static Color get cellTextColor => MyTheme().getThemeIsLight
-      ? const Color.fromRGBO(0, 0, 0, 1)
-      : const Color.fromRGBO(255, 255, 255, 1);
+      ? const Color.fromRGBO(87, 87, 87, 1.0)
+      : const Color.fromRGBO(203, 203, 203, 1.0);
 
   static Color get textButtom => MyTheme().getThemeIsLight
       ? const Color(0xFFefeeee)

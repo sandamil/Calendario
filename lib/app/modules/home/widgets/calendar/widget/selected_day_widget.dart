@@ -7,19 +7,26 @@ import 'package:intl/intl.dart';
 import '../../../../../controllers/app_controller.dart';
 
 class SelectedDayWidget extends StatelessWidget {
-  const SelectedDayWidget({super.key});
+  final calendarController = Get.put(CalendarController());
+
+
+  SelectedDayWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
+
     return Padding(
         padding: const EdgeInsets.symmetric(vertical: 16.0),
-        child: GetBuilder<CalendarController>(
-          builder: (controller) {
-            return Text(
-              DateFormat.MMMM('es').add_y().format(AppController().focusDayRx).toUpperCase(),
-              style: CustomTextStyle.appBarTitle(context: context),
-            );
-          },
-        ));
+        child:
+        Obx(() {
+          return Text(
+            DateFormat.MMMM('es').add_y()
+                .format(calendarController.focusDayRx.value)
+                .toUpperCase(),
+            style: CustomTextStyle.appBarTitle(context: context),
+          );
+        })
+
+    );
   }
 }

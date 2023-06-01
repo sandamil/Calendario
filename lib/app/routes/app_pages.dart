@@ -18,7 +18,7 @@ import '../modules/ayuda/views/ayuda_view.dart';
 import '../modules/boarding/bindings/boarding_binding.dart';
 import '../modules/boarding/views/boarding_view.dart';
 import '../modules/crearCuadrante/bindings/crear_cuadrante_binding.dart';
-import '../modules/crearCuadrante/views/crear_cuadrante_view.dart';
+import '../modules/crearCuadrante/views/cuadrante_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/inicio/bindings/inicio_binding.dart';

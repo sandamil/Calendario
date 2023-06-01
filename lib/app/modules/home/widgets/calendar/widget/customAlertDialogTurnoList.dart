@@ -24,7 +24,8 @@ class CustomAlertDialogTurnoList extends StatelessWidget {
 
     var theme = Theme.of(context);
 
-    return Align(
+    return
+      Align(
       alignment: Alignment.center,
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 10.w),
@@ -74,8 +75,9 @@ class CustomAlertDialogTurnoList extends StatelessWidget {
                           ),
                           onPressed: () async {
 
-                            await CalendarioDB.db.addItem(
+                            await CalendarioDB.db.addCuadranteItem(
                               CuadranteDay(
+                                cuadranteName: 'Turnos sueltos',
                                 dateTime: DateTime.parse(selectedDate.toString().substring(0, 10)),
                                 color: m.color,
                                 description: m.description,
@@ -84,10 +86,10 @@ class CustomAlertDialogTurnoList extends StatelessWidget {
                                 title: m.title,
                               ),
                             );
-                            await calendarController.getCuadrante();
-                            adcontroller.staticHomeAd.load();
-
-                            Get.offAllNamed('/home');
+                         // await calendarController.getCuadrante();
+                            // adcontroller.staticHomeAd.load();
+                            Navigator.pop(context);
+                            // Get.offAllNamed('/home');
                           },
                         ),
                       );

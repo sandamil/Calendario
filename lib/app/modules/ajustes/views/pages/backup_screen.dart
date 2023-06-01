@@ -66,7 +66,7 @@ class BackupScreen extends GetView<AjustesController> {
                     },
                     semanticLabel: 'Backup Notas',
                     child: const Text(
-                      'Backup\nNotas',
+                      'Guardar\nNotas',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           // color: Colors.black,
@@ -124,7 +124,7 @@ class BackupScreen extends GetView<AjustesController> {
                       controller.backupCalendarioDb();
                     },
                     child: const Text(
-                      'Backup\nCalendario',
+                      'Guardar\nCalendario',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           // color: Colors.black,

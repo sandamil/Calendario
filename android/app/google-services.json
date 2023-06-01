@@ -38,6 +38,13 @@
             {
               "client_id": "574148281822-540i25l9ldj0np731htha7qg8inbue9j.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "574148281822-90a7rnaj6nv2lcpeglqkep88k1fagrsv.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "ajat.calendario.turnos"
+              }
             }
           ]
         }

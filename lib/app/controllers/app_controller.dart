@@ -58,7 +58,7 @@ class AppController extends GetxController {
 
 
   String appVersion = 'version 1.0.0';
-  DateTime focusDayRx = DateTime.now().toLocal();
+  // DateTime focusDayRx = DateTime.now().toLocal();
 
   // RxBool isShowLog = true.obs;
   // RxString currentPage = ''.obs;

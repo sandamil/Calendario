@@ -23,16 +23,21 @@ List<Color> colorList = [
 ];
 
 class TaskCard extends StatelessWidget {
+
   const TaskCard({
     required this.noteData,
     required this.onTapAction,
     required this.routeToNotas,
+    this.focusedDay,
+    this.selectedDay,
     Key? key,
   }) : super(key: key);
 
   final Task noteData;
   final Function(Task noteData) onTapAction;
   final bool routeToNotas;
+  final selectedDay;
+  final focusedDay;
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +84,7 @@ class TaskCard extends StatelessWidget {
                   backgroundColor: Colors.red,
                   borderRadius: BorderRadius.all(Radius.circular(5.r)),
                   onPressed: (context) {
-                    notasViewController.handleDeleteCalendar(noteData.id, routeToNotas);
+                    notasViewController.handleDeleteCalendar(noteData.id, routeToNotas, selectedDay, focusedDay);
                   },
                 ),
               ]),

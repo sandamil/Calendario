@@ -37,6 +37,13 @@ class CrearCuadranteController extends GetxController {
 
   @override
   void onInit() async {
+    var cuadrantes = await CalendarioDB.db.getCuadranteList();
+    cuadrantes.forEach((element) {
+      cuadrantesNameList.contains(element.cuadranteName) ? null
+      : cuadrantesNameList.add(element.cuadranteName ?? '') ;
+    });
+    MySharedPref.setCuadrantesList(cuadrantesNameList.value);
+
     cuadrantesNameList.value = MySharedPref.getStringList() ?? [];
 
     // inicialDate = Rxn(DateTime.now());
@@ -114,7 +121,7 @@ class CrearCuadranteController extends GetxController {
       if (x >= list.length) {
         x = 0;
       }
-      await CalendarioDB.db.addItem(
+      await CalendarioDB.db.addCuadranteItem(
         CuadranteDay(
           dateTime: date,
           color: list[x].color,

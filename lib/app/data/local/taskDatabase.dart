@@ -14,7 +14,7 @@ class NotasDB {
   static Database? _db;
   final String databaseName = 'notas_database.db';
   final String taskTable = 'Notas';
-  static const int _version = 1;
+  static const int _version = 2;
 
 
   get db async {
@@ -41,8 +41,25 @@ class NotasDB {
       path,
       version: _version,
       onCreate: _onCreate,
+      onUpgrade: _onUpgrade,
     );
   }
+
+  // void _onCreate(Database db, int version) async {
+  //   await db.execute('CREATE TABLE IF NOT EXISTS $taskTable('
+  //       'id INTEGER PRIMARY KEY, '
+  //       'title TEXT, site TEXT, '
+  //       'notes TEXT, '
+  //       'startTimeMilliseconds INTEGER, '
+  //       'endTimeMilliseconds INTEGER, '
+  //       'time TEXT, '
+  //       'isImportant INTEGER, '
+  //       'idAlarma INTEGER, '
+  //       'alarmaActivadaString TEXT, '
+  //       'isAlarmaCreated INTEGER)'
+  //   );
+  // }
+
 
   void _onCreate(Database db, int version) async {
     await db.execute('CREATE TABLE IF NOT EXISTS $taskTable('
@@ -58,6 +75,14 @@ class NotasDB {
         'alarmaActivadaString TEXT, '
         'isAlarmaCreated INTEGER)'
     );
+  }
+
+  // UPGRADE DATABASE TABLES
+  void _onUpgrade(Database db, int oldVersion, int newVersion) {
+    if (oldVersion < newVersion) {
+      // you can execute drop table and create table
+      db.execute("ALTER TABLE $taskTable ADD COLUMN alarmaHora TEXT;");
+    }
   }
 
   Future<int> insertNotas(Task notas) async {

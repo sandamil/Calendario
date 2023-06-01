@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:calendario2/app/components/custom_snackbar.dart';
 import 'package:calendario2/app/data/local/calendarDatabase.dart';
 import 'package:calendario2/app/data/local/my_shared_pref.dart';
 import 'package:calendario2/app/data/model/language.dart';
@@ -213,28 +214,73 @@ class AjustesController extends GetxController {
 
 
   ///=============Backup==============
-  void backupNotasDb() {
+  ///
+
+
+
+  late bool errorBackup;
+
+
+  void backupNotasDb() async {
     NotasDB databaseRepository = NotasDB();
-    print('backupNotasDb');
-    backupDb(databaseRepository);
+    try {
+      await backupDb(databaseRepository);
+    } on Exception catch (e) {
+      CustomSnackBar.showCustomErrorSnackBar(title: 'Backup Error', message: 'Error: $e',duration: const Duration(seconds: 6));
+      print(e); // Only catches an exception of type `Exception`.
+      return;
+    } catch (e) {
+      print(e); // Catches all types of `Exception` and `Error`.
+      return;
+    }
+     CustomSnackBar.showCustomSnackBar(title: 'Backup realizado', message: 'Lo puedes ver o guardar desde tu carpeta Descargas o Download ');
   }
 
-  void restoreNotasDb() {
+  void restoreNotasDb() async {
     NotasDB databaseRepository = NotasDB();
     print('restoreNotasDb');
-    restaurarDb(databaseRepository);
+    try {
+      await restaurarDb(databaseRepository);
+    } on Exception catch (e) {
+      CustomSnackBar.showCustomErrorSnackBar(title: 'Error en restauación de datos.', message: 'Error: $e',duration: const Duration(seconds: 6));
+      print(e); // Only catches an exception of type `Exception`.
+      return;
+    } catch (e) {
+      print(e); // Catches all types of `Exception` and `Error`.
+      return;
+    }
+    CustomSnackBar.showCustomSnackBar(title: 'Datos restaurados', message: 'Puedes volver a la página de calendario, tus datos han sido restaurados con éxito.');
   }
 
-  void backupCalendarioDb() {
+  void backupCalendarioDb() async {
     CalendarioDB databaseRepository = CalendarioDB();
     print('backupCalendarioDb');
-    backupDb(databaseRepository);
+    try {
+      await backupDb(databaseRepository);
+    } on Exception catch (e) {
+      CustomSnackBar.showCustomErrorSnackBar(title: 'Backup Error', message: 'Error: $e',duration: const Duration(seconds: 6));
+      print(e); // Only catches an exception of type `Exception`.
+      return;
+    } catch (e) {
+      print(e); // Catches all types of `Exception` and `Error`.
+      return;
+    }
+    CustomSnackBar.showCustomSnackBar(title: 'Backup realizado', message: 'Lo puedes ver o guardar desde tu carpeta Descargas o Download ');
   }
 
-  void restoreCalendarioDb() {
+  void restoreCalendarioDb() async {
     CalendarioDB databaseRepository = CalendarioDB();
-    print('restoreCalendarioDb');
-    restaurarDb(databaseRepository);
+    try {
+      await restaurarDb(databaseRepository);
+    } on Exception catch (e) {
+      CustomSnackBar.showCustomErrorSnackBar(title: 'Error en restauación de datos.', message: 'Error: $e',duration: const Duration(seconds: 6));
+      print(e); // Only catches an exception of type `Exception`.
+      return;
+    } catch (e) {
+      print(e); // Catches all types of `Exception` and `Error`.
+      return;
+    }
+    CustomSnackBar.showCustomSnackBar(title: 'Datos restaurados', message: 'Puedes volver a la página de calendario, tus datos han sido restaurados con éxito.');
   }
 
 

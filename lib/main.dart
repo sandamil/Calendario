@@ -26,17 +26,18 @@ import 'firebase_options.dart';
 Future<void> main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
-  MySharedPref.init();
-  GetStorage.init();
+  // MySharedPref.init();
+  // GetStorage.init();
+  Get.put(AppController());
 
-  await Firebase.initializeApp(
+   Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  Get.put(AppController());
-  // await initMemory();
-  // Log.init();
+  Log.init();
 
   MobileAds.instance.initialize();
+
+  await initMemory();
 
   initializeDateFormatting().then(
     (_) async => runApp(
