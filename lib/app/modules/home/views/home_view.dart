@@ -1,5 +1,6 @@
 import 'dart:collection';
 import 'dart:io';
+import 'package:calendario2/app/modules/notas/controllers/notas_controller.dart';
 import 'package:calendario2/config/util/dateUtils.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
@@ -20,47 +21,76 @@ import '../../../../config/theme/my_fonts.dart';
 import '../../../../config/util/constant.dart';
 import '../../../../config/util/hexColor.dart';
 import '../../../components/custom_dialog.dart';
+import '../../../components/toast.dart';
 import '../../../controllers/ads_controller.dart';
 import '../../../data/local/calendarDatabase.dart';
+import '../../../data/local/taskDatabase.dart';
 import '../../../data/model/cuadranteDay.dart';
 import '../../menu/views/menu_view.dart';
 import '../controllers/home_controller.dart';
 import '../widgets/calendar/widget/customAlertDialogDaySelected.dart';
 import '../widgets/calendar/widget/customAlertDialogTurnoList.dart';
 
+typedef HomeCallback = void Function(int id, DateTime selectedDate);
+typedef HomeCallback2 = void Function();
+typedef HomeCallbackSetState = void Function(DateTime selectedDate);
+
 class HomeView extends StatefulWidget {
-  const HomeView({Key? key}) : super(key: key);
+  ValueNotifier<DateTime> focusedDay = ValueNotifier(DateTime.now());
+
+  HomeView({Key? key}) : super(key: key);
+
+  static get notasListController => Get.put(NotasListController());
 
   State<HomeView> createState() => _HomeViewState();
+
+  static notaHomeDelete(
+      BuildContext context, id, selectedDay, focusedDay) async {
+    print('HomeView');
+    await NotasDB.instance.delete(id);
+    if (context.mounted) Toast.toast(context, msg: "Eliminada!");
+    _HomeViewState().setStateHomeFOcusday(selectedDay, focusedDay);
+  }
 }
 
 class _HomeViewState extends State<HomeView> {
   final isDialOpen = ValueNotifier(false);
   final adcontroller = Get.find<AdsController>();
   final homeController = Get.find<HomeController>();
-
   final calendarController = Get.put(CalendarController());
 
+  List<Task> selectedDayNotas = <Task>[];
 
-  final ValueNotifier<DateTime> _focusedDay = ValueNotifier(DateTime.now());
   DateTime? _selectedDay;
+  DateTime? _focusedDay;
   DateTime? _rangeStart;
   DateTime? _rangeEnd;
   RangeSelectionMode _rangeSelectionMode = RangeSelectionMode.toggledOff;
+  int currentX = 0;
+  int currentY = 0;
 
   final Set<DateTime> _selectedDays = LinkedHashSet<DateTime>(
     equals: isSameDay,
     hashCode: getHashCode,
   );
 
+  onTapDown(TapDownDetails details) {
+    currentX = details.globalPosition.dx.toInt();
+    currentY = details.globalPosition.dy.toInt();
+  }
+
+  setStateHomeFOcusday(selectedDay, focusedDay) {
+    calendarController.getListEvent();
+    setState(() {
+      selectedDayNotas = calendarController.getNotasOfDay(selectedDay);
+    });
+    calendarController.getNotasOfDay(selectedDay);
+  }
+
   deleteTurnoCuadrante(id, DateTime selectedDate) async {
-
     CalendarioDB.db.deleteItemID(id);
-    print('selectedDate :  ${selectedDate}');
-
     await getCuadrante();
-    setState(() => _focusedDay.value = selectedDate);
-
+    setState(() => widget.focusedDay.value = selectedDate);
     Navigator.pop(context);
   }
 
@@ -68,15 +98,14 @@ class _HomeViewState extends State<HomeView> {
     if (!isSameDay(_selectedDay, selectedDay)) {
       setState(() {
         _selectedDay = selectedDay;
-        _focusedDay.value = focusedDay;
+        widget.focusedDay.value = focusedDay;
         _rangeStart = null; // Important to clean those
         _rangeEnd = null;
         _rangeSelectionMode = RangeSelectionMode.toggledOff;
       });
       calendarController.selectedDayTurnos.value =
           calendarController.getTurnosOfDay(selectedDay);
-      calendarController.selectedDayNotas.value =
-          calendarController.getNotasOfDay(selectedDay);
+      selectedDayNotas = calendarController.getNotasOfDay(selectedDay);
       // _selectedEvents.value = _getEventsForDays(_selectedDays);
     }
   }
@@ -85,7 +114,7 @@ class _HomeViewState extends State<HomeView> {
     if (!isSameDay(_selectedDay, selectedDate)) {
       setState(() {
         _selectedDay = selectedDate;
-        _focusedDay.value = focusedDate;
+        widget.focusedDay.value = focusedDate;
         _rangeStart = null; // Important to clean those
         _rangeEnd = null;
         _rangeSelectionMode = RangeSelectionMode.toggledOff;
@@ -93,29 +122,433 @@ class _HomeViewState extends State<HomeView> {
     }
     calendarController.selectedDayTurnos.value =
         calendarController.getTurnosOfDay(selectedDate);
-    calendarController.selectedDayNotas.value =
-        calendarController.getNotasOfDay(selectedDate);
+    selectedDayNotas = calendarController.getNotasOfDay(selectedDate);
 
     showDialog(
         context: context,
         builder: (BuildContext context) {
-          return
-              // CustomAlertDilogDaySelected(
-              //       x: calendarController.currentX,
-              //       y: calendarController.currentY,
-              //       selectedDate: selectedDate,
-              //       turno: calendarController.turno);
+          return SizedBox(
+            height: Get.height,
+            width: Get.width - 20.w,
+            child: Stack(
+              children: [
+                Positioned(
+                  // left: x,
+                  top: currentY - 40.h,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10.w),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SizedBox(
+                          height: 30,
+                          width: Get.width - 20.w,
+                          child: Stack(
+                            children: [
+                              Positioned(
+                                left: currentX - 20.w,
+                                child: CustomPaint(
+                                    size: const Size(35, 35),
+                                    painter: DrawTriangle()),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          height: 220,
+                          width: Get.width - 20.w,
+                          padding: EdgeInsets.symmetric(horizontal: 10.w),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: PRIMARY_COLOR),
+                            color: MyColors.backgroundColor,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(5.r),
+                            ),
+                          ),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              SizedBox(height: 2.h),
+                              TurnosNotasAlertDialog(selectedDate, context),
+                              SizedBox(height: 2.h),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Padding(
+                                      padding: EdgeInsets.all(2.h),
+                                      child: ElevatedButton(
+                                        onPressed: () async {
+                                          await calendarController.fetchTurno();
 
-              DialogLongPress( selectedDate: selectedDate, context,);
+                                          Navigator.pop(context);
+                                          showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              // adcontroller.staticHomeAd.dispose();
+                                              return Align(
+                                                alignment: Alignment.center,
+                                                child: Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 10.w),
+                                                  child: Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    children: <Widget>[
+                                                      Container(
+                                                        padding: EdgeInsets
+                                                            .symmetric(
+                                                                horizontal:
+                                                                    10.w),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          border: Border.all(
+                                                              color:
+                                                                  PRIMARY_COLOR),
+                                                          // color: theme.scaffoldBackgroundColor,
+                                                          borderRadius:
+                                                              BorderRadius.all(
+                                                            Radius.circular(
+                                                                5.r),
+                                                          ),
+                                                        ),
+                                                        child:
+                                                            SingleChildScrollView(
+                                                          child: Wrap(
+                                                            alignment:
+                                                                WrapAlignment
+                                                                    .spaceAround,
+                                                            // runSpacing: 1.h,
+                                                            children: <Widget>[
+                                                              ...calendarController
+                                                                  .turno
+                                                                  .map((m) {
+                                                                return Padding(
+                                                                  padding: EdgeInsets
+                                                                      .symmetric(
+                                                                          horizontal:
+                                                                              2.w),
+                                                                  child:
+                                                                      ElevatedButton(
+                                                                    style: ElevatedButton
+                                                                        .styleFrom(
+                                                                      side: BorderSide(
+                                                                          width:
+                                                                              0.8.r),
+                                                                      shape:
+                                                                          RoundedRectangleBorder(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(5.r),
+                                                                      ),
+                                                                      backgroundColor:
+                                                                          HexColor(
+                                                                              m.color!),
+                                                                    ),
+                                                                    child:
+                                                                        Container(
+                                                                      alignment:
+                                                                          Alignment
+                                                                              .center,
+                                                                      height:
+                                                                          20.h,
+                                                                      width:
+                                                                          75.w,
+                                                                      child:
+                                                                          Text(
+                                                                        m.description!,
+                                                                        style: TextStyle(
+                                                                            fontSize: 12
+                                                                                .sp,
+                                                                            fontWeight: FontWeight
+                                                                                .bold,
+                                                                            color: HexColor(m.color!).computeLuminance() > 0.5
+                                                                                ? Colors.black
+                                                                                : Colors.white),
+                                                                      ),
+                                                                    ),
+                                                                    onPressed:
+                                                                        () async {
+                                                                      await CalendarioDB
+                                                                          .db
+                                                                          .addCuadranteItem(
+                                                                        CuadranteDay(
+                                                                          cuadranteName:
+                                                                              'Turnos sueltos',
+                                                                          dateTime: DateTime.parse(selectedDate.toString().substring(
+                                                                              0,
+                                                                              10)),
+                                                                          color:
+                                                                              m.color,
+                                                                          description:
+                                                                              m.description,
+                                                                          endHour:
+                                                                              m.endHour,
+                                                                          startHour:
+                                                                              m.startHour,
+                                                                          title:
+                                                                              m.title,
+                                                                        ),
+                                                                      );
+                                                                      // await calendarController.getCuadrante();
+                                                                      // adcontroller.staticHomeAd.load();
+                                                                      await getCuadrante();
+                                                                      setState(() => widget
+                                                                          .focusedDay
+                                                                          .value = selectedDate);
+
+                                                                      Navigator.pop(
+                                                                          context); // Get.offAllNamed('/home');
+                                                                    },
+                                                                  ),
+                                                                );
+                                                              }),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                          );
+                                        },
+                                        child: const Text("Añade Turno"),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(width: 2.w),
+                                  Expanded(
+                                    child: Padding(
+                                      padding: EdgeInsets.all(2.h),
+                                      child: ElevatedButton(
+                                        onPressed: () {
+                                          Get.toNamed('/add-notas',
+                                              arguments: selectedDate
+                                                  .millisecondsSinceEpoch);
+                                        },
+                                        child: const Text("Añade Nota"),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
         });
-
-    // Get.dialog(CustomAlertDilogDaySelected(
-    //     x: calendarController.currentX,
-    //     y: calendarController.currentY,
-    //     selectedDate: selectedDate,
-    //     turno: calendarController.turno));
   }
 
+  Container TurnosNotasAlertDialog(
+      DateTime selectedDate, BuildContext context) {
+    return Container(
+      color: MyColors.backgroundColor,
+      height: 150,
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            calendarController.selectedDayTurnos.isEmpty
+                ? Container()
+                : ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: calendarController.selectedDayTurnos.length,
+                    itemBuilder: (context, index) {
+                      return Slidable(
+                        endActionPane: ActionPane(
+                          motion: const DrawerMotion(),
+                          extentRatio: 0.3,
+                          children: [
+                            SlidableAction(
+                              label: 'Eliminar',
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(5.r)),
+                              backgroundColor: Colors.redAccent,
+                              // icon: Icons.send,
+                              onPressed: (context) {
+                                deleteTurnoCuadrante(
+                                    calendarController
+                                        .selectedDayTurnos[index].id,
+                                    selectedDate);
+                              },
+                            ),
+                          ],
+                        ),
+                        child: Container(
+                          height: 22.h,
+                          padding: EdgeInsets.symmetric(
+                              vertical: 1.h, horizontal: 2.w),
+                          decoration: BoxDecoration(
+                            color: HexColor(calendarController
+                                .selectedDayTurnos[index].color!),
+                            border: Border.all(width: 0.8.r),
+                            borderRadius: BorderRadius.circular(5.r),
+                          ),
+                          margin: EdgeInsets.symmetric(
+                              horizontal: 2.w, vertical: 2.h),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.only(left: 6.0),
+                                child: FittedBox(
+                                  child: DefaultTextStyle(
+                                    style: TextStyle(
+                                        height: 1.2.h,
+                                        fontSize: 14.sp,
+                                        fontWeight: FontWeight.bold,
+                                        color: HexColor(calendarController
+                                                        .selectedDayTurnos[
+                                                            index]
+                                                        .color!)
+                                                    .computeLuminance() >
+                                                0.5
+                                            ? Colors.black
+                                            : Colors.white),
+                                    child: Text(
+                                      calendarController
+                                          .selectedDayTurnos[index]
+                                          .description!,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              // SizedBox(
+                              //   width: 20.w,
+                              // ),
+                              calendarController.selectedDayTurnos[index]
+                                              .startHour !=
+                                          null &&
+                                      calendarController
+                                              .selectedDayTurnos[index]
+                                              .endHour !=
+                                          null
+                                  ? Padding(
+                                      padding: EdgeInsets.only(left: 15.w),
+                                      child: FittedBox(
+                                        child: DefaultTextStyle(
+                                          style: TextStyle(
+                                              height: 1.2.h,
+                                              fontSize: 14.sp,
+                                              color: HexColor(calendarController
+                                                              .selectedDayTurnos[
+                                                                  index]
+                                                              .color!)
+                                                          .computeLuminance() >
+                                                      0.5
+                                                  ? Colors.black
+                                                  : Colors.white),
+                                          child: Text(
+                                            'de ${calendarController.selectedDayTurnos[index].startHour.toString()} '
+                                            'a ${calendarController.selectedDayTurnos[index].endHour.toString()}',
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  : Container(
+                                      padding: EdgeInsets.only(right: 20.w),
+                                    ),
+                              Spacer(),
+                              Icon(
+                                Icons.arrow_back,
+                                size: 16,
+                                color: MyColors.textColor,
+                              ),
+                              Icon(
+                                Icons.delete_forever,
+                                size: 18,
+                                color: MyColors.textColor,
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+            SizedBox(
+              height: 3.h,
+            ),
+            ...selectedDayNotas.map((nota) => Padding(
+                  padding: EdgeInsets.symmetric(vertical: 1.h, horizontal: 2.w),
+                  child: GestureDetector(
+                    onTap: () {
+                      MyCustomDialog.mostrarTask(nota, context);
+                    },
+                    child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 4.w),
+                        decoration: BoxDecoration(
+                          color: MyColors.cellSelectedColor,
+                          border: Border.all(
+                              color: MyColors.borderAccentLine, width: 1),
+                          borderRadius: BorderRadius.circular(3.r),
+                        ),
+                        height: 22.h,
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              width: 4.w,
+                            ),
+                            SizedBox(
+                              width: 50.w,
+                              child: DefaultTextStyle(
+                                style: TextStyle(
+                                    height: 1.2.h,
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.w600),
+                                child: Text(
+                                  DateTime.fromMillisecondsSinceEpoch(
+                                          nota.startTimeMilliseconds!)
+                                      .formatDateTime24H,
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 4.w,
+                            ),
+                            SizedBox(
+                              width: 85.w,
+                              child: DefaultTextStyle(
+                                style: TextStyle(
+                                    height: 1.2.h,
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.w600),
+                                child: Text(
+                                  nota.title!.toUpperCase(),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 4.w,
+                            ),
+                            SizedBox(
+                              width: 170.w,
+                              child: DefaultTextStyle(
+                                style: TextStyle(
+                                    height: 1.2.h,
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.w600),
+                                child: Text(
+                                  nota.notes!,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ),
+                          ],
+                        )),
+                  ),
+                )),
+          ],
+        ),
+      ),
+    );
+  }
 
   Future<Map<DateTime, List<CuadranteDay>>> getCuadrante() async {
     calendarController.cuadrante.value =
@@ -141,193 +574,163 @@ class _HomeViewState extends State<HomeView> {
   @override
   void initState() {
     super.initState();
-    _selectedDays.add(_focusedDay.value);
+    _selectedDays.add(widget.focusedDay.value);
     getCuadrante();
     calendarController.getListEvent();
     // _selectedEvents = ValueNotifier(_getEventsForDay(_focusedDay.value));
     calendarController.selectedDayTurnos.value =
-        calendarController.getTurnosOfDay(_focusedDay.value);
-    calendarController.selectedDayNotas.value =
-        calendarController.getNotasOfDay(_focusedDay.value);
+        calendarController.getTurnosOfDay(widget.focusedDay.value);
+    selectedDayNotas =
+        calendarController.getNotasOfDay(widget.focusedDay.value);
   }
 
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-        onWillPop: () async {
-          if (Platform.isAndroid) {
-            //? to close quick order floating if its open when click back btn
-            if (isDialOpen.value) {
-              isDialOpen.value = false;
-              return false;
-            } else {
-              homeController.appCloseConfirm(context);
-            }
+      onWillPop: () async {
+        if (Platform.isAndroid) {
+          //? to close quick order floating if its open when click back btn
+          if (isDialOpen.value) {
+            isDialOpen.value = false;
+            return false;
+          } else {
+            homeController.appCloseConfirm(context);
           }
-          return false;
-        },
-        child: GestureDetector(
-          behavior: HitTestBehavior.translucent,
-          onTapDown: (TapDownDetails details) =>
-              calendarController.onTapDown(details),
-          child: Scaffold(
-              appBar: AppBar(
-                centerTitle: false,
-                elevation: 0,
-                backgroundColor: Colors.transparent,
-                leading: Builder(
-                  builder: (BuildContext context) {
-                    return IconButton(
-                      key: homeController.firstTime.value
-                          ? homeController.tutorialController.keyButton6
-                          : widget.key,
-                      icon: Icon(
-                        Icons.menu,
-                        color: PRIMARY_COLOR,
-                        size: 26.sp,
-                      ),
-                      onPressed: () {
-                        adcontroller.staticHomeAd.dispose();
-                        Get.to(() => const MenuView(),
-                            duration: const Duration(milliseconds: 100),
-                            transition: Transition.leftToRight);
-                      },
-                      tooltip: MaterialLocalizations.of(context)
-                          .openAppDrawerTooltip,
-                    );
+        }
+        return false;
+      },
+      child: GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onTapDown: (TapDownDetails details) => onTapDown(details),
+        child: Scaffold(
+            appBar: AppBar(
+              centerTitle: false,
+              elevation: 0,
+              backgroundColor: Colors.transparent,
+              leading: Builder(
+                builder: (BuildContext context) {
+                  return IconButton(
+                    key: homeController.firstTime.value
+                        ? homeController.tutorialController.keyButton6
+                        : widget.key,
+                    icon: Icon(
+                      Icons.menu,
+                      color: PRIMARY_COLOR,
+                      size: 26.sp,
+                    ),
+                    onPressed: () {
+                      adcontroller.staticHomeAd.dispose();
+                      Get.to(() => const MenuView(),
+                          duration: const Duration(milliseconds: 100),
+                          transition: Transition.leftToRight);
+                    },
+                    tooltip:
+                        MaterialLocalizations.of(context).openAppDrawerTooltip,
+                  );
+                },
+              ),
+              title: SelectedDayWidget(),
+              actions: [
+                IconButton(
+                  key: homeController.firstTime.value
+                      ? homeController.tutorialController.keyButton7
+                      : widget.key,
+                  color: PRIMARY_COLOR,
+                  icon: const Icon(
+                    Icons.today,
+                  ),
+                  tooltip: 'today',
+                  onPressed: () {
+                    Get.toNamed('/version-anterior');
                   },
                 ),
-                title: SelectedDayWidget(),
-                actions: [
-                  IconButton(
-                    key: homeController.firstTime.value
-                        ? homeController.tutorialController.keyButton7
-                        : widget.key,
-                    color: PRIMARY_COLOR,
-                    icon: const Icon(
-                      Icons.today,
-                    ),
-                    tooltip: 'today',
-                    onPressed: () {
-                      // controller.firstTime.value = true;
-                      // controller.tutorialController.showTutorial(context, 'home');
-                      Get.toNamed('/version-anterior');
-                      // CustomDialog.showPopUpInfo(
-                      //   title: 'Volver a HOY',
-                      //   description: 'Selecciona Mes al que quieres ir',
-                      //   labelButton: 'Volver',
-                      //   // onPress: (){}
-                      // );adb backup -noapk ajat.calendario.turnos
-
-                      // / data/data/ ajat.calendario.turnos/app_flutter/ DBC4A.db
-                      // print(notesList.asMap());
-                    },
-                  ),
-                ],
-              ),
-              // floatingActionButtonLocation:
-              //     FloatingActionButtonLocation.centerDocked,
-              // floatingActionButton: Platform.isAndroid
-              //     ? FloatingActionButton.extended(
-              //         backgroundColor: Colors.transparent,
-              //         elevation: 0,
-              //         onPressed: () {
-              //           // MyTheme.changeTheme();
-              //         },
-              //         label: adcontroller.staticAdHomeLoaded.value
-              //             ? Container(
-              //                 color: Colors.transparent,
-              //                 width: adcontroller.staticHomeAd.size.width
-              //                     .toDouble(),
-              //                 height: adcontroller.staticHomeAd.size.height
-              //                     .toDouble(),
-              //                 alignment: Alignment.bottomCenter,
-              //                 child: AdWidget(
-              //                   ad: adcontroller.staticHomeAd,
-              //                 ),
-              //               )
-              //             : const SizedBox(),
-              //       )
-              //     : null,
-              body: Column(
-                children: [
-                  SizedBox(height: 2.h),
-                  Column(
-                    key: homeController.firstTime.value
-                        ? homeController.tutorialController.keyButton8
-                        : widget.key,
-                    children: [
-                      Container(
-                        alignment: Alignment.center,
-                        child: TableCalendar(
-                          locale: 'es_ES',
-                          daysOfWeekHeight: 25.h,
-                          rowHeight: 90.h,
-                          headerVisible: Platform.isMacOS ? true : false,
-                          calendarStyle: const CalendarStyle(
-                            outsideDaysVisible: false,
-                          ),
-                          holidayPredicate: (day) {
-                            // print('comprobar refactor' '${calendarController.hasEvent(day)}'
-                            // );
-                            return calendarController.hasEvent(day);
-                          },
-                          firstDay: DateTime(2000),
-                          lastDay: DateTime(2050),
-                          focusedDay: _focusedDay.value,
-                          // calendarFormat: controller.calendarFormat,
-                          eventLoader: calendarController.getTurnosOfDay,
-                          startingDayOfWeek: StartingDayOfWeek.monday,
-                          // selectedDayPredicate: (day) {
-                          //   return isSameDay(calendarController.selectedDayRx.value, day);
-                          // },
-                          selectedDayPredicate: (day) =>
-                              isSameDay(_selectedDay, day),
-
-                          onDaySelected: _onDaySelected,
-                          onDayLongPressed: _onDaySelectedLongPress,
-                          // onFormatChanged: (format) {
-                          //   if (controller.calendarFormat != format) {
-                          //     controller.changeCalendarFormat(format);
-                          //   }
-                          // },
-                          onCalendarCreated: (_) {
-                            calendarController.update;
-                          },
-                          onPageChanged: (focusedDay) {
-                            _focusedDay.value = focusedDay;
-                            calendarController.focusDayRx.value =
-                                _focusedDay.value;
-                          },
-                          calendarBuilders: _calendarBuilders(),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 5.h),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8.w),
-                    child: LineWidget(),
-                  ),
-                  // SizedBox(height: 2.h),
-                  // Obx(() => _buildSelectedDay()),
-                  SizedBox(height: 2.h),
-
-                  Expanded(
-                    key: homeController.firstTime.value
-                        ? homeController.tutorialController.keyButton9
-                        : widget.key,
-                    child: _buildListEvent(
-                        context, calendarController.selectedDayNotas),
+              ],
+            ),
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerDocked,
+            floatingActionButton: Platform.isAndroid
+                ? FloatingActionButton.extended(
+                    backgroundColor: Colors.transparent,
+                    elevation: 0,
+                    onPressed: () {},
+                    label: adcontroller.staticAdHomeLoaded.value
+                        ? Container(
+                            color: Colors.transparent,
+                            width:
+                                adcontroller.staticHomeAd.size.width.toDouble(),
+                            height: adcontroller.staticHomeAd.size.height
+                                .toDouble(),
+                            alignment: Alignment.bottomCenter,
+                            child: AdWidget(
+                              ad: adcontroller.staticHomeAd,
+                            ),
+                          )
+                        : const SizedBox(),
                   )
-                ],
-              )),
-        ));
+                : null,
+            body: Column(
+              children: [
+                SizedBox(height: 2.h),
+                Column(
+                  key: homeController.firstTime.value
+                      ? homeController.tutorialController.keyButton8
+                      : widget.key,
+                  children: [
+                    Container(
+                      alignment: Alignment.center,
+                      child: TableCalendar(
+                        locale: 'es_ES',
+                        daysOfWeekHeight: 25.h,
+                        rowHeight: 90.h,
+                        headerVisible: Platform.isMacOS ? true : false,
+                        calendarStyle: const CalendarStyle(
+                          outsideDaysVisible: false,
+                        ),
+                        holidayPredicate: (day) {
+                          return calendarController.hasEvent(day);
+                        },
+                        firstDay: DateTime(2000),
+                        lastDay: DateTime(2050),
+                        focusedDay: widget.focusedDay.value,
+                        eventLoader: calendarController.getTurnosOfDay,
+                        startingDayOfWeek: StartingDayOfWeek.monday,
+                        selectedDayPredicate: (day) =>
+                            isSameDay(_selectedDay, day),
+                        onDaySelected: _onDaySelected,
+                        onDayLongPressed: _onDaySelectedLongPress,
+                        onCalendarCreated: (_) {
+                          calendarController.update;
+                        },
+                        onPageChanged: (focusedDay) {
+                          widget.focusedDay.value = focusedDay;
+                          calendarController.focusDayRx.value =
+                              widget.focusedDay.value;
+                        },
+                        calendarBuilders: _calendarBuilders(),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 5.h),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8.w),
+                  child: LineWidget(),
+                ),
+                SizedBox(height: 2.h),
+                Expanded(
+                  key: homeController.firstTime.value
+                      ? homeController.tutorialController.keyButton9
+                      : widget.key,
+                  child: _buildListEvent(context, selectedDayNotas),
+                )
+              ],
+            )),
+      ),
+    );
   }
 
   _calendarBuilders() => CalendarBuilders(
         /// =       markerBuilder:          =======================================
-
         markerBuilder: (context, day, List<CuadranteDay> events) {
           List<Task> notas = calendarController.getNotasOfDay(day);
           return Container(
@@ -388,11 +791,9 @@ class _HomeViewState extends State<HomeView> {
                               ),
                             )),
                       )),
-
                 ],
               ),
             ),
-
           );
         },
 
@@ -413,7 +814,8 @@ class _HomeViewState extends State<HomeView> {
                   children: [
                     Text(
                       day.day.toString(),
-                      style: CustomTextStyle.numberCalendar.copyWith(   color: MyColors.cellTextColor,
+                      style: CustomTextStyle.numberCalendar.copyWith(
+                        color: MyColors.cellTextColor,
                       ),
                     ),
                   ],
@@ -445,7 +847,8 @@ class _HomeViewState extends State<HomeView> {
                   children: [
                     Text(
                       day.day.toString(),
-                      style: CustomTextStyle.numberCalendar.copyWith(   color: MyColors.cellTextColor,
+                      style: CustomTextStyle.numberCalendar.copyWith(
+                        color: MyColors.cellTextColor,
                       ),
                     ),
                   ],
@@ -474,9 +877,11 @@ class _HomeViewState extends State<HomeView> {
                 alignment: Alignment.topCenter,
                 child: Text(
                   day.day.toString(),
-                  style:
-                      CustomTextStyle.numberCalendar.copyWith(fontSize: 15.sp,color: MyColors.cellTextColor,), ),
-
+                  style: CustomTextStyle.numberCalendar.copyWith(
+                    fontSize: 15.sp,
+                    color: MyColors.cellTextColor,
+                  ),
+                ),
               ),
             ),
           );
@@ -536,10 +941,6 @@ class _HomeViewState extends State<HomeView> {
         },
       );
   Widget _buildListEvent(BuildContext context, List<Task> events) {
-    // final calendarVM = Get.find<CalendarController>();
-    // final selectedDay = calendarVM.selectedDayRx;
-    // List events = calendarVM.getEventsOfDay(selectedDay.value);
-
     return SingleChildScrollView(
       child: Column(
         children: [
@@ -551,10 +952,13 @@ class _HomeViewState extends State<HomeView> {
                       children: [
                         // CardEvent(event: event),
                         TaskCard(
-                            noteData: event,
-                            onTapAction:
-                                homeController.notasController.openNoteToRead,
-                            routeToNotas: false)
+                          noteData: event,
+                          onTapAction:
+                              homeController.notasController.openNoteToRead,
+                          routeToNotas: false,
+                          selectedDay: _selectedDay,
+                          focusedDay: widget.focusedDay.value,
+                        )
                       ],
                     ),
                   )
@@ -566,201 +970,3 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 }
-
-// class HomeView extends GetView<HomeController> {
-//   HomeView({Key? key}) : super(key: key);
-//   final adcontroller = Get.find<AdsController>();
-//   final calendarController = Get.find<CalendarController>();
-//   final isDialOpen = ValueNotifier(false);
-//
-//   @override
-//   Widget build(BuildContext context) {
-//
-//     return WillPopScope(
-//       onWillPop: () async {
-//         if (Platform.isAndroid) {
-//           //? to close quick order floating if its open when click back btn
-//           if (isDialOpen.value) {
-//             isDialOpen.value = false;
-//             return false;
-//           } else {
-//             controller.appCloseConfirm(context);
-//           }
-//         }
-//         return false;
-//       },
-//       child: Obx(() {
-//
-//         return GestureDetector(
-//           behavior: HitTestBehavior.translucent,
-//           onTapDown: (TapDownDetails details) =>
-//               calendarController.onTapDown(details),
-//           child: Scaffold(
-//               appBar: AppBar(
-//                 centerTitle: false,
-//                 elevation: 0,
-//                 backgroundColor: Colors.transparent,
-//                 leading: Builder(
-//                   builder: (BuildContext context) {
-//                     return IconButton(
-//                       key: controller.firstTime.value
-//                           ? controller.tutorialController.keyButton6
-//                           : key,
-//                       icon: Icon(
-//                         Icons.menu,
-//                         color: PRIMARY_COLOR,
-//                         size: 26.sp,
-//                       ),
-//                       onPressed: () {
-//                         adcontroller.staticHomeAd.dispose();
-//                         Get.to(() => const MenuView(),
-//                             duration: const Duration(milliseconds: 100),
-//                             transition: Transition.leftToRight);
-//                       },
-//                       tooltip: MaterialLocalizations.of(context)
-//                           .openAppDrawerTooltip,
-//                     );
-//                   },
-//                 ),
-//                 title: SelectedDayWidget(),
-//                 actions: [
-//                   IconButton(
-//                     key: controller.firstTime.value
-//                         ? controller.tutorialController.keyButton7
-//                         : key,
-//                     color: PRIMARY_COLOR,
-//                     icon: const Icon(
-//                       Icons.today,
-//                     ),
-//                     tooltip: 'today',
-//                     onPressed: () {
-//                       // controller.firstTime.value = true;
-//                       // controller.tutorialController.showTutorial(context, 'home');
-//                       Get.toNamed('/version-anterior');
-//                       // CustomDialog.showPopUpInfo(
-//                       //   title: 'Volver a HOY',
-//                       //   description: 'Selecciona Mes al que quieres ir',
-//                       //   labelButton: 'Volver',
-//                       //   // onPress: (){}
-//                       // );adb backup -noapk ajat.calendario.turnos
-//
-//                       // / data/data/ ajat.calendario.turnos/app_flutter/ DBC4A.db
-//                       // print(notesList.asMap());
-//                     },
-//                   ),
-//                 ],
-//               ),
-//               floatingActionButtonLocation:
-//                   FloatingActionButtonLocation.centerDocked,
-//               floatingActionButton: Platform.isAndroid
-//                   ? FloatingActionButton.extended(
-//                       backgroundColor: Colors.transparent,
-//                       elevation: 0,
-//                       onPressed: () {
-//                         // MyTheme.changeTheme();
-//                       },
-//                       label: adcontroller.staticAdHomeLoaded.value
-//                           ? Container(
-//                               color: Colors.transparent,
-//                               width: adcontroller.staticHomeAd.size.width
-//                                   .toDouble(),
-//                               height: adcontroller.staticHomeAd.size.height
-//                                   .toDouble(),
-//                               alignment: Alignment.bottomCenter,
-//                               child: AdWidget(
-//                                 ad: adcontroller.staticHomeAd,
-//                               ),
-//                             )
-//                           : const SizedBox(),
-//                     )
-//                   : null,
-//               body: Column(
-//                 children: [
-//                   SizedBox(height: 2.h),
-//                   CalendarWidget(
-//                     key: controller.firstTime.value
-//                         ? controller.tutorialController.keyButton8
-//                         : key,
-//                   ),
-//                   SizedBox(height: 5.h),
-//                   Padding(
-//                     padding: EdgeInsets.symmetric(horizontal: 8.w),
-//                     child: LineWidget(),
-//                   ),
-//                   // SizedBox(height: 2.h),
-//                   // Obx(() => _buildSelectedDay()),
-//                   SizedBox(height: 2.h),
-//                   Obx(() {
-//                     return Expanded(
-//                       key: controller.firstTime.value
-//                           ? controller.tutorialController.keyButton9
-//                           : key,
-//                       child: _buildListEvent(context, calendarController.selectedDayNotas),
-//                     );
-//                   }),
-//                 ],
-//               )),
-//         );
-//       }),
-//     );
-//   }
-//
-//   Widget _buildListEvent(BuildContext context, List<Task> events) {
-//     // final calendarVM = Get.find<CalendarController>();
-//     // final selectedDay = calendarVM.selectedDayRx;
-//     // List events = calendarVM.getEventsOfDay(selectedDay.value);
-//
-//     return SingleChildScrollView(
-//       child: Column(
-//         children: [
-//           SingleChildScrollView(
-//             child: Column(
-//               children: events
-//                   .map(
-//                     (event) => Column(
-//                       children: [
-//                         // CardEvent(event: event),
-//                         TaskCard(
-//                             noteData: event,
-//                             onTapAction:
-//                                 controller.notasController.openNoteToRead, routeToNotas: false)
-//                       ],
-//                     ),
-//                   )
-//                   .toList(),
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-//
-// // Widget _buildSelectedDay() {
-// //   final calendarVM = Get.find<CalendarController>();
-// //
-// //   final selectedDay = calendarVM.selectedDay.value;
-// //   String formattedDate =
-// //       '${selectedDay.day} / ${selectedDay.month} / ${selectedDay.year}';
-// //
-// //   return Row(
-// //     crossAxisAlignment: CrossAxisAlignment.start,
-// //     children: [
-// //       Container(
-// //         margin: const EdgeInsets.only(left: 10),
-// //         child: const Text(
-// //           'Notas para el dia:',
-// //           // style: AppTextStyle.titleTextStyle(),
-// //         ),
-// //       ),
-// //       const SizedBox(height: 5),
-// //       Container(
-// //         margin: const EdgeInsets.only(left: 10),
-// //         child: Text(
-// //           formattedDate + ':',
-// //           // style: AppTextStyle.disableTextStyle(),
-// //         ),
-// //       ),
-// //     ],
-// //   );
-// // }
-// }
