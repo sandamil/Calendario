@@ -1,4 +1,12 @@
+<<<<<<< HEAD
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="ajat.calendario.turnos">
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+=======
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+>>>>>>> a39d4f8 (Fix after performance check)
 
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
     <uses-permission android:name="android.permission.READ_MEDIA_VIDEO"/>
@@ -13,7 +21,7 @@
         android:requestLegacyExternalStorage="true"
         android:label="calendario"
         android:name="${applicationName}"
-        android:icon="@mipmap/launcher_icon">
+        android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
             android:exported="true"
