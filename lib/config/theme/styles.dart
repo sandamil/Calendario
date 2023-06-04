@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:introduction_screen/introduction_screen.dart';
+
+import 'my_fonts.dart';
 
 // enum TextFieldState { focus, error, disabled, none }
 //
@@ -99,27 +102,19 @@ class Shadows {
       ];
 }
 
-// InputDecoration inputDecoration({
-//   required String hintText,
-//   Widget? prefixIcon,
-//   Widget? suffixIcon,
-//   TextStyle? hintStyle,
-//   EdgeInsets? padding,
-//   Color? hintColor,
-// }) {
-//   return InputDecoration(
-//     isDense: true,
-//     // filled: true,
-//     contentPadding:
-//         padding ?? EdgeInsets.symmetric(horizontal: 12.w, vertical: 16.w),
-//     hintText: hintText,
-//     border: InputBorder.none,
-//     errorMaxLines: 5,
-//     prefixIcon: prefixIcon,
-//     prefixIconConstraints: BoxConstraints(minHeight: 24.w, minWidth: 24.w),
-//     suffixIconConstraints: BoxConstraints(minHeight: 24.w, minWidth: 24.w),
-//     suffixIcon: suffixIcon,
-//     hintStyle: hintStyle ??
-//         CustomTextStyle.text.copyWith(color: hintColor ?? const Color(0xFFC1BABA)),
-//   );
-// }
+final PageDecoration pageDecoration = PageDecoration(
+  // titleTextStyle: CustomTextStyle.titleLarge,
+  titlePadding:  EdgeInsets.only(top: 36.h, bottom: 24.h),
+  // bodyTextStyle: CustomTextStyle.textLarge,
+  bodyPadding:  EdgeInsets.fromLTRB(16.w, 0.h, 16.w, 16.h),
+  // pageColor: Colors.white,
+  imagePadding: EdgeInsets.zero,
+);
+
+const PageDecoration pageDecorationFullScreen = PageDecoration(
+  fullScreen : true,
+  bodyPadding:  EdgeInsets.zero,
+  imagePadding: EdgeInsets.zero,
+  contentMargin: EdgeInsets.zero,
+  footerPadding: EdgeInsets.zero,
+);

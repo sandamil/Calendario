@@ -1,3 +1,4 @@
+import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -9,6 +10,8 @@ import 'my_styles.dart';
 class MyTheme {
   static getThemeData({required bool isLight}) {
     return ThemeData(
+      useMaterial3: true,
+
       // main color (app bar,tabs..etc)
       primaryColor: isLight
           ? LightThemeColors.primaryColor
@@ -86,8 +89,39 @@ class MyTheme {
       inputDecorationTheme: MyStyles.getInputDecorationTheme(isLightTheme: isLight),
 
 
+      switchTheme: SwitchThemeData(
+        thumbColor: MaterialStateProperty.resolveWith(getSwitchColorThumb),
+        trackColor: MaterialStateProperty.resolveWith(getSwitchTrackColor),
+      ),
+
 
     );
+  }
+
+  static Color getSwitchColorThumb(Set<MaterialState> states) {
+    if (states.contains(MaterialState.selected)) {
+      return const Color(0xFF303030);
+    }
+
+    return Colors.grey;
+  }
+
+  static Color getSwitchTrackColor(Set<MaterialState> states) {
+    const Set<MaterialState> interactiveStates = <MaterialState>{
+      MaterialState.pressed,
+      MaterialState.hovered,
+      MaterialState.focused,
+    };
+
+    if (states.any(interactiveStates.contains)) {
+      return const Color(0xFF505050);
+    }
+
+    if (states.contains(MaterialState.selected)) {
+      return PRIMARY_COLOR;
+    }
+
+    return const Color(0xFF353535);
   }
 
   /// update app theme and save theme type to shared pref

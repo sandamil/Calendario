@@ -41,7 +41,7 @@ class EditNotasView extends GetView<EditNotasController> {
                 size: 26.sp,
               ),
               onPressed: () {
-                adcontroller.loadNotesListBannerAd();
+                // adcontroller.loadNotesListBannerAd();
 
                 Get.offAllNamed('/notas');
               }),
@@ -54,7 +54,7 @@ class EditNotasView extends GetView<EditNotasController> {
               ),
               padding: EdgeInsets.only(right: 3.w),
               onPressed: () async {
-                adcontroller.loadNotesListBannerAd();
+                // adcontroller.loadNotesListBannerAd();
 
                 await controller.editNote();
                 Get.offAllNamed('/notas');

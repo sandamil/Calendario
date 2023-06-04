@@ -53,7 +53,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.BOARDING,
-      page: () => const BoardingView(),
+      page: () =>  BoardingView(),
       binding: BoardingBinding(),
     ),
     GetPage(

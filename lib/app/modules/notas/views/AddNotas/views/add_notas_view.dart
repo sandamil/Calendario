@@ -49,7 +49,7 @@ class AddNotasView extends GetView<AddNotasController> {
                 size: 26.sp,
               ),
               onPressed: () async {
-                adcontroller.loadNotesListBannerAd();
+                // adcontroller.loadNotesListBannerAd();
 
                 Get.offAllNamed('/notas');
               }),
@@ -62,7 +62,7 @@ class AddNotasView extends GetView<AddNotasController> {
               ),
               padding: EdgeInsets.only(right: 3.w),
               onPressed: () async {
-                adcontroller.loadNotesListBannerAd();
+                // adcontroller.loadNotesListBannerAd();
 
                 // controller.addTravelEvent();
                 await controller.saveNota();

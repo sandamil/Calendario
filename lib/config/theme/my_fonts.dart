@@ -99,6 +99,12 @@ class CustomTextStyle {
     color: MyColors.textColor,
   );
 
+  static TextStyle textLarge = TextStyle(
+    fontWeight: FontWeight.w400,
+    fontSize: 18.w,
+    color: MyColors.textColor,
+  );
+
   static TextStyle title = TextStyle(
     fontWeight: FontWeight.w700,
     fontSize: 25.w,
