@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-import '../../../../../controllers/app_controller.dart';
 
 class SelectedDayWidget extends StatelessWidget {
   final calendarController = Get.put(CalendarController());

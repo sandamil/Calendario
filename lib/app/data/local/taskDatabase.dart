@@ -64,7 +64,8 @@ class NotasDB {
   void _onCreate(Database db, int version) async {
     await db.execute('CREATE TABLE IF NOT EXISTS $taskTable('
         'id INTEGER PRIMARY KEY, '
-        'title TEXT, site TEXT, '
+        'title TEXT, '
+        'site TEXT, '
         'notes TEXT, '
         'startTimeMilliseconds INTEGER, '
         'endTimeMilliseconds INTEGER, '
@@ -79,6 +80,9 @@ class NotasDB {
 
   // UPGRADE DATABASE TABLES
   void _onUpgrade(Database db, int oldVersion, int newVersion) {
+    print(' ------------------------------------------${oldVersion}');
+    print(' ------------------------------------------${newVersion}');
+    (newVersion);
     if (oldVersion < newVersion) {
       // you can execute drop table and create table
       db.execute("ALTER TABLE $taskTable ADD COLUMN alarmaHora TEXT;");
@@ -137,6 +141,7 @@ class NotasDB {
       'time',
       'isImportant',
       'idAlarma',
+      'alarmaHora',
       'alarmaActivadaString',
       'isAlarmaCreated'
     ]);
@@ -181,10 +186,10 @@ class NotasDB {
   //   await db.close();
   // }
 
-  // Future close() async {
-  //   final db = await instance.db;
-  //   _db = null;
-  //   return db.close();
-  // }
+  Future close() async {
+    final db = await instance.db;
+    _db = null;
+    return db.close();
+  }
 
 }

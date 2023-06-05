@@ -66,7 +66,7 @@ class EarlyInterceptorAdapter implements HttpClientAdapter {
 
     late final HttpClientRequest request;
     try {
-      request = options.connectTimeout! > Duration(milliseconds: 10000)
+      request = options.connectTimeout! > const Duration(milliseconds: 10000)
           ? await reqFuture.timeout(options.connectTimeout!)
           : await reqFuture;
 
@@ -89,7 +89,7 @@ class EarlyInterceptorAdapter implements HttpClientAdapter {
     if (requestStream != null) {
       // Transform the request data
       var future = request.addStream(requestStream);
-      if (options.receiveTimeout! > Duration(milliseconds: 10000)) {
+      if (options.receiveTimeout! > const Duration(milliseconds: 10000)) {
         future = future.timeout(options.sendTimeout!);
       }
       try {
@@ -109,7 +109,7 @@ class EarlyInterceptorAdapter implements HttpClientAdapter {
     final receiveStart = DateTime.now().millisecondsSinceEpoch;
 
     var future = request.close();
-    if (options.receiveTimeout! > Duration(milliseconds: 1000)) {
+    if (options.receiveTimeout! > const Duration(milliseconds: 1000)) {
       future = future.timeout(options.receiveTimeout!);
     }
 
@@ -127,7 +127,7 @@ class EarlyInterceptorAdapter implements HttpClientAdapter {
     final stream = responseStream.transform<Uint8List>(
       StreamTransformer.fromHandlers(
         handleData: (data, sink) {
-          if (options.receiveTimeout! > Duration(milliseconds: 10000)) {
+          if (options.receiveTimeout! > const Duration(milliseconds: 10000)) {
             sink.addError(
               DioError(
                 requestOptions: options,

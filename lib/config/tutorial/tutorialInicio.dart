@@ -143,7 +143,7 @@ class InicioListTarget {
       keyTarget: calKeys3,
       contents: [
         TargetContent(
-          padding: EdgeInsets.symmetric(horizontal: 15, vertical: 1),
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 1),
             align: ContentAlign.top,
             child: Text(
               _info5,
@@ -155,7 +155,7 @@ class InicioListTarget {
               textAlign: TextAlign.center,
             )),
         TargetContent(
-            padding: EdgeInsets.symmetric(horizontal: 15, vertical: 1),
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 1),
 
             align: ContentAlign.bottom,
             child: SingleChildScrollView(

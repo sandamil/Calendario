@@ -7,6 +7,7 @@ import 'package:calendario2/app/modules/versionAnterior/views/widgets/ShiftsBkpC
 import 'package:calendario2/app/modules/versionAnterior/views/widgets/notasBkpCard.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+// ignore: unused_import
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 

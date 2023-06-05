@@ -1,5 +1,4 @@
 
-import 'dart:io';
 
 import 'package:calendario2/app/modules/ajustes/views/pages/util/notifications/notifications.dart';
 import 'package:calendario2/config/util/app_utils.dart';
@@ -7,7 +6,6 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:mixpanel_flutter/mixpanel_flutter.dart';
 
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 // late BannerAd bannerAd;
 late Mixpanel mixPanel;

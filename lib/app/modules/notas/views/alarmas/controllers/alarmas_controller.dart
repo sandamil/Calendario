@@ -1,14 +1,10 @@
 
-import 'package:calendario2/app/components/custom_dialog.dart';
 import 'package:calendario2/app/components/custom_snackbar.dart';
 import 'package:calendario2/app/data/model/taskModel.dart';
 import 'package:calendario2/app/modules/notas/views/AddNotas/controllers/add_notas_controller.dart';
 import 'package:calendario2/app/modules/notas/views/AddNotas/views/add_notas_view.dart';
 import 'package:calendario2/app/modules/notas/views/EditNotas/controllers/edit_notas_controller.dart';
 import 'package:calendario2/app/modules/notas/views/EditNotas/views/edit_notas_view.dart';
-import 'package:calendario2/app/modules/notas/views/alarmas/views/edit_alarm.dart';
-import 'package:calendario2/config/util/constant.dart';
-import 'package:calendario2/config/util/dateUtils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
@@ -225,8 +221,6 @@ class AlarmasController extends GetxController {
         : CustomSnackBar.showCustomSnackBar(
             title: 'No has añadido Alarma',
             message: ' Vuelve a entrar si queires añadir recordatorio');
-    // await loadAlarmCreada();
-    await loadAlarmCreadaEdit();
     await updatealarmaActivadaString();
 
     editNotasController.setAlarmaCreada(noRemind.value);
@@ -244,42 +238,13 @@ class AlarmasController extends GetxController {
         : CustomSnackBar.showCustomSnackBar(
             title: 'No has añadido Alarma',
             message: ' Vuelve a entrar si queires añadir recordatorio');
-    await loadAlarmCreada();
     await updatealarmaActivadaString();
     addNotasController.setAlarmaCreada(noRemind.value);
     addNotasController.setAlarmaTime(alarmTime);
     await Get.to(() => AddNotasView());
   }
 
-  loadAlarmCreada() {
-      AddNotasController adNotasController = Get.find();
-      // AlarmSettings? alarm = Alarm.getAlarm(id);
-      // adNotasController.alarmaCreadaNota = alarm;
-  }
 
-  loadAlarmCreadaEdit() {
-    EditNotasController editNotasController = Get.find();
-    // AlarmSettings? alarm = Alarm.getAlarm(id);
-    // editNotasController.alarmaCreadaNota = alarm;
-  }
-
-  Future<void> noti() async {
-
-    print('=============== prueba ==================');
-    const AndroidNotificationDetails androidNotificationDetails =
-    AndroidNotificationDetails('your channel id', 'your channel name',
-        channelDescription: 'your channel description',
-        importance: Importance.max,
-        priority: Priority.high,
-        ticker: 'ticker');
-    const NotificationDetails notificationDetails =
-    NotificationDetails(android: androidNotificationDetails);
-    await flutterLocalNotificationsPlugin.show(
-        id++, 'plain title', 'plain body', notificationDetails,
-        payload: 'item x');
-    print('=============== prueba ==================');
-
-  }
 
 // searchIdAlarma() {
 //   AddNotasController adNotasController = Get.find();

@@ -1,5 +1,6 @@
-import 'dart:developer';
 
+import 'package:calendario2/app/data/local/calendarDatabase.dart';
+import 'package:calendario2/app/data/local/taskDatabase.dart';
 import 'package:calendario2/app/modules/ajustes/controllers/ajustes_controller.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/config/theme/my_fonts.dart';
@@ -62,6 +63,7 @@ class BackupScreen extends GetView<AjustesController> {
                     border: const BorderSide(color: Colors.black26),
                     bgColor: MyColors.botonBgColor,
                     onPressed: () async {
+                      await NotasDB.instance.close();
                       controller.backupNotasDb();
                     },
                     semanticLabel: 'Backup Notas',
@@ -82,6 +84,7 @@ class BackupScreen extends GetView<AjustesController> {
                     bgColor: MyColors.botonBgColor,
                     semanticLabel: 'Restaurar Notas',
                     onPressed: () async {
+                      await NotasDB.instance.close();
                       controller.restoreNotasDb();
                     },
                     child:  Text(
@@ -121,7 +124,10 @@ class BackupScreen extends GetView<AjustesController> {
                     bgColor: MyColors.botonBgColor,
                     semanticLabel: 'Backup Calendario',
                     onPressed: () async {
-                      controller.backupCalendarioDb();
+                      await CalendarioDB.db.closeDb();
+                      await controller.backupCalendarioDb();
+                      await CalendarioDB.db.initDb();
+
                     },
                     child:  Text(
                       'Guardar\nCalendario',
@@ -140,7 +146,10 @@ class BackupScreen extends GetView<AjustesController> {
                     bgColor: MyColors.botonBgColor,
                     semanticLabel: 'Restaurar Calendario',
                     onPressed: () async {
-                      controller.restoreCalendarioDb();
+                      await CalendarioDB.db.closeDb();
+                      await  controller.restoreCalendarioDb();
+                      await CalendarioDB.db.initDb();
+
                     },
                     child:  Text(
                       'Restaurar\nCalendario',

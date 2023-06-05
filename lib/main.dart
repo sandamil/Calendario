@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
-import 'package:mixpanel_flutter/mixpanel_flutter.dart';
 
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 import 'app/bindings/initial_bindings.dart';
 import 'app/controllers/app_controller.dart';

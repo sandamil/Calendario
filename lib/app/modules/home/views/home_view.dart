@@ -100,7 +100,6 @@ class _HomeViewState extends State<HomeView> {
 
   deleteTurnoCuadrante(id, DateTime selectedDate) async {
     CalendarioDB.db.deleteItemID(id);
-    print('selectedDate :  ${selectedDate}');
 
     await getCuadrante();
     setState(() => widget.focusedDay.value = selectedDate);

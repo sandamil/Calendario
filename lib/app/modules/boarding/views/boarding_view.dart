@@ -8,7 +8,6 @@ import 'package:get/get.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 
 import '../../../../config/theme/my_fonts.dart';
-import '../../../../config/theme/my_theme.dart';
 import '../../../../config/theme/styles.dart';
 import '../../../../config/util/constant.dart';
 import '../../../data/local/app_storage.dart';

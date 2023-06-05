@@ -11,7 +11,6 @@ import 'package:get/get.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../widgets/calendar/widget/customAlertDialogTurnoList.dart';
-import '../widgets/calendar/widget/customAlertDialogDaySelected.dart';
 
 class CalendarController extends GetxController {
   final adcontroller = Get.find<AdsController>();

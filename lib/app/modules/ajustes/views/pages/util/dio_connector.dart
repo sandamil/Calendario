@@ -23,9 +23,9 @@ class DioConnector {
   );
 
   static final dioOptions = BaseOptions(
-    connectTimeout: Duration(milliseconds: 5000),
-    receiveTimeout: Duration(milliseconds: 10000),
-    sendTimeout:Duration(milliseconds: 5000) ,
+    connectTimeout: const Duration(milliseconds: 5000),
+    receiveTimeout: const Duration(milliseconds: 10000),
+    sendTimeout:const Duration(milliseconds: 5000) ,
     headers: _headers,
     responseType: ResponseType.json,
     contentType: "application/x-www-form-urlencoded",

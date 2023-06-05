@@ -127,7 +127,7 @@ class CalendarioDB {
           item.dateTime?.toIso8601String().substring(0, 10),
           item.cuadranteName
         ]);
-    int res = await dbClient!.insert("Cuadrante", item.toMap(),
+    int res = await dbClient.insert("Cuadrante", item.toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace);
     return res;
   }

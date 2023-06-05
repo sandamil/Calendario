@@ -102,7 +102,7 @@ class AjustesView extends GetView<AjustesController> {
                 }),
 
                 SettingTile(
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.backup,
                     size: 20.0,
                   ),
@@ -160,7 +160,7 @@ class AjustesView extends GetView<AjustesController> {
                 ),
 ///==============================Proximamente
 
-                SettingTitleTile("Proximamente..."),
+                const SettingTitleTile("Proximamente..."),
                 SettingTile(
                     icon: const ImageIcon(AssetImage(MyIcon.languageIcon)),
                     btnText: 'Idioma'.tr,

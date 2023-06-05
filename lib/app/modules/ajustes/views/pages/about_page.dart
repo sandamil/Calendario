@@ -1,17 +1,12 @@
-import 'dart:io';
 
 import 'package:calendario2/app/components/toast.dart';
-import 'package:calendario2/app/modules/ajustes/views/pages/privacy_policy_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 import '../../../../../config/theme/my_fonts.dart';
 import '../../../../../config/util/app_utils.dart';
 import '../../../../../config/util/list_view_animator.dart';
-import '../../../../controllers/app_controller.dart';
 import '../../../../routes/app_pages.dart';
-import 'dev_page.dart';
 
 enum OnListViewPress { appUpdate, contribution, privacyPolicy, version, dev }
 

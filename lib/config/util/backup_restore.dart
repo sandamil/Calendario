@@ -1,7 +1,5 @@
 
 import 'dart:io';
-import 'dart:convert';
-import 'package:calendario2/app/components/toast.dart';
 import 'package:calendario2/app/modules/ajustes/controllers/ajustes_controller.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
@@ -11,8 +9,6 @@ import 'package:intl/intl.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-import '../../app/components/custom_snackbar.dart';
-import '../../app/data/local/taskDatabase.dart';
 
 final ajustesController = Get.find<AjustesController>();
 

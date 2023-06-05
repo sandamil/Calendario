@@ -92,11 +92,11 @@ class ButtonRowView extends StatelessWidget {
                                   fontWeight: FontWeight.w500),
                               border: InputBorder.none,
                             ).copyWith(
-                              focusedBorder: OutlineInputBorder(borderSide: BorderSide(
+                              focusedBorder: const OutlineInputBorder(borderSide: BorderSide(
                                     style: BorderStyle.solid,
                                     color: Colors.transparent
                                 ),),
-                              enabledBorder: OutlineInputBorder(
+                              enabledBorder: const OutlineInputBorder(
 
                                   borderSide: BorderSide(width: 2.0, color: Colors.transparent)),
                               border: const OutlineInputBorder(

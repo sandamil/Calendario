@@ -1,19 +1,7 @@
 
-import 'package:calendario2/app/data/model/taskModel.dart';
-import 'package:calendario2/app/modules/home/controllers/calendar_controller.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
-import 'package:calendario2/config/util/dateUtils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:get/get.dart';
 
-import '../../../../../../config/util/hexColor.dart';
-import '../../../../../components/custom_dialog.dart';
-import '../../../../../data/local/calendarDatabase.dart';
-import '../../../../../data/model/cuadranteDay.dart';
-import '../../../views/home_view.dart';
-import 'day_selected_turno_widget.dart';
 //
 // class DialogLongPress extends StatelessWidget {
 //   CalendarController calendarController = CalendarController();

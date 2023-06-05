@@ -208,13 +208,6 @@ class AlarmasView extends GetView<AlarmasController> {
                                   onChanged: controller.masOpcionesAlarma.value
                                       ? null
                                       : (value) {
-                                    print(controller.duracion);
-                                    print(controller.startTime);
-                                    print(controller.alarmTime);
-                                    print(controller.title);
-                                    print(controller.notes);
-
-
                                     controller.alPrincipio(false);
                                           controller.minutos30(false);
                                           controller.horas1(false);

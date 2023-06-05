@@ -53,7 +53,7 @@ class DevPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
-          title: Text('Developer Mode'),
+          title: const Text('Developer Mode'),
         ),
         body: ListView.separated(
           itemCount: listViewData.length,
