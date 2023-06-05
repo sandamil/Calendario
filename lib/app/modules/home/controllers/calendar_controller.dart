@@ -14,7 +14,7 @@ import '../widgets/calendar/widget/customAlertDialogTurnoList.dart';
 import '../widgets/calendar/widget/customAlertDialogDaySelected.dart';
 
 class CalendarController extends GetxController {
-  // final adcontroller = Get.find<AdsController>();
+  final adcontroller = Get.find<AdsController>();
 
   // final Rx<CalendarFormat> _calendarFormat = CalendarFormat.month.obs;
 
@@ -23,9 +23,11 @@ class CalendarController extends GetxController {
 
   // Rx<CalendarFormat> get calendarFormat => _calendarFormat;
 
-
+  ///============================
+//============================= Todo Rendimiento de app con obs =============================
+//
   final focusDayRx = DateTime.now().obs;
-  // final selectedDayRx = DateTime.now().toLocal().obs;
+  final selectedDayRx = DateTime.now().toLocal().obs;
 //   // Rx<DateTime> get selectedDay => _selectedDay;
 //   Rx<DateTime> selectedDay = DateTime.now().obs;
 //   // DateTime _selectedDay = DateTime.now();
@@ -39,13 +41,13 @@ class CalendarController extends GetxController {
 // //   var focusedDay = DateTime.now();
 
   final selectedDayTurnos = <CuadranteDay>[].obs;
-  // List<Task> selectedDayNotas = <Task>[];
+  List<Task> selectedDayNotas = <Task>[];
   // get selectedEvents => _selectedEvents;
 
   RxMap<DateTime, List<CuadranteDay>> cuadranteMap =
       <DateTime, List<CuadranteDay>>{}.obs;
 
-  // RxMap<DateTime, List<Task>> notasMap = <DateTime, List<Task>>{}.obs;
+  RxMap<DateTime, List<Task>> notasMap = <DateTime, List<Task>>{}.obs;
 
   RxList<CuadranteDay> cuadrante = <CuadranteDay>[].obs;
 
@@ -168,17 +170,17 @@ class CalendarController extends GetxController {
     return turno;
   }
 
-  // showPopUp(context, selectedDate, turno) {
-  //   return showDialog(
-  //     context: context,
-  //     builder: (context) {
-  //       // adcontroller.staticHomeAd.dispose();
-  //
-  //       return CustomAlertDialogTurnoList(
-  //           selectedDate: selectedDate, turno: turno);
-  //     },
-  //   );
-  // }
+  showPopUp(context, selectedDate, turno) {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        // adcontroller.staticHomeAd.dispose();
+
+        return CustomAlertDialogTurnoList(
+            selectedDate: selectedDate, turno: turno);
+      },
+    );
+  }
 
 ///////////////     Notas
   /// ==

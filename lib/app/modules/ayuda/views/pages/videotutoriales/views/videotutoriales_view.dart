@@ -40,6 +40,8 @@ class VideotutorialesView extends GetView<VideotutorialesController> {
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Card(
+              color: MyColors.menuCardBackgroundDark,
+
               child: VideotutorialesViewGroup(
                 title: "Version Anterior",
                 children: [
@@ -54,6 +56,8 @@ class VideotutorialesView extends GetView<VideotutorialesController> {
               ),
             ),
             Card(
+              color: MyColors.menuCardBackgroundDark,
+
               child: VideotutorialesViewGroup(
                 title: "Pantalla principal",
                 children: [
@@ -69,6 +73,8 @@ class VideotutorialesView extends GetView<VideotutorialesController> {
               ),
             ),
             Card(
+              color: MyColors.menuCardBackgroundDark,
+
               child: VideotutorialesViewGroup(
                 title: "Cuadrantes",
                 children: [
@@ -97,6 +103,8 @@ class VideotutorialesView extends GetView<VideotutorialesController> {
               ),
             ),
             Card(
+              color: MyColors.menuCardBackgroundDark,
+
               child: VideotutorialesViewGroup(
                 title: "Copia de Seguridad",
                 children: [
@@ -111,6 +119,8 @@ class VideotutorialesView extends GetView<VideotutorialesController> {
               ),
             ),
             Card(
+              color: MyColors.menuCardBackgroundDark,
+
               child: VideotutorialesViewGroup(
                 title: "Turnos",
                 children: [
@@ -126,6 +136,8 @@ class VideotutorialesView extends GetView<VideotutorialesController> {
               ),
             ),
             Card(
+              color: MyColors.menuCardBackgroundDark,
+
               child: VideotutorialesViewGroup(
                 title: "Notas",
                 children: [

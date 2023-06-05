@@ -86,7 +86,9 @@ class NotasListView extends GetView<NotasListController> {
             icon: const Icon(Icons.add),
           ),
           // bottomNavigationBar: Platform.isAndroid
-          //     ? adcontroller.staticAdNotesListLoaded.value
+          //     ?
+          //
+          // adcontroller.staticAdNotesListLoaded.value
           //     ? Container(
           //         color: Colors.transparent,
           //         width: adcontroller.staticNotesListAd.size.width.toDouble(),

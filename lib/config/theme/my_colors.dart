@@ -8,7 +8,11 @@ class MyColors {
 
   static Color get menuCardBackground => MyTheme().getThemeIsLight
       ? const Color(0xfff5f3f1)
-      : const Color(0xff444444);
+      : const Color(0xff3a3a3a);
+
+  static Color get menuCardBackgroundDark => MyTheme().getThemeIsLight
+      ? const Color(0xfffaf4f2)
+      : const Color(0xe0211d18);
 
   static Color get disableBgColorBtn => MyTheme().getThemeIsLight
       ? const Color(0xFFEBEAEF)

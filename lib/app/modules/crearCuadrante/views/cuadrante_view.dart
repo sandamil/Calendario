@@ -187,12 +187,14 @@ class CrearCuadranteView extends GetView<CrearCuadranteController> {
                                 return Padding(
                                   padding: EdgeInsets.symmetric(horizontal: 8.h),
                                   child: Card(
+                                    color: MyColors.menuCardBackgroundDark,
+elevation: 1,
                                     child: Row(
                                       children: [
                                         SizedBox(width: 10.w),
                                         Text(
                                           name,
-                                          style: CustomTextStyle.rowButomText,
+                                          style: TextStyle(color: MyColors.textColor, fontSize: 18.sp, ),
                                         ),
                                         Spacer(),
                                         IconButton(

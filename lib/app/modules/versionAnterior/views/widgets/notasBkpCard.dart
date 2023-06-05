@@ -5,6 +5,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:flutter/material.dart';
 
+import '../../../../../config/theme/my_colors.dart';
+
 
 List<Color> colorList = [
   Colors.blue,
@@ -35,6 +37,8 @@ class NotasBkpCard extends StatelessWidget {
     colorList.elementAt(Random().nextInt(colorList.length));
 
     return Card(
+      color: MyColors.menuCardBackgroundDark,
+
       // padding: EdgeInsets.only(left: 4.w, right: 4.w),
       // decoration: BoxDecoration(
       //

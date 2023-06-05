@@ -1,23 +1,19 @@
-<<<<<<< HEAD
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ajat.calendario.turnos">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
-=======
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
->>>>>>> a39d4f8 (Fix after performance check)
 
     <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
     <uses-permission android:name="android.permission.READ_MEDIA_VIDEO"/>
 
-
-    <!--    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"/>-->
+<!--    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"/>-->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
+
         android:requestLegacyExternalStorage="true"
         android:label="calendario"
         android:name="${applicationName}"
@@ -39,8 +35,8 @@
               android:resource="@style/NormalTheme"
               />
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <!-- Don't delete the meta-data below.
@@ -48,6 +44,22 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        <service
+            android:name="dev.fluttercommunity.plus.androidalarmmanager.AlarmService"
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            android:exported="false" />
+
+        <receiver
+            android:name="dev.fluttercommunity.plus.androidalarmmanager.AlarmBroadcastReceiver"
+            android:exported="false" />
+        <receiver
+            android:name="dev.fluttercommunity.plus.androidalarmmanager.RebootBroadcastReceiver"
+            android:enabled="false"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
@@ -55,3 +67,4 @@
 
     </application>
 </manifest>
+

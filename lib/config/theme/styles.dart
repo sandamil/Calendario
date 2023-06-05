@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 
-import 'my_fonts.dart';
-
 // enum TextFieldState { focus, error, disabled, none }
 //
 // enum InputStyle { box, line, outline }
@@ -103,6 +101,15 @@ class Shadows {
 }
 
 final PageDecoration pageDecoration = PageDecoration(
+    imageFlex: 2,
+    footerFlex: 0,
+    titleTextStyle: TextStyle(fontSize: 30.sp, fontWeight: FontWeight.w700,),
+    bodyTextStyle: TextStyle(
+      fontWeight: FontWeight.w400,
+      fontSize: 18.w,
+    ),
+    // pageColor: Colors.white,
+
   // titleTextStyle: CustomTextStyle.titleLarge,
   titlePadding:  EdgeInsets.only(top: 36.h, bottom: 24.h),
   // bodyTextStyle: CustomTextStyle.textLarge,

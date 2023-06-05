@@ -1,10 +1,10 @@
-import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../app/data/local/my_shared_pref.dart';
 import 'dark_theme_colors.dart';
 import 'light_theme_colors.dart';
+import 'my_colors.dart';
 import 'my_styles.dart';
 
 class MyTheme {

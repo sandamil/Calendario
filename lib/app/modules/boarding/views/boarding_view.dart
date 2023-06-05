@@ -127,8 +127,8 @@ class BoardingView extends GetView<BoardingController> {
     ),
     PageViewModel(
       decoration: PageDecoration(
-  imageFlex: 2,
-  footerFlex: 0,
+        imageFlex: 2,
+        footerFlex: 0,
         titleTextStyle: TextStyle(fontSize: 25.sp),
         titlePadding: EdgeInsets.only(top: 16.h, bottom: 14.h),
         bodyTextStyle: TextStyle(
@@ -141,9 +141,16 @@ class BoardingView extends GetView<BoardingController> {
       title: "Configuracion",
       body:
           "Antes de empezar vamos a elegir el tema de la aplicacion, prefieres oscuro, o claro.",
-      image: Image.asset(
-        'assets/other/Notas.gif',
+      image: Obx(
+        () => sx.on.value
+            ? Image.asset(
+                'assets/other/oscuro.png',
+              )
+            : Image.asset(
+                'assets/other/claro.png',
+              ),
       ),
+
       footer: Column(
         children: [
           ListTile(

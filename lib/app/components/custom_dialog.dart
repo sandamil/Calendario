@@ -298,6 +298,7 @@ class MyCustomDialog {
 
         builder: (BuildContext context) {
           return AlertDialog(
+            backgroundColor: MyColors.menuCardBackground,
             shape: RoundedRectangleBorder(borderRadius: Corners.smBorder),
             elevation: 5,
             title: Text.rich(

@@ -294,6 +294,7 @@ class MyStyles {
         //     : DarkThemeColors.bodyTextColor,),
 
         inputDecorationTheme: InputDecorationTheme(
+
           errorStyle: const TextStyle(color: Colors.blue),
           prefixIconColor: isLightTheme
               ? LightThemeColors.darkTextColor
@@ -363,19 +364,24 @@ class MyStyles {
 
   static InputDecorationTheme getInputDecorationTheme(
           {required bool isLightTheme}) =>
-      const InputDecorationTheme(
-        labelStyle: TextStyle(color: Colors.orange),
+       InputDecorationTheme(
+          fillColor:  isLightTheme
+              ? LightThemeColors.backgroundColor
+              : DarkThemeColors
+              .backgroundColor,
+
+          labelStyle: const TextStyle(color: Colors.orange),
         // focusedErrorBorder: UnderlineInputBorder(
         //     borderSide: BorderSide(width: 0.7, color: errorColor)),
-        focusedBorder: OutlineInputBorder(
+        focusedBorder: const OutlineInputBorder(
             borderSide: BorderSide(
                 style: BorderStyle.solid,
                 color: Colors.orange
             ),
           ),
-        enabledBorder: OutlineInputBorder(
+        enabledBorder: const OutlineInputBorder(
             borderSide: BorderSide(width: 2.0, color: Colors.orange)),
-        border: OutlineInputBorder(
+        border: const OutlineInputBorder(
             borderSide: BorderSide(width: 2.0, color: Colors.orange)),
         // disabledBorder: UnderlineInputBorder(
         //     borderSide: BorderSide(width: 2.0, color: disabledColor)),

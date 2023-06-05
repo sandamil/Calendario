@@ -136,43 +136,41 @@ class AdsController extends GetxController {
 
 
 
+  void loadAd() async {
+    // Get an AnchoredAdaptiveBannerAdSize before loading the ad.
+    final size = await AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(
+        Get.size.width.truncate());
 
+    if (size == null) {
+      // Unable to get width of anchored banner.
+      return;
+    }
 
-  // void loadAd() async {
-  //   // Get an AnchoredAdaptiveBannerAdSize before loading the ad.
-  //   final size = await AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(
-  //       Get.size.width.truncate());
-  //
-  //   if (size == null) {
-  //     // Unable to get width of anchored banner.
-  //     return;
-  //   }
-  //
-  //   BannerAd(
-  //     adUnitId: _adHomeId,
-  //     request: const AdRequest(),
-  //     size: size,
-  //     listener: BannerAdListener(
-  //       // Called when an ad is successfully received.
-  //       onAdLoaded: (ad) {
-  //
-  //           bannerAd = ad as BannerAd;
-  //           isLoaded = true;
-  //         update();
-  //       },
-  //       // Called when an ad request failed.
-  //       onAdFailedToLoad: (ad, err) {
-  //         ad.dispose();
-  //       },
-  //       // Called when an ad opens an overlay that covers the screen.
-  //       onAdOpened: (Ad ad) {},
-  //       // Called when an ad removes an overlay that covers the screen.
-  //       onAdClosed: (Ad ad) {},
-  //       // Called when an impression occurs on the ad.
-  //       onAdImpression: (Ad ad) {},
-  //     ),
-  //   ).load();
-  // }
+    BannerAd(
+      adUnitId: _adHomeId,
+      request: const AdRequest(),
+      size: size,
+      listener: BannerAdListener(
+        // Called when an ad is successfully received.
+        onAdLoaded: (ad) {
+
+            bannerAd = ad as BannerAd;
+            isLoaded = true;
+          update();
+        },
+        // Called when an ad request failed.
+        onAdFailedToLoad: (ad, err) {
+          ad.dispose();
+        },
+        // Called when an ad opens an overlay that covers the screen.
+        onAdOpened: (Ad ad) {},
+        // Called when an ad removes an overlay that covers the screen.
+        onAdClosed: (Ad ad) {},
+        // Called when an impression occurs on the ad.
+        onAdImpression: (Ad ad) {},
+      ),
+    ).load();
+  }
 
   @override
   void dispose() {

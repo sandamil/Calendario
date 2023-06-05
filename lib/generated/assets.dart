@@ -26,11 +26,12 @@ class Assets {
   static const String imagesNotas = 'assets/images/notas.png';
   static const String imagesTurnos = 'assets/images/turnos.png';
   static const String logosLogoApp = 'assets/logos/logo_app.png';
+  static const String otherClaro = 'assets/other/claro.png';
   static const String otherCuadrantes = 'assets/other/Cuadrantes.gif';
   static const String otherNotas = 'assets/other/Notas.gif';
+  static const String otherOscuro = 'assets/other/oscuro.png';
   static const String otherTurnos = 'assets/other/turnos.gif';
   static const String otherVacio = 'assets/other/vacio.png';
-  static const String otherVersionAnterior = 'assets/other/versionAnterior.png';
   static const String tutorialNotas1 = 'assets/images/tutorial/Notas1.png';
 
 }

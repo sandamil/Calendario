@@ -34,9 +34,9 @@ class BackupScreen extends GetView<AjustesController> {
                   'recuerda que es irreversible, puedes hacer todos los backup que quieras, pero si restauras los datos, los datos que tienes guardados en el calendario, o las notas, se cambiaran por las que tengas guardados en el backup, y no podras recuperar los anteriores.',
               textAlign: TextAlign.center,
               style: TextStyle(
-                  // color: Colors.black,
-                  fontSize: 16.sp,
-                  ),
+                // color: Colors.black,
+                fontSize: 16.sp,
+              ),
             ),
           ),
           SizedBox(height: 20.h,),
@@ -47,7 +47,7 @@ class BackupScreen extends GetView<AjustesController> {
                 child: const Text(
                   'Quieres hacer backup de Notas guardadas?',
                   style: TextStyle(
-                      // color: Colors.black,
+                    // color: Colors.black,
                       fontSize: 18,
                       fontWeight: FontWeight.bold),
                 ),
@@ -65,11 +65,11 @@ class BackupScreen extends GetView<AjustesController> {
                       controller.backupNotasDb();
                     },
                     semanticLabel: 'Backup Notas',
-                    child: const Text(
+                    child:  Text(
                       'Guardar\nNotas',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                          // color: Colors.black,
+                        color: MyColors.textColor,
                           fontSize: 16,
                           fontWeight: FontWeight.bold),
                     ),
@@ -84,11 +84,11 @@ class BackupScreen extends GetView<AjustesController> {
                     onPressed: () async {
                       controller.restoreNotasDb();
                     },
-                    child: const Text(
+                    child:  Text(
                       'Restaurar\nNotas',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                          // color: Colors.black,
+                          color: MyColors.textColor,
                           fontSize: 16,
                           fontWeight: FontWeight.bold),
                     ),
@@ -105,7 +105,7 @@ class BackupScreen extends GetView<AjustesController> {
                 child: const Text(
                   'Quieres hacer backup del Calendario?',
                   style: TextStyle(
-                      // color: Colors.black,
+                    // color: Colors.black,
                       fontSize: 18,
                       fontWeight: FontWeight.bold),
                 ),
@@ -123,11 +123,11 @@ class BackupScreen extends GetView<AjustesController> {
                     onPressed: () async {
                       controller.backupCalendarioDb();
                     },
-                    child: const Text(
+                    child:  Text(
                       'Guardar\nCalendario',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                          // color: Colors.black,
+                          color: MyColors.textColor,
                           fontSize: 16,
                           fontWeight: FontWeight.bold),
                     ),
@@ -142,11 +142,11 @@ class BackupScreen extends GetView<AjustesController> {
                     onPressed: () async {
                       controller.restoreCalendarioDb();
                     },
-                    child: const Text(
+                    child:  Text(
                       'Restaurar\nCalendario',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                          // color: Colors.black,
+                          color: MyColors.textColor,
                           fontSize: 16,
                           fontWeight: FontWeight.bold),
                     ),
