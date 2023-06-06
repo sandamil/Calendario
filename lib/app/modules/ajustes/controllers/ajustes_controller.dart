@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:calendario2/app/components/custom_snackbar.dart';
 import 'package:calendario2/app/data/local/calendarDatabase.dart';
@@ -11,12 +13,15 @@ import 'package:calendario2/config/translations/localization_service.dart';
 import 'package:calendario2/config/util/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_file_dialog/flutter_file_dialog.dart';
 import 'package:get/get.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:rive/rive.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../config/util/backup_restore.dart';
 import '../../../data/local/taskDatabase.dart';
+import '../../../data/model/taskModel.dart';
 import '../views/pages/backup_screen.dart';
 import '../views/pages/util/dio_connector.dart';
 
@@ -187,19 +192,6 @@ class AjustesController extends GetxController {
 
 
 
-  void editarAlarmas() {
-    // Get.to(AlarmSettingsScreen());
-  }
-
-
-
-
-  loadAlarms() async {
-    // alarms.value = Alarm.getAlarms();
-    // alarms.sort((a, b) => a.dateTime.isBefore(b.dateTime) ? 0 : 1);
-    // searchIdAlarma();
-    update();
-  }
 
   Future<String> getDataByGet(ConnectorParameter parameter) async {
     try {
@@ -213,63 +205,161 @@ class AjustesController extends GetxController {
 
   ///=============Backup==============
   ///
+  ///
+
+  Future<bool> isPickDirectorySupported =
+  FlutterFileDialog.isPickDirectorySupported();
+  DirectoryLocation? _pickedDirecotry;
+  bool _isBusy = false;
+  OpenFileDialogType _dialogType = OpenFileDialogType.image;
+  // SourceType _sourceType = SourceType.photoLibrary;
+  bool _allowEditing = false;
+  File? _currentFile;
+  String? _savedFilePath;
+  bool _localOnly = false;
+  bool _copyFileToCacheDir = true;
+  String? _pickedFilePath;
+
+
+  Future<void> pickDirectory() async {
+    _pickedDirecotry = (await FlutterFileDialog.pickDirectory());
+    update();
+  }
+
+  Future<void> saveFileToDirectory(currentFile, dbName) async {
+    try {
+      String ext = currentFile!.path.split('.').last;
+      if (ext == 'jpg') ext = 'jpeg';
+      final fileData = currentFile!.readAsBytesSync();
+      final mimeType = 'image/$ext';
+      final newFileName = '$dbName.$ext';
+      FlutterFileDialog.saveFileToDirectory(
+        directory: _pickedDirecotry!,
+        data: fileData,
+        mimeType: mimeType,
+        fileName: newFileName,
+        replace: false,
+        onFileExists: () async {
+          await showDialog<void>(
+            context: Get.context!,
+            builder: (BuildContext context) {
+              return SimpleDialog(
+                title: const Text('Ya existe un archivo con ese nombre'),
+                children: <Widget>[
+                  SimpleDialogOption(
+                    child: const Text('Cancelar'),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                  SimpleDialogOption(
+                    child: const Text('Reemplaza'),
+                    onPressed: () {
+                      Navigator.pop(context);
+                      FlutterFileDialog.saveFileToDirectory(
+                        directory: _pickedDirecotry!,
+                        data: fileData,
+                        mimeType: mimeType,
+                        fileName: newFileName,
+                        replace: true,
+                      );
+                    },
+                  ),
+                ],
+              );
+            },
+          );
+        },
+      );
+    }
+    on Exception catch (e) {
+      CustomSnackBar.showCustomErrorSnackBar(title: 'Backup Error', message: 'Error: $e',duration: const Duration(seconds: 6));
+      return;
+    } catch (e) {
+      CustomSnackBar.showCustomErrorSnackBar(title: 'Backup Error', message: 'Error: $e',duration: const Duration(seconds: 6));
+    }
+    CustomSnackBar.showCustomSnackBar(title: 'Backup realizado', message: 'Lo puedes ver o guardar desde tu carpeta elegida');
 
 
 
-  late bool errorBackup;
+  }
+
+  Future<void> restoreDB(databaseRepository) async {
+    try {
+      String? result;
+      try {
+        _isBusy = true;
+        _currentFile = null;
+        update();
+        final params = OpenFileDialogParams(
+          dialogType: _dialogType,
+          // sourceType: _sourceType,
+          allowEditing: _allowEditing,
+          localOnly: _localOnly,
+          copyFileToCacheDir: _copyFileToCacheDir,
+        );
+        result = await FlutterFileDialog.pickFile(params: params);
+        print(result);
+      } on PlatformException catch (e) {
+        print(e);
+      } finally {
+        _pickedFilePath = result;
+        if (result != null) {
+          _currentFile = File(result);
+          final String db = await databaseRepository.databasePath();
+          await _currentFile?.copy(db);
+        } else {
+          _currentFile = null;
+        }
+        _isBusy = false;
+        update();
+      }
+    } on Exception catch (e) {
+      CustomSnackBar.showCustomErrorSnackBar(title: 'Error en restauación de datos.', message: 'Error: $e',duration: const Duration(seconds: 6));
+      return;
+    } catch (e) {
+      CustomSnackBar.showCustomErrorSnackBar(title: 'Error en restauación de datos.', message: 'Error: $e',duration: const Duration(seconds: 6));
+    }
+    CustomSnackBar.showCustomSnackBar(title: 'Datos restaurados', message: 'Puedes volver a la página de calendario, tus datos han sido restaurados con éxito.');
+
+  }
+
 
 
   void backupNotasDb() async {
-    NotasDB databaseRepository = NotasDB();
-    try {
-      await backupDb(databaseRepository);
-    } on Exception catch (e) {
-      CustomSnackBar.showCustomErrorSnackBar(title: 'Backup Error', message: 'Error: $e',duration: const Duration(seconds: 6));
-      return;
-    } catch (e) {
+    if (_pickedDirecotry == null ) {
       return;
     }
-     CustomSnackBar.showCustomSnackBar(title: 'Backup realizado', message: 'Lo puedes ver o guardar desde tu carpeta Descargas o Download ');
-  }
+    NotasDB databaseRepository = NotasDB();
+    String? dbName = databaseRepository.databaseName;
+    final String db = await databaseRepository.databasePath();
+    final File file = File(db);
+    saveFileToDirectory(file, dbName);
+   }
+
+
+
+
 
   void restoreNotasDb() async {
     NotasDB databaseRepository = NotasDB();
-    try {
-      await restaurarDb(databaseRepository);
-    } on Exception catch (e) {
-      CustomSnackBar.showCustomErrorSnackBar(title: 'Error en restauación de datos.', message: 'Error: $e',duration: const Duration(seconds: 6));
-      return;
-    } catch (e) {
-      return;
-    }
-    CustomSnackBar.showCustomSnackBar(title: 'Datos restaurados', message: 'Puedes volver a la página de calendario, tus datos han sido restaurados con éxito.');
+    await restoreDB(databaseRepository);
   }
 
   Future backupCalendarioDb() async {
-    CalendarioDB databaseRepository = CalendarioDB();
-    try {
-      await backupDb(databaseRepository);
-    } on Exception catch (e) {
-      CustomSnackBar.showCustomErrorSnackBar(title: 'Backup Error', message: 'Error: $e',duration: const Duration(seconds: 6));
-      return;
-    } catch (e) {
+    if (_pickedDirecotry == null ) {
       return;
     }
-    CustomSnackBar.showCustomSnackBar(title: 'Backup realizado', message: 'Lo puedes ver o guardar desde tu carpeta Descargas o Download ');
-  }
+    CalendarioDB databaseRepository = CalendarioDB();
+    String? dbName = databaseRepository.databaseName;
+    final String db = await databaseRepository.databasePath();
+    final File file = File(db);
+    saveFileToDirectory(file, dbName);
+     }
 
   Future restoreCalendarioDb() async {
     CalendarioDB databaseRepository = CalendarioDB();
-    try {
-      await restaurarDb(databaseRepository);
-    } on Exception catch (e) {
-      CustomSnackBar.showCustomErrorSnackBar(title: 'Error en restauación de datos.', message: 'Error: $e',duration: const Duration(seconds: 6));
-      return;
-    } catch (e) {
-      return;
+    await restoreDB(databaseRepository);
+
     }
-    CustomSnackBar.showCustomSnackBar(title: 'Datos restaurados', message: 'Puedes volver a la página de calendario, tus datos han sido restaurados con éxito.');
-  }
 
 
 }

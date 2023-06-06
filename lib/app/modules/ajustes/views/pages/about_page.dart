@@ -56,7 +56,7 @@ class _AboutPageState extends State<AboutPage> {
         "onPress": OnListViewPress.version
       }
     ]);
-    _addDevListItem();
+    // _addDevListItem();
   }
 
   void _addDevListItem() {

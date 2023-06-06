@@ -7,9 +7,9 @@ import 'package:sqflite/sqflite.dart';
 import '../model/taskModel.dart';
 
 class NotasDB {
-  static final NotasDB instance = NotasDB._internal();
+  static final NotasDB instance = NotasDB._();
   factory NotasDB() => instance;
-  NotasDB._internal();
+  NotasDB._();
 
   static Database? _db;
   final String databaseName = 'notas_database.db';
@@ -88,6 +88,8 @@ class NotasDB {
       db.execute("ALTER TABLE $taskTable ADD COLUMN alarmaHora TEXT;");
     }
   }
+
+
 
   Future<int> insertNotas(Task notas) async {
     var dbClient = await db;

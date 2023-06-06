@@ -3,7 +3,7 @@ description: Calendario 2.0.
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 2.1.01+41
+version: 2.1.1+41
 
 environment:
   sdk: '>=2.19.3 <3.0.0'
@@ -61,8 +61,10 @@ dependencies:
   flutter_markdown: ^0.6.14
   package_info_plus: ^3.0.0
   device_info_plus: ^8.0.2
+  flutter_file_dialog: ^3.0.1
 
-# TODO PENDIENTE DE BUSCAR OTRA OPCION ESTABLE
+
+  # TODO PENDIENTE DE BUSCAR OTRA OPCION ESTABLE
   modal_bottom_sheet:
     git:
       url: https://github.com/bayysp/modal_bottom_sheet.git
@@ -88,10 +90,6 @@ dependencies:
   firebase_messaging: ^14.6.1
   cloud_firestore: ^4.7.1
   firebase_auth: ^4.6.1
-
-
-
-
 
 
 
@@ -136,4 +134,5 @@ flutter:
     - assets/animaciones/
     - assets/logos/
     - assets/other/
+
 

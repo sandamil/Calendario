@@ -67,10 +67,10 @@ android {
 
     signingConfigs {
         release {
-            keyAlias keystoreProperties['keyAlias']
-            keyPassword keystoreProperties['keyPassword']
-            storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
-            storePassword keystoreProperties['storePassword']
+            keyAlias 'ajatsoft'
+            keyPassword 'ainara2016'
+            storeFile(file("/Users/imac/Documents/androidkey.jks"))
+            storePassword 'ainara2016'
         }
     }
     buildTypes {
@@ -89,8 +89,8 @@ dependencies {
     implementation 'com.google.android.gms:play-services-ads:22.1.0'
     implementation 'com.android.support:multidex:1.0.3'
 
-    implementation platform('com.google.firebase:firebase-bom:32.1.0')
-    implementation 'com.google.firebase:firebase-analytics-ktx'
-    implementation 'com.google.firebase:firebase-crashlytics-ktx:18.3.7'
+//    implementation platform('com.google.firebase:firebase-bom:32.1.0')
+//    implementation 'com.google.firebase:firebase-analytics-ktx'
+//    implementation 'com.google.firebase:firebase-crashlytics-ktx:18.3.7'
 }
 

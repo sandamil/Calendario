@@ -28,10 +28,10 @@ Future<void> main() async {
   // GetStorage.init();
   Get.put(AppController());
 
-   Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-  Log.init();
+  //  Firebase.initializeApp(
+  //   options: DefaultFirebaseOptions.currentPlatform,
+  // );
+  // Log.init();
 
   MobileAds.instance.initialize();
 

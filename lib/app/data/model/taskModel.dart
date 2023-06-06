@@ -27,6 +27,9 @@ class Task {
       this.isAlarmaCreated
       });
 
+
+
+
   Map<String, Object?> toMap() {
     return {
       'id': id,
@@ -57,6 +60,38 @@ class Task {
     alarmaHora = map['alarmaHora'];
     alarmaActivadaString = map['alarmaActivadaString'];
     isAlarmaCreated = map['isAlarmaCreated'] == 1 ? true : false;
+  }
+
+  Task.fromJson(Map<String, dynamic> json)
+      :id = json['id'],
+  title = json['title'],
+  site = json['site'],
+  notes = json['notes'],
+  startTimeMilliseconds = json['startTimeMilliseconds'],
+  endTimeMilliseconds = json['endTimeMilliseconds'],
+  // this.time = map['time'];
+  isImportant = json['isImportant'] == 1 ? true : false,
+  idAlarma = json['idAlarma'] ?? '',
+  alarmaHora = json['alarmaHora'],
+  alarmaActivadaString = json['alarmaActivadaString'],
+  isAlarmaCreated = json['isAlarmaCreated'] == 1 ? true : false;
+
+  Map<String, dynamic> toJson() {
+    return {
+
+      'id' : id,
+      'title' : title,
+      'notes' : notes,
+      'site' : site,
+      'startTimeMilliseconds' : startTimeMilliseconds,
+      'endTimeMilliseconds' : endTimeMilliseconds,
+      'isImportant' : isImportant,
+      'idAlarma' : idAlarma,
+      'alarmaHora' : alarmaHora,
+      'alarmaActivadaString' : alarmaActivadaString,
+      'isAlarmaCreated' : isAlarmaCreated,
+
+    };
   }
 
   @override
