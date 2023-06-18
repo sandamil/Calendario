@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
-
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
@@ -15,14 +14,11 @@ import 'config/theme/my_theme.dart';
 import 'config/translations/localization_service.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
-import 'debug/log/log.dart';
-
-import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
-
+//
+// import 'package:firebase_core/firebase_core.dart';
+// import 'firebase_options.dart';
 
 Future<void> main() async {
-
   WidgetsFlutterBinding.ensureInitialized();
   // MySharedPref.init();
   // GetStorage.init();
@@ -44,9 +40,6 @@ Future<void> main() async {
   );
 }
 
-
-
-
 Future<void> initMemory() async {
   await MySharedPref.init();
   await GetStorage.init();
@@ -61,7 +54,6 @@ Future<void> initMemory() async {
 }
 
 buildApp() {
-
   return ScreenUtilInit(
     designSize: const Size(375, 812),
     minTextAdapt: true,

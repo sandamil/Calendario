@@ -17,8 +17,6 @@ import '../../notas/views/alarmas/controllers/alarmas_controller.dart';
 import '../controllers/ajustes_controller.dart';
 import '../../../../widgets/setting_title.dart';
 
-
-
 class AjustesView extends GetView<AjustesController> {
   AlarmasController alarmasController = AlarmasController();
 
@@ -97,8 +95,6 @@ class AjustesView extends GetView<AjustesController> {
                       //   },
                       // ),
                       );
-
-
                 }),
 
                 SettingTile(
@@ -158,9 +154,29 @@ class AjustesView extends GetView<AjustesController> {
                   indent: 15.w,
                   endIndent: 15.w,
                 ),
-///==============================Proximamente
+
+                ///==============================Proximamente
 
                 const SettingTitleTile("Proximamente..."),
+
+                ///Todo inapp reviev  https://pub.dev/packages/in_app_review
+                SettingTile(
+                  btnText: 'rate_this_app',
+                  // icon: IconlyLight.star,
+                  // iconColor: Colors.blueAccent,
+                  trailing: const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    // child: Icon(IconlyLight.arrowRight2),
+                  ),
+                  onPressed: () {
+                    try {
+                      // InAppReview.instance.openStoreListing();
+                    } on Exception {
+                      // Fluttertoast.showToast(msg: 'Failed to open store');
+                    }
+                  },
+                ),
+
                 SettingTile(
                     icon: const ImageIcon(AssetImage(MyIcon.languageIcon)),
                     btnText: 'Idioma'.tr,
@@ -213,7 +229,8 @@ class AjustesView extends GetView<AjustesController> {
                     //     controller.alarmSettings, context);
                     MyCustomDialog.showPopUpInfo(
                       context: context,
-                      description: 'En próximas actualizaciones estará disponible'.tr,
+                      description:
+                          'En próximas actualizaciones estará disponible'.tr,
                       title: 'Pronto Disponible'.tr,
                     );
                   },
@@ -245,8 +262,6 @@ class AjustesView extends GetView<AjustesController> {
                     // controller.showFeedback(context);
                   },
                 ),
-
-
 
                 SizedBox(height: 20.h),
                 Divider(
