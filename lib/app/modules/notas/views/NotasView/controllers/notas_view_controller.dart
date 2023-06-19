@@ -31,10 +31,7 @@ class NotasViewController extends GetxController {
     isAlarmaCreated.value = currentNote.value.isAlarmaCreated!;
     showHeader();
     super.onInit();
-
   }
-
-
 
   void showHeader() async {
     Future.delayed(const Duration(milliseconds: 100), () {
@@ -46,14 +43,14 @@ class NotasViewController extends GetxController {
   void handleSave() async {
     await NotasDB.instance.update(
       Task(
-          id: currentNote.value.id,
-          title: currentNote.value.title,
-          isImportant: currentNote.value.isImportant,
-          site: currentNote.value.site,
-          notes: currentNote.value.notes,
-          startTimeMilliseconds: currentNote.value.startTimeMilliseconds,
-          endTimeMilliseconds: currentNote.value.endTimeMilliseconds,
-          // time: currentNote.value.time
+        id: currentNote.value.id,
+        title: currentNote.value.title,
+        isImportant: currentNote.value.isImportant,
+        site: currentNote.value.site,
+        notes: currentNote.value.notes,
+        startTimeMilliseconds: currentNote.value.startTimeMilliseconds,
+        endTimeMilliseconds: currentNote.value.endTimeMilliseconds,
+        // time: currentNote.value.time
       ),
     );
 
@@ -79,20 +76,18 @@ class NotasViewController extends GetxController {
     //         builder: (context) => EditTaskPage(widget.currentNote, _warnList)));
   }
 
-
   Future<void> shareApp() async {
     print('Titulo: ${currentNote.value.title}'
         '\nNota: ${currentNote.value.notes}'
         '\nInicio: ${DateTime.fromMillisecondsSinceEpoch(currentNote.value.startTimeMilliseconds!).formatDateTime24H} h.  ${DateTime.fromMillisecondsSinceEpoch(currentNote.value.startTimeMilliseconds!).formatDateYMMMd}'
-        '\nFin: ${DateTime.fromMillisecondsSinceEpoch(currentNote.value.endTimeMilliseconds!).formatDateTime24H} h.  ${DateTime.fromMillisecondsSinceEpoch(currentNote.value.endTimeMilliseconds!).formatDateYMMMd}'
-    );
+        '\nFin: ${DateTime.fromMillisecondsSinceEpoch(currentNote.value.endTimeMilliseconds!).formatDateTime24H} h.  ${DateTime.fromMillisecondsSinceEpoch(currentNote.value.endTimeMilliseconds!).formatDateYMMMd}');
     Share.share(''
         'Titulo: ${currentNote.value.title}'
         '\nNota: ${currentNote.value.notes}'
         '\nInicio: ${DateTime.fromMillisecondsSinceEpoch(currentNote.value.startTimeMilliseconds!).formatDateTime24H} h.  ${DateTime.fromMillisecondsSinceEpoch(currentNote.value.startTimeMilliseconds!).formatDateYMMMd}'
-        '\nFin: ${DateTime.fromMillisecondsSinceEpoch(currentNote.value.endTimeMilliseconds!).formatDateTime24H} h.  ${DateTime.fromMillisecondsSinceEpoch(currentNote.value.endTimeMilliseconds!).formatDateYMMMd}'
-    );
+        '\nFin: ${DateTime.fromMillisecondsSinceEpoch(currentNote.value.endTimeMilliseconds!).formatDateTime24H} h.  ${DateTime.fromMillisecondsSinceEpoch(currentNote.value.endTimeMilliseconds!).formatDateYMMMd}');
   }
+
   ///todo share
   void handleShare() {
     //   Share.share(
@@ -105,7 +100,7 @@ class NotasViewController extends GetxController {
         builder: (BuildContext context) {
           return AlertDialog(
             shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
             title: const Text('Borrar nota'),
             content: const Text('Se borrará permanentemente'),
             actions: <Widget>[
@@ -137,26 +132,26 @@ class NotasViewController extends GetxController {
         });
   }
 
-  notaNotasDelete(context, id)async{
+  notaNotasDelete(context, id) async {
     await NotasDB.instance.delete(id);
     Get.offAllNamed('/notas');
     notasListController.refetchNotesFromDB();
     Toast.toast(context, msg: "Eliminada!");
   }
-   notaHomeDelete(context, id)async{
+
+  notaHomeDelete(context, id) async {
     await NotasDB.instance.delete(id);
     notasListController.refetchNotesFromDB();
     Toast.toast(context, msg: "Eliminada!");
   }
 
-
-  void handleDeleteCalendar(id, routeToNotas, selectedDay, focusedDay) async{
+  void handleDeleteCalendar(id, routeToNotas, selectedDay, focusedDay) async {
     showDialog(
         context: Get.context!,
         builder: (BuildContext context) {
           return AlertDialog(
             shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
             title: const Text('Borrar nota'),
             content: const Text('Se borrará permanentemente'),
             actions: <Widget>[
@@ -166,13 +161,11 @@ class NotasViewController extends GetxController {
                         color: Colors.red.shade300,
                         fontWeight: FontWeight.w500,
                         letterSpacing: 1)),
-                onPressed: ()  {
-
-                  routeToNotas
-                      ? notaNotasDelete(context, id)
-                      : HomeView.notaHomeDelete(context, id, selectedDay, focusedDay);
-                  Navigator.pop(context);
-
+                onPressed: () {
+                  // routeToNotas
+                  //     ? notaNotasDelete(context, id)
+                  //     : HomeView.notaHomeDelete(context, id, selectedDay, focusedDay);
+                  // Navigator.pop(context);
                 },
               ),
               TextButton(

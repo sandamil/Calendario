@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
@@ -35,7 +36,9 @@ Future<void> main() async {
 
   initializeDateFormatting().then(
     (_) async => runApp(
-      await buildApp(),
+      await ProviderScope(
+        child: buildApp(),
+      ),
     ),
   );
 }
