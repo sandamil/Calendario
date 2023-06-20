@@ -22,11 +22,25 @@ class CalendarController extends GetxController {
 
   // Rx<CalendarFormat> get calendarFormat => _calendarFormat;
 
+  ValueNotifier<DateTime> focusedDay = ValueNotifier(DateTime.now());
+  DateTime? selectedDay;
+
+  List<Task> selectedDayNotas = <Task>[];
+
+  int currentX = 0;
+  int currentY = 0;
+
+  onTapDown(TapDownDetails details) {
+    currentX = details.globalPosition.dx.toInt();
+    currentY = details.globalPosition.dy.toInt();
+  }
+
   ///============================
 //============================= Todo Rendimiento de app con obs =============================
-//
+// //
   final focusDayRx = DateTime.now().obs;
-  final selectedDayRx = DateTime.now().toLocal().obs;
+//   final selectedDayRx = DateTime.now().toLocal().obs;
+//   final selectedDayRx = DateTime.now().toLocal().obs;
 //   // Rx<DateTime> get selectedDay => _selectedDay;
 //   Rx<DateTime> selectedDay = DateTime.now().obs;
 //   // DateTime _selectedDay = DateTime.now();
@@ -40,7 +54,6 @@ class CalendarController extends GetxController {
 // //   var focusedDay = DateTime.now();
 
   final selectedDayTurnos = <CuadranteDay>[].obs;
-  List<Task> selectedDayNotas = <Task>[];
   // get selectedEvents => _selectedEvents;
 
   RxMap<DateTime, List<CuadranteDay>> cuadranteMap =
@@ -66,10 +79,9 @@ class CalendarController extends GetxController {
 
   @override
   void onReady() async {
-     fetchTurno();
+    fetchTurno();
     super.onReady();
   }
-
 
   // onTapDown(TapDownDetails details) {
   //   currentX = details.globalPosition.dx;
@@ -141,7 +153,6 @@ class CalendarController extends GetxController {
   }
 
   Future<Map<DateTime, List<CuadranteDay>>> getCuadrante() async {
-
     cuadrante.value = await CalendarioDB.db.getCuadranteList();
     cuadranteMap.clear();
     for (CuadranteDay turno in cuadrante) {
@@ -216,8 +227,6 @@ class CalendarController extends GetxController {
     }
     return list;
   }
-
-
 
   // deleteTurnoCuadrante(id) {
   //   adcontroller.staticHomeAd.load();

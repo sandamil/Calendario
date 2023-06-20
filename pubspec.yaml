@@ -29,6 +29,7 @@ dependencies:
 
 # ESTADO
   get: ^4.6.5
+  flutter_riverpod: ^2.3.6
 
 # ADS Y CONTROL
   google_mobile_ads: ^3.0.0
