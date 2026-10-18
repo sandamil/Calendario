@@ -228,8 +228,9 @@ class EditTurnoView extends GetView<CrearTurnoController> {
                                 /*[VERBOSE-2:dart_vm_initializer.cc(41)] Unhandled Exception: Null check operator used on a null value
                               #0      AddTurnoView.build.<anonymous closure>.<anonymous closure> (package:calendario2/app/modules/CrearTurno/views/add_turno_view.dart:190:61)
                               <asynchronous suspension>*/
-                                controller
-                                    .eendDate(_pickedTime!.format(context));
+                                if (_pickedTime != null) {
+                                  controller.eendDate(_pickedTime.format(context));
+                                }
                               },
                               icon: const Icon(Icons.access_time_rounded),
                             ),
