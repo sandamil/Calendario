@@ -7,10 +7,6 @@ const _info = "Botón menú:";
 const _info2 =
     "Desde este botón accedes al menú de la aplicación donde podrás acceder al menú, "
     "desde donde podrás ir a las diferentes utilidades de la app y ajustes";
-const _info3 = "Botón Version Anterior";
-const _info4 = "Pulsa en este botón para ir a los datos guardados del calendario anterior."
-    "\n \n Si prefieres tener instalada la version anterior del calendario, puedes descargarla desde el menu ayuda, pulsando en versión anterior."
-    "Allí veras un menu donde acceder a la aplicacion anterior y descargar. cualquier duda ponte en contacto con nosotros en el email ajatsoft@gmail.com";
 const _info5 = "Calendario";
 const _info6 =
     "En el calendario aparecen los turnos de tu cuadrante creado y las notas guardadas."
@@ -89,56 +85,7 @@ class InicioListTarget {
         ],
       ),
     );
-    targets.add(TargetFocus(
-      identify: "Target 2",
-      keyTarget: calKeys2,
-      contents: [
-        TargetContent(
-          align: ContentAlign.bottom,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              SizedBox(
-                height: 2.h,
-              ),
-              Padding(
-                padding: EdgeInsets.all(1.h),
-                child: Text(
-                  _info3,
-                  style: TextStyle(
-                    color: Colors.white.withOpacity(0.90),
-                    fontSize: 26.sp,
-                    fontWeight: FontWeight.bold,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(2.h),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    SizedBox(
-                      height: 2.h,
-                    ),
-                    CustomTextWidget(
-                      data: _info4,
-                      // style: GoogleFonts.lato(),
-                      color: Colors.white,
-                      textAlign: TextAlign.center,
-                      fontSize: 20.sp,
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-      shape: ShapeLightFocus.Circle,
-    ));
-    targets.add(TargetFocus(
+targets.add(TargetFocus(
       identify: "Target 3",
       keyTarget: calKeys3,
       contents: [

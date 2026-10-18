@@ -6,8 +6,6 @@ class VideotutorialesController extends GetxController {
 
   final urlHome = 'NiUMF8g00Xw';
 
-  final urlVersionAnterior = 'beHIxSeJ2zE';
-
   final urlCrearCuadrante = 'bCSZLNRjCnc';
   final urlEditarUnDia = '0X6ffxpI99o';
   final urlEditarVariosDias = 'BrzgZg1p7RY';

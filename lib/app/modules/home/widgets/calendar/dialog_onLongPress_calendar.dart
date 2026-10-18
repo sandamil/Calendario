@@ -8,14 +8,18 @@ import '../../../../../config/theme/my_colors.dart';
 import '../../../../../config/theme/my_fonts.dart';
 import '../../../../../config/util/hexColor.dart';
 import '../../../../data/model/cuadranteDay.dart';
-import '../../controllers/calendar_controller.dart';
 import 'dialog_addTurnosTo_calendar.dart';
 import 'turnos_notas_onHomeDialog.dart';
 
 class OnLongPressDialog extends StatefulWidget {
-  OnLongPressDialog(
-      {required this.selectedDate, required this.getCuadrante, super.key});
-  DateTime selectedDate;
+  OnLongPressDialog({
+    required this.selectedDate,
+    required this.getCuadrante,
+    required this.tapPosition,
+    super.key,
+  });
+  final DateTime selectedDate;
+  final Offset tapPosition;
   Future<Map<DateTime, List<CuadranteDay>>> getCuadrante;
 
   @override
@@ -23,8 +27,6 @@ class OnLongPressDialog extends StatefulWidget {
 }
 
 class _OnLongPressDialogState extends State<OnLongPressDialog> {
-  final calendarController = Get.find<CalendarController>();
-
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -34,7 +36,7 @@ class _OnLongPressDialogState extends State<OnLongPressDialog> {
         children: [
           Positioned(
             // left: x,
-            top: calendarController.currentY - 40.h,
+            top: widget.tapPosition.dy - 40.h,
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: 10.w),
               child: Column(
@@ -46,7 +48,7 @@ class _OnLongPressDialogState extends State<OnLongPressDialog> {
                     child: Stack(
                       children: [
                         Positioned(
-                          left: calendarController.currentX - 20.w,
+                          left: widget.tapPosition.dx - 20.w,
                           child: CustomPaint(
                               size: const Size(35, 35),
                               painter: DrawTriangle()),
@@ -69,7 +71,7 @@ class _OnLongPressDialogState extends State<OnLongPressDialog> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         SizedBox(height: 2.h),
-                        TurnosNotasOnHomeDialog(context),
+                        const TurnosNotasOnHomeDialog(),
                         SizedBox(height: 2.h),
                         Row(
                           children: [
@@ -78,7 +80,6 @@ class _OnLongPressDialogState extends State<OnLongPressDialog> {
                                 padding: EdgeInsets.all(2.h),
                                 child: ElevatedButton(
                                   onPressed: () async {
-                                    await calendarController.fetchTurno();
                                     Navigator.pop(context);
                                     showDialog(
                                       context: context,

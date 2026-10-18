@@ -1,6 +1,4 @@
-
 import 'dart:math';
-
 
 const String APP_FIRST_TIME_OPEN = 'app_first_time_open';
 
@@ -16,9 +14,6 @@ class ConstantData {
 
   ///animaciones
   static const BASEANIMATIONURL = "assets/animaciones/";
-
-  static const darklightswitch = "${BASEANIMATIONURL}darklightswitch.riv";
-  static const lightdark_theme = "${BASEANIMATIONURL}lightdark_theme.riv";
 
   ///alarmas
   static const BASEALARMURL = "assets/alarmas/";
@@ -45,20 +40,17 @@ class ConstantData {
 /// notas
 const String warnDefaultt = 'Al principio';
 
-
-
 int idGenerator() {
   final now = DateTime.now();
-  return now.microsecondsSinceEpoch ;
+  return now.microsecondsSinceEpoch;
 }
-
 
 randomIdGenerator() {
   var ranAssets = RanKeyAssets();
   String middle4Digits = '';
   for (int i = 0; i < 4; i++) {
     middle4Digits +=
-    ranAssets.digits[Random.secure().nextInt(ranAssets.digits.length)];
+        ranAssets.digits[Random.secure().nextInt(ranAssets.digits.length)];
   }
 
   return '$middle4Digits${DateTime.now().microsecondsSinceEpoch.toString().substring(8, 12)}';

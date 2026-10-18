@@ -1,7 +1,6 @@
 import 'package:calendario2/app/controllers/ads_controller.dart';
 import 'package:calendario2/app/data/local/calendarDatabase.dart';
 import 'package:calendario2/app/data/model/cuadranteDay.dart';
-import 'package:calendario2/app/modules/home/controllers/calendar_controller.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/config/util/hexColor.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +15,6 @@ class CustomAlertDialogTurnoList extends StatelessWidget {
 
   final List turno;
 
-  CalendarController calendarController = CalendarController();
   //
   @override
   Widget build(BuildContext context) {
@@ -24,8 +22,7 @@ class CustomAlertDialogTurnoList extends StatelessWidget {
 
     var theme = Theme.of(context);
 
-    return
-      Align(
+    return Align(
       alignment: Alignment.center,
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 10.w),
@@ -51,16 +48,13 @@ class CustomAlertDialogTurnoList extends StatelessWidget {
                         padding: EdgeInsets.symmetric(horizontal: 2.w),
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-
-                              side: BorderSide(width: 0.8.r),
-
+                            side: BorderSide(width: 0.8.r),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(5.r),
                             ),
                             backgroundColor: HexColor(m.color!),
                           ),
                           child: Container(
-
                             alignment: Alignment.center,
                             height: 20.h,
                             width: 75.w,
@@ -69,16 +63,18 @@ class CustomAlertDialogTurnoList extends StatelessWidget {
                               style: TextStyle(
                                   fontSize: 12.sp,
                                   fontWeight: FontWeight.bold,
-                                  color: HexColor(m.color!).computeLuminance() > 0.5 ? Colors.black : Colors.white
-                              ),
+                                  color: HexColor(m.color!).computeLuminance() >
+                                          0.5
+                                      ? Colors.black
+                                      : Colors.white),
                             ),
                           ),
                           onPressed: () async {
-
                             await CalendarioDB.db.addCuadranteItem(
                               CuadranteDay(
                                 cuadranteName: 'Turnos sueltos',
-                                dateTime: DateTime.parse(selectedDate.toString().substring(0, 10)),
+                                dateTime: DateTime.parse(
+                                    selectedDate.toString().substring(0, 10)),
                                 color: m.color,
                                 description: m.description,
                                 endHour: m.endHour,
@@ -86,7 +82,7 @@ class CustomAlertDialogTurnoList extends StatelessWidget {
                                 title: m.title,
                               ),
                             );
-                         // await calendarController.getCuadrante();
+                            // await calendarController.getCuadrante();
                             // adcontroller.staticHomeAd.load();
                             Navigator.pop(context);
                             // Get.offAllNamed('/home');

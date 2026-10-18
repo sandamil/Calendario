@@ -2,11 +2,9 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:dart_big5/big5.dart';
 
-
 import 'package:get/get.dart' as k;
 import 'package:get/get_core/src/get_main.dart';
 
-import 'alice.dart';
 import 'connector_parameter.dart';
 import 'early_interceptor_adapter.dart';
 
@@ -18,14 +16,10 @@ class DioConnector {
     "Upgrade-Insecure-Requests": "1",
   };
 
-  final alice = Alice(
-    navigatorKey: Get.key,
-  );
-
   static final dioOptions = BaseOptions(
     connectTimeout: const Duration(milliseconds: 5000),
     receiveTimeout: const Duration(milliseconds: 10000),
-    sendTimeout:const Duration(milliseconds: 5000) ,
+    sendTimeout: const Duration(milliseconds: 5000),
     headers: _headers,
     responseType: ResponseType.json,
     contentType: "application/x-www-form-urlencoded",
@@ -61,12 +55,12 @@ class DioConnector {
 
   static final instance = DioConnector._privateConstructor();
 
-  static String _big5Decoder(List<int> responseBytes, RequestOptions options, ResponseBody responseBody) =>
+  static String _big5Decoder(List<int> responseBytes, RequestOptions options,
+          ResponseBody responseBody) =>
       big5.decode(responseBytes);
   //
   Future<void> init({required List<Interceptor> interceptors}) async {
     dio.interceptors.addAll(interceptors);
-    dio.interceptors.add(alice.getDioInterceptor());
   }
 
   // void deleteCookies() {
@@ -117,6 +111,7 @@ class DioConnector {
     _handleHeaders(parameter);
     return await dio.get(url, queryParameters: data);
   }
+
   //
   // Future<Response> getDataByPostResponse(ConnectorParameter parameter) async {
   //   final url = parameter.url;
@@ -131,6 +126,7 @@ class DioConnector {
       dio.options.headers[HttpHeaders.refererHeader] = parameter.referer;
     }
   }
+
   //
   void _handleCharsetName(String charsetName) {
     if (charsetName == presetCharsetName) {

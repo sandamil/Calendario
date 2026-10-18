@@ -1,15 +1,17 @@
 import 'dart:collection';
 import 'dart:io';
-import 'package:calendario2/app/modules/notas/controllers/notas_controller.dart';
 
 import 'package:calendario2/app/data/model/taskModel.dart';
+import 'package:calendario2/app/data/local/my_shared_pref.dart';
 import 'package:calendario2/app/modules/notas/views/widgets/taskCard.dart';
-import 'package:calendario2/app/modules/home/controllers/calendar_controller.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:calendario2/app/modules/home/providers/calendar_providers.dart';
 import 'package:calendario2/app/modules/home/widgets/calendar/table_calendar.dart';
 import 'package:calendario2/app/modules/home/widgets/calendar/widget/line.dart';
 import 'package:calendario2/app/modules/home/widgets/calendar/widget/selected_day_widget.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -17,12 +19,12 @@ import 'package:table_calendar/table_calendar.dart';
 import '../../../../config/util/constant.dart';
 
 import '../../../components/toast.dart';
+import '../../../components/custom_dialog.dart';
 import '../../../controllers/ads_controller.dart';
-import '../../../data/local/calendarDatabase.dart';
+import '../../../controllers/tutorialController.dart';
 import '../../../data/local/taskDatabase.dart';
 import '../../../data/model/cuadranteDay.dart';
 import '../../menu/views/menu_view.dart';
-import '../controllers/home_controller.dart';
 import '../widgets/calendar/dialog_onLongPress_calendar.dart';
 
 typedef HomeCallback = void Function(int id, DateTime selectedDate);
@@ -32,28 +34,42 @@ typedef HomeCallbackSetState = void Function(DateTime selectedDate);
 class HomeView extends StatefulWidget {
   HomeView({Key? key}) : super(key: key);
 
-  static get notasListController => Get.put(NotasListController());
-
   State<HomeView> createState() => _HomeViewState();
 
   static notaHomeDelete(
       BuildContext context, id, selectedDay, focusedDay) async {
-    print('HomeView');
-    final calendarController = Get.put(CalendarController());
-
     await NotasDB.instance.delete(id);
-    // Navigator.pop(context);
+    final container = ProviderScope.containerOf(context, listen: false);
+    await container.read(notasProvider.notifier).reload();
 
     Toast.toast(context, msg: "Eliminada!");
-    _HomeViewState().setStateHomeFOcusday(selectedDay, focusedDay);
   }
 }
 
 class _HomeViewState extends State<HomeView> {
+  void _appCloseConfirm(BuildContext context) {
+    MyCustomDialog.myConfirmDialogBody(
+      context: context,
+      title: '¿ Salir de la aplicacion ?',
+      desc: 'Quieres cerrar la aplicación?'
+          '\\nPuedes dejarla en segundo plano'
+          '\\nsi pulsas el botón: o en vez de: <',
+      btnCancelText: 'Salir',
+      btnOkText: 'Quedarme',
+      onTapOK: () async {
+        Get.back();
+      },
+      onTapCancel: () async {
+        SystemNavigator.pop();
+      },
+    );
+  }
+
   final isDialOpen = ValueNotifier(false);
   final adcontroller = Get.find<AdsController>();
-  final homeController = Get.find<HomeController>();
-  final calendarController = Get.put(CalendarController());
+  final tutorialController = Get.put(TutorialController());
+
+  bool _showHomeTutorial = false;
 
   DateTime? _focusedDay;
   DateTime? _rangeStart;
@@ -65,88 +81,127 @@ class _HomeViewState extends State<HomeView> {
     hashCode: getHashCode,
   );
 
-  setStateHomeFOcusday(selectedDay, focusedDay) {
-    print('setStateHomeFOcusday');
-    calendarController.getListEvent();
-    setState(() {
-      calendarController.selectedDayNotas =
-          calendarController.getNotasOfDay(selectedDay);
-    });
-
-    calendarController.getNotasOfDay(selectedDay);
-
-    // _onDaySelected(selectedDay, focusedDay);
-    // _selectedEvents.value = _getEventsForDays(_selectedDays);
-  }
-
   Future<Map<DateTime, List<CuadranteDay>>> getCuadrante() async {
-    calendarController.cuadrante.value =
-        await CalendarioDB.db.getCuadranteList();
-
-    setState(() {
-      calendarController.cuadranteMap.clear();
-      for (CuadranteDay turno in calendarController.cuadrante) {
-        calendarController.cuadranteMap
-            .putIfAbsent(turno.dateTime!, () => <CuadranteDay>[]);
-        List<CuadranteDay>? turnoData =
-            calendarController.cuadranteMap[turno.dateTime];
-        turnoData!.add(turno);
-        calendarController.cuadranteMap.update(turno.dateTime!, (data) {
-          return turnoData;
-        });
-      }
-      calendarController.isReady.value = true;
-    });
-    print('getCuadrante');
-
-    return calendarController.cuadranteMap;
+    final container = ProviderScope.containerOf(context, listen: false);
+    await container.read(cuadranteMapProvider.notifier).reload();
+    final result = container.read(cuadranteMapProvider);
+    if (mounted) setState(() {});
+    return result;
   }
 
   onDaySelected(DateTime selectedDate, DateTime focusedDate) {
-    if (!isSameDay(calendarController.selectedDay, selectedDate)) {
+    if (!isSameDay(
+      ProviderScope.containerOf(context, listen: false)
+          .read(selectedDayProvider),
+      selectedDate,
+    )) {
       setState(() {
-        calendarController.selectedDay = selectedDate;
-        calendarController.focusedDay.value = focusedDate;
+        ProviderScope.containerOf(context, listen: false)
+            .read(selectedDayProvider.notifier)
+            .setSelectedDay(selectedDate);
+        ProviderScope.containerOf(context, listen: false)
+            .read(focusedMonthProvider.notifier)
+            .setFocusedDay(focusedDate);
       });
     }
-    calendarController.selectedDayTurnos.value =
-        calendarController.getTurnosOfDay(selectedDate);
-    calendarController.selectedDayNotas =
-        calendarController.getNotasOfDay(selectedDate);
+
+    final container = ProviderScope.containerOf(context, listen: false);
+    container
+        .read(selectedDayTurnosProvider.notifier)
+        .setTurnos(getTurnosOfDayFromMap(
+          selectedDate,
+          container.read(cuadranteMapProvider),
+        ));
   }
 
-  onDaySelectedLongPress(DateTime selectedDate, DateTime focusedDate) {
-    if (!isSameDay(calendarController.selectedDay, selectedDate)) {
+  onDaySelectedLongPress(
+    DateTime selectedDate,
+    DateTime focusedDate,
+    Offset tapPosition,
+  ) {
+    if (!isSameDay(
+      ProviderScope.containerOf(context, listen: false)
+          .read(selectedDayProvider),
+      selectedDate,
+    )) {
       setState(() {
-        calendarController.selectedDay = selectedDate;
-        calendarController.focusedDay.value = focusedDate;
+        ProviderScope.containerOf(context, listen: false)
+            .read(selectedDayProvider.notifier)
+            .setSelectedDay(selectedDate);
+        ProviderScope.containerOf(context, listen: false)
+            .read(focusedMonthProvider.notifier)
+            .setFocusedDay(focusedDate);
       });
     }
-    calendarController.selectedDayTurnos.value =
-        calendarController.getTurnosOfDay(selectedDate);
-    calendarController.selectedDayNotas =
-        calendarController.getNotasOfDay(selectedDate);
+
+    final container = ProviderScope.containerOf(context, listen: false);
+    container
+        .read(selectedDayTurnosProvider.notifier)
+        .setTurnos(getTurnosOfDayFromMap(
+          selectedDate,
+          container.read(cuadranteMapProvider),
+        ));
+
     showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return OnLongPressDialog(
-            selectedDate: selectedDate,
-            getCuadrante: getCuadrante(),
-          );
-        });
+      context: context,
+      builder: (BuildContext context) {
+        return OnLongPressDialog(
+          selectedDate: selectedDate,
+          getCuadrante: getCuadrante(),
+          tapPosition: tapPosition,
+        );
+      },
+    );
   }
 
   @override
   void initState() {
     super.initState();
-    _selectedDays.add(calendarController.focusedDay.value);
-    getCuadrante();
-    calendarController.getListEvent();
-    // _selectedEvents = ValueNotifier(_getEventsForDay(_focusedDay.value));
-    calendarController.selectedDayTurnos.value =
-        calendarController.getTurnosOfDay(calendarController.focusedDay.value);
-    calendarController.selectedDayNotas =
-        calendarController.getNotasOfDay(calendarController.focusedDay.value);
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted || !MySharedPref.getTutoHomeFirst()) return;
+
+      setState(() {
+        _showHomeTutorial = true;
+      });
+
+      // Esperar al siguiente frame: las claves ya estarán en el árbol.
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted || !_showHomeTutorial) return;
+
+        tutorialController.firstInstall(
+          'home',
+          context: context,
+          onFinished: () {
+            if (!mounted) return;
+            setState(() {
+              _showHomeTutorial = false;
+            });
+          },
+        );
+      });
+    });
+
+    _selectedDays.add(ProviderScope.containerOf(context, listen: false)
+        .read(focusedMonthProvider));
+
+    // Cargar el cuadrante antes de consultar los turnos del día inicial.
+    getCuadrante().then((mapa) {
+      if (!mounted) return;
+      ProviderScope.containerOf(context, listen: false)
+          .read(selectedDayTurnosProvider.notifier)
+          .setTurnos(getTurnosOfDayFromMap(
+            ProviderScope.containerOf(context, listen: false)
+                .read(focusedMonthProvider),
+            mapa,
+          ));
+      setState(() {});
+    });
+
+    Future.microtask(() async {
+      final container = ProviderScope.containerOf(context, listen: false);
+      await container.read(notasProvider.notifier).reload();
+    });
   }
 
   @override
@@ -159,7 +214,7 @@ class _HomeViewState extends State<HomeView> {
               isDialOpen.value = false;
               return false;
             } else {
-              homeController.appCloseConfirm(context);
+              _appCloseConfirm(context);
             }
           }
           return false;
@@ -172,8 +227,8 @@ class _HomeViewState extends State<HomeView> {
               leading: Builder(
                 builder: (BuildContext context) {
                   return IconButton(
-                    key: homeController.firstTime.value
-                        ? homeController.tutorialController.keyButton6
+                    key: _showHomeTutorial
+                        ? tutorialController.keyButton6
                         : widget.key,
                     icon: Icon(
                       Icons.menu,
@@ -194,8 +249,8 @@ class _HomeViewState extends State<HomeView> {
               title: SelectedDayWidget(),
               actions: [
                 IconButton(
-                  key: homeController.firstTime.value
-                      ? homeController.tutorialController.keyButton7
+                  key: _showHomeTutorial
+                      ? tutorialController.keyButton7
                       : widget.key,
                   color: PRIMARY_COLOR,
                   icon: const Icon(
@@ -203,18 +258,10 @@ class _HomeViewState extends State<HomeView> {
                   ),
                   tooltip: 'today',
                   onPressed: () {
-                    // controller.firstTime.value = true;
-                    // controller.tutorialController.showTutorial(context, 'home');
-                    Get.toNamed('/version-anterior');
-                    // CustomDialog.showPopUpInfo(
-                    //   title: 'Volver a HOY',
-                    //   description: 'Selecciona Mes al que quieres ir',
-                    //   labelButton: 'Volver',
-                    //   // onPress: (){}
-                    // );adb backup -noapk ajat.calendario.turnos
-
-                    // / data/data/ ajat.calendario.turnos/app_flutter/ DBC4A.db
-                    // print(notesList.asMap());
+                    final hoy = DateTime.now();
+                    final container = ProviderScope.containerOf(context, listen: false);
+                    container.read(focusedMonthProvider.notifier).setFocusedDay(hoy);
+                    container.read(selectedDayProvider.notifier).setSelectedDay(hoy);
                   },
                 ),
               ],
@@ -247,8 +294,8 @@ class _HomeViewState extends State<HomeView> {
               children: [
                 SizedBox(height: 2.h),
                 Column(
-                  key: homeController.firstTime.value
-                      ? homeController.tutorialController.keyButton8
+                  key: _showHomeTutorial
+                      ? tutorialController.keyButton8
                       : widget.key,
                   children: [
                     Container(
@@ -270,11 +317,22 @@ class _HomeViewState extends State<HomeView> {
                 SizedBox(height: 2.h),
 
                 Expanded(
-                  key: homeController.firstTime.value
-                      ? homeController.tutorialController.keyButton9
+                  key: _showHomeTutorial
+                      ? tutorialController.keyButton9
                       : widget.key,
-                  child: _buildListEvent(
-                      context, calendarController.selectedDayNotas),
+                  child: Consumer(
+                    builder: (context, ref, child) {
+                      ref.watch(notasProvider);
+                      final DateTime selectedDate =
+                          ref.watch(selectedDayProvider) ??
+                              ref.watch(focusedMonthProvider);
+                      final selectedDayNotas = ref
+                          .read(notasProvider.notifier)
+                          .getNotasOfDay(selectedDate);
+
+                      return _buildListEvent(context, selectedDayNotas);
+                    },
+                  ),
                 )
               ],
             )));
@@ -293,11 +351,22 @@ class _HomeViewState extends State<HomeView> {
                         // CardEvent(event: event),
                         TaskCard(
                           noteData: event,
-                          onTapAction:
-                              homeController.notasController.openNoteToRead,
+                          onTapAction: (Task noteData) {
+                            Get.toNamed(
+                              '/notas-view',
+                              arguments: {
+                                'id': noteData.id!,
+                                'noteData': noteData,
+                              },
+                            );
+                          },
                           routeToNotas: false,
-                          selectedDay: calendarController.selectedDay,
-                          focusedDay: calendarController.focusedDay.value,
+                          selectedDay:
+                              ProviderScope.containerOf(context, listen: false)
+                                  .read(selectedDayProvider),
+                          focusedDay:
+                              ProviderScope.containerOf(context, listen: false)
+                                  .read(focusedMonthProvider),
                         )
                       ],
                     ),

@@ -3,12 +3,14 @@ import 'dart:io';
 import 'package:calendario2/app/controllers/ads_controller.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
 
 import '../../../../config/theme/my_fonts.dart';
 import '../../../../config/util/hexColor.dart';
+import '../../home/providers/calendar_providers.dart';
 import '../controllers/crear_turno_controller.dart';
 import 'add_turno_view.dart';
 import 'edit_turno_view.dart';
@@ -136,7 +138,12 @@ class TurnoView extends GetView<CrearTurnoController> {
                                   .titleLarge!
                                   .color),
                           onPressed: () async {
-                            controller.deleteEventsType(index);
+                            await controller.deleteEventsType(index);
+                            final container = ProviderScope.containerOf(
+                              context,
+                              listen: false,
+                            );
+                            container.invalidate(turnoTypesProvider);
                           },
                         ),
                       ],

@@ -26,8 +26,6 @@ class BoardingView extends GetView<BoardingController> {
       body: "Bienvenidos a la aplicación\n\n"
           "En esta app podrás llevar un control de tus turnos y horarios de trabajo y anotar todo lo que necesites."
           "\n\nPonte en contacto con nosotros ante cualquier duda o sugerencia.\nANTES DE UNA VALORACION NEGATIVA CONTACTA CON NOSOTROS¡\nResolveremos cualquier problema."
-          "\n\nAntes de nada, si vienes de una versión anterior de esta aplicación, puedes acceder a los datos guardados desde la pantalla principal o desde el menu ayuda/version anterior."
-          "\n\nSi te gusta más la Versión anterior, tambien la puedes descargar desde esa pantalla del menu."
           "\n\nEste tutorial solo se verá la primera vez que inicies la aplicacion, "
           "si tienes dudas, puedes ir desde menú, a la pantalla ayuda,"
           " donde podrás ver este tutorial "
@@ -150,16 +148,23 @@ class BoardingView extends GetView<BoardingController> {
               ),
       ),
 
-      footer: Column(
-        children: [
-          ListTile(
-            title:
-                Obx(() => Text('Pulsa para cambiar a tema: ${sx.temaString}')),
-            trailing: Obx(
-              () => Switch(onChanged: (val) => sx.toggle(), value: sx.on.value),
+      footer: Material(
+        color: Colors.transparent,
+        child: Column(
+          children: [
+            ListTile(
+              title: Obx(
+                () => Text('Pulsa para cambiar a tema: ${sx.temaString}'),
+              ),
+              trailing: Obx(
+                () => Switch(
+                  onChanged: (val) => sx.toggle(),
+                  value: sx.on.value,
+                ),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
       // bodyWidget: const Center(
       //   child: Padding(

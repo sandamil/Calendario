@@ -43,22 +43,6 @@ class VideotutorialesView extends GetView<VideotutorialesController> {
               color: MyColors.menuCardBackgroundDark,
 
               child: VideotutorialesViewGroup(
-                title: "Version Anterior",
-                children: [
-                  VideotutorialesRowWidget(
-                      title: "Acceso a datos guardados",
-                      subtitle:
-                          "Video mostrando como acceder a datos guardados, de version anterior de aplicación.",
-                      onTap: () => Get.to(FullscreenVideoViewer(
-                          id: controller.urlVersionAnterior)),
-                      id: controller.urlVersionAnterior),
-                ],
-              ),
-            ),
-            Card(
-              color: MyColors.menuCardBackgroundDark,
-
-              child: VideotutorialesViewGroup(
                 title: "Pantalla principal",
                 children: [
                   VideotutorialesRowWidget(

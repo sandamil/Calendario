@@ -2,58 +2,53 @@ import 'package:calendario2/config/util/dateUtils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:get/get.dart';
 
 import '../../../../../config/theme/my_colors.dart';
 import '../../../../../config/util/hexColor.dart';
 import '../../../../components/custom_dialog.dart';
 import '../../../../data/local/calendarDatabase.dart';
 import '../../../../data/model/cuadranteDay.dart';
-import '../../controllers/calendar_controller.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:calendario2/app/modules/home/providers/calendar_providers.dart';
 
-class TurnosNotasOnHomeDialog extends StatefulWidget {
-  TurnosNotasOnHomeDialog(BuildContext context, {super.key});
+class TurnosNotasOnHomeDialog extends ConsumerStatefulWidget {
+  const TurnosNotasOnHomeDialog({super.key});
 
   @override
-  State<TurnosNotasOnHomeDialog> createState() =>
+  ConsumerState<TurnosNotasOnHomeDialog> createState() =>
       _TurnosNotasOnHomeDialogState();
 }
 
-class _TurnosNotasOnHomeDialogState extends State<TurnosNotasOnHomeDialog> {
-  final calendarController = Get.find<CalendarController>();
-
+class _TurnosNotasOnHomeDialogState
+    extends ConsumerState<TurnosNotasOnHomeDialog> {
   Future<Map<DateTime, List<CuadranteDay>>> getCuadrante() async {
-    calendarController.cuadrante.value =
-        await CalendarioDB.db.getCuadranteList();
-
-    setState(() {
-      calendarController.cuadranteMap.clear();
-      for (CuadranteDay turno in calendarController.cuadrante) {
-        calendarController.cuadranteMap
-            .putIfAbsent(turno.dateTime!, () => <CuadranteDay>[]);
-        List<CuadranteDay>? turnoData =
-            calendarController.cuadranteMap[turno.dateTime];
-        turnoData!.add(turno);
-        calendarController.cuadranteMap.update(turno.dateTime!, (data) {
-          return turnoData;
-        });
-      }
-      calendarController.isReady.value = true;
-    });
-    return calendarController.cuadranteMap;
+    final container = ProviderScope.containerOf(context, listen: false);
+    await container.read(cuadranteMapProvider.notifier).reload();
+    final result = container.read(cuadranteMapProvider);
+    if (mounted) setState(() {});
+    return result;
   }
 
   deleteTurnoCuadrante(id, DateTime selectedDate) async {
-    CalendarioDB.db.deleteItemID(id);
+    await CalendarioDB.db.deleteItemID(id);
 
     await getCuadrante();
-    setState(() => calendarController.focusedDay.value = selectedDate);
+    ProviderScope.containerOf(context, listen: false)
+        .read(focusedMonthProvider.notifier)
+        .setFocusedDay(selectedDate);
 
     Navigator.pop(context);
   }
 
   @override
   Widget build(BuildContext context) {
+    final selectedDayTurnos = ref.watch(selectedDayTurnosProvider);
+    final notas = ref.watch(notasProvider);
+    final selectedDate = ref.watch(selectedDayProvider);
+    final selectedDayNotas = selectedDate == null
+        ? notas.take(0).toList()
+        : ref.read(notasProvider.notifier).getNotasOfDay(selectedDate);
+
     return Container(
       color: MyColors.backgroundColor,
       height: 150,
@@ -61,11 +56,11 @@ class _TurnosNotasOnHomeDialogState extends State<TurnosNotasOnHomeDialog> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            calendarController.selectedDayTurnos.isEmpty
+            selectedDayTurnos.isEmpty
                 ? Container()
                 : ListView.builder(
                     shrinkWrap: true,
-                    itemCount: calendarController.selectedDayTurnos.length,
+                    itemCount: selectedDayTurnos.length,
                     itemBuilder: (context, index) {
                       return Slidable(
                         endActionPane: ActionPane(
@@ -79,10 +74,21 @@ class _TurnosNotasOnHomeDialogState extends State<TurnosNotasOnHomeDialog> {
                               backgroundColor: Colors.redAccent,
                               // icon: Icons.send,
                               onPressed: (context) {
+                                final selectedDate =
+                                    ref.read(selectedDayProvider);
+                                if (selectedDate == null) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                          'No hay ningún día seleccionado.'),
+                                    ),
+                                  );
+                                  return;
+                                }
                                 deleteTurnoCuadrante(
-                                    calendarController
-                                        .selectedDayTurnos[index].id,
-                                    calendarController.selectedDay!);
+                                  selectedDayTurnos[index].id,
+                                  selectedDate,
+                                );
                               },
                             ),
                           ],
@@ -92,8 +98,7 @@ class _TurnosNotasOnHomeDialogState extends State<TurnosNotasOnHomeDialog> {
                           padding: EdgeInsets.symmetric(
                               vertical: 1.h, horizontal: 2.w),
                           decoration: BoxDecoration(
-                            color: HexColor(calendarController
-                                .selectedDayTurnos[index].color!),
+                            color: HexColor(selectedDayTurnos[index].color!),
                             border: Border.all(width: 0.8.r),
                             borderRadius: BorderRadius.circular(5.r),
                           ),
@@ -126,18 +131,14 @@ class _TurnosNotasOnHomeDialogState extends State<TurnosNotasOnHomeDialog> {
                                         height: 1.2.h,
                                         fontSize: 14.sp,
                                         fontWeight: FontWeight.bold,
-                                        color: HexColor(calendarController
-                                                        .selectedDayTurnos[
-                                                            index]
+                                        color: HexColor(selectedDayTurnos[index]
                                                         .color!)
                                                     .computeLuminance() >
                                                 0.5
                                             ? Colors.black
                                             : Colors.white),
                                     child: Text(
-                                      calendarController
-                                          .selectedDayTurnos[index]
-                                          .description!,
+                                      selectedDayTurnos[index].description!,
                                     ),
                                   ),
                                 ),
@@ -145,13 +146,8 @@ class _TurnosNotasOnHomeDialogState extends State<TurnosNotasOnHomeDialog> {
                               // SizedBox(
                               //   width: 20.w,
                               // ),
-                              calendarController.selectedDayTurnos[index]
-                                              .startHour !=
-                                          null &&
-                                      calendarController
-                                              .selectedDayTurnos[index]
-                                              .endHour !=
-                                          null
+                              selectedDayTurnos[index].startHour != null &&
+                                      selectedDayTurnos[index].endHour != null
                                   ? Padding(
                                       padding: EdgeInsets.only(left: 15.w),
                                       child: FittedBox(
@@ -159,8 +155,7 @@ class _TurnosNotasOnHomeDialogState extends State<TurnosNotasOnHomeDialog> {
                                           style: TextStyle(
                                               height: 1.2.h,
                                               fontSize: 14.sp,
-                                              color: HexColor(calendarController
-                                                              .selectedDayTurnos[
+                                              color: HexColor(selectedDayTurnos[
                                                                   index]
                                                               .color!)
                                                           .computeLuminance() >
@@ -168,8 +163,8 @@ class _TurnosNotasOnHomeDialogState extends State<TurnosNotasOnHomeDialog> {
                                                   ? Colors.black
                                                   : Colors.white),
                                           child: Text(
-                                            'de ${calendarController.selectedDayTurnos[index].startHour.toString()} '
-                                            'a ${calendarController.selectedDayTurnos[index].endHour.toString()}',
+                                            'de ${selectedDayTurnos[index].startHour.toString()} '
+                                            'a ${selectedDayTurnos[index].endHour.toString()}',
                                           ),
                                         ),
                                       ),
@@ -197,7 +192,7 @@ class _TurnosNotasOnHomeDialogState extends State<TurnosNotasOnHomeDialog> {
             SizedBox(
               height: 3.h,
             ),
-            ...calendarController.selectedDayNotas.map((nota) => Padding(
+            ...selectedDayNotas.map((nota) => Padding(
                   padding: EdgeInsets.symmetric(vertical: 1.h, horizontal: 2.w),
                   child: GestureDetector(
                     onTap: () {

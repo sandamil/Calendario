@@ -12,18 +12,13 @@ import '../modules/ajustes/bindings/ajustes_binding.dart';
 import '../modules/ajustes/views/ajustes_view.dart';
 import '../modules/ajustes/views/pages/about_page.dart';
 import '../modules/ajustes/views/pages/privacy_policy_page.dart';
-import '../modules/ajustes/views/pages/util/dio_connector.dart';
 import '../modules/ayuda/bindings/ayuda_binding.dart';
 import '../modules/ayuda/views/ayuda_view.dart';
-import '../modules/boarding/bindings/boarding_binding.dart';
 import '../modules/boarding/views/boarding_view.dart';
 import '../modules/crearCuadrante/bindings/crear_cuadrante_binding.dart';
 import '../modules/crearCuadrante/views/cuadrante_view.dart';
-import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
-import '../modules/inicio/bindings/inicio_binding.dart';
 import '../modules/inicio/views/inicio_view.dart';
-import '../modules/menu/bindings/menu_binding.dart';
 import '../modules/menu/views/menu_view.dart';
 import '../modules/notas/bindings/notas_binding.dart';
 import '../modules/notas/views/AddNotas/bindings/add_notas_binding.dart';
@@ -35,8 +30,6 @@ import '../modules/notas/views/NotasView/views/notas_view.dart';
 import '../modules/notas/views/alarmas/bindings/alarmas_binding.dart';
 import '../modules/notas/views/alarmas/views/alarmas_view.dart';
 import '../modules/notas/views/notas_list_view.dart';
-import '../modules/versionAnterior/bindings/version_anterior_binding.dart';
-import '../modules/versionAnterior/views/version_anterior_view.dart';
 
 part 'app_routes.dart';
 
@@ -49,19 +42,16 @@ class AppPages {
     GetPage(
       name: _Paths.INICIO,
       page: () => const InicioView(),
-      binding: InicioBinding(),
     ),
     GetPage(
       name: _Paths.BOARDING,
-      page: () =>  BoardingView(),
-      binding: BoardingBinding(),
+      page: () => BoardingView(),
     ),
     GetPage(
       transition: Transition.fadeIn,
       transitionDuration: const Duration(milliseconds: 100),
       name: _Paths.HOME,
       page: () => HomeView(),
-      binding: HomeBinding(),
     ),
     GetPage(
       transition: Transition.fadeIn,
@@ -75,8 +65,7 @@ class AppPages {
       transitionDuration: const Duration(milliseconds: 100),
       name: _Paths.MENU,
       page: () => const MenuView(),
-      binding: MenuBinding(),
-    ),
+      ),
     GetPage(
       transition: Transition.fadeIn,
       transitionDuration: const Duration(microseconds: 100),
@@ -136,13 +125,6 @@ class AppPages {
     GetPage(
       transition: Transition.fadeIn,
       transitionDuration: const Duration(milliseconds: 100),
-      name: _Paths.VERSION_ANTERIOR,
-      page: () => const VersionAnteriorView(),
-      binding: VersionAnteriorBinding(),
-    ),
-    GetPage(
-      transition: Transition.fadeIn,
-      transitionDuration: const Duration(milliseconds: 100),
       name: _Paths.VIDEOTUTORIALES,
       page: () => const VideotutorialesView(),
       binding: VideotutorialesBinding(),
@@ -150,40 +132,34 @@ class AppPages {
   ];
 }
 
-
 class RouteUtils {
-  static Transition transition = (Platform.isAndroid)
-      ? Transition.downToUp
-      : Transition.cupertino;
+  static Transition transition =
+      (Platform.isAndroid) ? Transition.downToUp : Transition.cupertino;
 
   static Future? toAboutPage() {
     return Get.to(
-          () =>  AboutPage(),
+      () => AboutPage(),
       transition: transition,
     );
   }
 
   static Future? toPrivacyPolicyPage() {
     return Get.to(
-          () => PrivacyPolicyPage(),
+      () => PrivacyPolicyPage(),
       transition: transition,
     );
   }
 
-  static Future toAliceInspectorPage() async {
-    DioConnector.instance.alice.showInspector();
-  }
-
   static Future? toDevPage() {
     return Get.to(
-          () => const DevPage(),
+      () => const DevPage(),
       transition: transition,
     );
   }
 
   static Future? toLogConsolePage() {
     return Get.to(
-          () => LogConsole(dark: true),
+      () => LogConsole(dark: true),
       transition: transition,
     );
   }

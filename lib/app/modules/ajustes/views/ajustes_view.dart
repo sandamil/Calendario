@@ -10,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
-import 'package:rive/rive.dart';
 
 import '../../../controllers/ads_controller.dart';
 import '../../notas/views/alarmas/controllers/alarmas_controller.dart';
@@ -66,10 +65,11 @@ class AjustesView extends GetView<AjustesController> {
                       icon: ConstrainedBox(
                         constraints:
                             const BoxConstraints.expand(height: 50, width: 50),
-                        child: Rive(
-                          artboard: controller.artboard.value!,
-                          fit: BoxFit.fill,
-                          useArtboardSize: true,
+                        child: Icon(
+                          controller.isDark.value
+                              ? Icons.dark_mode
+                              : Icons.light_mode,
+                          size: 32,
                         ),
                       ),
                       btnText: "Tema".tr,
@@ -77,10 +77,11 @@ class AjustesView extends GetView<AjustesController> {
                           child: ConstrainedBox(
                             constraints: const BoxConstraints.expand(
                                 height: 40, width: 80),
-                            child: Rive(
-                              artboard: controller.artboard2.value!,
-                              fit: BoxFit.fill,
-                              useArtboardSize: true,
+                            child: Icon(
+                              controller.isDark.value
+                                  ? Icons.toggle_on
+                                  : Icons.toggle_off,
+                              size: 40,
                             ),
                           ),
                           onTap: () async {

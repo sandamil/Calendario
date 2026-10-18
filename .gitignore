@@ -45,3 +45,13 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+.aider*
+
+# Copias de seguridad locales
+*.bak
+
+# Carpetas de compilación en cualquier nivel
+**/build/
+
+# Copias de seguridad locales, incluidos sufijos
+*.bak*

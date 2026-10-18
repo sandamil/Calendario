@@ -125,7 +125,7 @@ class EarlyInterceptorAdapter implements HttpClientAdapter {
     }
 
     final stream = responseStream.transform<Uint8List>(
-      StreamTransformer.fromHandlers(
+      StreamTransformer<List<int>, Uint8List>.fromHandlers(
         handleData: (data, sink) {
           if (options.receiveTimeout! > const Duration(milliseconds: 10000)) {
             sink.addError(

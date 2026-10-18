@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 import 'dart:io';
 import 'package:calendario2/app/modules/ajustes/controllers/ajustes_controller.dart';
@@ -12,7 +11,6 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter_file_dialog/flutter_file_dialog.dart';
 
-
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
@@ -22,16 +20,12 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:flutter_file_dialog/flutter_file_dialog.dart';
 
-
-
 class Backup {
   DirectoryLocation? _pickedDirecotry;
 
   Future<void> pickDirectory() async {
     _pickedDirecotry = (await FlutterFileDialog.pickDirectory());
-
   }
-
 
   Future<void> saveFileToDirectory(context, currentFile) async {
     final fileData = currentFile!.readAsBytesSync();
@@ -73,28 +67,24 @@ class Backup {
     );
   }
 
-
-
-
-  Future<void> restoreFileToDirectory(context, currentFile, databaseRepository,) async {
+  Future<void> restoreFileToDirectory(
+    context,
+    currentFile,
+    databaseRepository,
+  ) async {
     final String db = await databaseRepository.databasePath();
-    final params = SaveFileDialogParams(sourceFilePath: db,data: currentFile);
+    final params = SaveFileDialogParams(sourceFilePath: db, data: currentFile);
     final filePath = await FlutterFileDialog.saveFile(params: params);
     print(filePath);
 
     final fileData = currentFile!.readAsBytesSync();
-
   }
-
-
 
   static Future<File> get _localFile async {
     final directory = await getApplicationDocumentsDirectory();
     final path = directory.path;
     return File('$path/notas_database.db');
   }
-
-
 
   static Future<File> writeBackup(path) async {
     print(path);
@@ -114,8 +104,6 @@ class Backup {
   }
 }
 
-
-
 createBackup(notas) async {
   try {
     var file = await Backup.writeBackup(notas);
@@ -128,7 +116,6 @@ createBackup(notas) async {
     print('ERROR: Creating backup failed. $e');
   }
 }
-
 
 final ajustesController = Get.find<AjustesController>();
 
@@ -145,15 +132,10 @@ Future<String> getStringFile(File file) async {
 }
 
 Future<File?> getFileStorage() async {
-  FilePickerResult? picker = await FilePicker.platform.pickFiles();
-  if (picker != null) {
-    final String? path = picker.files.single.path;
-    if (path != null) {
-      final File file = File(path);
-      return file;
-    }
-  }
-  return null;
+  final pickedFile = await FilePicker.pickFile();
+  final path = pickedFile?.path;
+  if (path == null) return null;
+  return File(path);
 }
 
 Future<bool> backupJson(databaseRepository) async {
@@ -190,8 +172,7 @@ Future<bool> restoreJson(databaseRepository) async {
   return false;
 }
 
-
-  backupDb(databaseRepository) async {
+backupDb(databaseRepository) async {
   print('backupDb');
   final Directory downloadDirectory = Directory('/sdcard/Download/');
   final DateTime now = DateTime.now();
@@ -205,10 +186,7 @@ Future<bool> restoreJson(databaseRepository) async {
   final params = SaveFileDialogParams(sourceFilePath: newPath);
   // final filePath = await FlutterFileDialog.saveFile(params: params);
 
-   await Backup().pickDirectory;
-
-
-
+  await Backup().pickDirectory;
 
   // if (!await FlutterFileDialog.isPickDirectorySupported()) {
   //   print("Picking directory not supported");
@@ -228,7 +206,6 @@ Future<bool> restoreJson(databaseRepository) async {
   //   await Backup.writeBackup(filePath);
   //
   // }
-
 
 // // Todo fotos?
 //   if (Platform.isAndroid) {
@@ -272,14 +249,7 @@ Future<bool> restoreJson(databaseRepository) async {
 //     }
 //
 //   }
-
-
 }
-
-
-
-
-
 
 Future<bool> restaurarDb(databaseRepository) async {
   print('backupDb');
@@ -295,7 +265,6 @@ Future<bool> restaurarDb(databaseRepository) async {
     print('yes');
     await file.copy(db);
     print('yes¡¡¡¡¡');
-
 
     return true;
   } else {

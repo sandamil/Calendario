@@ -1,4 +1,3 @@
-
 import 'package:calendario2/app/modules/ajustes/views/pages/util/cloud_messaging_utils.dart';
 import 'package:clipboard/clipboard.dart';
 import 'package:flutter/material.dart';
@@ -8,10 +7,8 @@ import '../../../../../debug/log/log.dart';
 import '../../../../components/toast.dart';
 import '../../../../routes/app_pages.dart';
 
-
 enum OnListViewPress {
   cloudMessageToken,
-  dioLog,
   appLog,
 }
 
@@ -25,8 +22,12 @@ class DevPage extends StatelessWidget {
       "color": Colors.green,
       "onPress": OnListViewPress.cloudMessageToken
     },
-    {"icon": Icons.info_outline, "title": "Dio Log", "color": Colors.blue, "onPress": OnListViewPress.dioLog},
-    {"icon": Icons.info_outline, "title": "App Log", "color": Colors.yellow, "onPress": OnListViewPress.appLog},
+    {
+      "icon": Icons.info_outline,
+      "title": "App Log",
+      "color": Colors.yellow,
+      "onPress": OnListViewPress.appLog
+    },
   ];
 
   void _onListViewPress(context, OnListViewPress value) async {
@@ -37,9 +38,6 @@ class DevPage extends StatelessWidget {
 
         Toast.toast(context, msg: "$token copy");
         FlutterClipboard.copy(token ?? '');
-        break;
-      case OnListViewPress.dioLog:
-        RouteUtils.toAliceInspectorPage();
         break;
       case OnListViewPress.appLog:
         RouteUtils.toLogConsolePage();
@@ -59,7 +57,8 @@ class DevPage extends StatelessWidget {
           itemCount: listViewData.length,
           itemBuilder: (context, index) => InkWell(
             child: WidgetAnimator(_buildAbout(listViewData[index])),
-            onTap: () => _onListViewPress(context, listViewData[index]['onPress']),
+            onTap: () =>
+                _onListViewPress(context, listViewData[index]['onPress']),
           ),
           separatorBuilder: (context, index) {
             return Container(
@@ -72,7 +71,8 @@ class DevPage extends StatelessWidget {
 
   Widget _buildAbout(Map data) => Container(
         //color: Colors.yellow,
-        padding: const EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0, bottom: 20.0),
+        padding: const EdgeInsets.only(
+            top: 20.0, left: 20.0, right: 20.0, bottom: 20.0),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

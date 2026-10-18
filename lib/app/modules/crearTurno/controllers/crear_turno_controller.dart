@@ -1,4 +1,3 @@
-import 'package:calendario2/app/modules/home/controllers/calendar_controller.dart';
 import 'package:calendario2/config/util/dateUtils.dart';
 import 'package:calendario2/config/util/hexColor.dart';
 import 'package:calendario2/config/util/validation_utils.dart';
@@ -6,19 +5,15 @@ import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 import '../../../data/local/calendarDatabase.dart';
 import '../../../data/model/turnoType.dart';
 
 class CrearTurnoController extends GetxController {
-
   RxList<TurnoType> turnoTypeList = <TurnoType>[].obs;
   // Rx<TurnoType> turnoType = i.obs;
   final turnoType = Rxn<TurnoType>();
-
-
-  CalendarController calendarController = CalendarController();
 
 
   RxString title = "".obs;
@@ -35,9 +30,7 @@ class CrearTurnoController extends GetxController {
       description.value = descriptionString;
   var descriptionValueController = TextEditingController();
 
-
   Rx<Color> turnoColor = Rx<Color>(Colors.orangeAccent);
-
 
   // var selectedTime = TimeOfDay.now().obs;
 
@@ -45,7 +38,8 @@ class CrearTurnoController extends GetxController {
   void onInit() {
     fetchEventsType();
     startDate = DateTime.now().formatDateTime24H.obs;
-    endDate = DateTime.now().add(const Duration(hours: 1)).formatDateTime24H.obs;
+    endDate =
+        DateTime.now().add(const Duration(hours: 1)).formatDateTime24H.obs;
     titleValueController = TextEditingController();
     descriptionValueController = TextEditingController();
     super.onInit();
@@ -70,8 +64,6 @@ class CrearTurnoController extends GetxController {
     return turnoTypeList;
   }
 
-
-
   Future<List<TurnoType>> deleteEventsType(index) async {
     await CalendarioDB.db.deleteTypeId(turnoTypeList[index].id!);
     await fetchEventsType();
@@ -87,8 +79,7 @@ class CrearTurnoController extends GetxController {
       color: turnoColor.value.value.toRadixString(16),
     );
     await CalendarioDB.db.addTypeModel(eventType);
-    await calendarController.fetchTurno();
-    fetchEventsType();
+    await fetchEventsType();
   }
 
   updateDrawerColor(Color newColor) {
@@ -98,47 +89,90 @@ class CrearTurnoController extends GetxController {
   }
 
   Future<bool> colorPickerDialog(BuildContext context) async {
-    return ColorPicker(
-      color: turnoColor.value,
-      onColorChanged: (Color color) {
-        updateDrawerColor(color);
-      },
-      width: 40,
-      height: 40,
-      borderRadius: 5.r,
-      spacing: 5,
-      runSpacing: 5,
-      wheelDiameter: 155,
-      heading: const Text(
-        'Selecciona color',
-      ),
-      subheading: const Text(
-        'Selecciona tono color',
-      ),
-      // recentColors: [mainColor],
-      // showRecentColors: true,
-      showMaterialName: false,
-      showColorName: false,
-      showColorCode: false,
-      copyPasteBehavior: const ColorPickerCopyPasteBehavior(
-        longPressMenu: true,
-      ),
-      pickersEnabled: const <ColorPickerType, bool>{
-        ColorPickerType.both: false,
-        ColorPickerType.primary: true,
-        ColorPickerType.accent: true,
-        ColorPickerType.bw: false,
-        ColorPickerType.custom: true,
-        ColorPickerType.wheel: false,
-      },
-    ).showPickerDialog(
-      context,
-      constraints:
-          const BoxConstraints(minHeight: 480, minWidth: 300, maxWidth: 320),
-    );
+    final locale = Localizations.localeOf(context);
+    final theme = Theme.of(context);
+
+    return await showGeneralDialog<bool>(
+          context: context,
+          barrierDismissible: true,
+          barrierLabel: 'Cerrar selector de color',
+          pageBuilder: (dialogContext, animation, secondaryAnimation) {
+            return Theme(
+              data: theme,
+              child: Localizations.override(
+                context: dialogContext,
+                locale: locale,
+                delegates: const [
+                  GlobalMaterialLocalizations.delegate,
+                  GlobalWidgetsLocalizations.delegate,
+                  GlobalCupertinoLocalizations.delegate,
+                ],
+                child: Dialog(
+                  backgroundColor: theme.cardColor,
+                  surfaceTintColor: Colors.transparent,
+                  child: SizedBox(
+                    width: 320,
+                    height: 560,
+                    child: Padding(
+                      padding: const EdgeInsets.all(12),
+                      child: Column(
+                        children: [
+                          Expanded(
+                            child: ColorPicker(
+                              color: turnoColor.value,
+                              onColorChanged: updateDrawerColor,
+                              width: 40,
+                              height: 40,
+                              borderRadius: 5.r,
+                              spacing: 5,
+                              runSpacing: 5,
+                              wheelDiameter: 155,
+                              heading: const Text('Selecciona color'),
+                              subheading: const Text('Selecciona tono color'),
+                              showMaterialName: false,
+                              showColorName: false,
+                              showColorCode: false,
+                              copyPasteBehavior:
+                                  const ColorPickerCopyPasteBehavior(
+                                longPressMenu: false,
+                              ),
+                              pickersEnabled: const <ColorPickerType, bool>{
+                                ColorPickerType.both: false,
+                                ColorPickerType.primary: true,
+                                ColorPickerType.accent: true,
+                                ColorPickerType.bw: false,
+                                ColorPickerType.custom: true,
+                                ColorPickerType.wheel: false,
+                              },
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              TextButton(
+                                onPressed: () =>
+                                    Navigator.of(dialogContext).pop(false),
+                                child: const Text('Cancelar'),
+                              ),
+                              TextButton(
+                                onPressed: () =>
+                                    Navigator.of(dialogContext).pop(true),
+                                child: const Text('Aceptar'),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            );
+          },
+        ) ??
+        false;
   }
-
-
 
   ///Edit turno
 
@@ -148,15 +182,14 @@ class CrearTurnoController extends GetxController {
   void esetTitle(String titleString) => etitle.value = titleString;
   var etitleValueController = TextEditingController();
 
-   RxString estartDate = ''.obs;
-   RxString eendDate = ''.obs;
+  RxString estartDate = ''.obs;
+  RxString eendDate = ''.obs;
 
   RxString edescription = "".obs;
   get egetDescription => description.value;
   void esetDescription(String descriptionString) =>
       edescription.value = descriptionString;
   var edescriptionValueController = TextEditingController();
-
 
   Rx<Color> eturnoColor = Rx<Color>(Colors.orangeAccent);
 
@@ -165,11 +198,11 @@ class CrearTurnoController extends GetxController {
   }
 
   Future<void> editEventsType(int index) async {
-    turnoType.value = await CalendarioDB.db.fetchTurnoType(turnoTypeList[index].id!);
+    turnoType.value =
+        await CalendarioDB.db.fetchTurnoType(turnoTypeList[index].id!);
   }
 
-
-   updateEditScreen() {
+  updateEditScreen() {
     id = turnoType.value!.id;
     etitle.value = turnoType.value!.title!;
     etitleValueController.text = turnoType.value!.title!;
@@ -180,7 +213,7 @@ class CrearTurnoController extends GetxController {
     eturnoColor.value = HexColor(turnoType.value!.color!);
   }
 
-  updateTurno() async {
+  Future<void> updateTurno() async {
     await CalendarioDB.db.updateTurno(
       TurnoType(
         id: id,
@@ -191,8 +224,5 @@ class CrearTurnoController extends GetxController {
         color: eturnoColor.value.value.toRadixString(16),
       ),
     );
-    await  fetchEventsType();
-calendarController.fetchTurno();
-calendarController.getCuadrante();
   }
 }

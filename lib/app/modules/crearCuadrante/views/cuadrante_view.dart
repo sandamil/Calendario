@@ -7,13 +7,16 @@ import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/config/theme/my_fonts.dart';
 import 'package:calendario2/config/theme/styles.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_animated_dialog_updated/flutter_animated_dialog.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
 
 import '../../../data/local/my_shared_pref.dart';
 import '../controllers/crear_cuadrante_controller.dart';
+import '../../home/providers/calendar_providers.dart';
+import '../providers/crear_cuadrante_provider.dart';
 import 'add_cuadrante_view.dart';
 
 class CrearCuadranteView extends GetView<CrearCuadranteController> {
@@ -104,11 +107,20 @@ class CrearCuadranteView extends GetView<CrearCuadranteController> {
                   ),
 
                   onPressed: () {
+                    ProviderScope.containerOf(context, listen: false)
+                        .read(crearCuadranteProvider.notifier)
+                        .resetForCreate();
+                    controller.cuadranteName.clear();
+                    controller.cuadranteNameString.value = '';
                     Future.delayed(const Duration(milliseconds: 300), () {
                       // MySharedPref.setTutoCuadranteFirst(true);
                       if (MySharedPref.getTutoCuadranteFirst()) {
                         controller.firstTime.value = true;
-                        controller.tutorialController.firstInstall('cuadrante');
+                        controller.tutorialController.firstInstall(
+                          'cuadrante', context: context,
+                          onCuadranteTutorialFinished: () {
+                            controller.firstTime.value = false;
+                          });
                       }
                     });
                     // Get.toNamed('/notas', (r) => false);
@@ -197,11 +209,36 @@ elevation: 1,
                                           style: TextStyle(color: MyColors.textColor, fontSize: 18.sp, ),
                                         ),
                                         Spacer(),
-                                        IconButton(
-                                          onPressed: () =>
-                                              controller.editarCuadrante(name),
-                                          icon: const Icon(
-                                              Icons.edit_calendar),
+                                        Consumer(
+                                          builder: (context, ref, child) {
+                                            return IconButton(
+                                              onPressed: () async {
+                                                final preparado = await ref
+                                                    .read(crearCuadranteProvider
+                                                        .notifier)
+                                                    .prepareEdit(name);
+
+                                                if (!context.mounted) return;
+
+                                                if (!preparado) {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    const SnackBar(
+                                                      content: Text(
+                                                        'No se han encontrado datos para este cuadrante.',
+                                                      ),
+                                                    ),
+                                                  );
+                                                  return;
+                                                }
+
+                                                controller.editarCuadrante(name);
+                                              },
+                                              icon: const Icon(
+                                                Icons.edit_calendar,
+                                              ),
+                                            );
+                                          },
                                         ),
                                         IconButton(
                                           onPressed: () =>

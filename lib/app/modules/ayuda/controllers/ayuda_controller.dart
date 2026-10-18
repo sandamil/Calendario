@@ -13,17 +13,6 @@ import 'package:url_launcher/url_launcher.dart';
 class AyudaController extends GetxController {
   //TODO: Implement AyudaController
 
-  final count = 0.obs;
-
-
-
-
-  void goToVersionAnteriorScreen() {
-    Get.toNamed('/version-anterior');
-  }
-
-
-
   void launchGmail() async {
     final Uri params = Uri(
       scheme: 'mailto',
@@ -31,20 +20,12 @@ class AyudaController extends GetxController {
       query: 'subject= Email Calendario Turnos Appp&body = ',
     );
     String url = params.toString();
-    if (await launchUrlString(url)) {
-      await launchUrlString(url);
-    } else {
-    }
+    await launchUrlString(url);
   }
 
-  void reportProblem() {}
-
   void launchTwitter() async {
-    const String url = 'https://www.twitter.com/@ajatsoft';
-    if (await launchUrlString(url)) {
-      await launchUrlString(url);
-    } else {
-    }
+    const String url = 'https://x.com/ajatsoft';
+    await launchUrlString(url);
   }
 
   void giveFeedbackClicked(context) {
@@ -56,34 +37,29 @@ class AyudaController extends GetxController {
             SizedBox(height: 600.h, child: const FeedbackScreen()));
   }
 
-  void rateAppClicked() {}
-
-
-
   void onRateThisAppPress() async {
-    // logEvent(EventNames.rateAppClicked, {});
     if (Platform.isAndroid || Platform.isIOS) {
-      // todo support for ios
-      var androidPackageName = 'ajat.calendario.turnos';
-      final appId = Platform.isAndroid ? androidPackageName: 'YOUR_IOS_APP_ID';
+      const androidPackageName = 'ajat.calendario.turnos';
+      final appId = Platform.isAndroid ? androidPackageName : 'YOUR_IOS_APP_ID';
+
       final url = Uri.parse(
         Platform.isAndroid
-            ? "market://details?id=ajat.calendario.turnos"
-            : "https://apps.apple.com/app/id$appId",
+            ? 'market://details?id=$androidPackageName'
+            : 'https://apps.apple.com/app/id$appId',
       );
-      bool canLaunchIntent = await canLaunchUrl(url);
+
+      final canLaunchIntent = await canLaunchUrl(url);
       if (canLaunchIntent) {
-        launchUrl(
+        await launchUrl(
           url,
           mode: LaunchMode.externalApplication,
         );
       } else {
-        launchUrlString(
-            'https://play.google.com/store/apps/details?id=$androidPackageName');
+        await launchUrlString(
+          'https://play.google.com/store/apps/details?id=$androidPackageName',
+          mode: LaunchMode.externalApplication,
+        );
       }
     }
   }
-
-
-
 }

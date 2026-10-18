@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -36,10 +37,9 @@ Future<void> main() async {
   initializeDateFormatting("es_ES");
 
   runApp(
-    // ProviderScope(
-    //   child:
-    buildApp(),
-    // ),
+    ProviderScope(
+      child: buildApp(),
+    ),
   );
 }
 
@@ -66,6 +66,12 @@ buildApp() {
     builder: (context, widget) {
       return GetMaterialApp(
         title: "Calendario",
+        localizationsDelegates: const [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: LocalizationService.supportedLanguages.values,
         useInheritedMediaQuery: true,
         debugShowCheckedModeBanner: false,
         builder: (context, widget) {
@@ -76,7 +82,7 @@ buildApp() {
               // prevent font from scalling (some people use big/small device fonts)
               // but we want our app font to still the same and dont get affected
               data: MediaQuery.of(context)
-                  .copyWith(textScaleFactor: Get.width <= 360 ? .85 : 1),
+                  .copyWith(textScaleFactor: MediaQuery.of(context).size.width <= 360 ? .85 : 1),
               child: widget!,
             ),
           );

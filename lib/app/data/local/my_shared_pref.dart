@@ -47,12 +47,12 @@ class MySharedPref {
     return LocalizationService.supportedLanguages[langCode]!;
   }
 
-  static setCuadrantesList(List<String> list) async {
-    _sharedPreferences.setStringList(_cuadranteName, list);
+  static Future<void> setCuadrantesList(List<String> list) async {
+    await _sharedPreferences.setStringList(_cuadranteName, list);
   }
 
-  static deleteCuadrantesList() async {
-    _sharedPreferences.remove(_cuadranteName);
+  static Future<void> deleteCuadrantesList() async {
+    await _sharedPreferences.remove(_cuadranteName);
   }
 
   static getStringList() {

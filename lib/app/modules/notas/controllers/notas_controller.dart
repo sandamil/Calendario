@@ -3,7 +3,6 @@ import 'package:calendario2/app/data/local/my_shared_pref.dart';
 import 'package:calendario2/app/data/local/previusTaskDatabase.dart';
 import 'package:calendario2/app/data/local/taskDatabase.dart';
 import 'package:calendario2/app/data/model/previousDatabase/previousTaskModel.dart';
-import 'package:calendario2/app/modules/home/controllers/calendar_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -11,7 +10,6 @@ import '../../../data/model/taskModel.dart';
 import '../views/widgets/taskCard.dart';
 
 class NotasListController extends GetxController {
-  CalendarController calendarController = CalendarController();
   TutorialController tutorialController = TutorialController();
 
   bool headerShouldHide = false;

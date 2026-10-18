@@ -8,6 +8,7 @@ import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/config/theme/my_fonts.dart';
 import 'package:calendario2/config/util/hexColor.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
     as dp;
@@ -17,6 +18,8 @@ import 'package:get/get.dart';
 
 import '../../../../config/util/app_icons.dart';
 import '../controllers/crear_cuadrante_controller.dart';
+import '../providers/crear_cuadrante_provider.dart';
+import '../../home/providers/calendar_providers.dart';
 
 class AddCuadranteView extends GetView<CrearCuadranteController> {
   const AddCuadranteView({Key? key}) : super(key: key);
@@ -38,8 +41,10 @@ class AddCuadranteView extends GetView<CrearCuadranteController> {
           /*This method here will hide the soft keyboard.*/
           FocusScope.of(context).requestFocus(FocusNode());
         },
-        child: Obx(
-          () {
+        child: Consumer(
+          builder: (context, ref, child) {
+            final state = ref.watch(crearCuadranteProvider);
+            final notifier = ref.read(crearCuadranteProvider.notifier);
             return Scaffold(
               appBar: AppBar(
                 elevation: 0,
@@ -63,19 +68,19 @@ class AddCuadranteView extends GetView<CrearCuadranteController> {
                 ),
                 actions: <Widget>[
                   IconButton(
-                    onPressed: controller.submit()
+                    onPressed: state.canSubmit
                         ? () async {
-                            if (controller.cuadranteNameString.isEmpty) {
+                            if (state.cuadranteName.isEmpty) {
                               MyCustomDialog.alertaError(
                                   'Es necesario añadir nombre al cuadrante');
                               return;
                             }
                             //Todo carcgar primera pagina de calendario
                             showAlertLoadingDialog(context);
-                            await controller.cuadranteLoad();
+                            await notifier.cuadranteLoad();
                           }
                         : () => alertDialog(context),
-                    icon: controller.submit()
+                    icon: state.canSubmit
                         ? Icon(
                             Icons.done,
                             color: Colors.green,
@@ -86,7 +91,7 @@ class AddCuadranteView extends GetView<CrearCuadranteController> {
                             color: PRIMARY_COLOR.withOpacity(0.4),
                             size: 24.sp,
                           ),
-                    key: controller.firstTime.value
+                    key: state.firstTime
                         ? controller.tutorialController.keyButton5
                         : key,
                   )
@@ -116,10 +121,12 @@ class AddCuadranteView extends GetView<CrearCuadranteController> {
                                   color: Colors.green),
                               tooltip: '',
                               onPressed: () {
-                                controller.firstTime.value = true;
+                                notifier.setFirstTime(true);
 
                                 controller.tutorialController
-                                    .showTutorial(context, 'cuadrante');
+                                    .showTutorial(context, 'cuadrante', onCuadranteTutorialFinished: () {
+                                  notifier.setFirstTime(false);
+                                });
                               },
                             ),
                           ],
@@ -133,8 +140,7 @@ class AddCuadranteView extends GetView<CrearCuadranteController> {
                             //   ),
                             // ],
                             controller: controller.cuadranteName,
-                            onChanged: (value) =>
-                                controller.setCuadranteName(value),
+                            onChanged: notifier.setCuadranteName,
                             decoration: const InputDecoration(
                               hintText: 'Nombre del cuadrante creado',
                               labelText: 'Nombre del Cuadrante',
@@ -155,7 +161,7 @@ class AddCuadranteView extends GetView<CrearCuadranteController> {
                                   (MediaQuery.of(context).size.width) / 2.2,
                               child: InputField(
                                 label: 'Inicio',
-                                hintText: controller.inicialDate.value
+                                hintText: state.inicialDate
                                     .toIso8601String()
                                     .substring(0, 10),
                                 widget: IconButton(
@@ -183,16 +189,16 @@ class AddCuadranteView extends GetView<CrearCuadranteController> {
                                         minTime: DateTime(2020),
                                         maxTime: DateTime(2050),
                                         onChanged: (date) {
-                                      controller.inicialDate.value = date;
+                                      notifier.setInicialDate(date);
                                     }, onConfirm: (date) {
-                                      controller.inicialDate.value = date;
+                                      notifier.setInicialDate(date);
                                     },
                                         currentTime: DateTime.now(),
                                         locale: dp.LocaleType.es);
                                   },
                                   icon: Icon(
                                     Icons.calendar_today_outlined,
-                                    key: controller.firstTime.value
+                                    key: state.firstTime
                                         ? controller
                                             .tutorialController.keyButton
                                         : key,
@@ -208,11 +214,11 @@ class AddCuadranteView extends GetView<CrearCuadranteController> {
                                   (MediaQuery.of(context).size.width) / 2.2,
                               child: InputField(
                                 label: 'Fin',
-                                hintText: controller.endDate.value
+                                hintText: state.endDate
                                     .toIso8601String()
                                     .substring(0, 10),
                                 widget: IconButton(
-                                  key: controller.firstTime.value
+                                  key: state.firstTime
                                       ? controller
                                           .tutorialController.keyButton2
                                       : key,
@@ -241,9 +247,9 @@ class AddCuadranteView extends GetView<CrearCuadranteController> {
                                         minTime: DateTime(2020),
                                         maxTime: DateTime(2050),
                                         onChanged: (date) {
-                                      controller.endDate.value = date;
+                                      notifier.setEndDate(date);
                                     }, onConfirm: (date) {
-                                      controller.endDate.value = date;
+                                      notifier.setEndDate(date);
                                     },
                                         currentTime: DateTime.now(),
                                         locale: dp.LocaleType.es);
@@ -261,7 +267,7 @@ class AddCuadranteView extends GetView<CrearCuadranteController> {
                       height: 1.h,
                     ),
                     Container(
-                      key: controller.firstTime.value
+                      key: state.firstTime
                           ? controller.tutorialController.keyButton3
                           : key,
                       padding: EdgeInsets.all(8.w),
@@ -270,12 +276,12 @@ class AddCuadranteView extends GetView<CrearCuadranteController> {
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: 5),
-                        itemCount: controller.list.length,
+                        itemCount: state.list.length,
                         itemBuilder: (context, index) {
                           return Container(
                             decoration: BoxDecoration(
                                 color:
-                                    HexColor(controller.list[index].color!),
+                                    HexColor(state.list[index].color!),
                                 border: Border.all(width: 0.8),
                                 borderRadius: BorderRadius.circular(5.r),
                                 boxShadow: const <BoxShadow>[
@@ -292,7 +298,7 @@ class AddCuadranteView extends GetView<CrearCuadranteController> {
                                 Padding(
                                   padding: EdgeInsets.all(2.h),
                                   child: Text(
-                                    controller.list[index].title!,
+                                    state.list[index].title!,
                                     style: TextStyle(
                                       fontSize: 22,
                                       fontWeight: FontWeight.bold,
@@ -328,8 +334,7 @@ class AddCuadranteView extends GetView<CrearCuadranteController> {
                                     ),
                                   ),
                                   onTap: () async {
-                                    controller.list
-                                        .remove(controller.list[index]);
+                                    notifier.removeTurnoAt(index);
                                   },
                                 ),
                               ],
@@ -343,9 +348,9 @@ class AddCuadranteView extends GetView<CrearCuadranteController> {
               ),
               floatingActionButton: FloatingActionButton(
                 onPressed: () async {
-                  await controller.showPopUp(context);
+                  await _showTurnoPicker(context, ref);
                 },
-                key: controller.firstTime.value
+                key: state.firstTime
                     ? controller.tutorialController.keyButton4
                     : key,
                 child: const Icon(Icons.add),
@@ -354,6 +359,75 @@ class AddCuadranteView extends GetView<CrearCuadranteController> {
           },
         ),
       ),
+    );
+  }
+
+  Future<void> _showTurnoPicker(BuildContext context, WidgetRef ref) async {
+    await showDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      builder: (dialogContext) {
+        return Consumer(
+          builder: (context, ref, child) {
+            final state = ref.watch(crearCuadranteProvider);
+            final notifier = ref.read(crearCuadranteProvider.notifier);
+
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                AlertDialog(
+                  elevation: 0,
+                  backgroundColor: Colors.transparent,
+                  content: SingleChildScrollView(
+                    child: Wrap(
+                      alignment: WrapAlignment.spaceEvenly,
+                      runSpacing: 15,
+                      children: state.turnoType.map((turno) {
+                        final color = HexColor(turno.color!);
+                        return ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(5.r),
+                            ),
+                            backgroundColor: color,
+                          ),
+                          onPressed: () {
+                            notifier.addTurno(turno);
+                          },
+                          child: Container(
+                            alignment: Alignment.center,
+                            height: 30,
+                            width: 50,
+                            child: FittedBox(
+                              fit: BoxFit.fill,
+                              child: Text(
+                                turno.description!,
+                                style: TextStyle(
+                                  color: color.computeLuminance() > 0.5
+                                      ? Colors.black
+                                      : Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  child: Icon(
+                    Icons.done,
+                    color: Theme.of(context).primaryColorDark,
+                    size: 30.0,
+                  ),
+                  onTap: () => Navigator.of(dialogContext).pop(),
+                ),
+              ],
+            );
+          },
+        );
+      },
     );
   }
 
@@ -369,35 +443,40 @@ class AddCuadranteView extends GetView<CrearCuadranteController> {
   showAlertLoadingDialog(BuildContext context) {
     final adcontroller = Get.find<AdsController>();
 
-    Widget okButton = Obx(() {
-      return TextButton(
-        child: controller.cuadranteLoading.value
-            ? const SizedBox(
-                height: 25,
-                width: 25,
-                child: CircularProgressIndicator(),
-              )
-            : const Text('Calendario'),
-        onPressed: () async {
-          adcontroller.staticHomeAd.load();
-
-          Get.offAllNamed('/home');
-        },
-      );
-    });
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      title: const Text("Espera a que cargue el cuadrante"),
-      content: const Text(
-          "Cuando se haya cargado el cuadrante el boton se habilitara para llevarte a la pagina de calendario"),
-      actions: [
-        okButton,
-      ],
-    );
-    showDialog(
+    showDialog<void>(
       context: context,
-      builder: (BuildContext context) {
-        return alert;
+      builder: (dialogContext) {
+        return Consumer(
+          builder: (context, ref, child) {
+            final loading =
+                ref.watch(crearCuadranteProvider).cuadranteLoading;
+
+            return AlertDialog(
+              title: const Text("Espera a que cargue el cuadrante"),
+              content: const Text(
+                "Cuando se haya cargado el cuadrante el boton se habilitara "
+                "para llevarte a la pagina de calendario",
+              ),
+              actions: [
+                TextButton(
+                  onPressed: loading
+                      ? null
+                      : () async {
+                          adcontroller.staticHomeAd.load();
+                          Get.offAllNamed('/home');
+                        },
+                  child: loading
+                      ? const SizedBox(
+                          height: 25,
+                          width: 25,
+                          child: CircularProgressIndicator(),
+                        )
+                      : const Text('Calendario'),
+                ),
+              ],
+            );
+          },
+        );
       },
     );
   }

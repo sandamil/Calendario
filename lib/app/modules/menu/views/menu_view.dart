@@ -4,16 +4,15 @@ import 'package:calendario2/app/modules/home/views/home_view.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/config/theme/styles.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import 'package:get/get.dart';
 
 import '../../../../config/theme/my_fonts.dart';
-import '../controllers/menu_controller.dart';
 
-class MenuView extends GetView<MenuAppController> {
+class MenuView extends StatelessWidget {
 
-  const MenuView({Key? key}) : super(key: key);
+  const MenuView({super.key});
 
   @override
   Widget build(BuildContext context) {

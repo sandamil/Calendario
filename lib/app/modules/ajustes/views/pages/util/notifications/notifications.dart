@@ -1,10 +1,10 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:open_filex/open_filex.dart';
-import 'package:rxdart/rxdart.dart';
 
 import '../../../../../../../debug/log/log.dart';
 
@@ -14,8 +14,9 @@ class Notifications {
   static int idCount = 0;
   static final instance = Notifications._privateConstructor();
   final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-  final didReceiveLocalNotificationSubject = BehaviorSubject<ReceivedNotification>();
-  final selectNotificationSubject = BehaviorSubject<String>();
+  final didReceiveLocalNotificationSubject =
+      StreamController<ReceivedNotification>.broadcast();
+  final selectNotificationSubject = StreamController<String>.broadcast();
   final downloadChannelId = "Download";
   final downloadChannelName = "Download";
   final downloadChannelDescription = "Show Download Progress";
@@ -29,27 +30,21 @@ class Notifications {
     // final notificationAppLaunchDetails =
     //     await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
 
-    const initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/launcher_icon');
+    const initializationSettingsAndroid =
+        AndroidInitializationSettings('@mipmap/launcher_icon');
     // Note: permissions aren't requested here just to demonstrate that can be done later using the `requestPermissions()` method
     // of the `IOSFlutterLocalNotificationsPlugin` class
     final initializationSettingsIOS = DarwinInitializationSettings(
-        requestAlertPermission: false,
-        requestBadgePermission: false,
-        requestSoundPermission: false,
-        onDidReceiveLocalNotification: (id, title, body, payload) async {
-          didReceiveLocalNotificationSubject.add(ReceivedNotification(
-            id: id,
-            title: title,
-            body: body,
-            payload: payload,
-          ));
-        });
+      requestAlertPermission: false,
+      requestBadgePermission: false,
+      requestSoundPermission: false,
+    );
     final initializationSettings = InitializationSettings(
       android: initializationSettingsAndroid,
       iOS: initializationSettingsIOS,
     );
     await flutterLocalNotificationsPlugin.initialize(
-      initializationSettings,
+      settings: initializationSettings,
       onDidReceiveNotificationResponse: (response) async {
         final payload = response.payload;
         if (payload != null) {
@@ -65,7 +60,8 @@ class Notifications {
 
   void _requestIOSPermissions() {
     flutterLocalNotificationsPlugin
-        .resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>()
+        .resolvePlatformSpecificImplementation<
+            IOSFlutterLocalNotificationsPlugin>()
         ?.requestPermissions(
           alert: true,
           badge: true,
@@ -75,7 +71,8 @@ class Notifications {
 
   void _configureDidReceiveLocalNotificationSubject() {
     //IOS端接收到通知所作的處理的方法
-    didReceiveLocalNotificationSubject.stream.listen((ReceivedNotification receivedNotification) async {});
+    didReceiveLocalNotificationSubject.stream
+        .listen((ReceivedNotification receivedNotification) async {});
   }
 
   void _configureSelectNotificationSubject() {
@@ -107,7 +104,8 @@ class Notifications {
     });
   }
 
-  Future<void> showProgressNotification(ReceivedNotification value, int maxProgress, int nowProgress) async {
+  Future<void> showProgressNotification(
+      ReceivedNotification value, int maxProgress, int nowProgress) async {
     //顯示下載進度
     final androidPlatformChannelSpecifics = AndroidNotificationDetails(
       downloadChannelId,
@@ -127,11 +125,17 @@ class Notifications {
       android: androidPlatformChannelSpecifics,
       iOS: iOSPlatformChannelSpecifics,
     );
-    await flutterLocalNotificationsPlugin.show(value.id, value.title, value.body, platformChannelSpecifics,
-        payload: value.payload);
+    await flutterLocalNotificationsPlugin.show(
+      id: value.id,
+      title: value.title,
+      body: value.body,
+      notificationDetails: platformChannelSpecifics,
+      payload: value.payload,
+    );
   }
 
-  Future<void> showIndeterminateProgressNotification(ReceivedNotification value) async {
+  Future<void> showIndeterminateProgressNotification(
+      ReceivedNotification value) async {
     //顯示未知下載進度
     final androidPlatformChannelSpecifics = AndroidNotificationDetails(
       downloadChannelId,
@@ -151,10 +155,10 @@ class Notifications {
       iOS: iOSPlatformChannelSpecifics,
     );
     await flutterLocalNotificationsPlugin.show(
-      value.id,
-      value.title,
-      value.body,
-      platformChannelSpecifics,
+      id: value.id,
+      title: value.title,
+      body: value.body,
+      notificationDetails: platformChannelSpecifics,
       payload: value.payload,
     );
   }
@@ -176,16 +180,16 @@ class Notifications {
       iOS: iOSPlatformChannelSpecifics,
     );
     await flutterLocalNotificationsPlugin.show(
-      value.id,
-      value.title,
-      value.body,
-      platformChannelSpecifics,
+      id: value.id,
+      title: value.title,
+      body: value.body,
+      notificationDetails: platformChannelSpecifics,
       payload: value.payload,
     );
   }
 
   Future<void> cancelNotification(int id) async {
-    await flutterLocalNotificationsPlugin.cancel(id);
+    await flutterLocalNotificationsPlugin.cancel(id: id);
   }
 
   int get notificationId {
@@ -200,7 +204,9 @@ class ReceivedNotification {
     required this.body,
     required this.payload,
   })  : id = id ?? Notifications.instance.notificationId,
-        title = title != null ? (title.length > 26 ? "${title.substring(0, 26)}..." : title) : 'TAT';
+        title = title != null
+            ? (title.length > 26 ? "${title.substring(0, 26)}..." : title)
+            : 'TAT';
 
   int id;
   String title;

@@ -73,18 +73,6 @@ class AyudaView extends GetView<AyudaController> {
                 ),
                 SizedBox(height: 10.h),
                 SettingsGroup(
-                  title: "Version Anterior",
-                  children: [
-                    AyudaRowWidget(
-                      title: "Datos Guardados",
-                      subtitle:
-                          "Consulta aquí, los datos guardados de tu versión anterior a Calendario 2.0, o Mayo 2023.",
-                      onTap: () => controller.goToVersionAnteriorScreen(),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 10.h),
-                SettingsGroup(
                   title: "Feedback",
                   children: [
                     AyudaRowWidget(

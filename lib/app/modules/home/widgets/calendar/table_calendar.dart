@@ -1,10 +1,10 @@
 import 'dart:io';
 import 'package:intl/intl.dart';
-import 'package:calendario2/app/modules/home/controllers/calendar_controller.dart';
 import 'package:calendario2/app/modules/home/widgets/calendar/widget/customAlertDialogDaySelected.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:calendario2/app/modules/home/providers/calendar_providers.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 import '../../../../../config/theme/my_colors.dart';
@@ -15,18 +15,98 @@ import '../../../../data/model/cuadranteDay.dart';
 import '../../../../data/model/taskModel.dart';
 import 'turnos_notas_onHomeDialog.dart';
 
-class TableCalendarWidget extends StatefulWidget {
+class TableCalendarWidget extends ConsumerStatefulWidget {
   TableCalendarWidget(
       {super.key, this.onDaySelected, this.onDaySelectedLongPress});
   void Function(DateTime, DateTime)? onDaySelected;
-  void Function(DateTime, DateTime)? onDaySelectedLongPress;
+  void Function(DateTime, DateTime, Offset)? onDaySelectedLongPress;
 
   @override
-  State<TableCalendarWidget> createState() => _TableCalendarWidgetState();
+  ConsumerState<TableCalendarWidget> createState() =>
+      _TableCalendarWidgetState();
 }
 
-class _TableCalendarWidgetState extends State<TableCalendarWidget> {
-  final calendarController = Get.find<CalendarController>();
+class _TableCalendarWidgetState extends ConsumerState<TableCalendarWidget> {
+  Offset _lastTapPosition = Offset.zero;
+  PageController? _calendarPageController;
+  double _horizontalDragDistance = 0;
+  bool _horizontalPageChangeTriggered = false;
+
+  Map<DateTime, List<CuadranteDay>>? _cachedCuadranteSource;
+  List<Task>? _cachedNotasSource;
+  Map<DateTime, List<CuadranteDay>> _cachedTurnosPorDia = {};
+  Map<DateTime, List<Task>> _cachedNotasPorDia = {};
+
+  void _actualizarIndices(
+    Map<DateTime, List<CuadranteDay>> cuadranteMap,
+    List<Task> notas,
+  ) {
+    if (!identical(_cachedCuadranteSource, cuadranteMap)) {
+      final turnosPorDia = <DateTime, List<CuadranteDay>>{};
+
+      for (final entry in cuadranteMap.entries) {
+        final fecha = DateTime(
+          entry.key.year,
+          entry.key.month,
+          entry.key.day,
+        );
+        turnosPorDia.putIfAbsent(fecha, () => <CuadranteDay>[]);
+        turnosPorDia[fecha]!.addAll(entry.value);
+      }
+
+      _cachedCuadranteSource = cuadranteMap;
+      _cachedTurnosPorDia = turnosPorDia;
+    }
+
+    if (!identical(_cachedNotasSource, notas)) {
+      final notasPorDia = <DateTime, List<Task>>{};
+
+      for (final nota in notas) {
+        final timestamp = nota.startTimeMilliseconds;
+        if (timestamp == null) continue;
+
+        final fecha = DateTime.fromMillisecondsSinceEpoch(timestamp);
+        final dia = DateTime(fecha.year, fecha.month, fecha.day);
+        notasPorDia.putIfAbsent(dia, () => <Task>[]);
+        notasPorDia[dia]!.add(nota);
+      }
+
+      _cachedNotasSource = notas;
+      _cachedNotasPorDia = notasPorDia;
+    }
+  }
+
+  void _onVerticalSwipeEnd(DragEndDetails details) {
+    final velocity = details.primaryVelocity;
+    final pageController = _calendarPageController;
+
+    if (!mounted ||
+        velocity == null ||
+        velocity.abs() < 100 ||
+        pageController == null ||
+        !pageController.hasClients) {
+      return;
+    }
+
+    // Deslizar hacia arriba avanza; hacia abajo retrocede.
+    final delta = velocity < 0 ? 1 : -1;
+    final focused = ref.read(focusedMonthProvider);
+    final nextMonth = DateTime(focused.year, focused.month + delta, 1);
+
+    if (nextMonth.isBefore(DateTime(2000, 1, 1)) ||
+        nextMonth.isAfter(DateTime(2050, 12, 1))) {
+      return;
+    }
+
+    final currentPage = pageController.page;
+    if (currentPage == null) return;
+
+    pageController.animateToPage(
+      currentPage.round() + delta,
+      duration: const Duration(milliseconds: 100),
+      curve: Curves.easeOut,
+    );
+  }
 
   // Future<Map<DateTime, List<CuadranteDay>>> getCuadrante() async {
   //   calendarController.cuadrante.value =
@@ -49,12 +129,64 @@ class _TableCalendarWidgetState extends State<TableCalendarWidget> {
   //   return calendarController.cuadranteMap;
   // }
 
+  void _onHorizontalSwipeUpdate(DragUpdateDetails details) {
+    if (_horizontalPageChangeTriggered) return;
+
+    _horizontalDragDistance += details.delta.dx;
+    if (_horizontalDragDistance.abs() < 10) return;
+
+    final pageController = _calendarPageController;
+    if (pageController == null || !pageController.hasClients) return;
+
+    final delta = _horizontalDragDistance < 0 ? 1 : -1;
+    final focused = ref.read(focusedMonthProvider);
+    final nextMonth = DateTime(focused.year, focused.month + delta, 1);
+
+    if (nextMonth.isBefore(DateTime(2000, 1, 1)) ||
+        nextMonth.isAfter(DateTime(2050, 12, 1))) {
+      _horizontalPageChangeTriggered = true;
+      return;
+    }
+
+    final currentPage = pageController.page;
+    if (currentPage == null) return;
+
+    // Solo se inicia un cambio por gesto.
+    _horizontalPageChangeTriggered = true;
+
+    pageController.animateToPage(
+      currentPage.round() + delta,
+      duration: const Duration(milliseconds: 100),
+      curve: Curves.easeOut,
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final cuadranteMap = ref.watch(cuadranteMapProvider);
+    final notas = ref.watch(notasProvider);
+
+    // Recalcular los índices solo cuando Riverpod publica nuevos datos.
+    _actualizarIndices(cuadranteMap, notas);
+    final turnosPorDia = _cachedTurnosPorDia;
+    final notasPorDia = _cachedNotasPorDia;
+
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
-      onTapDown: (TapDownDetails details) =>
-          calendarController.onTapDown(details),
+      onTapDown: (TapDownDetails details) {
+        _lastTapPosition = details.globalPosition;
+      },
+      onVerticalDragEnd: _onVerticalSwipeEnd,
+      onHorizontalDragStart: (_) {
+        _horizontalDragDistance = 0;
+        _horizontalPageChangeTriggered = false;
+      },
+      onHorizontalDragUpdate: _onHorizontalSwipeUpdate,
       child: TableCalendar(
         locale: 'es_ES',
         daysOfWeekHeight: 25.h,
@@ -64,46 +196,58 @@ class _TableCalendarWidgetState extends State<TableCalendarWidget> {
           outsideDaysVisible: false,
         ),
         holidayPredicate: (day) {
-          // print('comprobar refactor' '${calendarController.hasEvent(day)}'
-          // );
-          return calendarController.hasEvent(day);
+          final fecha = DateTime(day.year, day.month, day.day);
+          return notasPorDia[fecha]?.isNotEmpty ?? false;
         },
         firstDay: DateTime(2000),
         lastDay: DateTime(2050),
-        focusedDay: calendarController.focusedDay.value,
+        focusedDay: ref.watch(focusedMonthProvider),
         // calendarFormat: controller.calendarFormat,
-        eventLoader: calendarController.getTurnosOfDay,
+        eventLoader: (day) {
+          final fecha = DateTime(day.year, day.month, day.day);
+          return turnosPorDia[fecha] ?? const <CuadranteDay>[];
+        },
         startingDayOfWeek: StartingDayOfWeek.monday,
+        // El gesto vertical personalizado cambia de mes, no de formato.
+        availableGestures: AvailableGestures.none,
         // selectedDayPredicate: (day) {
         //   return isSameDay(calendarController.selectedDayRx.value, day);
         // },
         selectedDayPredicate: (day) =>
-            isSameDay(calendarController.selectedDay, day),
+            isSameDay(ref.watch(selectedDayProvider), day),
 
         onDaySelected: widget.onDaySelected,
-        onDayLongPressed: widget.onDaySelectedLongPress,
+        onDayLongPressed: (selectedDay, focusedDay) {
+          widget.onDaySelectedLongPress?.call(
+            selectedDay,
+            focusedDay,
+            _lastTapPosition,
+          );
+        },
         // onFormatChanged: (format) {
         //   if (controller.calendarFormat != format) {
         //     controller.changeCalendarFormat(format);
         //   }
         // },
-        onCalendarCreated: (_) {
-          calendarController.update;
+        onCalendarCreated: (pageController) {
+          _calendarPageController = pageController;
         },
         onPageChanged: (focusedDay) {
-          calendarController.focusedDay.value = focusedDay;
-          calendarController.focusDayRx.value = focusedDay;
+          ProviderScope.containerOf(context, listen: false)
+              .read(focusedMonthProvider.notifier)
+              .setFocusedDay(focusedDay);
         },
-        calendarBuilders: _calendarBuilders(),
+        calendarBuilders: _calendarBuilders(notasPorDia),
       ),
     );
   }
 
-  _calendarBuilders() => CalendarBuilders(
+  _calendarBuilders(Map<DateTime, List<Task>> notasPorDia) => CalendarBuilders(
         /// =       markerBuilder:          =======================================
 
         markerBuilder: (context, day, List<CuadranteDay> events) {
-          List<Task> notas = calendarController.getNotasOfDay(day);
+          final fecha = DateTime(day.year, day.month, day.day);
+          final notasDelDia = notasPorDia[fecha] ?? const <Task>[];
           return Container(
             alignment: Alignment.topCenter,
             margin: EdgeInsets.only(top: 20.h),
@@ -138,7 +282,7 @@ class _TableCalendarWidgetState extends State<TableCalendarWidget> {
                   SizedBox(
                     height: 3.h,
                   ),
-                  ...notas.map((nota) => Padding(
+                  ...notasDelDia.map((nota) => Padding(
                         padding: EdgeInsets.symmetric(
                             vertical: 0.5.h, horizontal: 1.w),
                         child: Container(

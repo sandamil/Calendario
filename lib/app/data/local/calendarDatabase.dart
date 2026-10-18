@@ -28,7 +28,6 @@ class CalendarioDB {
     return join(doucumentDirectory.path, databaseName);
   }
 
-
   Future<Database> initDb() async {
     // Directory doucumentDirectory = await getApplicationDocumentsDirectory();
     // String path = join(doucumentDirectory.path, databaseName);
@@ -85,8 +84,8 @@ class CalendarioDB {
 
   Future<CuadranteDay?> fetchItem(int id) async {
     final dbClient = await database;
-    List result =
-        await dbClient!.query(_cuadrantesTable, where: "id = ?", whereArgs: [id]);
+    List result = await dbClient!
+        .query(_cuadrantesTable, where: "id = ?", whereArgs: [id]);
     if (result.isEmpty) {
       return null;
     } else {
@@ -94,10 +93,7 @@ class CalendarioDB {
     }
   }
 
-  getCuadrantesName (){
-
-
-  }
+  getCuadrantesName() {}
 
   Future<List<CuadranteDay>> getCuadranteList() async {
     final dbClient = await database;
@@ -164,6 +160,24 @@ class CalendarioDB {
         where: "cuadranteName = ?", whereArgs: [cuadranteName]);
   }
 
+  Future<void> deleteCuadranteOutsideRange(
+    String cuadranteName,
+    DateTime start,
+    DateTime end,
+  ) async {
+    final dbClient = await database;
+    if (dbClient == null) return;
+
+    final fechaInicio = start.toIso8601String().substring(0, 10);
+    final fechaFin = end.toIso8601String().substring(0, 10);
+
+    await dbClient.delete(
+      _cuadrantesTable,
+      where: "cuadranteName = ? AND (datetime < ? OR datetime > ?)",
+      whereArgs: [cuadranteName, fechaInicio, fechaFin],
+    );
+  }
+
   Future<void> deleteALlCuadrante() async {
     Database? dbClient = await database;
     await dbClient!.delete(_cuadrantesTable);
@@ -190,7 +204,7 @@ class CalendarioDB {
   Future<TurnoType?> fetchTurnoType(int id) async {
     final dbClient = await database;
     List result =
-    await dbClient!.query(_turnosTable, where: "id = ?", whereArgs: [id]);
+        await dbClient!.query(_turnosTable, where: "id = ?", whereArgs: [id]);
     if (result.isEmpty) {
       return null;
     } else {
@@ -198,19 +212,56 @@ class CalendarioDB {
     }
   }
 
-
   Future<void> updateTurno(TurnoType turno) async {
-    var dbClient = await database;
-    await dbClient?.update(
+    final dbClient = await database;
+    if (dbClient == null) return;
+
+    // Recuperar los datos anteriores del tipo de turno.
+    final resultado = await dbClient.query(
+      _turnosTable,
+      where: 'id = ?',
+      whereArgs: [turno.id],
+      limit: 1,
+    );
+
+    if (resultado.isEmpty) return;
+
+    final anterior = TurnoType.fromMap(resultado.first);
+
+    // Actualizar el tipo de turno.
+    await dbClient.update(
       _turnosTable,
       turno.toMap(),
-      where: "id = ?",
+      where: 'id = ?',
       whereArgs: [turno.id],
     );
+
+    // Actualizar las asignaciones que coincidan con los datos anteriores.
+    await dbClient.update(
+      _cuadrantesTable,
+      {
+        'title': turno.title,
+        'description': turno.description,
+        'startHour': turno.startHour,
+        'endHour': turno.endHour,
+        'color': turno.color,
+      },
+      where: '''
+        title IS ?
+        AND description IS ?
+        AND startHour IS ?
+        AND endHour IS ?
+        AND color IS ?
+      ''',
+      whereArgs: [
+        anterior.title,
+        anterior.description,
+        anterior.startHour,
+        anterior.endHour,
+        anterior.color,
+      ],
+    );
   }
-
-
-
 
   Future<void> deleteTypeId(int id) async {
     final dbClient = await database;
@@ -226,5 +277,4 @@ class CalendarioDB {
     Database? dbClient = await database;
     return await dbClient!.delete(_cuadrantesTable);
   }
-
 }

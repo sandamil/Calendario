@@ -127,7 +127,8 @@ class AddNotasView extends GetView<AddNotasController> {
                                         color: MyColors.textColorPrimary,
                                         fontSize: 16.sp,
                                         fontWeight: FontWeight.bold),
-                                    backgroundColor: MyColors.backgroundLowAccent),
+                                    backgroundColor:
+                                        MyColors.backgroundLowAccent),
                                 showTitleActions: true,
                                 onChanged: (DateTime date) {
                               if (controller
@@ -192,7 +193,8 @@ class AddNotasView extends GetView<AddNotasController> {
                                         color: MyColors.textColorPrimary,
                                         fontSize: 16.sp,
                                         fontWeight: FontWeight.bold),
-                                    backgroundColor: MyColors.backgroundLowAccent),
+                                    backgroundColor:
+                                        MyColors.backgroundLowAccent),
                                 showTitleActions: true,
                                 onChanged: (DateTime date) {
                               if (controller
@@ -395,7 +397,7 @@ class AddNotasView extends GetView<AddNotasController> {
                       padding: EdgeInsets.all(4.h),
                       child: Text(
                         'Tienes una alarma creada en esta nota para las: '
-                            '${controller.alarmaHora}'
+                        '${controller.alarmaHora}'
                         //     '${TimeOfDay(
                         //   hour: controller
                         //       .alarmaCreadaNota!
@@ -406,11 +408,9 @@ class AddNotasView extends GetView<AddNotasController> {
                         //       .dateTime
                         //       .minute,
                         // ).format(context)}'
-                            ''
-                            ', quieres borrarla?',
-                        style: Theme.of(Get.context!)
-                            .textTheme
-                            .headlineSmall,
+                        ''
+                        ', quieres borrarla?',
+                        style: Theme.of(Get.context!).textTheme.headlineSmall,
                       ),
                     ),
                   ),
@@ -432,7 +432,9 @@ class AddNotasView extends GetView<AddNotasController> {
                           child: ElevatedButton(
                         onPressed: () async {
                           // controller.alarmTime = DateTime(2020);
-                          await controller.flutterLocalNotificationsPlugin.cancel(controller.idGenerated);  // 0 is your notification id
+                          await controller.flutterLocalNotificationsPlugin.cancel(
+                              id: controller
+                                  .idGenerated!); // 0 is your notification id
                           Get.toNamed('/alarmas', arguments: {
                             'id': controller.idGenerated!,
                             'startTime': controller.startTime.value,

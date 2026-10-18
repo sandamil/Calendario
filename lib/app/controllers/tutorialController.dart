@@ -1,6 +1,4 @@
 import 'package:calendario2/app/data/local/my_shared_pref.dart';
-import 'package:calendario2/app/modules/crearCuadrante/controllers/crear_cuadrante_controller.dart';
-import 'package:calendario2/app/modules/home/controllers/home_controller.dart';
 import 'package:calendario2/app/modules/notas/controllers/notas_controller.dart';
 import 'package:calendario2/app/modules/notas/views/AddNotas/controllers/add_notas_controller.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
@@ -13,15 +11,21 @@ import 'package:get/get.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 class TutorialController extends GetxController {
-
   TutorialCoachMark? tutorialCoachMark;
   List<TargetFocus> targets = [];
 
-  firstInstall(String view) async {
+  firstInstall(String view,
+      {BuildContext? context,
+      VoidCallback? onFinished,
+      VoidCallback? onCuadranteTutorialFinished}) async {
     switch (view) {
       case 'home':
         if (MySharedPref.getTutoHomeFirst()) {
-          showTutorial(Get.overlayContext, view);
+          final tutorialContext = context ?? Get.overlayContext;
+          if (tutorialContext == null) return;
+          showTutorial(tutorialContext, view,
+              onFinished: onFinished,
+              onCuadranteTutorialFinished: onCuadranteTutorialFinished);
           MySharedPref.setTutoHomeFirst(false);
         }
         break;
@@ -48,10 +52,11 @@ class TutorialController extends GetxController {
     }
   }
 
-  void showTutorial(context, String view) {
+  void showTutorial(context, String view,
+      {VoidCallback? onFinished, VoidCallback? onCuadranteTutorialFinished}) {
     switch (view) {
       case 'home':
-        createTutorialHome();
+        createTutorialHome(onFinished: onFinished);
         tutorialCoachMark?.show(context: context);
         break;
       case 'task':
@@ -63,7 +68,7 @@ class TutorialController extends GetxController {
         tutorialCoachMark?.show(context: context);
         break;
       case 'cuadrante':
-        createTutorialCuadrante();
+        createTutorialCuadrante(onCuadranteTutorialFinished);
         tutorialCoachMark?.show(context: context);
         break;
       default:
@@ -85,9 +90,7 @@ class TutorialController extends GetxController {
   GlobalKey? keyButton8 = GlobalKey();
   GlobalKey? keyButton9 = GlobalKey();
 
-  void createTutorialHome() {
-    var homeController = HomeController();
-
+  void createTutorialHome({VoidCallback? onFinished}) {
     tutorialCoachMark = TutorialCoachMark(
       alignSkip: Alignment.bottomRight,
       targets: InicioListTarget().createTargets(
@@ -101,13 +104,14 @@ class TutorialController extends GetxController {
       paddingFocus: 2,
       opacityShadow: 0.92,
       onFinish: () {
-        homeController.firstTime.value = false;
+        onFinished?.call();
       },
       onClickTarget: (target) {},
       onClickTargetWithTapPosition: (target, tapDetails) {},
       onClickOverlay: (target) {},
       onSkip: () {
-        homeController.firstTime.value = false;
+        onFinished?.call();
+        return true;
       },
     );
   }
@@ -121,8 +125,8 @@ class TutorialController extends GetxController {
   GlobalKey keyButton4 = GlobalKey();
   GlobalKey keyButton5 = GlobalKey();
 
-  void createTutorialCuadrante() {
-    var cuadranteController = Get.put(CrearCuadranteController());
+  void createTutorialCuadrante(VoidCallback? onFinished) {
+    if (onFinished == null) return;
 
     tutorialCoachMark = TutorialCoachMark(
       targets: ListTargetCuadrantes().createTargets(
@@ -137,14 +141,13 @@ class TutorialController extends GetxController {
       textSkip: "Finalizar",
       paddingFocus: 2,
       opacityShadow: 0.92,
-      onFinish: () {
-        cuadranteController.firstTime.value = false;
-      },
+      onFinish: onFinished,
       onClickTarget: (target) {},
       onClickTargetWithTapPosition: (target, tapDetails) {},
       onClickOverlay: (target) {},
       onSkip: () {
-        cuadranteController.firstTime.value = false;
+        onFinished();
+        return true;
       },
     );
   }
@@ -180,6 +183,7 @@ class TutorialController extends GetxController {
       onClickOverlay: (target) {},
       onSkip: () {
         notasController.firstTime.value = false;
+        return true;
       },
     );
   }
@@ -218,6 +222,7 @@ class TutorialController extends GetxController {
       onClickOverlay: (target) {},
       onSkip: () {
         addNotasController.firstTime.value = false;
+        return true;
       },
     );
   }

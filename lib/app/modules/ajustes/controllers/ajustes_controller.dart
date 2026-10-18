@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'dart:io';
+import 'dart:io' as io;
 
 import 'package:calendario2/app/components/custom_snackbar.dart';
 import 'package:calendario2/app/data/local/calendarDatabase.dart';
@@ -16,7 +16,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_file_dialog/flutter_file_dialog.dart';
 import 'package:get/get.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:rive/rive.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../config/util/backup_restore.dart';
@@ -26,20 +25,10 @@ import '../views/pages/backup_screen.dart';
 import '../views/pages/util/dio_connector.dart';
 
 class AjustesController extends GetxController {
-
-
   RxBool isDark = true.obs;
 
   final List<Language> languages = <Language>[];
   late Rx<Language> selectedLanguage;
-
-  late RiveAnimationController? _controller;
-  late RiveAnimationController? _controller2;
-
-  final artboard = Rxn<RuntimeArtboard>();
-  final artboard2 = Rxn<RuntimeArtboard>();
-
-
 
   // var islight = true;
   // var enable = true;
@@ -56,33 +45,12 @@ class AjustesController extends GetxController {
 
     if (Get.isDarkMode) {
       isDark.value = true;
-    }  else {
+    } else {
       isDark.value = false;
     }
-    artboard.value = RuntimeArtboard();
-    rootBundle.load(ConstantData.lightdark_theme).then((data) async {
-      final file = RiveFile.import(data);
-      final _artboard = file.mainArtboard as RuntimeArtboard;
-      _artboard.addController(_controller = (!isDark.value)
-          ? SimpleAnimation('to light')
-          : SimpleAnimation('to dark'));
-      artboard.value = _artboard;
-    });
-
-    artboard2.value = RuntimeArtboard();
-    rootBundle.load(ConstantData.darklightswitch).then((data) async {
-      final file = RiveFile.import(data);
-      final _artboard2 = file.mainArtboard as RuntimeArtboard;
-      _artboard2.addController(_controller2 = (!isDark.value)
-          ? SimpleAnimation('ltr')
-          : SimpleAnimation('rtl'));
-      artboard2.value = _artboard2;
-    });
 
     super.onInit();
   }
-
-
 
   Future<void> cambioModo() async {
     isDark.value = !isDark.value;
@@ -91,20 +59,12 @@ class AjustesController extends GetxController {
 
   Future<void> changeTheme(bool value) async {
     if (value) {
-      artboard.value?.removeController(_controller!);
-      artboard.value?.addController(_controller = SimpleAnimation('to dark'));
-      artboard2.value?.removeController(_controller2!);
-      artboard2.value?.addController(_controller2 = SimpleAnimation('rtl'));
       Get.snackbar("Tema oscuro", "Modo oscuro activado",
           colorText: Colors.white, snackPosition: SnackPosition.BOTTOM);
       update();
       isDark.value = true;
       MyTheme.changeTheme();
     } else {
-      artboard.value?.removeController(_controller!);
-      artboard.value?.addController(_controller = SimpleAnimation('to light'));
-      artboard2.value?.removeController(_controller2!);
-      artboard2.value?.addController(_controller2 = SimpleAnimation('ltr'));
       Get.snackbar("Tema claro", "Modo brillante activado",
           colorText: Colors.white, snackPosition: SnackPosition.BOTTOM);
       update();
@@ -115,13 +75,11 @@ class AjustesController extends GetxController {
 
   void backup() {
     Get.to(
-          () => const BackupScreen(),
+      () => const BackupScreen(),
       transition: Transition.fadeIn,
       duration: const Duration(milliseconds: 100),
     );
   }
-
-
 
   void goToLanguageScreen() {
     Get.to(
@@ -165,8 +123,7 @@ class AjustesController extends GetxController {
     String url = params.toString();
     if (await canLaunch(url)) {
       await launch(url);
-    } else {
-    }
+    } else {}
   }
 
   //Report a problem
@@ -178,20 +135,15 @@ class AjustesController extends GetxController {
     String url = params.toString();
     if (await canLaunch(url)) {
       await launch(url);
-    } else {
-    }
+    } else {}
   }
 
   void launchTwitter() async {
     const String url = 'https://www.twitter.com/@ajatsoft';
     if (await canLaunch(url)) {
       await launch(url);
-    } else {
-    }
+    } else {}
   }
-
-
-
 
   Future<String> getDataByGet(ConnectorParameter parameter) async {
     try {
@@ -202,24 +154,22 @@ class AjustesController extends GetxController {
     }
   }
 
-
   ///=============Backup==============
   ///
   ///
 
   Future<bool> isPickDirectorySupported =
-  FlutterFileDialog.isPickDirectorySupported();
+      FlutterFileDialog.isPickDirectorySupported();
   DirectoryLocation? _pickedDirecotry;
   bool _isBusy = false;
   OpenFileDialogType _dialogType = OpenFileDialogType.image;
   // SourceType _sourceType = SourceType.photoLibrary;
   bool _allowEditing = false;
-  File? _currentFile;
+  io.File? _currentFile;
   String? _savedFilePath;
   bool _localOnly = false;
   bool _copyFileToCacheDir = true;
   String? _pickedFilePath;
-
 
   Future<void> pickDirectory() async {
     _pickedDirecotry = (await FlutterFileDialog.pickDirectory());
@@ -269,17 +219,21 @@ class AjustesController extends GetxController {
           );
         },
       );
-    }
-    on Exception catch (e) {
-      CustomSnackBar.showCustomErrorSnackBar(title: 'Backup Error', message: 'Error: $e',duration: const Duration(seconds: 6));
+    } on Exception catch (e) {
+      CustomSnackBar.showCustomErrorSnackBar(
+          title: 'Backup Error',
+          message: 'Error: $e',
+          duration: const Duration(seconds: 6));
       return;
     } catch (e) {
-      CustomSnackBar.showCustomErrorSnackBar(title: 'Backup Error', message: 'Error: $e',duration: const Duration(seconds: 6));
+      CustomSnackBar.showCustomErrorSnackBar(
+          title: 'Backup Error',
+          message: 'Error: $e',
+          duration: const Duration(seconds: 6));
     }
-    CustomSnackBar.showCustomSnackBar(title: 'Backup realizado', message: 'Lo puedes ver o guardar desde tu carpeta elegida');
-
-
-
+    CustomSnackBar.showCustomSnackBar(
+        title: 'Backup realizado',
+        message: 'Lo puedes ver o guardar desde tu carpeta elegida');
   }
 
   Future<void> restoreDB(databaseRepository) async {
@@ -303,7 +257,7 @@ class AjustesController extends GetxController {
       } finally {
         _pickedFilePath = result;
         if (result != null) {
-          _currentFile = File(result);
+          _currentFile = io.File(result);
           final String db = await databaseRepository.databasePath();
           await _currentFile?.copy(db);
         } else {
@@ -313,31 +267,33 @@ class AjustesController extends GetxController {
         update();
       }
     } on Exception catch (e) {
-      CustomSnackBar.showCustomErrorSnackBar(title: 'Error en restauación de datos.', message: 'Error: $e',duration: const Duration(seconds: 6));
+      CustomSnackBar.showCustomErrorSnackBar(
+          title: 'Error en restauación de datos.',
+          message: 'Error: $e',
+          duration: const Duration(seconds: 6));
       return;
     } catch (e) {
-      CustomSnackBar.showCustomErrorSnackBar(title: 'Error en restauación de datos.', message: 'Error: $e',duration: const Duration(seconds: 6));
+      CustomSnackBar.showCustomErrorSnackBar(
+          title: 'Error en restauación de datos.',
+          message: 'Error: $e',
+          duration: const Duration(seconds: 6));
     }
-    CustomSnackBar.showCustomSnackBar(title: 'Datos restaurados', message: 'Puedes volver a la página de calendario, tus datos han sido restaurados con éxito.');
-
+    CustomSnackBar.showCustomSnackBar(
+        title: 'Datos restaurados',
+        message:
+            'Puedes volver a la página de calendario, tus datos han sido restaurados con éxito.');
   }
 
-
-
   void backupNotasDb() async {
-    if (_pickedDirecotry == null ) {
+    if (_pickedDirecotry == null) {
       return;
     }
     NotasDB databaseRepository = NotasDB();
     String? dbName = databaseRepository.databaseName;
     final String db = await databaseRepository.databasePath();
-    final File file = File(db);
+    final io.File file = io.File(db);
     saveFileToDirectory(file, dbName);
-   }
-
-
-
-
+  }
 
   void restoreNotasDb() async {
     NotasDB databaseRepository = NotasDB();
@@ -345,21 +301,18 @@ class AjustesController extends GetxController {
   }
 
   Future backupCalendarioDb() async {
-    if (_pickedDirecotry == null ) {
+    if (_pickedDirecotry == null) {
       return;
     }
     CalendarioDB databaseRepository = CalendarioDB();
     String? dbName = databaseRepository.databaseName;
     final String db = await databaseRepository.databasePath();
-    final File file = File(db);
+    final io.File file = io.File(db);
     saveFileToDirectory(file, dbName);
-     }
+  }
 
   Future restoreCalendarioDb() async {
     CalendarioDB databaseRepository = CalendarioDB();
     await restoreDB(databaseRepository);
-
-    }
-
-
+  }
 }

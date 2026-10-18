@@ -3,6 +3,8 @@ import 'package:calendario2/app/data/model/turnoType.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/config/util/app_utils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../home/providers/calendar_providers.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
@@ -14,7 +16,6 @@ import 'widgets/input_field.dart';
 
 class EditTurnoView extends GetView<CrearTurnoController> {
   const EditTurnoView(Rxn<TurnoType> turnoType, {Key? key}) : super(key: key);
-
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +35,7 @@ class EditTurnoView extends GetView<CrearTurnoController> {
               ),
               onPressed: () {
                 Get.to(
-                      () => const TurnoView(),
+                  () => const TurnoView(),
                   transition: Transition.fadeIn,
                   duration: const Duration(milliseconds: 100),
                 );
@@ -80,10 +81,10 @@ class EditTurnoView extends GetView<CrearTurnoController> {
                               hintText: 'Abreviatura',
                               labelText: 'Abreviatura',
                               border: const OutlineInputBorder(
-                                // borderSide: BorderSide(color: Colors.yellow),
+                                  // borderSide: BorderSide(color: Colors.yellow),
 
                                   borderRadius:
-                                  BorderRadius.all(Radius.circular(15))),
+                                      BorderRadius.all(Radius.circular(15))),
                             ),
                           ),
                         ),
@@ -115,33 +116,35 @@ class EditTurnoView extends GetView<CrearTurnoController> {
                                       Container(
                                         decoration: BoxDecoration(
                                             border: Border.all(
-                                                color:
-                                                controller.eturnoColor.value,
+                                                color: controller
+                                                    .eturnoColor.value,
                                                 width: 2),
                                             color: controller.eturnoColor.value
                                                 .withAlpha(600),
                                             borderRadius:
-                                            BorderRadius.circular(5.r)),
-                                        padding:
-                                        EdgeInsets.symmetric(horizontal: 5.w),
+                                                BorderRadius.circular(5.r)),
+                                        padding: EdgeInsets.symmetric(
+                                            horizontal: 5.w),
                                         child: controller.etitle.value.isEmpty
                                             ? Text(
-                                          '        ',
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              color: controller
-                                                  .eturnoColor.value,
-                                              fontWeight: FontWeight.w700),
-                                        )
+                                                '        ',
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    color: controller
+                                                        .eturnoColor.value,
+                                                    fontWeight:
+                                                        FontWeight.w700),
+                                              )
                                             : Text(
-                                          controller.title.value
-                                              .toUpperCase(),
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              color: controller
-                                                  .eturnoColor.value,
-                                              fontWeight: FontWeight.w700),
-                                        ),
+                                                controller.title.value
+                                                    .toUpperCase(),
+                                                style: TextStyle(
+                                                    fontSize: 16,
+                                                    color: controller
+                                                        .eturnoColor.value,
+                                                    fontWeight:
+                                                        FontWeight.w700),
+                                              ),
                                       ),
                                     ],
                                   ),
@@ -150,7 +153,7 @@ class EditTurnoView extends GetView<CrearTurnoController> {
                               padding: const EdgeInsets.only(top: 5.0),
                               child: Text(
                                 "VISTA PREVIA"
-                                    "\nEN CALENDARIO",
+                                "\nEN CALENDARIO",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     fontSize: 12.sp,
@@ -172,8 +175,8 @@ class EditTurnoView extends GetView<CrearTurnoController> {
                         hintText: 'Nombre del tipo de turno o dia creado',
                         labelText: 'Título',
                         border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(
-                                Radius.circular(15))),
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(15))),
                       ),
                       maxLines: 1,
                       maxLength: 12,
@@ -185,10 +188,7 @@ class EditTurnoView extends GetView<CrearTurnoController> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         SizedBox(
-                          width: (MediaQuery
-                              .of(context)
-                              .size
-                              .width) / 2.2,
+                          width: (MediaQuery.of(context).size.width) / 2.2,
                           child: InputField(
                             label: 'Inicio',
                             hintText: controller.estartDate.value,
@@ -211,10 +211,7 @@ class EditTurnoView extends GetView<CrearTurnoController> {
                           ),
                         ),
                         SizedBox(
-                          width: (MediaQuery
-                              .of(context)
-                              .size
-                              .width) / 2.2,
+                          width: (MediaQuery.of(context).size.width) / 2.2,
                           child: InputField(
                             label: 'Fin',
                             hintText: controller.eendDate.value,
@@ -231,8 +228,8 @@ class EditTurnoView extends GetView<CrearTurnoController> {
                                 /*[VERBOSE-2:dart_vm_initializer.cc(41)] Unhandled Exception: Null check operator used on a null value
                               #0      AddTurnoView.build.<anonymous closure>.<anonymous closure> (package:calendario2/app/modules/CrearTurno/views/add_turno_view.dart:190:61)
                               <asynchronous suspension>*/
-                                controller.eendDate(
-                                    _pickedTime!.format(context));
+                                controller
+                                    .eendDate(_pickedTime!.format(context));
                               },
                               icon: const Icon(Icons.access_time_rounded),
                             ),
@@ -271,17 +268,25 @@ class EditTurnoView extends GetView<CrearTurnoController> {
                             ),
                           ),
                           onPressed: controller.isValidEditResponse()
-                              ? () {
-                            controller.updateTurno();
-                            Get.back(closeOverlays: true);
-                          }
+                              ? () async {
+                                  await controller.updateTurno();
+                                  final container = ProviderScope.containerOf(
+                                    context,
+                                    listen: false,
+                                  );
+                                  container.invalidate(turnoTypesProvider);
+                                  await container
+                                      .read(cuadranteMapProvider.notifier)
+                                      .reload();
+                                  Get.back(closeOverlays: true);
+                                }
                               : () {
-                            MyCustomDialog.alertaError(
-                              duracion: 3,
-                              'Necesitas añadir un Título valido.'
-                                  '\nAbreviatura puede ir vacio si no quieres mostrarla en el calendario',
-                            );
-                          },
+                                  MyCustomDialog.alertaError(
+                                    duracion: 3,
+                                    'Necesitas añadir un Título valido.'
+                                    '\nAbreviatura puede ir vacio si no quieres mostrarla en el calendario',
+                                  );
+                                },
                           child: Text(
                             'Editar',
                             style: CustomTextStyle.button,

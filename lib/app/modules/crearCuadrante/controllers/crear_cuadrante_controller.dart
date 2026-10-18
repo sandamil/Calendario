@@ -77,7 +77,7 @@ class CrearCuadranteController extends GetxController {
             0;
   }
 
-  Future cuadranteLoad() async {
+  Future<void> cuadranteLoad() async {
     await Rotation(
       DateTime.parse(inicialDate.value.toString().substring(0, 10)),
       DateTime.parse(endDate.value.toString().substring(0, 10)),
@@ -85,7 +85,7 @@ class CrearCuadranteController extends GetxController {
     cuadranteLoading.value = false;
   }
 
-  Rotation(DateTime start, DateTime end) async {
+  Future<void> Rotation(DateTime start, DateTime end) async {
     if (cuadrantesNameList.value.contains(cuadranteNameString.value)) {
       DateTime date;
       var x = 0;
@@ -129,7 +129,7 @@ class CrearCuadranteController extends GetxController {
           endHour: list[x].endHour,
           startHour: list[x].startHour,
           title: list[x].title,
-          cuadranteName: cuadranteNameString.toString(),
+          cuadranteName: cuadranteNameString.value,
         ),
       );
       x = x + 1;
@@ -144,9 +144,9 @@ class CrearCuadranteController extends GetxController {
   }
 
   editarCuadrante(String name) {
-    Get.to(() =>  AddCuadranteView());
     cuadranteName.text = name;
     cuadranteNameString.value = name;
+    Get.to(() => AddCuadranteView());
   }
 
   deleteCuadrante(cuadranteName) async {

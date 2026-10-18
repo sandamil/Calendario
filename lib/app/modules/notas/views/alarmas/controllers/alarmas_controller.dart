@@ -1,4 +1,3 @@
-
 import 'package:calendario2/app/components/custom_snackbar.dart';
 import 'package:calendario2/app/data/model/taskModel.dart';
 import 'package:calendario2/app/modules/notas/views/AddNotas/controllers/add_notas_controller.dart';
@@ -11,13 +10,9 @@ import 'package:get/get.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
-
 class AlarmasController extends GetxController {
-
-
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-  FlutterLocalNotificationsPlugin();
-
+      FlutterLocalNotificationsPlugin();
 
   Rx<Task> currentNote = Task().obs;
 
@@ -35,15 +30,15 @@ class AlarmasController extends GetxController {
   RxBool isEditing = false.obs;
 
   RxList<ActiveNotification> pastNotifications = <ActiveNotification>[].obs;
-  RxList<PendingNotificationRequest> pendingNotifications = <PendingNotificationRequest>[].obs;
+  RxList<PendingNotificationRequest> pendingNotifications =
+      <PendingNotificationRequest>[].obs;
 
   @override
-   onInit()  async {
+  onInit() async {
     print('        ${Get.arguments['isEditing']}');
     print('        ${Get.arguments['currentNota']}');
 
     if (Get.arguments != null) {
-
       if (Get.arguments['isEditing'] == true) {
         final editNotasController = Get.find<EditNotasController>();
 
@@ -55,14 +50,13 @@ class AlarmasController extends GetxController {
         // notes = currentNote.value.notes;
         // id = currentNote.value.id!;
 
-
         currentNote.value = editNotasController.currentNote.value;
 
         id = currentNote.value.id!;
         title = currentNote.value.title;
         notes = currentNote.value.notes;
-        startTime = DateTime.fromMillisecondsSinceEpoch(currentNote.value.startTimeMilliseconds!);
-
+        startTime = DateTime.fromMillisecondsSinceEpoch(
+            currentNote.value.startTimeMilliseconds!);
       } else {
         startTime = Get.arguments['startTime'];
         alarmTime = DateTime(2000);
@@ -86,7 +80,6 @@ class AlarmasController extends GetxController {
     });
   }
 
-
   @override
   void onClose() {
     super.onClose();
@@ -102,17 +95,14 @@ class AlarmasController extends GetxController {
         await flutterLocalNotificationsPlugin.getActiveNotifications();
 
     print(pastNotifications.value.length);
-
   }
+
   getPendingNotification() async {
     pendingNotifications.value =
         await flutterLocalNotificationsPlugin.pendingNotificationRequests();
 
     print(pendingNotifications.value.length);
-
   }
-
-
 
   RxString alarmaActivada = 'Sin recordatorio'.obs;
 
@@ -120,12 +110,11 @@ class AlarmasController extends GetxController {
     if (isEditing.value) {
       EditNotasController editNotasController = Get.find();
       editNotasController.alarmaActivadaString.value = alarmaActivada.value;
-
     } else {
       AddNotasController adNotasController = Get.find();
       adNotasController.alarmaActivadaString.value = alarmaActivada.value;
     }
-     }
+  }
 
   String sinRecordatorio = 'Sin recordatorio';
   RxBool noRemind = false.obs;
@@ -149,9 +138,7 @@ class AlarmasController extends GetxController {
   RxString subtractTimeString = ''.obs;
   // RxInt subtractTime = 0.obs;
 
-
   Duration duracion = const Duration(microseconds: 2);
-
 
   setNotification([bool enableNotif = true]) async {
     print(duracion);
@@ -171,20 +158,21 @@ class AlarmasController extends GetxController {
     print('tzdatetime  ${tzdatetime}');
 
     await flutterLocalNotificationsPlugin.zonedSchedule(
-        id,
-        'Nota: $title',
-        'Mensaje: $notes',
-        tzdatetime,
-        const NotificationDetails(
-            android: AndroidNotificationDetails(
-                'your channel id', 'your channel name',
-                channelDescription: 'your channel description')),
-        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-        uiLocalNotificationDateInterpretation:
-        UILocalNotificationDateInterpretation.absoluteTime);
+      id: id,
+      title: 'Nota: $title',
+      body: 'Mensaje: $notes',
+      scheduledDate: tzdatetime,
+      notificationDetails: const NotificationDetails(
+        android: AndroidNotificationDetails(
+          'your channel id',
+          'your channel name',
+          channelDescription: 'your channel description',
+        ),
+      ),
+      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+    );
 
     print('fin ==================');
-
   }
 
   String? selectedHMD;
@@ -224,8 +212,7 @@ class AlarmasController extends GetxController {
     await updatealarmaActivadaString();
 
     editNotasController.setAlarmaCreada(noRemind.value);
-    (noRemind.value)
-        ? editNotasController.setAlarmaTime(alarmTime) : null;
+    (noRemind.value) ? editNotasController.setAlarmaTime(alarmTime) : null;
 
     await Get.to(() => EditNotasView());
   }
@@ -243,8 +230,6 @@ class AlarmasController extends GetxController {
     addNotasController.setAlarmaTime(alarmTime);
     await Get.to(() => AddNotasView());
   }
-
-
 
 // searchIdAlarma() {
 //   AddNotasController adNotasController = Get.find();

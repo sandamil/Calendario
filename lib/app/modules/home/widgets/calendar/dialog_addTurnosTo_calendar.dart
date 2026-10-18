@@ -2,53 +2,38 @@ import 'package:calendario2/app/data/local/calendarDatabase.dart';
 import 'package:calendario2/app/modules/home/widgets/calendar/widget/customAlertDialogDaySelected.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
 
 import '../../../../../config/theme/my_colors.dart';
 import '../../../../../config/theme/my_fonts.dart';
 import '../../../../../config/util/hexColor.dart';
 import '../../../../data/model/cuadranteDay.dart';
-import '../../controllers/calendar_controller.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:calendario2/app/modules/home/providers/calendar_providers.dart';
 import 'turnos_notas_onHomeDialog.dart';
 
-class AddTurnostoCalendar extends StatefulWidget {
+class AddTurnostoCalendar extends ConsumerStatefulWidget {
   AddTurnostoCalendar(
       {required this.selectedDate, required this.getCuadrante, super.key});
   DateTime selectedDate;
   Future<Map<DateTime, List<CuadranteDay>>> getCuadrante;
 
   @override
-  State<AddTurnostoCalendar> createState() => _AddTurnostoCalendarState();
+  _AddTurnostoCalendarState createState() => _AddTurnostoCalendarState();
 }
 
-class _AddTurnostoCalendarState extends State<AddTurnostoCalendar> {
-  final calendarController = Get.find<CalendarController>();
+class _AddTurnostoCalendarState extends ConsumerState<AddTurnostoCalendar> {
 
   Future<Map<DateTime, List<CuadranteDay>>> getCuadrante() async {
-    calendarController.cuadrante.value =
-        await CalendarioDB.db.getCuadranteList();
-
-    setState(() {
-      calendarController.cuadranteMap.clear();
-      for (CuadranteDay turno in calendarController.cuadrante) {
-        calendarController.cuadranteMap
-            .putIfAbsent(turno.dateTime!, () => <CuadranteDay>[]);
-        List<CuadranteDay>? turnoData =
-            calendarController.cuadranteMap[turno.dateTime];
-        turnoData!.add(turno);
-        calendarController.cuadranteMap.update(turno.dateTime!, (data) {
-          return turnoData;
-        });
-      }
-      calendarController.isReady.value = true;
-    });
-    print('getCuadrante22222222');
-
-    return calendarController.cuadranteMap;
+    final container = ProviderScope.containerOf(context, listen: false);
+    await container.read(cuadranteMapProvider.notifier).reload();
+    final result = container.read(cuadranteMapProvider);
+    if (mounted) setState(() {});
+    return result;
   }
 
   @override
   Widget build(BuildContext context) {
+    final turnos = ref.watch(turnoTypesProvider).value ?? [];
     return Align(
       alignment: Alignment.center,
       child: Padding(
@@ -70,7 +55,7 @@ class _AddTurnostoCalendarState extends State<AddTurnostoCalendar> {
                   alignment: WrapAlignment.spaceAround,
                   // runSpacing: 1.h,
                   children: <Widget>[
-                    ...calendarController.turno.map((m) {
+                    ...turnos.map((m) {
                       return Padding(
                         padding: EdgeInsets.symmetric(horizontal: 2.w),
                         child: ElevatedButton(
@@ -113,8 +98,9 @@ class _AddTurnostoCalendarState extends State<AddTurnostoCalendar> {
                             // await calendarController.getCuadrante();
                             // adcontroller.staticHomeAd.load();
                             await getCuadrante();
-                            setState(() => calendarController.focusedDay.value =
-                                widget.selectedDate);
+                            ProviderScope.containerOf(context, listen: false)
+                                .read(focusedMonthProvider.notifier)
+                                .setFocusedDay(widget.selectedDate);
 
                             Navigator.pop(context); // Get.offAllNamed('/home');
                           },
