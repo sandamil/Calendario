@@ -136,7 +136,7 @@ class EditTurnoView extends GetView<CrearTurnoController> {
                                                         FontWeight.w700),
                                               )
                                             : Text(
-                                                controller.title.value
+                                                controller.etitle.value
                                                     .toUpperCase(),
                                                 style: TextStyle(
                                                     fontSize: 16,
