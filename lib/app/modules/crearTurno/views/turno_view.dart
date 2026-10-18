@@ -57,15 +57,17 @@ class TurnoView extends GetView<CrearTurnoController> {
             const SizedBox(
               height: 5.0,
             ),
-            Obx(() {
-              return ListView.builder(
+            Consumer(
+              builder: (context, ref, child) {
+                final turnos = ref.watch(turnoTypesProvider).value ?? [];
+                return ListView.builder(
                 shrinkWrap: true,
-                itemCount: controller.turnoTypeList.length,
+                itemCount: turnos.length,
                 itemBuilder: (context, index) {
                   return Container(
                     padding: const EdgeInsets.all(8.0),
                     decoration: BoxDecoration(
-                        color: HexColor(controller.turnoTypeList[index].color!),
+                        color: HexColor(turnos[index].color!),
                         border: Border.all(width: 0.8),
                         borderRadius: BorderRadius.circular(5.r),
                         boxShadow: const <BoxShadow>[
@@ -83,7 +85,7 @@ class TurnoView extends GetView<CrearTurnoController> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Text(
-                              controller.turnoTypeList[index].description!,
+                              turnos[index].description!,
                               style: TextStyle(
                                   fontSize: 19,
                                   fontWeight: FontWeight.bold,
@@ -101,7 +103,7 @@ class TurnoView extends GetView<CrearTurnoController> {
                             //         controller.turnoType[index].endHour != ''
                             //     ?
                             Text(
-                                    'De ${controller.turnoTypeList[index].startHour} a ${controller.turnoTypeList[index].endHour}',
+                                    'De ${turnos[index].startHour} a ${turnos[index].endHour}',
                               style: TextStyle(
                                   fontSize: 15,
                                   color: Theme.of(context)
@@ -151,7 +153,8 @@ class TurnoView extends GetView<CrearTurnoController> {
                   );
                 },
               );
-            }),
+              },
+            ),
           ],
         ),
         floatingActionButton: FloatingActionButton.extended(

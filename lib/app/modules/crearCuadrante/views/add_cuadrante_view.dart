@@ -10,8 +10,6 @@ import 'package:calendario2/config/util/hexColor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
-    as dp;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
@@ -165,36 +163,18 @@ class AddCuadranteView extends GetView<CrearCuadranteController> {
                                     .toIso8601String()
                                     .substring(0, 10),
                                 widget: IconButton(
-                                  onPressed: () {
-                                    dp.DatePicker.showDatePicker(context,
-                                        theme: dp.DatePickerTheme(
-                                            cancelStyle: TextStyle(
-                                                color:
-                                                    Colors.redAccent.shade200,
-                                                fontSize: 16.sp,
-                                                fontWeight: FontWeight.bold),
-                                            doneStyle: TextStyle(
-                                                color:
-                                                    MyColors.textColorPrimary,
-                                                fontSize: 16.sp,
-                                                fontWeight: FontWeight.bold),
-                                            itemStyle: TextStyle(
-                                                color:
-                                                    MyColors.textColorPrimary,
-                                                fontSize: 16.sp,
-                                                fontWeight: FontWeight.bold),
-                                            backgroundColor:
-                                                MyColors.backgroundLowAccent),
-                                        showTitleActions: true,
-                                        minTime: DateTime(2020),
-                                        maxTime: DateTime(2050),
-                                        onChanged: (date) {
+                                  onPressed: () async {
+                                    final date = await showDatePicker(
+                                      context: context,
+                                      initialDate: state.inicialDate,
+                                      firstDate: DateTime(2020),
+                                      lastDate: DateTime(2050),
+                                      locale: const Locale('es'),
+                                      helpText: 'Selecciona la fecha de inicio',
+                                    );
+                                    if (date != null) {
                                       notifier.setInicialDate(date);
-                                    }, onConfirm: (date) {
-                                      notifier.setInicialDate(date);
-                                    },
-                                        currentTime: DateTime.now(),
-                                        locale: dp.LocaleType.es);
+                                    }
                                   },
                                   icon: Icon(
                                     Icons.calendar_today_outlined,
@@ -222,37 +202,18 @@ class AddCuadranteView extends GetView<CrearCuadranteController> {
                                       ? controller
                                           .tutorialController.keyButton2
                                       : key,
-                                  onPressed: () {
-                                    dp.DatePicker.showDatePicker(
-                                        theme: dp.DatePickerTheme(
-                                            cancelStyle: TextStyle(
-                                                color:
-                                                    Colors.redAccent.shade200,
-                                                fontSize: 16.sp,
-                                                fontWeight: FontWeight.bold),
-                                            doneStyle: TextStyle(
-                                                color:
-                                                    MyColors.textColorPrimary,
-                                                fontSize: 16.sp,
-                                                fontWeight: FontWeight.bold),
-                                            itemStyle: TextStyle(
-                                                color:
-                                                    MyColors.textColorPrimary,
-                                                fontSize: 16.sp,
-                                                fontWeight: FontWeight.bold),
-                                            backgroundColor:
-                                                MyColors.backgroundLowAccent),
-                                        context,
-                                        showTitleActions: true,
-                                        minTime: DateTime(2020),
-                                        maxTime: DateTime(2050),
-                                        onChanged: (date) {
+                                  onPressed: () async {
+                                    final date = await showDatePicker(
+                                      context: context,
+                                      initialDate: state.endDate,
+                                      firstDate: DateTime(2020),
+                                      lastDate: DateTime(2050),
+                                      locale: const Locale('es'),
+                                      helpText: 'Selecciona la fecha de fin',
+                                    );
+                                    if (date != null) {
                                       notifier.setEndDate(date);
-                                    }, onConfirm: (date) {
-                                      notifier.setEndDate(date);
-                                    },
-                                        currentTime: DateTime.now(),
-                                        locale: dp.LocaleType.es);
+                                    }
                                   },
                                   icon: const Icon(
                                       Icons.calendar_today_outlined),
@@ -302,8 +263,7 @@ class AddCuadranteView extends GetView<CrearCuadranteController> {
                                     style: TextStyle(
                                       fontSize: 22,
                                       fontWeight: FontWeight.bold,
-                                      color: HexColor(controller
-                                                      .list[index].color!)
+                                      color: HexColor(state.list[index].color!)
                                                   .computeLuminance() >
                                               0.5
                                           ? Colors.black
