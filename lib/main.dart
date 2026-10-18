@@ -8,8 +8,8 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 import 'app/bindings/initial_bindings.dart';
-import 'app/controllers/app_controller.dart';
 import 'app/data/local/my_shared_pref.dart';
+import 'app/modules/ajustes/views/pages/util/notifications/notifications.dart';
 
 import 'app/routes/app_pages.dart';
 import 'config/theme/my_theme.dart';
@@ -22,9 +22,9 @@ import 'package:intl/date_symbol_data_local.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Notifications.instance.init();
   // MySharedPref.init();
   // GetStorage.init();
-  Get.put(AppController());
 
   //  Firebase.initializeApp(
   //   options: DefaultFirebaseOptions.currentPlatform,
@@ -81,8 +81,9 @@ buildApp() {
             child: MediaQuery(
               // prevent font from scalling (some people use big/small device fonts)
               // but we want our app font to still the same and dont get affected
-              data: MediaQuery.of(context)
-                  .copyWith(textScaleFactor: MediaQuery.of(context).size.width <= 360 ? .85 : 1),
+              data: MediaQuery.of(context).copyWith(
+                  textScaleFactor:
+                      MediaQuery.of(context).size.width <= 360 ? .85 : 1),
               child: widget!,
             ),
           );

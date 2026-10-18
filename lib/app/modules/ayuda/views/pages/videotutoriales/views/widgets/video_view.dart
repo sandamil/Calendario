@@ -1,22 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 import '../../../../../../../../widgets/buttons/circle_buttons.dart';
-import '../../../../../../../controllers/app_controller.dart';
+import '../../../../../../../controllers/orientation_provider.dart';
 
-class FullscreenVideoViewer extends StatefulWidget {
+class FullscreenVideoViewer extends ConsumerStatefulWidget {
   const FullscreenVideoViewer({Key? key, required this.id}) : super(key: key);
   final String id;
 
   @override
-  State<FullscreenVideoViewer> createState() => _FullscreenVideoViewerState();
+  ConsumerState<FullscreenVideoViewer> createState() =>
+      _FullscreenVideoViewerState();
 }
 
-class _FullscreenVideoViewerState extends State<FullscreenVideoViewer> {
-  final appController = Get.find<AppController>();
-
+class _FullscreenVideoViewerState extends ConsumerState<FullscreenVideoViewer> {
   late final _controller = YoutubePlayerController.fromVideoId(
     videoId: widget.id,
     params: const YoutubePlayerParams(),
@@ -25,19 +24,27 @@ class _FullscreenVideoViewerState extends State<FullscreenVideoViewer> {
   @override
   void initState() {
     super.initState();
-    appController.supportedOrientationsOverride = [Axiss.horizontal, Axiss.vertical];
+    ref.read(orientationProvider.notifier).setOverride(
+      [Axiss.horizontal, Axiss.vertical],
+    );
   }
 
   @override
   void dispose() {
-    // when view closes, remove the override
-    appController.supportedOrientationsOverride = null;
+    // Liberar los recursos del reproductor al cerrar la pantalla.
+    _controller.close();
+
+    // Restaurar las orientaciones permitidas.
+    ref.read(orientationProvider.notifier).setOverride(null);
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    double aspect = context.isLandscape ? MediaQuery.of(context).size.aspectRatio : 9 / 18;
+    final mediaQuery = MediaQuery.of(context);
+    final aspect = mediaQuery.orientation == Orientation.landscape
+        ? mediaQuery.size.aspectRatio
+        : 9 / 18;
     return SafeArea(
       // backgroundColor: Colors.black,
       child: Stack(

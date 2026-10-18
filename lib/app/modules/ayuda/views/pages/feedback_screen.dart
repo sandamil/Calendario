@@ -1,6 +1,5 @@
 import 'package:calendario2/app/components/toast.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
-import 'package:calendario2/config/util/analytics_helper.dart';
 import 'package:calendario2/config/util/validation_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -48,12 +47,12 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             ..._rateYourExperience(),
-             SizedBox(height: 20.h),
-             Text("¿Como podríamos mejorar?",
+            SizedBox(height: 20.h),
+            Text("¿Como podríamos mejorar?",
                 style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w800)),
-             SizedBox(height: 12.h),
+            SizedBox(height: 12.h),
             _inputField(),
-             SizedBox(height: 12.h),
+            SizedBox(height: 12.h),
             _sendFeedback()
           ]),
         ),
@@ -73,7 +72,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
             Stack(
               alignment: Alignment.center,
               children: [
-                 Align(
+                Align(
                   alignment: Alignment.center,
                   child: Text("Tu Feedback",
                       textAlign: TextAlign.center,
@@ -83,8 +82,8 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                 _aboveSaveButton()
               ],
             ),
-             SizedBox(height: 16.h),
-             Divider(height: 1.h, thickness: 0)
+            SizedBox(height: 16.h),
+            Divider(height: 1.h, thickness: 0)
           ],
         )));
   }
@@ -101,9 +100,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
           child: InkWell(
               onTap: isEnable
                   ? () {
-                      _feedbackSubmitted(
-                          eventName:
-                              AnalyticsHelper.feedbackAboveSubmitButtonClicked);
+                      _feedbackSubmitted();
                     }
                   : null,
               child: IntrinsicWidth(
@@ -112,15 +109,18 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
-                        color:
-                            isEnable ? PRIMARY_COLOR : MyColors.disableBgColorBtn,
+                        color: isEnable
+                            ? PRIMARY_COLOR
+                            : MyColors.disableBgColorBtn,
                         borderRadius: BorderRadius.circular(5.r)),
                     child: Text(
                       'Enviar',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: 14.sp,
-                          color: isEnable ? MyColors.textButtom : MyColors.textDisable,
+                          fontSize: 14.sp,
+                          color: isEnable
+                              ? MyColors.textButtom
+                              : MyColors.textDisable,
                           fontWeight: FontWeight.w800),
                     )),
               )),
@@ -148,15 +148,12 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
     return [textWidget, SizedBox(height: 12.h), emojiRow];
   }
 
-  Widget _emojiWidget(String emoji,  {bool isFirst = false}) {
+  Widget _emojiWidget(String emoji, {bool isFirst = false}) {
     var isSelected = selectedExperience == emoji;
     return InkWell(
       onTap: isSelected
           ? null
           : () {
-              AnalyticsHelper.logEvent(
-                  event: AnalyticsHelper.feedbackEmojiClicked,
-                  params: {"emoji": emoji});
               setState(() {
                 selectedExperience = emoji;
               });
@@ -165,8 +162,8 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
         decoration: BoxDecoration(
             color: isSelected ? PRIMARY_COLOR.withOpacity(0.1) : null,
             borderRadius: BorderRadius.circular(8.r)),
-        padding:
-            EdgeInsets.only(left: isFirst ? 0 : 4.w, right: 4.w, top: 6.h, bottom: 6.h),
+        padding: EdgeInsets.only(
+            left: isFirst ? 0 : 4.w, right: 4.w, top: 6.h, bottom: 6.h),
         child: Text(
           emoji,
           style: CustomTextStyle.emojiStyle(
@@ -190,8 +187,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
         hintText:
             "Cuentanos que es lo que te ha gustado, lo que no y si crees que podríamos implementar alguna mejora.",
         hintMaxLines: 4,
-        contentPadding:
-        EdgeInsets.symmetric(horizontal: 8.w, vertical: 10.h),
+        contentPadding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 10.h),
         hintStyle: TextStyle(
           fontSize: 16.sp,
           color: MyColors.textColor.withOpacity(0.26).withOpacity(0.3),
@@ -231,9 +227,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
         child: InkWell(
           onTap: isEnable
               ? () {
-                  _feedbackSubmitted(
-                      eventName:
-                          AnalyticsHelper.feedbackBottomSubmitButtonClicked);
+                  _feedbackSubmitted();
                 }
               : null,
           child: Container(
@@ -251,12 +245,13 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                       offset: const Offset(0, 3), // changes position of shadow
                     ),
                   ],
-                  borderRadius:  BorderRadius.all(Radius.circular(5.r))),
+                  borderRadius: BorderRadius.all(Radius.circular(5.r))),
               child: Text(
                 "Enviar",
                 style: TextStyle(
                     fontSize: 22.sp,
-                    color: isEnable ? MyColors.textButtom : MyColors.textDisable,
+                    color:
+                        isEnable ? MyColors.textButtom : MyColors.textDisable,
                     fontWeight: FontWeight.w800),
               ),
             ),
@@ -266,7 +261,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
     );
   }
 
-  void _feedbackSubmitted({required String eventName}) {
+  void _feedbackSubmitted() {
     Toast.toast(
       context,
       msg: "Gracias por enviarnos el feedback 😊",
@@ -277,9 +272,6 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
     //     toastLength: Toast.LENGTH_SHORT,
     //     gravity: ToastGravity.CENTER,
     //     fontSize: 16.0);
-
-    var params = {"reaction": selectedExperience, "feedback": _feedbackText};
-    AnalyticsHelper.logEvent(event: eventName, params: params);
     Navigator.of(context).pop();
   }
 }
