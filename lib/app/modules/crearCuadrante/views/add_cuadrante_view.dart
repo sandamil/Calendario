@@ -169,7 +169,7 @@ class AddCuadranteView extends GetView<CrearCuadranteController> {
                                       initialDate: state.inicialDate,
                                       firstDate: DateTime(2020),
                                       lastDate: DateTime(2050),
-                                      locale: const Locale('es'),
+                                      locale: const Locale('es', 'ES'),
                                       helpText: 'Selecciona la fecha de inicio',
                                     );
                                     if (date != null) {
@@ -208,7 +208,7 @@ class AddCuadranteView extends GetView<CrearCuadranteController> {
                                       initialDate: state.endDate,
                                       firstDate: DateTime(2020),
                                       lastDate: DateTime(2050),
-                                      locale: const Locale('es'),
+                                      locale: const Locale('es', 'ES'),
                                       helpText: 'Selecciona la fecha de fin',
                                     );
                                     if (date != null) {
