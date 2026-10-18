@@ -10,7 +10,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../../../../config/theme/my_fonts.dart';
-import '../../CrearTurno/views/turno_view.dart';
+import 'turno_view.dart';
 import '../controllers/crear_turno_controller.dart';
 import 'widgets/input_field.dart';
 
@@ -34,11 +34,7 @@ class EditTurnoView extends GetView<CrearTurnoController> {
                     : Colors.white,
               ),
               onPressed: () {
-                Get.to(
-                  () => const TurnoView(),
-                  transition: Transition.fadeIn,
-                  duration: const Duration(milliseconds: 100),
-                );
+                Get.back();
               },
             ),
             elevation: 0,
@@ -194,17 +190,15 @@ class EditTurnoView extends GetView<CrearTurnoController> {
                             hintText: controller.estartDate.value,
                             widget: IconButton(
                               onPressed: () async {
-                                var pickedTime = await showTimePicker(
-                                  context: context,
+                                var pickedTime = await showTimePicker(context: context,
                                   initialTime: TimeOfDay.now(),
                                   helpText: 'Selecciona hora de inicio',
                                   cancelText: 'Cancelar',
                                   confirmText: 'Ok',
                                 );
-                                controller.estartDate(
-                                  pickedTime?.format(context) ??
-                                      TimeOfDay.now().format(context),
-                                );
+                                if (pickedTime != null) {
+                                  controller.estartDate(pickedTime.format(context));
+                                }
                               },
                               icon: const Icon(Icons.access_time_rounded),
                             ),
