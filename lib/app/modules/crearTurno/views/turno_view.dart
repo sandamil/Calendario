@@ -140,12 +140,12 @@ class TurnoView extends GetView<CrearTurnoController> {
                                   .titleLarge!
                                   .color),
                           onPressed: () async {
-                            await controller.deleteEventsType(index);
-                            final container = ProviderScope.containerOf(
-                              context,
-                              listen: false,
-                            );
-                            container.invalidate(turnoTypesProvider);
+                            final turnoId = turnos[index].id;
+                            if (turnoId == null) return;
+
+                            await ref
+                                .read(turnoTypesProvider.notifier)
+                                .deleteById(turnoId);
                           },
                         ),
                       ],

@@ -143,9 +143,32 @@ final selectedDayTurnosProvider =
   SelectedDayTurnosNotifier.new,
 );
 
-final turnoTypesProvider = FutureProvider<List<TurnoType>>((ref) async {
-  return CalendarioDB.db.getTypeModels();
-});
+class TurnoTypesNotifier extends AsyncNotifier<List<TurnoType>> {
+  @override
+  Future<List<TurnoType>> build() async {
+    return CalendarioDB.db.getTypeModels();
+  }
+
+  Future<void> deleteById(int id) async {
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() async {
+      await CalendarioDB.db.deleteTypeId(id);
+      return CalendarioDB.db.getTypeModels();
+    });
+  }
+
+  Future<void> reload() async {
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(
+      () => CalendarioDB.db.getTypeModels(),
+    );
+  }
+}
+
+final turnoTypesProvider =
+    AsyncNotifierProvider<TurnoTypesNotifier, List<TurnoType>>(
+  TurnoTypesNotifier.new,
+);
 
 // Nombres únicos de cuadrantes. La base de datos es la fuente principal.
 final cuadranteNamesProvider = FutureProvider<List<String>>((ref) async {
