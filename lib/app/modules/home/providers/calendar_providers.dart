@@ -149,6 +149,14 @@ class TurnoTypesNotifier extends AsyncNotifier<List<TurnoType>> {
     return CalendarioDB.db.getTypeModels();
   }
 
+  Future<void> addTurno(TurnoType turno) async {
+    state = const AsyncLoading();
+    state = await AsyncValue.guard(() async {
+      await CalendarioDB.db.addTypeModel(turno);
+      return CalendarioDB.db.getTypeModels();
+    });
+  }
+
   Future<void> deleteById(int id) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {

@@ -7,6 +7,7 @@ class CrearTurnoBinding extends Bindings {
   void dependencies() {
     Get.lazyPut<CrearTurnoController>(
       () => CrearTurnoController(),
+      fenix: true,
     );
   }
 }
