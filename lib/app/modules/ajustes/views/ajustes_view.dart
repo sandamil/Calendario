@@ -12,12 +12,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../../../controllers/ads_controller.dart';
-import '../../notas/views/alarmas/controllers/alarmas_controller.dart';
 import '../controllers/ajustes_controller.dart';
 import '../../../../widgets/setting_title.dart';
 
 class AjustesView extends GetView<AjustesController> {
-  AlarmasController alarmasController = AlarmasController();
 
   AjustesView({Key? key}) : super(key: key);
   @override

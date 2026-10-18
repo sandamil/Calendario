@@ -4,17 +4,21 @@ import 'package:calendario2/app/components/custom_snackbar.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:calendario2/app/modules/notas/providers/add_nota_provider.dart';
+import 'package:calendario2/app/modules/notas/providers/edit_nota_provider.dart';
 import 'package:flutter_animated_dialog_updated/flutter_animated_dialog.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import '../controllers/alarmas_controller.dart';
 
-class AlarmasView extends GetView<AlarmasController> {
+class AlarmasView extends ConsumerWidget {
   const AlarmasView({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final controller = Get.find<AlarmasController>();
     var theme = Theme.of(context);
     return WillPopScope(
       onWillPop: () async => false,
@@ -32,9 +36,41 @@ class AlarmasView extends GetView<AlarmasController> {
                     return;
                   }
                 }
-                controller.isEditing.value
-                    ? controller.goToEditingNotas()
-                    : controller.goToAddNotas();
+                if (controller.isEditing.value) {
+                  final notifier = ref.read(editNotaProvider.notifier);
+
+                  notifier.setAlarmaActivadaString(
+                    controller.alarmaActivada.value,
+                  );
+                  notifier.setAlarmaCreada(controller.noRemind.value);
+
+                  if (controller.noRemind.value) {
+                    if (controller.duracion !=
+                        const Duration(microseconds: 2)) {
+                      controller.alarmTime =
+                          controller.startTime.subtract(controller.duracion);
+                    }
+                    notifier.setAlarmaTime(controller.alarmTime);
+                  }
+                } else {
+                  final notifier = ref.read(addNotaProvider.notifier);
+
+                  notifier.setAlarmaActivadaString(
+                    controller.alarmaActivada.value,
+                  );
+                  notifier.setAlarmaCreada(controller.noRemind.value);
+
+                  if (controller.noRemind.value) {
+                    if (controller.duracion !=
+                        const Duration(microseconds: 2)) {
+                      controller.alarmTime =
+                          controller.startTime.subtract(controller.duracion);
+                    }
+                    notifier.setAlarmaTime(controller.alarmTime);
+                  }
+                }
+
+                Get.back();
               }),
           // actions: [
           //   IconButton(
@@ -189,7 +225,7 @@ class AlarmasView extends GetView<AlarmasController> {
                                   onChanged: controller.masOpcionesAlarma.value
                                       ? null
                                       : (value) {
-                                    print(controller.duracion);
+                                          print(controller.duracion);
                                           controller.minutos5(false);
                                           controller.minutos30(false);
                                           controller.horas1(false);
@@ -208,7 +244,7 @@ class AlarmasView extends GetView<AlarmasController> {
                                   onChanged: controller.masOpcionesAlarma.value
                                       ? null
                                       : (value) {
-                                    controller.alPrincipio(false);
+                                          controller.alPrincipio(false);
                                           controller.minutos30(false);
                                           controller.horas1(false);
                                           controller.dias1(false);

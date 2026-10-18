@@ -5,7 +5,6 @@ import 'package:calendario2/app/controllers/tutorial_provider.dart';
 import 'package:calendario2/app/modules/notas/providers/add_nota_provider.dart';
 import 'package:calendario2/app/data/local/my_shared_pref.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:calendario2/app/modules/notas/views/alarmas/controllers/alarmas_controller.dart';
 import 'package:calendario2/app/modules/notas/views/alarmas/views/widget/alarmTile.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/config/theme/my_fonts.dart';
@@ -22,16 +21,46 @@ import 'package:get/get.dart';
 
 import '../../../../../../config/util/app_icons.dart';
 import '../../../../../controllers/ads_controller.dart';
-import '../controllers/add_notas_controller.dart';
 
-class AddNotasView extends GetView<AddNotasController> {
-  AddNotasView({Key? key}) : super(key: key);
+class AddNotasView extends ConsumerStatefulWidget {
+  const AddNotasView({super.key});
 
+  @override
+  ConsumerState<AddNotasView> createState() => _AddNotasViewState();
+}
+
+class _AddNotasViewState extends ConsumerState<AddNotasView> {
   bool _tutorialStartScheduled = false;
   final adcontroller = Get.find<AdsController>();
 
   @override
+  void initState() {
+    super.initState();
+
+    final arguments = Get.arguments;
+
+    if (arguments is DateTime) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          ref.read(addNotaProvider.notifier).setInitialDate(arguments);
+        }
+      });
+    } else if (arguments is int) {
+      final date = DateTime.fromMillisecondsSinceEpoch(arguments);
+
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          ref.read(addNotaProvider.notifier).setInitialDate(date);
+        }
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final notaState = ref.watch(addNotaProvider);
+    final notaNotifier = ref.read(addNotaProvider.notifier);
+
     var theme = Theme.of(context);
     final tutorialController = ProviderScope.containerOf(
       context,
@@ -42,19 +71,17 @@ class AddNotasView extends GetView<AddNotasController> {
       _tutorialStartScheduled = true;
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!context.mounted) return;
-        controller.firstTime.value = true;
+        notaNotifier.setFirstTime(true);
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (!context.mounted) return;
           tutorialController.firstInstall(
             'taskAdd',
             context: context,
-            onFinished: () => controller.firstTime.value = false,
+            onFinished: () => notaNotifier.setFirstTime(false),
           );
         });
       });
     }
-
-    AlarmasController alarmasController = AlarmasController();
 
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
@@ -96,22 +123,8 @@ class AddNotasView extends GetView<AddNotasController> {
                   listen: false,
                 ).read(addNotaProvider.notifier);
 
-                // Sincronizar los campos que todavía gestiona el controlador
-                // antiguo mientras terminamos la migración de la vista.
-                notaNotifier.title.text = controller.title.text;
-                notaNotifier.site.text = controller.site.text;
-                notaNotifier.notes.text = controller.notes.text;
-                notaNotifier.setStartTime(controller.startTime.value);
-                notaNotifier.setEndTime(controller.endTime.value);
-                notaNotifier.setImportant(controller.isImportant.value);
-                notaNotifier.setAlarmaCreada(controller.alarmaCreada);
-                notaNotifier.setAlarmaTime(controller.alarmTime);
-                notaNotifier.setAlarmaActivadaString(
-                  controller.alarmaActivadaString.value,
-                );
-
                 await notaNotifier.saveNota(
-                  id: controller.idGenerated as int?,
+                  id: notaState.idGenerated,
                 );
                 Get.offAllNamed('/notas');
               },
@@ -127,45 +140,46 @@ class AddNotasView extends GetView<AddNotasController> {
                 mainAxisSize: MainAxisSize.max,
                 children: <Widget>[
                   Container(
-                    key: controller.firstTime.value
+                    key: notaState.firstTime
                         ? tutorialController.keyButton13
-                        : key,
+                        : null,
                     child: _buildGeneralFormField(
-                        controller.title, 'Titulo del evento', 1),
+                        notaNotifier.title, 'Titulo del evento', 1),
                   ),
                   SizedBox(
                     height: 4.h,
                   ),
                   Column(
-                    key: controller.firstTime.value
+                    key: notaState.firstTime
                         ? tutorialController.keyButton17
-                        : key,
+                        : null,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      _buildGeneralFormField(controller.site, 'Ubicación', 2),
+                      _buildGeneralFormField(notaNotifier.site, 'Ubicación', 2),
                       SizedBox(
                         height: 4.h,
                       ),
                       _buildGeneralFormField(
-                          controller.notes, 'Observaciones', 8),
+                          notaNotifier.notes, 'Observaciones', 8),
                     ],
                   ),
                   SizedBox(
                     height: 10.h,
                   ),
                   Column(
-                    key: controller.firstTime.value
+                    key: notaState.firstTime
                         ? tutorialController.keyButton14
-                        : key,
+                        : null,
                     children: <Widget>[
                       TextButton(
                           onPressed: () async {
-                            final initial = controller.startTime.value;
+                            final initial = notaState.startTime;
                             final selectedTime = await showTimePicker(
                               context: context,
                               initialTime: TimeOfDay.fromDateTime(initial),
                             );
-                            if (!context.mounted || selectedTime == null) return;
+                            if (!context.mounted || selectedTime == null)
+                              return;
 
                             final date = DateTime(
                               initial.year,
@@ -175,7 +189,7 @@ class AddNotasView extends GetView<AddNotasController> {
                               selectedTime.minute,
                             );
 
-                            controller.setStartTime(date);
+                            notaNotifier.setStartTime(date);
                           },
                           child: Column(
                             children: [
@@ -196,7 +210,7 @@ class AddNotasView extends GetView<AddNotasController> {
                                           CrossAxisAlignment.center,
                                       children: <Widget>[
                                         Text(
-                                          '${controller.startTime.value.formatDateYMD} ${controller.startTime.value.formatDateTime24H}',
+                                          '${notaState.startTime.formatDateYMD} ${notaState.startTime.formatDateTime24H}',
                                           style: TextStyle(
                                               color: MyColors.textButtomBlack,
                                               fontSize: 16.sp),
@@ -213,12 +227,13 @@ class AddNotasView extends GetView<AddNotasController> {
                           )),
                       TextButton(
                           onPressed: () async {
-                            final initial = controller.endTime.value;
+                            final initial = notaState.endTime;
                             final selectedTime = await showTimePicker(
                               context: context,
                               initialTime: TimeOfDay.fromDateTime(initial),
                             );
-                            if (!context.mounted || selectedTime == null) return;
+                            if (!context.mounted || selectedTime == null)
+                              return;
 
                             var date = DateTime(
                               initial.year,
@@ -228,11 +243,11 @@ class AddNotasView extends GetView<AddNotasController> {
                               selectedTime.minute,
                             );
 
-                            if (date.isBefore(controller.startTime.value)) {
+                            if (date.isBefore(notaState.startTime)) {
                               date = date.add(const Duration(days: 1));
                             }
 
-                            controller.endTime.value = date;
+                            notaNotifier.setEndTime(date);
                           },
                           child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -246,7 +261,7 @@ class AddNotasView extends GetView<AddNotasController> {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: <Widget>[
                                     Text(
-                                      '${controller.endTime.value.formatDateYMD} ${controller.endTime.value.formatDateTime24H}',
+                                      '${notaState.endTime.formatDateYMD} ${notaState.endTime.formatDateTime24H}',
                                       style: TextStyle(
                                           color: MyColors.textButtomBlack,
                                           fontSize: 16.sp),
@@ -267,25 +282,24 @@ class AddNotasView extends GetView<AddNotasController> {
                   LineWidget(),
                   TextButton(
                       onPressed: () async {
-                        controller.alarmaCreada
-                            ? buildDialogAlarma(theme)
+                        notaState.alarmaCreada
+                            ? buildDialogAlarma(theme, notaState, notaNotifier)
                             : Get.toNamed(
                                 '/alarmas',
                                 arguments: {
                                   'isEditing': false,
-                                  'id': controller.idGenerated!,
-                                  'startTime': controller.startTime.value,
-                                  'notes': controller.notes.value.text,
-                                  'title': controller.title.value.text
+                                  'id': notaState.idGenerated,
+                                  'startTime': notaState.startTime,
+                                  'notes': notaNotifier.notes.text,
+                                  'title': notaNotifier.title.text
                                 },
                               );
-                        // alarmasController.refresh();
                         // Get.to(AlarmasPage());
                       },
                       child: Row(
-                          key: controller.firstTime.value
+                          key: notaState.firstTime
                               ? tutorialController.keyButton15
-                              : key,
+                              : null,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
@@ -296,7 +310,7 @@ class AddNotasView extends GetView<AddNotasController> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
                                 Text(
-                                  controller.alarmaActivadaString.value,
+                                  notaState.alarmaActivadaString,
                                   style: TextStyle(
                                       color: MyColors.textButtomBlack,
                                       fontSize: 16.sp),
@@ -309,31 +323,30 @@ class AddNotasView extends GetView<AddNotasController> {
                               ],
                             )
                           ])),
-                  controller.alarmaCreada
-                      // || alarmasController.pendingNotifications.contains(id: '${controller.idGenerated}')
+                  notaState.alarmaCreada
                       ? ExampleAlarmTile(
-                          key: Key(controller.alarmTime.toString()),
+                          key: Key(notaState.alarmTime.toString()),
                           title: TimeOfDay(
-                            hour: controller.alarmTime.hour,
-                            minute: controller.alarmTime.minute,
+                            hour: notaState.alarmTime.hour,
+                            minute: notaState.alarmTime.minute,
                           ).format(context),
                           onPressed: () {
                             null;
-                            // alarmasController.navigateToAlarmScreen(
-                            //     controller.alarmaCreadaNota, context);
+                            // navigateToAlarmScreen(
+                            //     notaState.alarmaCreadaNota, context);
                           },
                         )
                       : Container(),
-                  // : Container(child: Text(controller.alarmTime.toString()),),
+                  // : Container(child: Text(notaState.alarmTime.toString()),),
                   LineWidget(),
                   SizedBox(
                     height: 2.h,
                   ),
                   TextButton(
-                      key: controller.firstTime.value
+                      key: notaState.firstTime
                           ? tutorialController.keyButton16
-                          : key,
-                      onPressed: controller.markImportantAsDirty,
+                          : null,
+                      onPressed: notaNotifier.toggleImportant,
                       child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -345,10 +358,10 @@ class AddNotasView extends GetView<AddNotasController> {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
                                 Icon(
-                                  controller.isImportant.value
+                                  notaState.isImportant
                                       ? Icons.flag
                                       : Icons.outlined_flag,
-                                  color: controller.isImportant.value
+                                  color: notaState.isImportant
                                       ? Colors.red
                                       : Colors.black45,
                                 )
@@ -366,19 +379,19 @@ class AddNotasView extends GetView<AddNotasController> {
                           ),
                         ),
                         IconButton(
-                          key: controller.firstTime.value
+                          key: notaState.firstTime
                               ? tutorialController.keyNotasAyuda
-                              : key,
+                              : null,
                           icon: const AppIcon(AppIcons.informacion,
                               color: Colors.green),
                           tooltip: '',
                           onPressed: () {
-                            controller.firstTime.value = true;
+                            notaNotifier.setFirstTime(true);
                             tutorialController.showTutorial(
                               context,
                               'taskAdd',
                               onFinished: () =>
-                                  controller.firstTime.value = false,
+                                  notaNotifier.setFirstTime(false),
                             );
                           },
                         ),
@@ -394,7 +407,8 @@ class AddNotasView extends GetView<AddNotasController> {
     );
   }
 
-  Future<dynamic> buildDialogAlarma(ThemeData theme) {
+  Future<dynamic> buildDialogAlarma(
+      ThemeData theme, AddNotaState notaState, AddNotaNotifier notaNotifier) {
     return Get.dialog(Align(
       alignment: Alignment.center,
       child: Padding(
@@ -428,7 +442,7 @@ class AddNotasView extends GetView<AddNotasController> {
                       padding: EdgeInsets.all(4.h),
                       child: Text(
                         'Tienes una alarma creada en esta nota para las: '
-                        '${controller.alarmaHora}'
+                        '${notaState.alarmaHora}'
                         //     '${TimeOfDay(
                         //   hour: controller
                         //       .alarmaCreadaNota!
@@ -462,12 +476,12 @@ class AddNotasView extends GetView<AddNotasController> {
                       Expanded(
                           child: ElevatedButton(
                         onPressed: () async {
-                          // controller.alarmTime = DateTime(2020);
+                          // La alarma se gestiona desde /alarmas.
                           Get.toNamed('/alarmas', arguments: {
-                            'id': controller.idGenerated!,
-                            'startTime': controller.startTime.value,
-                            'notes': controller.notes.value,
-                            'title': controller.title.value
+                            'id': notaState.idGenerated,
+                            'startTime': notaState.startTime,
+                            'notes': notaNotifier.notes.text,
+                            'title': notaNotifier.title.text
                           });
                         },
                         child: const Text("Borrar"),
