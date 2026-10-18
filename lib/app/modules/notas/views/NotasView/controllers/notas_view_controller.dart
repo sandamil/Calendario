@@ -2,16 +2,24 @@ import 'package:calendario2/app/components/toast.dart';
 import 'package:calendario2/app/data/local/taskDatabase.dart';
 import 'package:calendario2/app/data/model/taskModel.dart';
 import 'package:calendario2/app/modules/home/views/home_view.dart';
-import 'package:calendario2/app/modules/notas/controllers/notas_controller.dart';
 import 'package:calendario2/config/util/dateUtils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:calendario2/app/modules/notas/providers/notas_list_provider.dart';
+import 'package:calendario2/app/modules/home/providers/calendar_providers.dart';
 
 import '../../../../../controllers/ads_controller.dart';
 
 class NotasViewController extends GetxController {
-  NotasListController notasListController = Get.put(NotasListController());
+  Future<void> _recargarNotas(BuildContext context) async {
+    final container = ProviderScope.containerOf(context, listen: false);
+    await container.read(notasListProvider.notifier).reload();
+    await container.read(notasProvider.notifier).reload();
+  }
+
+
   final adcontroller = Get.find<AdsController>();
 
   RxBool headerShouldShow = false.obs;
@@ -100,93 +108,143 @@ class NotasViewController extends GetxController {
   }
 
   void handleDelete() async {
+    final parentContext = Get.context;
+    if (parentContext == null || !parentContext.mounted) return;
+
+    final providerContainer =
+        ProviderScope.containerOf(parentContext, listen: false);
+
     showDialog(
-        context: Get.context!,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-            title: const Text('Borrar nota'),
-            content: const Text('Se borrará permanentemente'),
-            actions: <Widget>[
-              TextButton(
-                child: Text('BORRAR',
-                    style: TextStyle(
-                        color: Colors.red.shade300,
-                        fontWeight: FontWeight.w500,
-                        letterSpacing: 1)),
-                onPressed: () async {
-                  await NotasDB.instance.delete(id);
-                  Get.offAllNamed('/notas');
-                  notasListController.refetchNotesFromDB();
-                  Toast.toast(context, msg: "Eliminado exitosamente!");
-                },
+      context: parentContext,
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          title: const Text('Borrar nota'),
+          content: const Text('Se borrará permanentemente'),
+          actions: <Widget>[
+            TextButton(
+              child: Text(
+                'BORRAR',
+                style: TextStyle(
+                  color: Colors.red.shade300,
+                  fontWeight: FontWeight.w500,
+                  letterSpacing: 1,
+                ),
               ),
-              TextButton(
-                child: Text('CANCELAR',
-                    style: TextStyle(
-                        color: Theme.of(context).primaryColor,
-                        fontWeight: FontWeight.w500,
-                        letterSpacing: 1)),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              )
-            ],
-          );
-        });
+              onPressed: () async {
+                await NotasDB.instance.delete(id);
+                await providerContainer
+                    .read(notasListProvider.notifier)
+                    .reload();
+                await providerContainer
+                    .read(notasProvider.notifier)
+                    .reload();
+
+                if (!dialogContext.mounted) return;
+                Navigator.of(dialogContext).pop();
+
+                if (!parentContext.mounted) return;
+                Toast.toast(
+                  parentContext,
+                  msg: "Eliminado exitosamente!",
+                );
+                Get.offAllNamed('/notas');
+              },
+            ),
+            TextButton(
+              child: Text(
+                'CANCELAR',
+                style: TextStyle(
+                  color: Theme.of(dialogContext).primaryColor,
+                  fontWeight: FontWeight.w500,
+                  letterSpacing: 1,
+                ),
+              ),
+              onPressed: () => Navigator.of(dialogContext).pop(),
+            ),
+          ],
+        );
+      },
+    );
   }
 
-  notaNotasDelete(context, id)async{
+  notaNotasDelete(context, id) async {
     await NotasDB.instance.delete(id);
-    Get.offAllNamed('/notas');
-    notasListController.refetchNotesFromDB();
+    await _recargarNotas(context);
+    if (!context.mounted) return;
     Toast.toast(context, msg: "Eliminada!");
+    Get.offAllNamed('/notas');
   }
    notaHomeDelete(context, id)async{
     await NotasDB.instance.delete(id);
-    notasListController.refetchNotesFromDB();
+    await _recargarNotas(context);
     Toast.toast(context, msg: "Eliminada!");
   }
 
 
-  void handleDeleteCalendar(id, routeToNotas, selectedDay, focusedDay) async{
+  void handleDeleteCalendar(
+    id,
+    routeToNotas,
+    selectedDay,
+    focusedDay,
+  ) async {
+    final parentContext = Get.context;
+    if (parentContext == null || !parentContext.mounted) return;
+
     showDialog(
-        context: Get.context!,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-            title: const Text('Borrar nota'),
-            content: const Text('Se borrará permanentemente'),
-            actions: <Widget>[
-              TextButton(
-                child: Text('BORRAR',
-                    style: TextStyle(
-                        color: Colors.red.shade300,
-                        fontWeight: FontWeight.w500,
-                        letterSpacing: 1)),
-                onPressed: ()  {
-
-                  routeToNotas
-                      ? notaNotasDelete(context, id)
-                      : HomeView.notaHomeDelete(context, id, selectedDay, focusedDay);
-                  Navigator.pop(context);
-
-                },
+      context: parentContext,
+      builder: (BuildContext dialogContext) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          title: const Text('Borrar nota'),
+          content: const Text('Se borrará permanentemente'),
+          actions: <Widget>[
+            TextButton(
+              child: Text(
+                'BORRAR',
+                style: TextStyle(
+                  color: Colors.red.shade300,
+                  fontWeight: FontWeight.w500,
+                  letterSpacing: 1,
+                ),
               ),
-              TextButton(
-                child: Text('CANCELAR',
-                    style: TextStyle(
-                        color: Theme.of(context).primaryColor,
-                        fontWeight: FontWeight.w500,
-                        letterSpacing: 1)),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              )
-            ],
-          );
-        });
+              onPressed: () async {
+                Navigator.of(dialogContext).pop();
+
+                if (!parentContext.mounted) return;
+
+                if (routeToNotas) {
+                  await notaNotasDelete(parentContext, id);
+                } else {
+                  await HomeView.notaHomeDelete(
+                    parentContext,
+                    id,
+                    selectedDay,
+                    focusedDay,
+                  );
+                }
+              },
+            ),
+            TextButton(
+              child: Text(
+                'CANCELAR',
+                style: TextStyle(
+                  color: Theme.of(dialogContext).primaryColor,
+                  fontWeight: FontWeight.w500,
+                  letterSpacing: 1,
+                ),
+              ),
+              onPressed: () => Navigator.of(dialogContext).pop(),
+            ),
+          ],
+        );
+      },
+    );
   }
+
+
 }

@@ -5,6 +5,7 @@ import 'package:calendario2/app/data/model/taskModel.dart';
 import 'package:calendario2/app/data/local/my_shared_pref.dart';
 import 'package:calendario2/app/modules/notas/views/widgets/taskCard.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:calendario2/app/modules/notas/providers/notas_list_provider.dart';
 import 'package:calendario2/app/modules/home/providers/calendar_providers.dart';
 import 'package:calendario2/app/modules/home/widgets/calendar/table_calendar.dart';
 import 'package:calendario2/app/modules/home/widgets/calendar/widget/line.dart';
@@ -42,6 +43,7 @@ class HomeView extends StatefulWidget {
     await NotasDB.instance.delete(id);
     final container = ProviderScope.containerOf(context, listen: false);
     await container.read(notasProvider.notifier).reload();
+    await container.read(notasListProvider.notifier).reload();
 
     Toast.toast(context, msg: "Eliminada!");
   }

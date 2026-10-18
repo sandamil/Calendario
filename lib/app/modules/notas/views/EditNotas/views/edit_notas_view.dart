@@ -1,11 +1,11 @@
 import 'package:calendario2/app/modules/home/widgets/calendar/widget/line.dart';
+import 'package:calendario2/app/modules/notas/providers/edit_nota_provider.dart';
 import 'package:calendario2/app/modules/notas/views/alarmas/views/widget/alarmTile.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/config/theme/my_fonts.dart';
 import 'package:calendario2/config/util/dateUtils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
-as dp;
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import '../../../../../controllers/ads_controller.dart';
@@ -56,7 +56,25 @@ class EditNotasView extends GetView<EditNotasController> {
               onPressed: () async {
                 // adcontroller.loadNotesListBannerAd();
 
-                await controller.editNote();
+                final notaNotifier = ProviderScope.containerOf(
+                  context,
+                  listen: false,
+                ).read(editNotaProvider.notifier);
+
+                notaNotifier.title.text = controller.title.value.text;
+                notaNotifier.site.text = controller.site.value.text;
+                notaNotifier.notes.text = controller.notes.value.text;
+                notaNotifier.setStartTime(controller.startTime.value);
+                notaNotifier.setEndTime(controller.endTime.value);
+                notaNotifier.setImportant(controller.important.value);
+                notaNotifier.setAlarmaCreada(controller.alarmaCreada.value);
+                notaNotifier.setAlarmaTime(controller.alarmTime);
+                notaNotifier.setAlarmaHoraString(controller.alarmaHora.value);
+                notaNotifier.setAlarmaActivadaString(
+                  controller.alarmaActivadaString.value,
+                );
+
+                await notaNotifier.editNote(controller.currentNote.value);
                 Get.offAllNamed('/notas');
               },
             )
@@ -94,34 +112,26 @@ class EditNotasView extends GetView<EditNotasController> {
                       height: 6.h,
                     ),
                     TextButton(
-                        onPressed: () {
-                          dp.DatePicker.showDateTimePicker(Get.context!,
-                              theme: dp.DatePickerTheme(
-                                  cancelStyle: TextStyle(
-                                      color: Colors.redAccent.shade200,
-                                      fontSize: 16.sp,
-                                      fontWeight: FontWeight.bold),
-                                  doneStyle: TextStyle(
-                                      color: MyColors.textColorPrimary,
-                                      fontSize: 16.sp,
-                                      fontWeight: FontWeight.bold),
-                                  itemStyle: TextStyle(
-                                      color: MyColors.textColorPrimary,
-                                      fontSize: 16.sp,
-                                      fontWeight: FontWeight.bold),
-                                  backgroundColor: MyColors.backgroundLowAccent),
-                              showTitleActions: true,
-                              onChanged: (DateTime date) {
-                                if (controller.endTime.value
-                                    .millisecondsSinceEpoch <
-                                    date.millisecondsSinceEpoch) {
-                                  controller.endTime.value = date;
-                                }
-                                controller.startTime.value = date;
-                              },
-                              onConfirm: (DateTime date) {},
-                              currentTime: controller.startTime.value,
-                              locale: dp.LocaleType.es);
+                        onPressed: () async {
+                          final initial = controller.startTime.value;
+                          final selectedTime = await showTimePicker(
+                            context: context,
+                            initialTime: TimeOfDay.fromDateTime(initial),
+                          );
+                          if (!context.mounted || selectedTime == null) return;
+
+                          final date = DateTime(
+                            initial.year,
+                            initial.month,
+                            initial.day,
+                            selectedTime.hour,
+                            selectedTime.minute,
+                          );
+
+                          controller.startTime.value = date;
+                          if (controller.endTime.value.isBefore(date)) {
+                            controller.endTime.value = date;
+                          }
                         },
                         child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -151,33 +161,27 @@ class EditNotasView extends GetView<EditNotasController> {
                               )
                             ])),
                     TextButton(
-                        onPressed: () {
-                          dp.DatePicker.showDateTimePicker(Get.context!,
-                              theme: dp.DatePickerTheme(
-                                  cancelStyle: TextStyle(
-                                      color: Colors.redAccent.shade200,
-                                      fontSize: 16.sp,
-                                      fontWeight: FontWeight.bold),
-                                  doneStyle: TextStyle(
-                                      color: MyColors.textColorPrimary,
-                                      fontSize: 16.sp,
-                                      fontWeight: FontWeight.bold),
-                                  itemStyle: TextStyle(
-                                      color: MyColors.textColorPrimary,
-                                      fontSize: 16.sp,
-                                      fontWeight: FontWeight.bold),
-                                  backgroundColor: MyColors.backgroundLowAccent),
-                              showTitleActions: true,
-                              onChanged: (DateTime date) {
-                                if (controller.endTime.value
-                                    .millisecondsSinceEpoch <=
-                                    date.millisecondsSinceEpoch) {
-                                  controller.endTime.value = date;
-                                }
-                              },
-                              onConfirm: (DateTime date) {},
-                              currentTime: controller.endTime.value,
-                              locale: dp.LocaleType.es);
+                        onPressed: () async {
+                          final initial = controller.endTime.value;
+                          final selectedTime = await showTimePicker(
+                            context: context,
+                            initialTime: TimeOfDay.fromDateTime(initial),
+                          );
+                          if (!context.mounted || selectedTime == null) return;
+
+                          var date = DateTime(
+                            initial.year,
+                            initial.month,
+                            initial.day,
+                            selectedTime.hour,
+                            selectedTime.minute,
+                          );
+
+                          if (date.isBefore(controller.startTime.value)) {
+                            date = date.add(const Duration(days: 1));
+                          }
+
+                          controller.endTime.value = date;
                         },
                         child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,

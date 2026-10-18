@@ -57,6 +57,69 @@ class AlarmasController extends GetxController {
         notes = currentNote.value.notes;
         startTime = DateTime.fromMillisecondsSinceEpoch(
             currentNote.value.startTimeMilliseconds!);
+
+        // Recuperar la configuración guardada sin modificar notificaciones.
+        alarmTime = currentNote.value.alarmaTimestamp != null
+            ? DateTime.fromMillisecondsSinceEpoch(
+                currentNote.value.alarmaTimestamp!)
+            : startTime;
+
+        noRemind.value = currentNote.value.isAlarmaCreated ?? false;
+        alarmaActivada.value =
+            currentNote.value.alarmaActivadaString ?? sinRecordatorio;
+
+        // Restaurar la duración y la selección al editar una alarma existente.
+        if (noRemind.value) {
+          duracion = startTime.difference(alarmTime);
+
+          alPrincipio.value = false;
+          minutos5.value = false;
+          minutos30.value = false;
+          horas1.value = false;
+          dias1.value = false;
+
+          masOpcionesAlarma.value = false;
+          selectedHMD = null;
+
+          if (duracion == const Duration(minutes: 0)) {
+            alPrincipio.value = true;
+          } else if (duracion == const Duration(minutes: 5)) {
+            minutos5.value = true;
+          } else if (duracion == const Duration(minutes: 30)) {
+            minutos30.value = true;
+          } else if (duracion == const Duration(hours: 1)) {
+            horas1.value = true;
+          } else if (duracion == const Duration(days: 1)) {
+            dias1.value = true;
+          } else {
+            // Duración personalizada: restaurar unidad y cantidad.
+            masOpcionesAlarma.value = true;
+
+            int cantidad;
+            if (duracion.inDays > 0 &&
+                duracion.inHours == duracion.inDays * 24 &&
+                duracion.inMinutes == duracion.inDays * 1440) {
+              selectedHMD = 'Dias';
+              cantidad = duracion.inDays;
+            } else if (duracion.inHours > 0 &&
+                duracion.inMinutes == duracion.inHours * 60) {
+              selectedHMD = 'Horas';
+              cantidad = duracion.inHours;
+            } else {
+              selectedHMD = 'Minutos';
+              cantidad = duracion.inMinutes;
+            }
+
+            textController.text = cantidad.toString();
+            subtractTimeString.value = cantidad.toString();
+          }
+
+          update();
+        }
+
+        if (noRemind.value && alarmTime.isBefore(DateTime.now())) {
+          alarmaActivada.value = sinRecordatorio;
+        }
       } else {
         startTime = Get.arguments['startTime'];
         alarmTime = DateTime(2000);
@@ -202,32 +265,49 @@ class AlarmasController extends GetxController {
     }
   }
 
-  goToEditingNotas() async {
+    goToEditingNotas() async {
     final editNotasController = Get.find<EditNotasController>();
-    noRemind.value
-        ? await setNotification()
-        : CustomSnackBar.showCustomSnackBar(
-            title: 'No has añadido Alarma',
-            message: ' Vuelve a entrar si queires añadir recordatorio');
+
+    if (!noRemind.value) {
+      CustomSnackBar.showCustomSnackBar(
+        title: 'No has añadido Alarma',
+        message: 'Vuelve a entrar si quieres añadir recordatorio',
+      );
+    }
+
     await updatealarmaActivadaString();
 
     editNotasController.setAlarmaCreada(noRemind.value);
-    (noRemind.value) ? editNotasController.setAlarmaTime(alarmTime) : null;
+    if (noRemind.value) {
+      if (duracion != const Duration(microseconds: 2)) {
+        alarmTime = startTime.subtract(duracion);
+      }
+      editNotasController.setAlarmaTime(alarmTime);
+    }
 
     await Get.to(() => EditNotasView());
   }
 
-  goToAddNotas() async {
+    goToAddNotas() async {
     final addNotasController = Get.put(AddNotasController());
 
-    noRemind.value
-        ? await setNotification()
-        : CustomSnackBar.showCustomSnackBar(
-            title: 'No has añadido Alarma',
-            message: ' Vuelve a entrar si queires añadir recordatorio');
+    if (!noRemind.value) {
+      CustomSnackBar.showCustomSnackBar(
+        title: 'No has añadido Alarma',
+        message: 'Vuelve a entrar si quieres añadir recordatorio',
+      );
+    }
+
     await updatealarmaActivadaString();
+
     addNotasController.setAlarmaCreada(noRemind.value);
-    addNotasController.setAlarmaTime(alarmTime);
+    if (noRemind.value) {
+      if (duracion != const Duration(microseconds: 2)) {
+        alarmTime = startTime.subtract(duracion);
+      }
+      addNotasController.setAlarmaTime(alarmTime);
+    }
+
     await Get.to(() => AddNotasView());
   }
 

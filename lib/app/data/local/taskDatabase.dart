@@ -14,7 +14,7 @@ class NotasDB {
   static Database? _db;
   final String databaseName = 'notas_database.db';
   final String taskTable = 'Notas';
-  static const int _version = 2;
+  static const int _version = 3;
 
 
   get db async {
@@ -61,7 +61,7 @@ class NotasDB {
   // }
 
 
-  void _onCreate(Database db, int version) async {
+  Future<void> _onCreate(Database db, int version) async {
     await db.execute('CREATE TABLE IF NOT EXISTS $taskTable('
         'id INTEGER PRIMARY KEY, '
         'title TEXT, '
@@ -73,22 +73,26 @@ class NotasDB {
         'isImportant INTEGER, '
         'idAlarma INTEGER, '
         'alarmaHora TEXT, '
+        'alarmaTimestamp INTEGER, '
         'alarmaActivadaString TEXT, '
         'isAlarmaCreated INTEGER)'
     );
   }
 
-  // UPGRADE DATABASE TABLES
-  void _onUpgrade(Database db, int oldVersion, int newVersion) {
-    print(' ------------------------------------------${oldVersion}');
-    print(' ------------------------------------------${newVersion}');
-    (newVersion);
-    if (oldVersion < newVersion) {
-      // you can execute drop table and create table
-      db.execute("ALTER TABLE $taskTable ADD COLUMN alarmaHora TEXT;");
+  // Actualizaciones incrementales: conservan las notas existentes.
+  Future<void> _onUpgrade(
+      Database db, int oldVersion, int newVersion) async {
+    if (oldVersion < 2) {
+      await db.execute(
+        'ALTER TABLE $taskTable ADD COLUMN alarmaHora TEXT'
+      );
+    }
+    if (oldVersion < 3) {
+      await db.execute(
+        'ALTER TABLE $taskTable ADD COLUMN alarmaTimestamp INTEGER'
+      );
     }
   }
-
 
 
   Future<int> insertNotas(Task notas) async {
@@ -121,6 +125,7 @@ class NotasDB {
         isImportant: maps[0]['isImportant'] == 1 ? true : false,
         idAlarma: maps[0]['idAlarma'],
         alarmaHora: maps[0]['alarmaHora'],
+        alarmaTimestamp: maps[0]['alarmaTimestamp'],
         alarmaActivadaString: maps[0]['alarmaActivadaString'],
         isAlarmaCreated: maps[0]['isAlarmaCreated'] == 1 ? true : false,
       );
@@ -144,6 +149,7 @@ class NotasDB {
       'isImportant',
       'idAlarma',
       'alarmaHora',
+      'alarmaTimestamp',
       'alarmaActivadaString',
       'isAlarmaCreated'
     ]);

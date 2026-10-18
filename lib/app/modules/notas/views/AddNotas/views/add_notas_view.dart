@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:calendario2/app/modules/home/widgets/calendar/widget/line.dart';
 import 'package:calendario2/app/controllers/tutorial_provider.dart';
+import 'package:calendario2/app/modules/notas/providers/add_nota_provider.dart';
 import 'package:calendario2/app/data/local/my_shared_pref.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:calendario2/app/modules/notas/views/alarmas/controllers/alarmas_controller.dart';
@@ -90,7 +91,28 @@ class AddNotasView extends GetView<AddNotasController> {
                 // adcontroller.loadNotesListBannerAd();
 
                 // controller.addTravelEvent();
-                await controller.saveNota();
+                final notaNotifier = ProviderScope.containerOf(
+                  context,
+                  listen: false,
+                ).read(addNotaProvider.notifier);
+
+                // Sincronizar los campos que todavía gestiona el controlador
+                // antiguo mientras terminamos la migración de la vista.
+                notaNotifier.title.text = controller.title.text;
+                notaNotifier.site.text = controller.site.text;
+                notaNotifier.notes.text = controller.notes.text;
+                notaNotifier.setStartTime(controller.startTime.value);
+                notaNotifier.setEndTime(controller.endTime.value);
+                notaNotifier.setImportant(controller.isImportant.value);
+                notaNotifier.setAlarmaCreada(controller.alarmaCreada);
+                notaNotifier.setAlarmaTime(controller.alarmTime);
+                notaNotifier.setAlarmaActivadaString(
+                  controller.alarmaActivadaString.value,
+                );
+
+                await notaNotifier.saveNota(
+                  id: controller.idGenerated as int?,
+                );
                 Get.offAllNamed('/notas');
               },
             )
@@ -137,36 +159,23 @@ class AddNotasView extends GetView<AddNotasController> {
                         : key,
                     children: <Widget>[
                       TextButton(
-                          onPressed: () {
-                            dp.DatePicker.showDateTimePicker(Get.context!,
-                                theme: dp.DatePickerTheme(
-                                    cancelStyle: TextStyle(
-                                        color: Colors.redAccent.shade200,
-                                        fontSize: 16.sp,
-                                        fontWeight: FontWeight.bold),
-                                    doneStyle: TextStyle(
-                                        color: MyColors.textColorPrimary,
-                                        fontSize: 16.sp,
-                                        fontWeight: FontWeight.bold),
-                                    itemStyle: TextStyle(
-                                        color: MyColors.textColorPrimary,
-                                        fontSize: 16.sp,
-                                        fontWeight: FontWeight.bold),
-                                    backgroundColor:
-                                        MyColors.backgroundLowAccent),
-                                showTitleActions: true,
-                                onChanged: (DateTime date) {
-                              if (controller
-                                      .endTime.value.millisecondsSinceEpoch <
-                                  date.millisecondsSinceEpoch) {
-                                controller.endTime.value = date;
-                              }
-                              controller.startTime.value = date;
-                            }, onConfirm: (DateTime date) {
-                              controller.setStartTime(date);
-                            },
-                                currentTime: controller.startTime.value,
-                                locale: dp.LocaleType.es);
+                          onPressed: () async {
+                            final initial = controller.startTime.value;
+                            final selectedTime = await showTimePicker(
+                              context: context,
+                              initialTime: TimeOfDay.fromDateTime(initial),
+                            );
+                            if (!context.mounted || selectedTime == null) return;
+
+                            final date = DateTime(
+                              initial.year,
+                              initial.month,
+                              initial.day,
+                              selectedTime.hour,
+                              selectedTime.minute,
+                            );
+
+                            controller.setStartTime(date);
                           },
                           child: Column(
                             children: [
@@ -203,34 +212,27 @@ class AddNotasView extends GetView<AddNotasController> {
                             ],
                           )),
                       TextButton(
-                          onPressed: () {
-                            dp.DatePicker.showDateTimePicker(Get.context!,
-                                theme: dp.DatePickerTheme(
-                                    cancelStyle: TextStyle(
-                                        color: Colors.redAccent.shade200,
-                                        fontSize: 16.sp,
-                                        fontWeight: FontWeight.bold),
-                                    doneStyle: TextStyle(
-                                        color: MyColors.textColorPrimary,
-                                        fontSize: 16.sp,
-                                        fontWeight: FontWeight.bold),
-                                    itemStyle: TextStyle(
-                                        color: MyColors.textColorPrimary,
-                                        fontSize: 16.sp,
-                                        fontWeight: FontWeight.bold),
-                                    backgroundColor:
-                                        MyColors.backgroundLowAccent),
-                                showTitleActions: true,
-                                onChanged: (DateTime date) {
-                              if (controller
-                                      .endTime.value.millisecondsSinceEpoch <=
-                                  date.millisecondsSinceEpoch) {
-                                controller.endTime.value = date;
-                              }
-                            },
-                                onConfirm: (DateTime date) {},
-                                currentTime: controller.endTime.value,
-                                locale: dp.LocaleType.es);
+                          onPressed: () async {
+                            final initial = controller.endTime.value;
+                            final selectedTime = await showTimePicker(
+                              context: context,
+                              initialTime: TimeOfDay.fromDateTime(initial),
+                            );
+                            if (!context.mounted || selectedTime == null) return;
+
+                            var date = DateTime(
+                              initial.year,
+                              initial.month,
+                              initial.day,
+                              selectedTime.hour,
+                              selectedTime.minute,
+                            );
+
+                            if (date.isBefore(controller.startTime.value)) {
+                              date = date.add(const Duration(days: 1));
+                            }
+
+                            controller.endTime.value = date;
                           },
                           child: Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -461,9 +463,6 @@ class AddNotasView extends GetView<AddNotasController> {
                           child: ElevatedButton(
                         onPressed: () async {
                           // controller.alarmTime = DateTime(2020);
-                          await controller.flutterLocalNotificationsPlugin.cancel(
-                              id: controller
-                                  .idGenerated!); // 0 is your notification id
                           Get.toNamed('/alarmas', arguments: {
                             'id': controller.idGenerated!,
                             'startTime': controller.startTime.value,

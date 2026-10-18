@@ -1,15 +1,18 @@
 import 'dart:math';
 
+import 'package:calendario2/app/components/toast.dart';
+import 'package:calendario2/app/data/local/taskDatabase.dart';
 import 'package:calendario2/app/data/model/taskModel.dart';
+import 'package:calendario2/app/modules/home/providers/calendar_providers.dart';
+import 'package:calendario2/app/modules/notas/providers/notas_list_provider.dart';
 import 'package:calendario2/config/util/dateUtils.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-
-import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
-
-import '../../../notas/views/NotasView/controllers/notas_view_controller.dart';
 
 List<Color> colorList = [
   Colors.blue,
@@ -22,7 +25,7 @@ List<Color> colorList = [
   Colors.deepOrange
 ];
 
-class TaskCard extends StatelessWidget {
+class TaskCard extends ConsumerWidget {
 
   const TaskCard({
     required this.noteData,
@@ -40,9 +43,7 @@ class TaskCard extends StatelessWidget {
   final focusedDay;
 
   @override
-  Widget build(BuildContext context) {
-    NotasViewController notasViewController = NotasViewController();
-
+  Widget build(BuildContext context, WidgetRef ref) {
     var date =
         DateTime.fromMillisecondsSinceEpoch(noteData.startTimeMilliseconds!);
     String neatDate = DateFormat('dd-MM-yyyy HH:mm').format(date);
@@ -83,8 +84,77 @@ class TaskCard extends StatelessWidget {
                   icon: Icons.delete,
                   backgroundColor: Colors.red,
                   borderRadius: BorderRadius.all(Radius.circular(5.r)),
-                  onPressed: (context) {
-                    notasViewController.handleDeleteCalendar(noteData.id, routeToNotas, selectedDay, focusedDay);
+                  onPressed: (slidableContext) {
+                    showDialog<void>(
+                      context: context,
+                      builder: (dialogContext) => AlertDialog(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        title: const Text('Borrar nota'),
+                        content: const Text('Se borrará permanentemente'),
+                        actions: [
+                          TextButton(
+                            child: Text(
+                              'BORRAR',
+                              style: TextStyle(
+                                color: Colors.red.shade300,
+                                fontWeight: FontWeight.w500,
+                                letterSpacing: 1,
+                              ),
+                            ),
+                            onPressed: () async {
+                              final container = ProviderScope.containerOf(
+                                context,
+                                listen: false,
+                              );
+
+                              final notaId = noteData.id;
+                              Navigator.of(dialogContext).pop();
+
+                              if (notaId == null) {
+                                Toast.toast(
+                                  context,
+                                  msg: 'No se puede eliminar una nota sin ID.',
+                                );
+                                return;
+                              }
+
+                              await NotasDB.instance.delete(notaId);
+
+                              await container
+                                  .read(notasProvider.notifier)
+                                  .reload();
+                              await container
+                                  .read(notasListProvider.notifier)
+                                  .reload();
+
+                              if (routeToNotas) {
+                                Get.offAllNamed('/notas');
+                              }
+
+                              if (context.mounted) {
+                                Toast.toast(
+                                  context,
+                                  msg: 'Eliminada!',
+                                );
+                              }
+                            },
+                          ),
+                          TextButton(
+                            child: Text(
+                              'CANCELAR',
+                              style: TextStyle(
+                                color: Theme.of(dialogContext).primaryColor,
+                                fontWeight: FontWeight.w500,
+                                letterSpacing: 1,
+                              ),
+                            ),
+                            onPressed: () => Navigator.of(dialogContext).pop(),
+                          ),
+                        ],
+                      ),
+                    );
                   },
                 ),
               ]),

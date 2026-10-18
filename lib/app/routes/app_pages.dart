@@ -1,3 +1,5 @@
+import '../modules/notas/views/EditNotas/bindings/edit_notas_binding.dart';
+import '../modules/notas/views/AddNotas/bindings/add_notas_binding.dart';
 import 'dart:io';
 
 import 'package:calendario2/app/modules/ajustes/views/pages/dev_page.dart';
@@ -16,10 +18,7 @@ import '../modules/crearCuadrante/views/cuadrante_view.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/inicio/views/inicio_view.dart';
 import '../modules/menu/views/menu_view.dart';
-import '../modules/notas/bindings/notas_binding.dart';
-import '../modules/notas/views/AddNotas/bindings/add_notas_binding.dart';
 import '../modules/notas/views/AddNotas/views/add_notas_view.dart';
-import '../modules/notas/views/EditNotas/bindings/edit_notas_binding.dart';
 import '../modules/notas/views/EditNotas/views/edit_notas_view.dart';
 import '../modules/notas/views/NotasView/bindings/notas_view_binding.dart';
 import '../modules/notas/views/NotasView/views/notas_view.dart';
@@ -79,7 +78,6 @@ class AppPages {
       transitionDuration: const Duration(milliseconds: 100),
       name: _Paths.NOTAS,
       page: () => NotasListView(),
-      binding: NotasListBinding(),
     ),
     GetPage(
       transition: Transition.fadeIn,

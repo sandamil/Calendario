@@ -3,29 +3,56 @@ import 'dart:io';
 import 'package:calendario2/app/controllers/ads_controller.dart';
 import 'package:calendario2/app/controllers/tutorial_provider.dart';
 import 'package:calendario2/app/data/local/my_shared_pref.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:calendario2/app/modules/notas/controllers/notas_controller.dart';
+import 'package:calendario2/app/data/model/taskModel.dart';
+import 'package:calendario2/app/modules/notas/providers/notas_list_provider.dart';
 import 'package:calendario2/app/modules/notas/views/widgets/important_indicator_text_view.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/config/theme/my_fonts.dart';
+import 'package:calendario2/config/util/app_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import 'package:get/get.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 
-import '../../../../config/util/app_icons.dart';
 import 'widgets/button_row_view.dart';
+import 'widgets/taskCard.dart';
 
-class NotasListView extends GetView<NotasListController> {
+class NotasListView extends ConsumerStatefulWidget {
   NotasListView({Key? key}) : super(key: key);
 
+  @override
+  ConsumerState<NotasListView> createState() => _NotasListViewState();
+}
+
+class _NotasListViewState extends ConsumerState<NotasListView> {
   bool _tutorialStartScheduled = false;
-  final adcontroller = Get.find<AdsController>();
+
+  late final AdsController _adController;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // AdsController sigue siendo compartido con otras pantallas GetX.
+    _adController = Get.find<AdsController>();
+
+    Future.microtask(() async {
+      await ref.read(notasListProvider.notifier).reload();
+    });
+  }
+
+  void _openNote(Task note) {
+    Get.toNamed(
+      '/notas-view',
+      arguments: {'id': note.id!, 'noteData': note},
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    final adcontroller = Get.find<AdsController>();
+    final state = ref.watch(notasListProvider);
+    final notifier = ref.read(notasListProvider.notifier);
+
     final tutorialController = ProviderScope.containerOf(
       context,
       listen: false,
@@ -33,15 +60,23 @@ class NotasListView extends GetView<NotasListController> {
 
     if (!_tutorialStartScheduled && MySharedPref.getTutoTaskFirst()) {
       _tutorialStartScheduled = true;
+
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (!context.mounted) return;
-        controller.firstTime.value = true;
+        if (!mounted) return;
+
+        notifier.setTutorialVisible(true);
+
         WidgetsBinding.instance.addPostFrameCallback((_) {
-          if (!context.mounted) return;
+          if (!mounted) return;
+
           tutorialController.firstInstall(
             'task',
             context: context,
-            onFinished: () => controller.firstTime.value = false,
+            onFinished: () {
+              if (mounted) {
+                notifier.setTutorialVisible(false);
+              }
+            },
           );
         });
       });
@@ -50,104 +85,91 @@ class NotasListView extends GetView<NotasListController> {
     return WillPopScope(
       onWillPop: () async {
         if (Platform.isAndroid) {
-          //? to close quick order floating if its open when click back btn
-          adcontroller.staticHomeAd.load();
-
+          _adController.staticHomeAd.load();
           Get.offAllNamed('/home');
         }
         return false;
       },
-      child: Obx(() {
-        return Scaffold(
-          appBar: AppBar(
-            leading: IconButton(
-              icon: Icon(
-                Icons.home,
-                color: PRIMARY_COLOR,
-                size: 26.sp,
+      child: Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+            icon: Icon(Icons.home, color: PRIMARY_COLOR, size: 26.sp),
+            onPressed: () {
+              _adController.staticHomeAd.load();
+              Get.offAllNamed('/home');
+            },
+          ),
+          centerTitle: false,
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+          title: Text(
+            'Notas',
+            style: CustomTextStyle.appBarTitle(context: context),
+            overflow: TextOverflow.clip,
+            softWrap: false,
+          ),
+          actions: [
+            IconButton(
+              key: state.tutorialVisible
+                  ? tutorialController.keyNotasListAyuda
+                  : widget.key,
+              icon: const AppIcon(
+                AppIcons.informacion,
+                color: Colors.green,
               ),
+              tooltip: '',
               onPressed: () {
-                adcontroller.staticHomeAd.load();
-
-                Get.offAllNamed('/home');
+                notifier.setTutorialVisible(true);
+                tutorialController.showTutorial(
+                  context,
+                  'task',
+                  onFinished: () {
+                    if (mounted) {
+                      notifier.setTutorialVisible(false);
+                    }
+                  },
+                );
               },
             ),
-            centerTitle: false,
-            elevation: 0.0,
-            backgroundColor: Colors.transparent,
-            title: Text(
-              'Notas',
-              style: CustomTextStyle.appBarTitle(context: context),
-              overflow: TextOverflow.clip,
-              softWrap: false,
-            ),
-            actions: <Widget>[
-              IconButton(
-                key: controller.firstTime.value
-                    ? tutorialController.keyNotasListAyuda
-                    : key,
-                icon: const AppIcon(AppIcons.informacion, color: Colors.green),
-                tooltip: '',
-                onPressed: () {
-                  controller.firstTime.value = true;
-                  tutorialController.showTutorial(
-                    context,
-                    'task',
-                    onFinished: () => controller.firstTime.value = false,
-                  );
-                },
-              ),
-              // add your custom action widget
-            ], //Action icon search as search icon, notification icon
+          ],
+        ),
+        floatingActionButton: FloatingActionButton.extended(
+          backgroundColor: PRIMARY_COLOR,
+          onPressed: () => Get.toNamed('/add-notas'),
+          label: Text(
+            'Añade Nota'.toUpperCase(),
+            key: state.tutorialVisible
+                ? tutorialController.keyButton10
+                : widget.key,
           ),
-          floatingActionButton: FloatingActionButton.extended(
-            backgroundColor: PRIMARY_COLOR,
-            onPressed: () {
-              controller.gotoEditNote();
-              // adcontroller.staticNotesListAd.dispose();
-            },
-            label: Text(
-              'Añade Nota'.toUpperCase(),
-              key: controller.firstTime.value
-                  ? tutorialController.keyButton10
-                  : key,
-            ),
-            icon: const Icon(Icons.add),
-          ),
-          // bottomNavigationBar: Platform.isAndroid
-          //     ?
-          //
-          // adcontroller.staticAdNotesListLoaded.value
-          //     ? Container(
-          //         color: Colors.transparent,
-          //         width: adcontroller.staticNotesListAd.size.width.toDouble(),
-          //         height: adcontroller.staticNotesListAd.size.height.toDouble(),
-          //         alignment: Alignment.bottomCenter,
-          //         child: AdWidget(
-          //           ad: adcontroller.staticNotesListAd,
-          //         ),
-          //       )
-          //     : const SizedBox(
-          //       ): null,
-          body: AnimatedContainer(
-            duration: const Duration(milliseconds: 200),
-            margin: EdgeInsets.only(top: 6.h),
-            padding: EdgeInsets.only(left: 15.w, right: 15.w),
-            child: SingleChildScrollView(
-              child: Column(
-                // physics: BouncingScrollPhysics(),
-                children: <Widget>[
-                  const ButtonRowView(),
-                  const ImportantIndicatorTextView(),
-                  Container(height: 6.h),
-                  ...controller.buildNoteComponentsList(),
-                  Container(height: 100.h)
-                ],
-              ),
+          icon: const Icon(Icons.add),
+        ),
+        body: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          margin: EdgeInsets.only(top: 6.h),
+          padding: EdgeInsets.only(left: 15.w, right: 15.w),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                const ButtonRowView(),
+                const ImportantIndicatorTextView(),
+                SizedBox(height: 6.h),
+                if (state.notas.isEmpty)
+                  const SizedBox.shrink()
+                else
+                  ...state.notasFiltradas.map(
+                    (nota) => TaskCard(
+                      noteData: nota,
+                      onTapAction: _openNote,
+                      routeToNotas: true,
+                    ),
+                  ),
+                SizedBox(height: 100.h),
+              ],
             ),
           ),
-        );
-      }),
+        ),
+      ),
     );
   }
 }
