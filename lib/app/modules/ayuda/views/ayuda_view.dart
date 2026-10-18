@@ -7,12 +7,60 @@ import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/config/theme/my_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import 'package:get/get.dart';
 
-import '../controllers/ayuda_controller.dart';
+import 'pages/feedback_screen.dart';
 
-class AyudaView extends GetView<AyudaController> {
+Future<void> _launchGmail() async {
+  final Uri params = Uri(
+    scheme: 'mailto',
+    path: 'ajatsoft@gmail.com',
+    query: 'subject= Email Calendario Turnos Appp&body = ',
+  );
+  await launchUrlString(params.toString());
+}
+
+Future<void> _launchTwitter() async {
+  await launchUrlString('https://x.com/ajatsoft');
+}
+
+void _giveFeedbackClicked(BuildContext context) {
+  showBarModalBottomSheet(
+    context: context,
+    backgroundColor: Colors.transparent,
+    builder: (context) =>
+        SizedBox(height: 600.h, child: const FeedbackScreen()),
+  );
+}
+
+Future<void> _onRateThisAppPress() async {
+  if (Platform.isAndroid || Platform.isIOS) {
+    const androidPackageName = 'ajat.calendario.turnos';
+    final appId = Platform.isAndroid ? androidPackageName : 'YOUR_IOS_APP_ID';
+
+    final url = Uri.parse(
+      Platform.isAndroid
+          ? 'market://details?id=$androidPackageName'
+          : 'https://apps.apple.com/app/id$appId',
+    );
+
+    final canLaunchIntent = await canLaunchUrl(url);
+    if (canLaunchIntent) {
+      await launchUrl(url, mode: LaunchMode.externalApplication);
+    } else {
+      await launchUrlString(
+        'https://play.google.com/store/apps/details?id=$androidPackageName',
+        mode: LaunchMode.externalApplication,
+      );
+    }
+  }
+}
+
+class AyudaView extends StatelessWidget {
   const AyudaView({Key? key}) : super(key: key);
 
   @override
@@ -79,12 +127,12 @@ class AyudaView extends GetView<AyudaController> {
                       title: "Enviar Feedback",
                       subtitle:
                           "Sugiera sus comentarios y solicitudes para que esta aplicación sea imprescindible para usted",
-                      onTap: () => controller.giveFeedbackClicked(context),
+                      onTap: () => _giveFeedbackClicked(context),
                     ),
                     AyudaRowWidget(
                       title: "Califica app",
                       subtitle: "Comparte tu experiencia en Play Store",
-                      onTap: controller.onRateThisAppPress,
+                      onTap: _onRateThisAppPress,
                     ),
                   ],
                 ),
@@ -96,13 +144,13 @@ class AyudaView extends GetView<AyudaController> {
                       title: "Email",
                       subtitle:
                           "Contacta con nosotros por email para cualquier duda, sugerencia o reportar algun error.",
-                      onTap: () => controller.launchGmail(),
+                      onTap: () => _launchGmail(),
                     ),
                     AyudaRowWidget(
                       title: "Twitter",
                       subtitle:
                           "Síguenos para conocer todas las novedades o comunícate con nosotros a través de Twitter",
-                      onTap: () => controller.launchTwitter(),
+                      onTap: () => _launchTwitter(),
                     ),
                   ],
                 ),

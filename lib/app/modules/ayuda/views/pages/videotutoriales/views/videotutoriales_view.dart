@@ -8,9 +8,19 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../../../../../../../config/theme/my_fonts.dart';
-import '../controllers/videotutoriales_controller.dart';
 
-class VideotutorialesView extends GetView<VideotutorialesController> {
+const String _urlHome = 'NiUMF8g00Xw';
+const String _urlCrearCuadrante = 'bCSZLNRjCnc';
+const String _urlEditarUnDia = '0X6ffxpI99o';
+const String _urlEditarVariosDias = 'BrzgZg1p7RY';
+const String _urlBackup = 'S-JYfxwbmYI';
+const String _urlCrearTurno = 'LMzF1WAOSS0';
+const String _urlNotas = '0vph4HSnY3s';
+const String _urlFiltrosNotas = 'qNoW5vtUxoA';
+const String _urlAddAlarma = '0rF_X1qMkX0';
+const String _urlVistaNotaDetalle = 'Md9TEMlTFBE';
+
+class VideotutorialesView extends StatelessWidget {
   const VideotutorialesView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -41,7 +51,6 @@ class VideotutorialesView extends GetView<VideotutorialesController> {
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Card(
               color: MyColors.menuCardBackgroundDark,
-
               child: VideotutorialesViewGroup(
                 title: "Pantalla principal",
                 children: [
@@ -50,15 +59,13 @@ class VideotutorialesView extends GetView<VideotutorialesController> {
                       subtitle:
                           "Video donde podrás ver alguna de las funciones de la pantalla principal. "
                           "Acceso a menu, Calendario anterior, uso de calendario, etc..",
-                      onTap: () =>
-                          Get.to(FullscreenVideoViewer(id: controller.urlHome)),
-                      id: controller.urlHome),
+                      onTap: () => Get.to(FullscreenVideoViewer(id: _urlHome)),
+                      id: _urlHome),
                 ],
               ),
             ),
             Card(
               color: MyColors.menuCardBackgroundDark,
-
               child: VideotutorialesViewGroup(
                 title: "Cuadrantes",
                 children: [
@@ -66,29 +73,28 @@ class VideotutorialesView extends GetView<VideotutorialesController> {
                       title: "Crear Cuadrantes",
                       subtitle:
                           "Video mostrando como crear un cuadrante para marcar los días de trabajo en el calendario.",
-                      onTap: () => Get.to(FullscreenVideoViewer(
-                          id: controller.urlCrearCuadrante)),
-                      id: controller.urlCrearCuadrante),
+                      onTap: () =>
+                          Get.to(FullscreenVideoViewer(id: _urlCrearCuadrante)),
+                      id: _urlCrearCuadrante),
                   VideotutorialesRowWidget(
                       title: "Editar un dia",
                       subtitle:
-                      "Video mostrando como editar un día de cuadrante en el calendario.",
-                      onTap: () => Get.to(FullscreenVideoViewer(
-                          id: controller.urlEditarUnDia)),
-                      id: controller.urlEditarUnDia),
+                          "Video mostrando como editar un día de cuadrante en el calendario.",
+                      onTap: () =>
+                          Get.to(FullscreenVideoViewer(id: _urlEditarUnDia)),
+                      id: _urlEditarUnDia),
                   VideotutorialesRowWidget(
                       title: "Editar varios dias",
                       subtitle:
-                      "Como editar varis días juntos, sin tener que modificar de uno en uno.",
-                      onTap: () => Get.to(FullscreenVideoViewer(
-                          id: controller.urlEditarVariosDias)),
-                      id: controller.urlEditarVariosDias),
+                          "Como editar varis días juntos, sin tener que modificar de uno en uno.",
+                      onTap: () => Get.to(
+                          FullscreenVideoViewer(id: _urlEditarVariosDias)),
+                      id: _urlEditarVariosDias),
                 ],
               ),
             ),
             Card(
               color: MyColors.menuCardBackgroundDark,
-
               child: VideotutorialesViewGroup(
                 title: "Copia de Seguridad",
                 children: [
@@ -96,15 +102,14 @@ class VideotutorialesView extends GetView<VideotutorialesController> {
                       title: "Backup",
                       subtitle:
                           "Video mostrando como hacer copia de seguridad y restaurar datos de app.",
-                      onTap: () => Get.to(FullscreenVideoViewer(
-                          id: controller.urlbackup)),
-                      id: controller.urlbackup),
+                      onTap: () =>
+                          Get.to(FullscreenVideoViewer(id: _urlBackup)),
+                      id: _urlBackup),
                 ],
               ),
             ),
             Card(
               color: MyColors.menuCardBackgroundDark,
-
               child: VideotutorialesViewGroup(
                 title: "Turnos",
                 children: [
@@ -113,15 +118,14 @@ class VideotutorialesView extends GetView<VideotutorialesController> {
                       subtitle:
                           "Video mostrando como crear un turno para marcar los días en el calendario,"
                           " o crear cuadrantes con ese turno o tipo de dia.",
-                      onTap: () => Get.to(
-                          FullscreenVideoViewer(id: controller.urlCrearTurno)),
-                      id: controller.urlCrearTurno),
+                      onTap: () =>
+                          Get.to(FullscreenVideoViewer(id: _urlCrearTurno)),
+                      id: _urlCrearTurno),
                 ],
               ),
             ),
             Card(
               color: MyColors.menuCardBackgroundDark,
-
               child: VideotutorialesViewGroup(
                 title: "Notas",
                 children: [
@@ -129,32 +133,31 @@ class VideotutorialesView extends GetView<VideotutorialesController> {
                       title: "Crear Nota",
                       subtitle:
                           "Video general de la pantalla Notas, donde verás las principales características.",
-                      onTap: () => Get.to(
-                          FullscreenVideoViewer(id: controller.urlNotas)),
-                      id: controller.urlNotas),
+                      onTap: () => Get.to(FullscreenVideoViewer(id: _urlNotas)),
+                      id: _urlNotas),
                   VideotutorialesRowWidget(
                       title: "Filtros de busqueda",
                       subtitle:
                           "Video mostrando como se buscan y filtran las notas dentro de la lista de todas las notas",
-                      onTap: () => Get.to(FullscreenVideoViewer(
-                          id: controller.urlFiltrosNotas)),
-                      id: controller.urlFiltrosNotas),
+                      onTap: () =>
+                          Get.to(FullscreenVideoViewer(id: _urlFiltrosNotas)),
+                      id: _urlFiltrosNotas),
                   VideotutorialesRowWidget(
                       title: "Añadir alarma",
                       subtitle:
                           "Video mostrando como añadir alarma y notificacion a las notas creadas, "
                           "solo funciona si no se cierra app.",
-                      onTap: () => Get.to(
-                          FullscreenVideoViewer(id: controller.urlAddAlarma)),
-                      id: controller.urlAddAlarma),
+                      onTap: () =>
+                          Get.to(FullscreenVideoViewer(id: _urlAddAlarma)),
+                      id: _urlAddAlarma),
                   VideotutorialesRowWidget(
                       title: "Vista detalle de Nota",
                       subtitle:
                           "Video mostrando como ver cada nota en detalle, se accede, "
                           "tanto desde pantalla principal como desde Notas.",
-                      onTap: () => Get.to(FullscreenVideoViewer(
-                          id: controller.urlVistaNotaDetalle)),
-                      id: controller.urlVistaNotaDetalle),
+                      onTap: () => Get.to(
+                          FullscreenVideoViewer(id: _urlVistaNotaDetalle)),
+                      id: _urlVistaNotaDetalle),
                 ],
               ),
             ),

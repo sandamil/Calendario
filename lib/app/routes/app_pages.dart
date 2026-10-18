@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:calendario2/app/modules/ajustes/views/pages/dev_page.dart';
 import 'package:calendario2/app/modules/ajustes/views/pages/log_console.dart';
-import 'package:calendario2/app/modules/ayuda/views/pages/videotutoriales/bindings/videotutoriales_binding.dart';
 import 'package:calendario2/app/modules/ayuda/views/pages/videotutoriales/views/videotutoriales_view.dart';
 import 'package:get/get.dart';
 
@@ -12,7 +11,6 @@ import '../modules/ajustes/bindings/ajustes_binding.dart';
 import '../modules/ajustes/views/ajustes_view.dart';
 import '../modules/ajustes/views/pages/about_page.dart';
 import '../modules/ajustes/views/pages/privacy_policy_page.dart';
-import '../modules/ayuda/bindings/ayuda_binding.dart';
 import '../modules/ayuda/views/ayuda_view.dart';
 import '../modules/boarding/views/boarding_view.dart';
 import '../modules/crearCuadrante/views/cuadrante_view.dart';
@@ -118,14 +116,12 @@ class AppPages {
       transitionDuration: const Duration(milliseconds: 100),
       name: _Paths.AYUDA,
       page: () => const AyudaView(),
-      binding: AyudaBinding(),
     ),
     GetPage(
       transition: Transition.fadeIn,
       transitionDuration: const Duration(milliseconds: 100),
       name: _Paths.VIDEOTUTORIALES,
       page: () => const VideotutorialesView(),
-      binding: VideotutorialesBinding(),
     ),
   ];
 }
