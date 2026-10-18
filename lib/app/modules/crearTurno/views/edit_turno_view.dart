@@ -269,13 +269,23 @@ class EditTurnoView extends GetView<CrearTurnoController> {
                           ),
                           onPressed: controller.isValidEditResponse()
                               ? () async {
-                                  await controller.updateTurno();
-                                  final container = ProviderScope.containerOf(
-                                    context,
-                                    listen: false,
-                                  );
-                                  container.invalidate(turnoTypesProvider);
-                                  await container
+                                  await ProviderScope.containerOf(context, listen: false)
+                                      .read(turnoTypesProvider.notifier)
+                                      .updateTurno(
+                                        TurnoType(
+                                          id: controller.id,
+                                          title: controller.etitle.value,
+                                          description:
+                                              controller.edescription.value,
+                                          startHour:
+                                              controller.estartDate.value,
+                                          endHour: controller.eendDate.value,
+                                          color: controller.eturnoColor.value
+                                              .value
+                                              .toRadixString(16),
+                                        ),
+                                      );
+                                  await ProviderScope.containerOf(context, listen: false)
                                       .read(cuadranteMapProvider.notifier)
                                       .reload();
                                   Get.back(closeOverlays: true);

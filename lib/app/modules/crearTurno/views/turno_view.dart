@@ -122,7 +122,7 @@ class TurnoView extends GetView<CrearTurnoController> {
                                   .titleLarge!
                                   .color),
                           onPressed: () async {
-                            await controller.editEventsType(index);
+                            await controller.editEventsType(turnos[index].id!);
                             await controller.updateEditScreen();
                             await Future.delayed(Duration(milliseconds: 200));
                             Get.to(

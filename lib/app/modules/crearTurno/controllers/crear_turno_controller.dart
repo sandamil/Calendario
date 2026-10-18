@@ -197,9 +197,8 @@ class CrearTurnoController extends GetxController {
     return ValidationUtils.isValidString(edescription.value);
   }
 
-  Future<void> editEventsType(int index) async {
-    turnoType.value =
-        await CalendarioDB.db.fetchTurnoType(turnoTypeList[index].id!);
+  Future<void> editEventsType(int id) async {
+    turnoType.value = await CalendarioDB.db.fetchTurnoType(id);
   }
 
   updateEditScreen() {
