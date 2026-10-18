@@ -15,7 +15,6 @@ import '../modules/ajustes/views/pages/privacy_policy_page.dart';
 import '../modules/ayuda/bindings/ayuda_binding.dart';
 import '../modules/ayuda/views/ayuda_view.dart';
 import '../modules/boarding/views/boarding_view.dart';
-import '../modules/crearCuadrante/bindings/crear_cuadrante_binding.dart';
 import '../modules/crearCuadrante/views/cuadrante_view.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/inicio/views/inicio_view.dart';
@@ -65,7 +64,7 @@ class AppPages {
       transitionDuration: const Duration(milliseconds: 100),
       name: _Paths.MENU,
       page: () => const MenuView(),
-      ),
+    ),
     GetPage(
       transition: Transition.fadeIn,
       transitionDuration: const Duration(microseconds: 100),
@@ -78,7 +77,6 @@ class AppPages {
       transitionDuration: const Duration(milliseconds: 100),
       name: _Paths.CREAR_CUADRANTE,
       page: () => const CrearCuadranteView(),
-      binding: CrearCuadranteBinding(),
     ),
     GetPage(
       transition: Transition.fadeIn,

@@ -17,12 +17,32 @@ import 'package:get/get.dart';
 
 import '../../../data/local/my_shared_pref.dart';
 import '../../../../config/util/app_icons.dart';
-import '../controllers/crear_cuadrante_controller.dart';
 import '../providers/crear_cuadrante_provider.dart';
 import '../../home/providers/calendar_providers.dart';
 
-class AddCuadranteView extends GetView<CrearCuadranteController> {
+class AddCuadranteView extends ConsumerStatefulWidget {
   const AddCuadranteView({Key? key}) : super(key: key);
+
+  @override
+  ConsumerState<AddCuadranteView> createState() => _AddCuadranteViewState();
+}
+
+class _AddCuadranteViewState extends ConsumerState<AddCuadranteView> {
+  late final TextEditingController _cuadranteNameController;
+
+  @override
+  void initState() {
+    super.initState();
+    _cuadranteNameController = TextEditingController(
+      text: ref.read(crearCuadranteProvider).cuadranteName,
+    );
+  }
+
+  @override
+  void dispose() {
+    _cuadranteNameController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -120,7 +140,7 @@ class AddCuadranteView extends GetView<CrearCuadranteController> {
                             color: PRIMARY_COLOR.withOpacity(0.4),
                             size: 24.sp,
                           ),
-                    key: state.firstTime ? tutorialController.keyButton5 : key,
+                    key: state.firstTime ? tutorialController.keyButton5 : null,
                   )
                 ],
               ),
@@ -167,7 +187,7 @@ class AddCuadranteView extends GetView<CrearCuadranteController> {
                             //     RegExp("[0-9]"),
                             //   ),
                             // ],
-                            controller: controller.cuadranteName,
+                            controller: _cuadranteNameController,
                             onChanged: notifier.setCuadranteName,
                             decoration: const InputDecoration(
                               hintText: 'Nombre del cuadrante creado',
@@ -209,7 +229,7 @@ class AddCuadranteView extends GetView<CrearCuadranteController> {
                                     Icons.calendar_today_outlined,
                                     key: state.firstTime
                                         ? tutorialController.keyButton
-                                        : key,
+                                        : null,
                                   ),
                                 ),
                               ),
@@ -227,7 +247,7 @@ class AddCuadranteView extends GetView<CrearCuadranteController> {
                                 widget: IconButton(
                                   key: state.firstTime
                                       ? tutorialController.keyButton2
-                                      : key,
+                                      : null,
                                   onPressed: () async {
                                     final date = await showDatePicker(
                                       context: context,
@@ -254,8 +274,9 @@ class AddCuadranteView extends GetView<CrearCuadranteController> {
                       height: 1.h,
                     ),
                     Container(
-                      key:
-                          state.firstTime ? tutorialController.keyButton3 : key,
+                      key: state.firstTime
+                          ? tutorialController.keyButton3
+                          : null,
                       padding: EdgeInsets.all(8.w),
                       child: GridView.builder(
                         shrinkWrap: true,
@@ -334,7 +355,7 @@ class AddCuadranteView extends GetView<CrearCuadranteController> {
                 onPressed: () async {
                   await _showTurnoPicker(context, ref);
                 },
-                key: state.firstTime ? tutorialController.keyButton4 : key,
+                key: state.firstTime ? tutorialController.keyButton4 : null,
                 child: const Icon(Icons.add),
               ),
             );

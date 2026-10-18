@@ -15,16 +15,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../../../data/local/my_shared_pref.dart';
-import '../controllers/crear_cuadrante_controller.dart';
 import '../../home/providers/calendar_providers.dart';
 import '../providers/crear_cuadrante_provider.dart';
 import 'add_cuadrante_view.dart';
 
-class CrearCuadranteView extends GetView<CrearCuadranteController> {
+class CrearCuadranteView extends ConsumerWidget {
   const CrearCuadranteView({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     double qaButtonHeight = 100.h;
     double qaButtonWidth = 120.w;
     final adcontroller = Get.find<AdsController>();
@@ -110,8 +109,6 @@ class CrearCuadranteView extends GetView<CrearCuadranteController> {
                     ProviderScope.containerOf(context, listen: false)
                         .read(crearCuadranteProvider.notifier)
                         .resetForCreate();
-                    controller.cuadranteName.clear();
-                    controller.cuadranteNameString.value = '';
                     // Get.toNamed('/notas', (r) => false);
                     Get.to(() => const AddCuadranteView()); //   Navigator.push(
                     //       context,
@@ -158,7 +155,9 @@ class CrearCuadranteView extends GetView<CrearCuadranteController> {
                                         '\ntodos los cuadrantes creados.'
                                         '\nY LOS TURNOS AÑADIDOS MANUALMENTE',
                                     onTapOK: () {
-                                      controller.deleteAllCuadrante();
+                                      ref
+                                          .read(crearCuadranteProvider.notifier)
+                                          .deleteAllCuadrante();
                                       Navigator.of(context).pop();
                                     },
                                     onTapCancel: () =>
@@ -176,16 +175,19 @@ class CrearCuadranteView extends GetView<CrearCuadranteController> {
                         SizedBox(
                           height: 15.h,
                         ),
-                        Obx(() {
+                        Consumer(builder: (context, ref, child) {
                           return Container(
                             height: 200.h,
                             child: ListView.builder(
                               physics: const BouncingScrollPhysics(),
-                              itemCount:
-                                  controller.cuadrantesNameList.value.length,
+                              itemCount: ref
+                                  .watch(crearCuadranteProvider)
+                                  .cuadrantesNameList
+                                  .length,
                               itemBuilder: (context, index) {
-                                final name =
-                                    controller.cuadrantesNameList.value[index];
+                                final name = ref
+                                    .watch(crearCuadranteProvider)
+                                    .cuadrantesNameList[index];
 
                                 return Padding(
                                   padding:
@@ -227,8 +229,8 @@ class CrearCuadranteView extends GetView<CrearCuadranteController> {
                                                   return;
                                                 }
 
-                                                controller
-                                                    .editarCuadrante(name);
+                                                Get.to(() =>
+                                                    const AddCuadranteView());
                                               },
                                               icon: const Icon(
                                                 Icons.edit_calendar,
@@ -237,8 +239,10 @@ class CrearCuadranteView extends GetView<CrearCuadranteController> {
                                           },
                                         ),
                                         IconButton(
-                                          onPressed: () =>
-                                              controller.deleteCuadrante(name),
+                                          onPressed: () => ref
+                                              .read(crearCuadranteProvider
+                                                  .notifier)
+                                              .deleteCuadrante(name),
                                           icon: const Icon(
                                               Icons.delete_forever_outlined),
                                         )
@@ -316,9 +320,9 @@ class CrearCuadranteView extends GetView<CrearCuadranteController> {
   showAlertLoadingDialog(BuildContext context) {
     final adcontroller = Get.find<AdsController>();
 
-    Widget okButton = Obx(() {
+    Widget okButton = Consumer(builder: (context, ref, child) {
       return TextButton(
-        child: controller.cuadranteLoading.value
+        child: ref.watch(crearCuadranteProvider).cuadranteLoading
             ? const SizedBox(
                 height: 25,
                 width: 25,
