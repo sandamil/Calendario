@@ -1,50 +1,50 @@
 import 'dart:io';
 
 import 'package:calendario2/app/components/custom_dialog.dart';
+import 'package:calendario2/app/controllers/ads_controller.dart';
+import 'package:calendario2/app/modules/ajustes/providers/ajustes_provider.dart';
+import 'package:calendario2/app/modules/ajustes/views/pages/backup_screen.dart';
+import 'package:calendario2/app/modules/ajustes/views/pages/language_screen.dart';
 import 'package:calendario2/app/routes/app_pages.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/config/theme/my_fonts.dart';
 import 'package:calendario2/config/util/assets.dart';
+import 'package:calendario2/widgets/setting_title.dart';
 import 'package:calendario2/widgets/setting_title_tile.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import 'package:get/get.dart';
 
-import '../../../controllers/ads_controller.dart';
-import '../controllers/ajustes_controller.dart';
-import '../../../../widgets/setting_title.dart';
-
-class AjustesView extends GetView<AjustesController> {
-
+class AjustesView extends ConsumerWidget {
   AjustesView({Key? key}) : super(key: key);
+
+  Future<bool> _goHome(WidgetRef ref) async {
+    Get.find<AdsController>().staticHomeAd.load();
+    Get.offAllNamed('/home');
+    return false;
+  }
+
   @override
-  Widget build(BuildContext context) {
-    final adcontroller = Get.find<AdsController>();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final settings = ref.watch(ajustesProvider);
+    final notifier = ref.read(ajustesProvider.notifier);
 
     return WillPopScope(
       onWillPop: () async {
         if (Platform.isAndroid) {
-          adcontroller.staticHomeAd.load();
-          Get.offAllNamed('/home');
+          return _goHome(ref);
         }
         return false;
       },
       child: Scaffold(
         appBar: AppBar(
           leading: IconButton(
-            icon: Icon(
-              Icons.home,
-              color: PRIMARY_COLOR,
-              size: 26.sp,
-            ),
-            onPressed: () {
-              adcontroller.staticHomeAd.load();
-              Get.offAllNamed('/home');
-            },
+            icon: Icon(Icons.home, color: PRIMARY_COLOR, size: 26.sp),
+            onPressed: () => _goHome(ref),
           ),
           centerTitle: false,
-          elevation: 0.0,
+          elevation: 0,
           backgroundColor: Colors.transparent,
           title: Text(
             'Ajustes'.tr,
@@ -58,174 +58,75 @@ class AjustesView extends GetView<AjustesController> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SettingTitleTile('General'.tr),
-                Obx(() {
-                  return SettingTile(
-                      icon: ConstrainedBox(
-                        constraints:
-                            const BoxConstraints.expand(height: 50, width: 50),
-                        child: Icon(
-                          controller.isDark.value
-                              ? Icons.dark_mode
-                              : Icons.light_mode,
-                          size: 32,
-                        ),
-                      ),
-                      btnText: "Tema".tr,
-                      trailing: GestureDetector(
-                          child: ConstrainedBox(
-                            constraints: const BoxConstraints.expand(
-                                height: 40, width: 80),
-                            child: Icon(
-                              controller.isDark.value
-                                  ? Icons.toggle_on
-                                  : Icons.toggle_off,
-                              size: 40,
-                            ),
-                          ),
-                          onTap: () async {
-                            controller.cambioModo();
-                          })
-
-                      // CupertinoSwitch(
-                      //   value: controller.isDark.value,
-                      //   onChanged: (val) async {
-                      //     controller.isDark.value = !controller.isDark.value;
-                      //     await controller.changeTheme(val);
-                      //   },
-                      // ),
-                      );
-                }),
-
                 SettingTile(
-                  icon: const Icon(
-                    Icons.backup,
-                    size: 20.0,
+                  icon: ConstrainedBox(
+                    constraints: const BoxConstraints.expand(
+                      height: 50,
+                      width: 50,
+                    ),
+                    child: Icon(
+                      settings.isDark ? Icons.dark_mode : Icons.light_mode,
+                      size: 32,
+                    ),
                   ),
-                  btnText: "Backup".tr,
-                  // trailing: Text("Online".tr),
+                  btnText: 'Tema'.tr,
+                  trailing: GestureDetector(
+                    onTap: notifier.cambioModo,
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints.expand(
+                        height: 40,
+                        width: 80,
+                      ),
+                      child: Icon(
+                        settings.isDark ? Icons.toggle_on : Icons.toggle_off,
+                        size: 40,
+                      ),
+                    ),
+                  ),
+                ),
+                SettingTile(
+                  icon: const Icon(Icons.backup, size: 20),
+                  btnText: 'Backup'.tr,
                   onPressed: () {
-                    controller.backup();
+                    Get.to(
+                      () => const BackupScreen(),
+                      transition: Transition.fadeIn,
+                      duration: const Duration(milliseconds: 100),
+                    );
                   },
                 ),
-                // Divider(
-                //   indent: 15.w,
-                //   endIndent: 15.w,
-                // ),
-                // SettingTile(
-                //   icon: const ImageIcon(AssetImage(MyIcon.notificationIcon)),
-                //   btnText: "Información App".tr,
-                //   onPressed: () {
-                //     // MyCustomDialog.showPopUpInfo(
-                //     //   context: context,
-                //     //   description:
-                //     //       'En próximas actualizaciones estará disponible',
-                //     //   title: 'Pronto Disponible',
-                //     // );
-                //     RouteUtils.toAboutPage();
-                //   },
-                // ),
-                // SettingTitleTile("Notificationes".tr),
-
-                // SettingTile(
-                //   icon: const ImageIcon(AssetImage(MyIcon.solIcon)),
-                //   btnText: "Ajustes alarma".tr,
-                //   //   trailing: KSwitch(),
-                // ),
-                Divider(
-                  indent: 15.w,
-                  endIndent: 15.w,
-                ),
-                SettingTitleTile("Sobre Nosotros".tr),
+                Divider(indent: 15.w, endIndent: 15.w),
+                SettingTitleTile('Sobre Nosotros'.tr),
                 SettingTile(
                   icon: const ImageIcon(AssetImage(MyIcon.notificationIcon)),
-                  btnText: "Información App".tr,
-                  onPressed: () {
-                    // MyCustomDialog.showPopUpInfo(
-                    //   context: context,
-                    //   description:
-                    //   'En próximas actualizaciones estará disponible'.tr,
-                    //   title: 'Pronto Disponible'.tr,
-                    // );
-                    RouteUtils.toAboutPage();
-                  },
+                  btnText: 'Información App'.tr,
+                  onPressed: RouteUtils.toAboutPage,
                 ),
-                Divider(
-                  indent: 15.w,
-                  endIndent: 15.w,
-                ),
-
-                ///==============================Proximamente
-
-                const SettingTitleTile("Proximamente..."),
-
-                ///Todo inapp reviev  https://pub.dev/packages/in_app_review
+                Divider(indent: 15.w, endIndent: 15.w),
+                const SettingTitleTile('Proximamente...'),
                 SettingTile(
                   btnText: 'rate_this_app',
-                  // icon: IconlyLight.star,
-                  // iconColor: Colors.blueAccent,
                   trailing: const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    // child: Icon(IconlyLight.arrowRight2),
+                    padding: EdgeInsets.all(8),
                   ),
+                  onPressed: () {},
+                ),
+                SettingTile(
+                  icon: const ImageIcon(AssetImage(MyIcon.languageIcon)),
+                  btnText: 'Idioma'.tr,
+                  trailing: Text(settings.selectedLanguage.name),
                   onPressed: () {
-                    try {
-                      // InAppReview.instance.openStoreListing();
-                    } on Exception {
-                      // Fluttertoast.showToast(msg: 'Failed to open store');
-                    }
+                    Get.to(
+                      () => const LanguageScreen(),
+                      transition: Transition.fadeIn,
+                      duration: const Duration(milliseconds: 100),
+                    );
                   },
                 ),
-
-                SettingTile(
-                    icon: const ImageIcon(AssetImage(MyIcon.languageIcon)),
-                    btnText: 'Idioma'.tr,
-                    trailing: Text(controller.selectedLanguage.value.name),
-                    onPressed: controller.goToLanguageScreen),
-
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //   children: [
-                //     SettingTitleTile("Version Pro".tr),
-                //     Padding(
-                //       padding: EdgeInsets.only(right: 12.w),
-                //       child: ElevatedButton(
-                //         style: ElevatedButton.styleFrom(
-                //           minimumSize: Size.zero,
-                //           // Set this
-                //           padding: const EdgeInsets.all(1),
-                //           elevation: 10,
-                //           disabledBackgroundColor: Colors.green,
-                //           backgroundColor: Colors.green,
-                //           // background (button) color
-                //           foregroundColor:
-                //               Colors.green, // foreground (text) color
-                //         ),
-                //         onPressed: () {
-                //           MyCustomDialog.showPopUpInfo(
-                //             context: context,
-                //             description:
-                //                 'En próximas actualizaciones estará disponible'
-                //                     .tr,
-                //             title: 'Pronto Disponible'.tr,
-                //           );
-                //         },
-                //         child: Padding(
-                //           padding: EdgeInsets.symmetric(horizontal: 8.w),
-                //           child: Text(
-                //             'Obtener version pro'.tr,
-                //             style: TextStyle(color: MyColors.textButtom),
-                //           ),
-                //         ),
-                //       ),
-                //     )
-                //   ],
-                // ),
                 SettingTile(
                   icon: const ImageIcon(AssetImage(MyIcon.notificationIcon)),
-                  btnText: "Ajustes alarma".tr,
+                  btnText: 'Ajustes alarma'.tr,
                   onPressed: () {
-                    // alarmasController.navigateToAlarmScreen(
-                    //     controller.alarmSettings, context);
                     MyCustomDialog.showPopUpInfo(
                       context: context,
                       description:
@@ -233,40 +134,27 @@ class AjustesView extends GetView<AjustesController> {
                       title: 'Pronto Disponible'.tr,
                     );
                   },
-                  //   trailing: KSwitch(),
                 ),
                 SettingTile(
                   icon: const ImageIcon(AssetImage(MyIcon.candadoIcon)),
-                  btnText: "Login".tr,
-                  trailing: const Text(""),
-                  onPressed: () {
-                    // controller.launchGmail();
-                    Get.toNamed('/boarding');
-                  },
+                  btnText: 'Login'.tr,
+                  trailing: const Text(''),
+                  onPressed: () => Get.toNamed('/boarding'),
                 ),
                 SettingTile(
                   icon: const ImageIcon(AssetImage(MyIcon.candadoIcon)),
-                  btnText: "Registro".tr,
-                  trailing: const Text(""),
-                  onPressed: () {
-                    // controller.reportProblem();
-                  },
+                  btnText: 'Registro'.tr,
+                  trailing: const Text(''),
+                  onPressed: () {},
                 ),
-                //
                 SettingTile(
                   icon: const ImageIcon(AssetImage(MyIcon.candadoIcon)),
-                  btnText: "Exportar Pdf".tr,
-                  trailing: const Text(""),
-                  onPressed: () {
-                    // controller.showFeedback(context);
-                  },
+                  btnText: 'Exportar Pdf'.tr,
+                  trailing: const Text(''),
+                  onPressed: () {},
                 ),
-
                 SizedBox(height: 20.h),
-                Divider(
-                  indent: 15.w,
-                  endIndent: 15.w,
-                ),
+                Divider(indent: 15.w, endIndent: 15.w),
               ],
             ),
           ),

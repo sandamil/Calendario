@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:calendario2/app/modules/ajustes/controllers/ajustes_controller.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
@@ -117,7 +116,6 @@ createBackup(notas) async {
   }
 }
 
-final ajustesController = Get.find<AjustesController>();
 
 const ENCRYPT_DB = false;
 

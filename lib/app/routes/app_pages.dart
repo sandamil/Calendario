@@ -6,7 +6,6 @@ import 'package:calendario2/app/modules/ayuda/views/pages/videotutoriales/views/
 import 'package:get/get.dart';
 
 import '../modules/CrearTurno/views/turno_view.dart';
-import '../modules/ajustes/bindings/ajustes_binding.dart';
 import '../modules/ajustes/views/ajustes_view.dart';
 import '../modules/ajustes/views/pages/about_page.dart';
 import '../modules/ajustes/views/pages/privacy_policy_page.dart';
@@ -49,7 +48,6 @@ class AppPages {
       transitionDuration: const Duration(milliseconds: 100),
       name: _Paths.AJUSTES,
       page: () => AjustesView(),
-      binding: AjustesBinding(),
     ),
     GetPage(
       transition: Transition.fadeIn,

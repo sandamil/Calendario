@@ -268,9 +268,12 @@ class CalendarioDB {
     await dbClient!.delete(_turnosTable, where: "id = ?", whereArgs: [id]);
   }
 
-  Future closeDb() async {
-    var dbClient = await database;
-    dbClient!.close();
+  Future<void> closeDb() async {
+    final dbClient = _database;
+    if (dbClient == null) return;
+
+    await dbClient.close();
+    _database = null;
   }
 
   Future<int> clear() async {
