@@ -20,7 +20,6 @@ import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
 import 'package:get/get.dart';
 
 import '../../../../../../config/util/app_icons.dart';
-import '../../../../../controllers/ads_controller.dart';
 
 class AddNotasView extends ConsumerStatefulWidget {
   const AddNotasView({super.key});
@@ -31,8 +30,6 @@ class AddNotasView extends ConsumerStatefulWidget {
 
 class _AddNotasViewState extends ConsumerState<AddNotasView> {
   bool _tutorialStartScheduled = false;
-  final adcontroller = Get.find<AdsController>();
-
   @override
   void initState() {
     super.initState();
@@ -134,273 +131,268 @@ class _AddNotasViewState extends ConsumerState<AddNotasView> {
         body: SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 6.w),
-            child: Obx(() {
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                mainAxisSize: MainAxisSize.max,
-                children: <Widget>[
-                  Container(
-                    key: notaState.firstTime
-                        ? tutorialController.keyButton13
-                        : null,
-                    child: _buildGeneralFormField(
-                        notaNotifier.title, 'Titulo del evento', 1),
-                  ),
-                  SizedBox(
-                    height: 4.h,
-                  ),
-                  Column(
-                    key: notaState.firstTime
-                        ? tutorialController.keyButton17
-                        : null,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      _buildGeneralFormField(notaNotifier.site, 'Ubicación', 2),
-                      SizedBox(
-                        height: 4.h,
-                      ),
-                      _buildGeneralFormField(
-                          notaNotifier.notes, 'Observaciones', 8),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 10.h,
-                  ),
-                  Column(
-                    key: notaState.firstTime
-                        ? tutorialController.keyButton14
-                        : null,
-                    children: <Widget>[
-                      TextButton(
-                          onPressed: () async {
-                            final initial = notaState.startTime;
-                            final selectedTime = await showTimePicker(
-                              context: context,
-                              initialTime: TimeOfDay.fromDateTime(initial),
-                            );
-                            if (!context.mounted || selectedTime == null)
-                              return;
-
-                            final date = DateTime(
-                              initial.year,
-                              initial.month,
-                              initial.day,
-                              selectedTime.hour,
-                              selectedTime.minute,
-                            );
-
-                            notaNotifier.setStartTime(date);
-                          },
-                          child: Column(
-                            children: [
-                              SizedBox(
-                                height: 6.h,
-                              ),
-                              Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: <Widget>[
-                                    Text('Hora de inicio',
-                                        style: CustomTextStyle.rowButomText),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: <Widget>[
-                                        Text(
-                                          '${notaState.startTime.formatDateYMD} ${notaState.startTime.formatDateTime24H}',
-                                          style: TextStyle(
-                                              color: MyColors.textButtomBlack,
-                                              fontSize: 16.sp),
-                                        ),
-                                        Icon(
-                                          Icons.arrow_forward_ios,
-                                          size: 16.sp,
-                                          color: PRIMARY_COLOR,
-                                        )
-                                      ],
-                                    )
-                                  ]),
-                            ],
-                          )),
-                      TextButton(
-                          onPressed: () async {
-                            final initial = notaState.endTime;
-                            final selectedTime = await showTimePicker(
-                              context: context,
-                              initialTime: TimeOfDay.fromDateTime(initial),
-                            );
-                            if (!context.mounted || selectedTime == null)
-                              return;
-
-                            var date = DateTime(
-                              initial.year,
-                              initial.month,
-                              initial.day,
-                              selectedTime.hour,
-                              selectedTime.minute,
-                            );
-
-                            if (date.isBefore(notaState.startTime)) {
-                              date = date.add(const Duration(days: 1));
-                            }
-
-                            notaNotifier.setEndTime(date);
-                          },
-                          child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                Text('Hora final',
-                                    style: CustomTextStyle.rowButomText),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: <Widget>[
-                                    Text(
-                                      '${notaState.endTime.formatDateYMD} ${notaState.endTime.formatDateTime24H}',
-                                      style: TextStyle(
-                                          color: MyColors.textButtomBlack,
-                                          fontSize: 16.sp),
-                                    ),
-                                    Icon(
-                                      Icons.arrow_forward_ios,
-                                      size: 16.sp,
-                                      color: PRIMARY_COLOR,
-                                    )
-                                  ],
-                                )
-                              ])),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 2.h,
-                  ),
-                  LineWidget(),
-                  TextButton(
-                      onPressed: () async {
-                        notaState.alarmaCreada
-                            ? buildDialogAlarma(theme, notaState, notaNotifier)
-                            : Get.toNamed(
-                                '/alarmas',
-                                arguments: {
-                                  'isEditing': false,
-                                  'id': notaState.idGenerated,
-                                  'startTime': notaState.startTime,
-                                  'notes': notaNotifier.notes.text,
-                                  'title': notaNotifier.title.text
-                                },
-                              );
-                        // Get.to(AlarmasPage());
-                      },
-                      child: Row(
-                          key: notaState.firstTime
-                              ? tutorialController.keyButton15
-                              : null,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            Text('Recordatorio',
-                                style: CustomTextStyle.rowButomText),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                Text(
-                                  notaState.alarmaActivadaString,
-                                  style: TextStyle(
-                                      color: MyColors.textButtomBlack,
-                                      fontSize: 16.sp),
-                                ),
-                                Icon(
-                                  Icons.arrow_forward_ios,
-                                  size: 16.sp,
-                                  color: PRIMARY_COLOR,
-                                )
-                              ],
-                            )
-                          ])),
-                  notaState.alarmaCreada
-                      ? ExampleAlarmTile(
-                          key: Key(notaState.alarmTime.toString()),
-                          title: TimeOfDay(
-                            hour: notaState.alarmTime.hour,
-                            minute: notaState.alarmTime.minute,
-                          ).format(context),
-                          onPressed: () {
-                            null;
-                            // navigateToAlarmScreen(
-                            //     notaState.alarmaCreadaNota, context);
-                          },
-                        )
-                      : Container(),
-                  // : Container(child: Text(notaState.alarmTime.toString()),),
-                  LineWidget(),
-                  SizedBox(
-                    height: 2.h,
-                  ),
-                  TextButton(
-                      key: notaState.firstTime
-                          ? tutorialController.keyButton16
-                          : null,
-                      onPressed: notaNotifier.toggleImportant,
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            Text('Marcar como importante',
-                                style: CustomTextStyle.rowButomText),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                Icon(
-                                  notaState.isImportant
-                                      ? Icons.flag
-                                      : Icons.outlined_flag,
-                                  color: notaState.isImportant
-                                      ? Colors.red
-                                      : Colors.black45,
-                                )
-                              ],
-                            )
-                          ])),
-                  Container(
-                    padding: EdgeInsets.only(left: 8.w, top: 16.h),
-                    child: Row(
-                      children: <Widget>[
-                        Text(
-                          "Pulsa aqui si necesitas ayuda para crear notas.",
-                          style: TextStyle(
-                            fontSize: 12.sp,
-                          ),
-                        ),
-                        IconButton(
-                          key: notaState.firstTime
-                              ? tutorialController.keyNotasAyuda
-                              : null,
-                          icon: const AppIcon(AppIcons.informacion,
-                              color: Colors.green),
-                          tooltip: '',
-                          onPressed: () {
-                            notaNotifier.setFirstTime(true);
-                            tutorialController.showTutorial(
-                              context,
-                              'taskAdd',
-                              onFinished: () =>
-                                  notaNotifier.setFirstTime(false),
-                            );
-                          },
-                        ),
-                      ],
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.max,
+              children: <Widget>[
+                Container(
+                  key: notaState.firstTime
+                      ? tutorialController.keyButton13
+                      : null,
+                  child: _buildGeneralFormField(
+                      notaNotifier.title, 'Titulo del evento', 1),
+                ),
+                SizedBox(
+                  height: 4.h,
+                ),
+                Column(
+                  key: notaState.firstTime
+                      ? tutorialController.keyButton17
+                      : null,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _buildGeneralFormField(notaNotifier.site, 'Ubicación', 2),
+                    SizedBox(
+                      height: 4.h,
                     ),
+                    _buildGeneralFormField(
+                        notaNotifier.notes, 'Observaciones', 8),
+                  ],
+                ),
+                SizedBox(
+                  height: 10.h,
+                ),
+                Column(
+                  key: notaState.firstTime
+                      ? tutorialController.keyButton14
+                      : null,
+                  children: <Widget>[
+                    TextButton(
+                        onPressed: () async {
+                          final initial = notaState.startTime;
+                          final selectedTime = await showTimePicker(
+                            context: context,
+                            initialTime: TimeOfDay.fromDateTime(initial),
+                          );
+                          if (!context.mounted || selectedTime == null) return;
+
+                          final date = DateTime(
+                            initial.year,
+                            initial.month,
+                            initial.day,
+                            selectedTime.hour,
+                            selectedTime.minute,
+                          );
+
+                          notaNotifier.setStartTime(date);
+                        },
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              height: 6.h,
+                            ),
+                            Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: <Widget>[
+                                  Text('Hora de inicio',
+                                      style: CustomTextStyle.rowButomText),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: <Widget>[
+                                      Text(
+                                        '${notaState.startTime.formatDateYMD} ${notaState.startTime.formatDateTime24H}',
+                                        style: TextStyle(
+                                            color: MyColors.textButtomBlack,
+                                            fontSize: 16.sp),
+                                      ),
+                                      Icon(
+                                        Icons.arrow_forward_ios,
+                                        size: 16.sp,
+                                        color: PRIMARY_COLOR,
+                                      )
+                                    ],
+                                  )
+                                ]),
+                          ],
+                        )),
+                    TextButton(
+                        onPressed: () async {
+                          final initial = notaState.endTime;
+                          final selectedTime = await showTimePicker(
+                            context: context,
+                            initialTime: TimeOfDay.fromDateTime(initial),
+                          );
+                          if (!context.mounted || selectedTime == null) return;
+
+                          var date = DateTime(
+                            initial.year,
+                            initial.month,
+                            initial.day,
+                            selectedTime.hour,
+                            selectedTime.minute,
+                          );
+
+                          if (date.isBefore(notaState.startTime)) {
+                            date = date.add(const Duration(days: 1));
+                          }
+
+                          notaNotifier.setEndTime(date);
+                        },
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              Text('Hora final',
+                                  style: CustomTextStyle.rowButomText),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: <Widget>[
+                                  Text(
+                                    '${notaState.endTime.formatDateYMD} ${notaState.endTime.formatDateTime24H}',
+                                    style: TextStyle(
+                                        color: MyColors.textButtomBlack,
+                                        fontSize: 16.sp),
+                                  ),
+                                  Icon(
+                                    Icons.arrow_forward_ios,
+                                    size: 16.sp,
+                                    color: PRIMARY_COLOR,
+                                  )
+                                ],
+                              )
+                            ])),
+                  ],
+                ),
+                SizedBox(
+                  height: 2.h,
+                ),
+                LineWidget(),
+                TextButton(
+                    onPressed: () async {
+                      notaState.alarmaCreada
+                          ? buildDialogAlarma(theme, notaState, notaNotifier)
+                          : Get.toNamed(
+                              '/alarmas',
+                              arguments: {
+                                'isEditing': false,
+                                'id': notaState.idGenerated,
+                                'startTime': notaState.startTime,
+                                'notes': notaNotifier.notes.text,
+                                'title': notaNotifier.title.text
+                              },
+                            );
+                      // Get.to(AlarmasPage());
+                    },
+                    child: Row(
+                        key: notaState.firstTime
+                            ? tutorialController.keyButton15
+                            : null,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Text('Recordatorio',
+                              style: CustomTextStyle.rowButomText),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              Text(
+                                notaState.alarmaActivadaString,
+                                style: TextStyle(
+                                    color: MyColors.textButtomBlack,
+                                    fontSize: 16.sp),
+                              ),
+                              Icon(
+                                Icons.arrow_forward_ios,
+                                size: 16.sp,
+                                color: PRIMARY_COLOR,
+                              )
+                            ],
+                          )
+                        ])),
+                notaState.alarmaCreada
+                    ? ExampleAlarmTile(
+                        key: Key(notaState.alarmTime.toString()),
+                        title: TimeOfDay(
+                          hour: notaState.alarmTime.hour,
+                          minute: notaState.alarmTime.minute,
+                        ).format(context),
+                        onPressed: () {
+                          null;
+                          // navigateToAlarmScreen(
+                          //     notaState.alarmaCreadaNota, context);
+                        },
+                      )
+                    : Container(),
+                // : Container(child: Text(notaState.alarmTime.toString()),),
+                LineWidget(),
+                SizedBox(
+                  height: 2.h,
+                ),
+                TextButton(
+                    key: notaState.firstTime
+                        ? tutorialController.keyButton16
+                        : null,
+                    onPressed: notaNotifier.toggleImportant,
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Text('Marcar como importante',
+                              style: CustomTextStyle.rowButomText),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              Icon(
+                                notaState.isImportant
+                                    ? Icons.flag
+                                    : Icons.outlined_flag,
+                                color: notaState.isImportant
+                                    ? Colors.red
+                                    : Colors.black45,
+                              )
+                            ],
+                          )
+                        ])),
+                Container(
+                  padding: EdgeInsets.only(left: 8.w, top: 16.h),
+                  child: Row(
+                    children: <Widget>[
+                      Text(
+                        "Pulsa aqui si necesitas ayuda para crear notas.",
+                        style: TextStyle(
+                          fontSize: 12.sp,
+                        ),
+                      ),
+                      IconButton(
+                        key: notaState.firstTime
+                            ? tutorialController.keyNotasAyuda
+                            : null,
+                        icon: const AppIcon(AppIcons.informacion,
+                            color: Colors.green),
+                        tooltip: '',
+                        onPressed: () {
+                          notaNotifier.setFirstTime(true);
+                          tutorialController.showTutorial(
+                            context,
+                            'taskAdd',
+                            onFinished: () => notaNotifier.setFirstTime(false),
+                          );
+                        },
+                      ),
+                    ],
                   ),
-                ],
-              );
-            }),
+                ),
+              ],
+            ),
           ),
         ),
       ),

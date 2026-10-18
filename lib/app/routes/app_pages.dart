@@ -1,5 +1,3 @@
-import '../modules/notas/views/EditNotas/bindings/edit_notas_binding.dart';
-import '../modules/notas/views/AddNotas/bindings/add_notas_binding.dart';
 import 'dart:io';
 
 import 'package:calendario2/app/modules/ajustes/views/pages/dev_page.dart';
@@ -20,9 +18,7 @@ import '../modules/inicio/views/inicio_view.dart';
 import '../modules/menu/views/menu_view.dart';
 import '../modules/notas/views/AddNotas/views/add_notas_view.dart';
 import '../modules/notas/views/EditNotas/views/edit_notas_view.dart';
-import '../modules/notas/views/NotasView/bindings/notas_view_binding.dart';
 import '../modules/notas/views/NotasView/views/notas_view.dart';
-import '../modules/notas/views/alarmas/bindings/alarmas_binding.dart';
 import '../modules/notas/views/alarmas/views/alarmas_view.dart';
 import '../modules/notas/views/notas_list_view.dart';
 
@@ -84,28 +80,24 @@ class AppPages {
       transitionDuration: const Duration(milliseconds: 100),
       name: _Paths.NOTAS_VIEW,
       page: () => const NotasView(),
-      binding: NotasViewBinding(),
     ),
     GetPage(
       transition: Transition.fadeIn,
       transitionDuration: const Duration(milliseconds: 100),
       name: _Paths.ADD_NOTAS,
       page: () => AddNotasView(),
-      binding: AddNotasBinding(),
     ),
     GetPage(
       transition: Transition.fadeIn,
       transitionDuration: const Duration(milliseconds: 100),
       name: _Paths.EDIT_NOTAS,
       page: () => EditNotasView(),
-      binding: EditNotasBinding(),
     ),
     GetPage(
       transition: Transition.fadeIn,
       transitionDuration: const Duration(milliseconds: 100),
       name: _Paths.ALARMAS,
       page: () => const AlarmasView(),
-      binding: AlarmasBinding(),
     ),
     GetPage(
       transition: Transition.fadeIn,

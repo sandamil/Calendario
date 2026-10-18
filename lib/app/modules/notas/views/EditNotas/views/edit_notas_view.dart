@@ -5,423 +5,397 @@ import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/config/theme/my_fonts.dart';
 import 'package:calendario2/config/util/dateUtils.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
+    as dp;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import '../../../../../controllers/ads_controller.dart';
-import '../../alarmas/controllers/alarmas_controller.dart';
-import '../controllers/edit_notas_controller.dart';
 
-class EditNotasView extends GetView<EditNotasController> {
-  EditNotasView({Key? key}) : super(key: key);
-
-  final adcontroller = Get.find<AdsController>();
-  AlarmasController alarmasController = AlarmasController();
+class EditNotasView extends ConsumerStatefulWidget {
+  const EditNotasView({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    var theme = Theme.of(context);
+  ConsumerState<EditNotasView> createState() => _EditNotasViewState();
+}
 
-    return Obx(() {
-      return Scaffold(
-        appBar: AppBar(
-          centerTitle: false,
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-          title: Text(
-            'Editar Nota',
-            style: CustomTextStyle.appBarTitle(context: context),
-            overflow: TextOverflow.clip,
-            softWrap: false,
-          ),
-          leading: IconButton(
-              icon: Icon(
-                Icons.clear,
-                color: PRIMARY_COLOR,
-                size: 26.sp,
-              ),
-              onPressed: () {
-                // adcontroller.loadNotesListBannerAd();
+class _EditNotasViewState extends ConsumerState<EditNotasView> {
+  bool _loadStarted = false;
 
-                Get.offAllNamed('/notas');
-              }),
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(
-                Icons.check,
-                color: PRIMARY_COLOR,
-                size: 26.sp,
-              ),
-              padding: EdgeInsets.only(right: 3.w),
-              onPressed: () async {
-                // adcontroller.loadNotesListBannerAd();
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
 
-                final notaNotifier = ProviderScope.containerOf(
-                  context,
-                  listen: false,
-                ).read(editNotaProvider.notifier);
+    if (_loadStarted) return;
+    _loadStarted = true;
 
-                notaNotifier.title.text = controller.title.value.text;
-                notaNotifier.site.text = controller.site.value.text;
-                notaNotifier.notes.text = controller.notes.value.text;
-                notaNotifier.setStartTime(controller.startTime.value);
-                notaNotifier.setEndTime(controller.endTime.value);
-                notaNotifier.setImportant(controller.important.value);
-                notaNotifier.setAlarmaCreada(controller.alarmaCreada.value);
-                notaNotifier.setAlarmaTime(controller.alarmTime);
-                notaNotifier.setAlarmaHoraString(controller.alarmaHora.value);
-                notaNotifier.setAlarmaActivadaString(
-                  controller.alarmaActivadaString.value,
-                );
+    final args = Get.arguments;
+    int? id;
 
-                await notaNotifier.editNote(controller.currentNote.value);
-                Get.offAllNamed('/notas');
-              },
-            )
-          ],
-        ),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 6.w),
-            child: Form(
-              // key: _formKey,
-                child: Column(
-                  children: <Widget>[
-                    SizedBox(
-                      height: 10.h,
-                    ),
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 6.w),
-                      child: _buildGeneralFormField(
-                          controller.title.value, 'Titulo del evento', 1),
-                    ),
-                    SizedBox(
-                      height: 4.h,
-                    ),
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 6.w),
-                      child: _buildGeneralFormField(
-                          controller.site.value, 'Ubicación', 2),
-                    ),
-                    SizedBox(
-                      height: 4.h,
-                    ),
-                    _buildGeneralFormField(
-                        controller.notes.value, 'Observaciones', 8),
-                    SizedBox(
-                      height: 6.h,
-                    ),
-                    TextButton(
-                        onPressed: () async {
-                          final initial = controller.startTime.value;
-                          final selectedTime = await showTimePicker(
-                            context: context,
-                            initialTime: TimeOfDay.fromDateTime(initial),
-                          );
-                          if (!context.mounted || selectedTime == null) return;
+    if (args is Map) {
+      final value = args['id'];
+      if (value is int) {
+        id = value;
+      } else if (value is String) {
+        id = int.tryParse(value);
+      }
+    } else if (args is int) {
+      id = args;
+    }
 
-                          final date = DateTime(
-                            initial.year,
-                            initial.month,
-                            initial.day,
-                            selectedTime.hour,
-                            selectedTime.minute,
-                          );
+    if (id == null) {
+      return;
+    }
 
-                          controller.startTime.value = date;
-                          if (controller.endTime.value.isBefore(date)) {
-                            controller.endTime.value = date;
-                          }
-                        },
-                        child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              Text('Hora de inicio',
-                                  style: CustomTextStyle.rowButomText),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment
-                                    .spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  Text(
-                                    '${controller.startTime.value
-                                        .formatDateYMD} ${controller.startTime
-                                        .value.formatDateTime24H}',
-                                    style: TextStyle(
-                                        color: MyColors.textButtomBlack,
-                                        fontSize: 16.sp),
-                                  ),
-                                  Icon(
-                                    Icons.arrow_forward_ios,
-                                    size: 16.sp,
-                                    color: PRIMARY_COLOR,
-                                  )
-                                ],
-                              )
-                            ])),
-                    TextButton(
-                        onPressed: () async {
-                          final initial = controller.endTime.value;
-                          final selectedTime = await showTimePicker(
-                            context: context,
-                            initialTime: TimeOfDay.fromDateTime(initial),
-                          );
-                          if (!context.mounted || selectedTime == null) return;
-
-                          var date = DateTime(
-                            initial.year,
-                            initial.month,
-                            initial.day,
-                            selectedTime.hour,
-                            selectedTime.minute,
-                          );
-
-                          if (date.isBefore(controller.startTime.value)) {
-                            date = date.add(const Duration(days: 1));
-                          }
-
-                          controller.endTime.value = date;
-                        },
-                        child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              Text('Hora final',
-                                  style: CustomTextStyle.rowButomText),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment
-                                    .spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  Text(
-                                    '${controller.endTime.value
-                                        .formatDateYMD} ${controller.endTime
-                                        .value.formatDateTime24H}',
-                                    style: TextStyle(
-                                        color: MyColors.textButtomBlack,
-                                        fontSize: 16.sp),
-                                  ),
-                                  Icon(
-                                    Icons.arrow_forward_ios,
-                                    size: 16.sp,
-                                    color: PRIMARY_COLOR,
-                                  )
-                                ],
-                              )
-                            ])),
-                    SizedBox(
-                      height: 2.h,
-                    ),
-                    LineWidget(),
-                    TextButton(
-                        onPressed: () async {
-                          controller.alarmaCreada.value
-                              ? Get.dialog(Align(
-                            alignment: Alignment.center,
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 10.w),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Container(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 10.w),
-                                    decoration: BoxDecoration(
-                                      color: theme.scaffoldBackgroundColor,
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(5.r),
-                                      ),
-                                    ),
-                                    child: Column(
-                                      children: [
-                                        Padding(
-                                          padding: EdgeInsets.all(8.h),
-                                          child: Icon(
-                                            Icons.info,
-                                            color: Colors.redAccent,
-                                            size: 38.sp,
-                                          ),
-                                        ),
-                                        Container(
-                                          padding: EdgeInsets.all(6.h),
-                                          color:
-                                          theme.scaffoldBackgroundColor,
-                                          height: 100.h,
-                                          // child: Padding(
-                                          //   padding: EdgeInsets.all(4.h),
-                                          //   child: Text(
-                                          //     'Si continuas se borrara la esta alarma preestablecida para las: ${TimeOfDay(
-                                          //       hour: controller
-                                          //           .alarmaCreadaNota!
-                                          //           .dateTime
-                                          //           .hour,
-                                          //       minute: controller
-                                          //           .alarmaCreadaNota!
-                                          //           .dateTime
-                                          //           .minute,
-                                          //     ).format(context)}',
-                                          //     style: Theme.of(context)
-                                          //         .textTheme
-                                          //         .headlineMedium,
-                                          //   ),
-                                          // ),
-                                        ),
-                                        Row(
-                                          children: [
-                                            Expanded(
-                                              child: ElevatedButton(
-                                                onPressed: () {
-                                                  Get.back();
-                                                  // Get.toNamed('/add-notas', arguments: selectedDate);
-                                                },
-                                                child: const Text("Cancelar"),
-                                              ),
-                                            ),
-                                            SizedBox(
-                                              width: 8.w,
-                                            ),
-                                            Expanded(
-                                                child: ElevatedButton(
-                                                  onPressed: () {
-                                                    Get.toNamed('/alarmas',
-                                                        arguments: {
-                                                          'isEditing': true,
-
-                                                          'currentNota': controller
-                                                              .currentNote
-                                                              .value,
-                                                          // 'id': controller.id,
-                                                          // 'startTime': controller
-                                                          //     .startTime.value,
-                                                          // 'notes': controller
-                                                          //     .notes.value.text,
-                                                          // 'title': controller
-                                                          //     .title.value.text
-                                                        });
-                                                  },
-                                                  child: const Text("Borrar"),
-                                                )),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ))
-                              : Get.toNamed('/alarmas', arguments: {
-                            'currentNote': controller.currentNote.value,
-                            'isEditing': true,
-                          });
-                        },
-                        child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              Text('Recordatorio',
-                                  style: CustomTextStyle.rowButomText),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment
-                                    .spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  Text(
-                                    controller.alarmaActivadaString.value,
-                                    style: TextStyle(
-                                        color: MyColors.textButtomBlack,
-                                        fontSize: 16.sp),
-                                  ),
-                                  Icon(
-                                    Icons.arrow_forward_ios,
-                                    size: 16.sp,
-                                    color: PRIMARY_COLOR,
-                                  )
-                                ],
-                              )
-                            ])),
-                    !controller.alarmaCreada.value
-                        ? Container()
-                        : Obx(() {
-                      return ExampleAlarmTile(
-                        key: Key(controller.alarmTime.toString()),
-                        title: controller.alarmaHora.value,
-                        onPressed: () {
-                          null;
-                          // alarmasController.navigateToAlarmScreen(
-                          //     controller.alarmaCreadaNota, context);
-                        },
-                      );
-                    }),
-                    LineWidget(),
-                    SizedBox(
-                      height: 2.h,
-                    ),
-                    TextButton(
-                        onPressed: controller.markImportantAsDirty,
-                        child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              Text('Marcar como importante',
-                                  style: CustomTextStyle.rowButomText),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment
-                                    .spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  Icon(
-                                    controller.important.value
-                                        ? Icons.flag
-                                        : Icons.outlined_flag,
-                                    color: controller.important.value
-                                        ? Colors.red
-                                        : Colors.black45,
-                                  )
-                                ],
-                              )
-                            ])),
-                  ],
-                )),
-          ),
-        ),
-      );
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        ref.read(editNotaProvider.notifier).load(id!);
+      }
     });
   }
 
-  TextFormField _buildGeneralFormField(TextEditingController value, String hint,
-      int lines) {
-    final double _radiusNum = 5.r;
+  Future<void> _pickDate({
+    required BuildContext context,
+    required DateTime initialDate,
+    required ValueChanged<DateTime> onChanged,
+  }) async {
+    dp.DatePicker.showDateTimePicker(
+      context,
+      theme: dp.DatePickerTheme(
+        cancelStyle: TextStyle(
+          color: Colors.redAccent.shade200,
+          fontSize: 16.sp,
+          fontWeight: FontWeight.bold,
+        ),
+        doneStyle: TextStyle(
+          color: MyColors.textColorPrimary,
+          fontSize: 16.sp,
+          fontWeight: FontWeight.bold,
+        ),
+        itemStyle: TextStyle(
+          color: MyColors.textColorPrimary,
+          fontSize: 16.sp,
+          fontWeight: FontWeight.bold,
+        ),
+        backgroundColor: MyColors.backgroundLowAccent,
+      ),
+      showTitleActions: true,
+      onChanged: onChanged,
+      onConfirm: (_) {},
+      currentTime: initialDate,
+      locale: dp.LocaleType.es,
+    );
+  }
+
+  TextFormField _buildGeneralFormField(
+    TextEditingController controller,
+    String hint,
+    int lines,
+  ) {
+    final radius = 5.r;
+
     return TextFormField(
-      // onTapOutside: (event){
-      //   FocusManager.instance.primaryFocus?.unfocus();
-      // },
-      controller: value,
-      decoration: InputDecoration(
-        // hintStyle: TextStyle(
-        //   color: MyColors.hintText
-        // ),
-          filled: true,
-          contentPadding: EdgeInsets.only(left: 10.w, top: 20.h),
-          fillColor: MyColors.backgroundLowAccent,
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(
-              Radius.circular(_radiusNum),
-            ),
-            borderSide: BorderSide.none,
-          ),
-          focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.all(
-                Radius.circular(_radiusNum),
-              ),
-              borderSide: BorderSide(
-                color: MyColors.borderCellColor,
-                width: 2.w,
-              )),
-          hintText: hint,
-          hintStyle: CustomTextStyle.hintText),
+      controller: controller,
       maxLines: lines,
+      decoration: InputDecoration(
+        filled: true,
+        contentPadding: EdgeInsets.only(left: 10.w, top: 20.h),
+        fillColor: MyColors.backgroundLowAccent,
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(radius)),
+          borderSide: BorderSide.none,
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(radius)),
+          borderSide: BorderSide(
+            color: MyColors.borderCellColor,
+            width: 2.w,
+          ),
+        ),
+        hintText: hint,
+        hintStyle: CustomTextStyle.hintText,
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final state = ref.watch(editNotaProvider);
+    final notifier = ref.read(editNotaProvider.notifier);
+    final theme = Theme.of(context);
+
+    if (state.loading || state.currentNote == null) {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text(
+            'Editar Nota',
+            style: CustomTextStyle.appBarTitle(context: context),
+          ),
+        ),
+        body: Center(
+          child: state.loading
+              ? const CircularProgressIndicator()
+              : const Text('No se ha podido cargar la nota.'),
+        ),
+      );
+    }
+
+    final note = state.currentNote!;
+
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: false,
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        title: Text(
+          'Editar Nota',
+          style: CustomTextStyle.appBarTitle(context: context),
+          overflow: TextOverflow.clip,
+          softWrap: false,
+        ),
+        leading: IconButton(
+          icon: Icon(
+            Icons.clear,
+            color: PRIMARY_COLOR,
+            size: 26.sp,
+          ),
+          onPressed: () => Get.offAllNamed('/notas'),
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(
+              Icons.check,
+              color: PRIMARY_COLOR,
+              size: 26.sp,
+            ),
+            padding: EdgeInsets.only(right: 3.w),
+            onPressed: () async {
+              await notifier.editNote(note);
+              if (mounted) {
+                Get.offAllNamed('/notas');
+              }
+            },
+          ),
+        ],
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 6.w),
+          child: Form(
+            child: Column(
+              children: [
+                SizedBox(height: 10.h),
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 6.w),
+                  child: _buildGeneralFormField(
+                    notifier.title,
+                    'Titulo del evento',
+                    1,
+                  ),
+                ),
+                SizedBox(height: 4.h),
+                Container(
+                  margin: EdgeInsets.symmetric(horizontal: 6.w),
+                  child: _buildGeneralFormField(
+                    notifier.site,
+                    'Ubicación',
+                    2,
+                  ),
+                ),
+                SizedBox(height: 4.h),
+                _buildGeneralFormField(
+                  notifier.notes,
+                  'Observaciones',
+                  8,
+                ),
+                SizedBox(height: 6.h),
+                TextButton(
+                  onPressed: () {
+                    _pickDate(
+                      context: context,
+                      initialDate: state.startTime,
+                      onChanged: (date) {
+                        notifier.setStartTime(date);
+                        if (state.endTime.isBefore(date)) {
+                          notifier.setEndTime(date);
+                        }
+                      },
+                    );
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Hora de inicio',
+                        style: CustomTextStyle.rowButomText,
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            '${state.startTime.formatDateYMD} '
+                            '${state.startTime.formatDateTime24H}',
+                            style: TextStyle(
+                              color: MyColors.textButtomBlack,
+                              fontSize: 16.sp,
+                            ),
+                          ),
+                          Icon(
+                            Icons.arrow_forward_ios,
+                            size: 16.sp,
+                            color: PRIMARY_COLOR,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    _pickDate(
+                      context: context,
+                      initialDate: state.endTime,
+                      onChanged: (date) {
+                        notifier.setEndTime(
+                          date.isBefore(state.startTime)
+                              ? state.startTime
+                              : date,
+                        );
+                      },
+                    );
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Hora final',
+                        style: CustomTextStyle.rowButomText,
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            '${state.endTime.formatDateYMD} '
+                            '${state.endTime.formatDateTime24H}',
+                            style: TextStyle(
+                              color: MyColors.textButtomBlack,
+                              fontSize: 16.sp,
+                            ),
+                          ),
+                          Icon(
+                            Icons.arrow_forward_ios,
+                            size: 16.sp,
+                            color: PRIMARY_COLOR,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 2.h),
+                LineWidget(),
+                TextButton(
+                  onPressed: () {
+                    if (state.alarmaCreada) {
+                      Get.dialog(
+                        AlertDialog(
+                          backgroundColor: theme.scaffoldBackgroundColor,
+                          title: const Icon(
+                            Icons.info,
+                            color: Colors.redAccent,
+                            size: 38,
+                          ),
+                          content: const Text(
+                            'Puedes modificar o quitar el recordatorio '
+                            'de esta nota.',
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: Get.back,
+                              child: const Text('Cancelar'),
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                Get.back();
+                                Get.toNamed(
+                                  '/alarmas',
+                                  arguments: {
+                                    'isEditing': true,
+                                    'currentNota': note,
+                                    'currentNote': note,
+                                  },
+                                );
+                              },
+                              child: const Text('Modificar'),
+                            ),
+                          ],
+                        ),
+                      );
+                    } else {
+                      Get.toNamed(
+                        '/alarmas',
+                        arguments: {
+                          'currentNote': note,
+                          'currentNota': note,
+                          'isEditing': true,
+                        },
+                      );
+                    }
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Recordatorio',
+                        style: CustomTextStyle.rowButomText,
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            state.alarmaActivadaString,
+                            style: TextStyle(
+                              color: MyColors.textButtomBlack,
+                              fontSize: 16.sp,
+                            ),
+                          ),
+                          Icon(
+                            Icons.arrow_forward_ios,
+                            size: 16.sp,
+                            color: PRIMARY_COLOR,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                if (state.alarmaCreada)
+                  ExampleAlarmTile(
+                    key: Key(state.alarmTime.toString()),
+                    title: state.alarmaHora,
+                    onPressed: () {},
+                  ),
+                LineWidget(),
+                SizedBox(height: 2.h),
+                TextButton(
+                  onPressed: () {
+                    notifier.setImportant(!state.isImportant);
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Marcar como importante',
+                        style: CustomTextStyle.rowButomText,
+                      ),
+                      Icon(
+                        state.isImportant ? Icons.flag : Icons.outlined_flag,
+                        color: state.isImportant ? Colors.red : Colors.black45,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
