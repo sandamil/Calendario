@@ -21,6 +21,7 @@ import '../../../../config/util/constant.dart';
 import '../../../components/toast.dart';
 import '../../../components/custom_dialog.dart';
 import '../../../controllers/ads_controller.dart';
+import '../../../controllers/tutorial_provider.dart';
 import '../../../controllers/tutorialController.dart';
 import '../../../data/local/taskDatabase.dart';
 import '../../../data/model/cuadranteDay.dart';
@@ -67,7 +68,7 @@ class _HomeViewState extends State<HomeView> {
 
   final isDialOpen = ValueNotifier(false);
   final adcontroller = Get.find<AdsController>();
-  final tutorialController = Get.put(TutorialController());
+  late final TutorialController tutorialController;
 
   bool _showHomeTutorial = false;
 
@@ -157,6 +158,10 @@ class _HomeViewState extends State<HomeView> {
   @override
   void initState() {
     super.initState();
+    tutorialController = ProviderScope.containerOf(
+      context,
+      listen: false,
+    ).read(tutorialControllerProvider);
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted || !MySharedPref.getTutoHomeFirst()) return;
@@ -259,9 +264,14 @@ class _HomeViewState extends State<HomeView> {
                   tooltip: 'today',
                   onPressed: () {
                     final hoy = DateTime.now();
-                    final container = ProviderScope.containerOf(context, listen: false);
-                    container.read(focusedMonthProvider.notifier).setFocusedDay(hoy);
-                    container.read(selectedDayProvider.notifier).setSelectedDay(hoy);
+                    final container =
+                        ProviderScope.containerOf(context, listen: false);
+                    container
+                        .read(focusedMonthProvider.notifier)
+                        .setFocusedDay(hoy);
+                    container
+                        .read(selectedDayProvider.notifier)
+                        .setSelectedDay(hoy);
                   },
                 ),
               ],

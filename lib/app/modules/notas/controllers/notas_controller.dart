@@ -1,4 +1,3 @@
-import 'package:calendario2/app/controllers/tutorialController.dart';
 import 'package:calendario2/app/data/local/my_shared_pref.dart';
 import 'package:calendario2/app/data/local/previusTaskDatabase.dart';
 import 'package:calendario2/app/data/local/taskDatabase.dart';
@@ -10,8 +9,6 @@ import '../../../data/model/taskModel.dart';
 import '../views/widgets/taskCard.dart';
 
 class NotasListController extends GetxController {
-  TutorialController tutorialController = TutorialController();
-
   bool headerShouldHide = false;
   RxBool isFlagOn = false.obs;
   RxBool isSearchEmpty = true.obs;
@@ -23,7 +20,6 @@ class NotasListController extends GetxController {
 
   RxBool firstTime = false.obs;
 
-
   @override
   void onInit() async {
     // await setNotesFromDB2();
@@ -32,20 +28,11 @@ class NotasListController extends GetxController {
     super.onInit();
     // if (MySharedPref.getTutoTaskFirst()) {
     //   firstTime.value = true;
-    //   tutorialController.firstInstall('task');
     // }
   }
 
   @override
   void onReady() {
-    Future.delayed(const Duration(milliseconds: 300), () {
-      // MySharedPref.setTutoTaskFirst(true);
-      if (MySharedPref.getTutoTaskFirst()) {
-        firstTime.value = true;
-        tutorialController.firstInstall('task');
-      }
-    });
-
     super.onReady();
   }
 
@@ -61,8 +48,6 @@ class NotasListController extends GetxController {
     update();
     return notesList.value;
   }
-
-
 
   // ///Todo update notes sin cargar toda la base de datos
   // setNotesFromDB2() async {
@@ -123,9 +108,7 @@ class NotasListController extends GetxController {
                 .toLowerCase()
                 .contains(searchController.value.text.toLowerCase())) {
           noteComponentsList.add(TaskCard(
-            noteData: note,
-            onTapAction: openNoteToRead, routeToNotas: true
-          ));
+              noteData: note, onTapAction: openNoteToRead, routeToNotas: true));
         }
       }
       return noteComponentsList;
@@ -134,22 +117,15 @@ class NotasListController extends GetxController {
       for (var note in notesList.value) {
         if (note.isImportant!) {
           noteComponentsList.add(TaskCard(
-            noteData: note,
-            onTapAction: openNoteToRead, routeToNotas: true
-          ));
+              noteData: note, onTapAction: openNoteToRead, routeToNotas: true));
         }
       }
     } else {
       for (var note in notesList.value) {
         noteComponentsList.add(TaskCard(
-          noteData: note,
-          onTapAction: openNoteToRead, routeToNotas: true
-        ));
+            noteData: note, onTapAction: openNoteToRead, routeToNotas: true));
       }
     }
     return noteComponentsList;
   }
-
-
-
 }

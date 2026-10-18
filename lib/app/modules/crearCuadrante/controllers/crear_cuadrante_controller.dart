@@ -1,4 +1,3 @@
-import 'package:calendario2/app/controllers/tutorialController.dart';
 import 'package:calendario2/app/data/local/calendarDatabase.dart';
 import 'package:calendario2/app/data/local/my_shared_pref.dart';
 import 'package:calendario2/app/data/model/cuadranteDay.dart';
@@ -10,8 +9,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 class CrearCuadranteController extends GetxController {
-  TutorialController tutorialController = TutorialController();
-
   RxString cuadranteNameString = "".obs;
 
   RxList<String> cuadrantesNameList = <String>[].obs;
@@ -39,8 +36,9 @@ class CrearCuadranteController extends GetxController {
   void onInit() async {
     var cuadrantes = await CalendarioDB.db.getCuadranteList();
     cuadrantes.forEach((element) {
-      cuadrantesNameList.contains(element.cuadranteName) ? null
-      : cuadrantesNameList.add(element.cuadranteName ?? '') ;
+      cuadrantesNameList.contains(element.cuadranteName)
+          ? null
+          : cuadrantesNameList.add(element.cuadranteName ?? '');
     });
     MySharedPref.setCuadrantesList(cuadrantesNameList.value);
 
@@ -51,7 +49,6 @@ class CrearCuadranteController extends GetxController {
 
     // if (MySharedPref.getTutoCuadranteFirst()) {
     //   firstTime.value = true;
-    //   tutorialController.firstInstall('cuadrante');
     // }
 
     fetchTurnosType();
@@ -60,8 +57,6 @@ class CrearCuadranteController extends GetxController {
 
   @override
   void onReady() {
-
-
     super.onReady();
   }
 
@@ -211,9 +206,11 @@ class CrearCuadranteController extends GetxController {
                                 child: Text(
                                   m.description!,
                                   style: TextStyle(
-                                    color: HexColor(m.color!).computeLuminance() > 0.5
-                                      ? Colors.black
-                                      : Colors.white,
+                                    color:
+                                        HexColor(m.color!).computeLuminance() >
+                                                0.5
+                                            ? Colors.black
+                                            : Colors.white,
                                   ),
                                 )),
                           ),

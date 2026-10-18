@@ -1,6 +1,9 @@
 import 'dart:io';
 
 import 'package:calendario2/app/modules/home/widgets/calendar/widget/line.dart';
+import 'package:calendario2/app/controllers/tutorial_provider.dart';
+import 'package:calendario2/app/data/local/my_shared_pref.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:calendario2/app/modules/notas/views/alarmas/controllers/alarmas_controller.dart';
 import 'package:calendario2/app/modules/notas/views/alarmas/views/widget/alarmTile.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
@@ -22,11 +25,33 @@ import '../controllers/add_notas_controller.dart';
 
 class AddNotasView extends GetView<AddNotasController> {
   AddNotasView({Key? key}) : super(key: key);
+
+  bool _tutorialStartScheduled = false;
   final adcontroller = Get.find<AdsController>();
 
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
+    final tutorialController = ProviderScope.containerOf(
+      context,
+      listen: false,
+    ).read(tutorialControllerProvider);
+
+    if (!_tutorialStartScheduled && MySharedPref.getTutoAddTaskFirst()) {
+      _tutorialStartScheduled = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!context.mounted) return;
+        controller.firstTime.value = true;
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (!context.mounted) return;
+          tutorialController.firstInstall(
+            'taskAdd',
+            context: context,
+            onFinished: () => controller.firstTime.value = false,
+          );
+        });
+      });
+    }
 
     AlarmasController alarmasController = AlarmasController();
 
@@ -81,7 +106,7 @@ class AddNotasView extends GetView<AddNotasController> {
                 children: <Widget>[
                   Container(
                     key: controller.firstTime.value
-                        ? controller.tutorialController.keyButton13
+                        ? tutorialController.keyButton13
                         : key,
                     child: _buildGeneralFormField(
                         controller.title, 'Titulo del evento', 1),
@@ -91,7 +116,7 @@ class AddNotasView extends GetView<AddNotasController> {
                   ),
                   Column(
                     key: controller.firstTime.value
-                        ? controller.tutorialController.keyButton17
+                        ? tutorialController.keyButton17
                         : key,
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -108,7 +133,7 @@ class AddNotasView extends GetView<AddNotasController> {
                   ),
                   Column(
                     key: controller.firstTime.value
-                        ? controller.tutorialController.keyButton14
+                        ? tutorialController.keyButton14
                         : key,
                     children: <Widget>[
                       TextButton(
@@ -257,7 +282,7 @@ class AddNotasView extends GetView<AddNotasController> {
                       },
                       child: Row(
                           key: controller.firstTime.value
-                              ? controller.tutorialController.keyButton15
+                              ? tutorialController.keyButton15
                               : key,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -304,7 +329,7 @@ class AddNotasView extends GetView<AddNotasController> {
                   ),
                   TextButton(
                       key: controller.firstTime.value
-                          ? controller.tutorialController.keyButton16
+                          ? tutorialController.keyButton16
                           : key,
                       onPressed: controller.markImportantAsDirty,
                       child: Row(
@@ -340,15 +365,19 @@ class AddNotasView extends GetView<AddNotasController> {
                         ),
                         IconButton(
                           key: controller.firstTime.value
-                              ? controller.tutorialController.keyNotasAyuda
+                              ? tutorialController.keyNotasAyuda
                               : key,
                           icon: const AppIcon(AppIcons.informacion,
                               color: Colors.green),
                           tooltip: '',
                           onPressed: () {
                             controller.firstTime.value = true;
-                            controller.tutorialController
-                                .showTutorial(context, 'taskAdd');
+                            tutorialController.showTutorial(
+                              context,
+                              'taskAdd',
+                              onFinished: () =>
+                                  controller.firstTime.value = false,
+                            );
                           },
                         ),
                       ],

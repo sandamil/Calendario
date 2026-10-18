@@ -8,6 +8,7 @@ import 'package:calendario2/config/theme/my_fonts.dart';
 import 'package:calendario2/config/theme/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:calendario2/app/controllers/tutorial_provider.dart';
 import 'package:flutter_animated_dialog_updated/flutter_animated_dialog.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -77,7 +78,6 @@ class CrearCuadranteView extends GetView<CrearCuadranteController> {
           //             size: 24.sp,
           //           ),
           //     key: controller.firstTime.value
-          //         ? controller.tutorialController.keyButton5
           //         : key,
           //   )
           // ],
@@ -112,17 +112,6 @@ class CrearCuadranteView extends GetView<CrearCuadranteController> {
                         .resetForCreate();
                     controller.cuadranteName.clear();
                     controller.cuadranteNameString.value = '';
-                    Future.delayed(const Duration(milliseconds: 300), () {
-                      // MySharedPref.setTutoCuadranteFirst(true);
-                      if (MySharedPref.getTutoCuadranteFirst()) {
-                        controller.firstTime.value = true;
-                        controller.tutorialController.firstInstall(
-                          'cuadrante', context: context,
-                          onCuadranteTutorialFinished: () {
-                            controller.firstTime.value = false;
-                          });
-                      }
-                    });
                     // Get.toNamed('/notas', (r) => false);
                     Get.to(() => const AddCuadranteView()); //   Navigator.push(
                     //       context,
@@ -192,21 +181,27 @@ class CrearCuadranteView extends GetView<CrearCuadranteController> {
                             height: 200.h,
                             child: ListView.builder(
                               physics: const BouncingScrollPhysics(),
-                              itemCount: controller.cuadrantesNameList.value.length,
+                              itemCount:
+                                  controller.cuadrantesNameList.value.length,
                               itemBuilder: (context, index) {
-                                final name = controller.cuadrantesNameList.value[index];
+                                final name =
+                                    controller.cuadrantesNameList.value[index];
 
                                 return Padding(
-                                  padding: EdgeInsets.symmetric(horizontal: 8.h),
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 8.h),
                                   child: Card(
                                     color: MyColors.menuCardBackgroundDark,
-elevation: 1,
+                                    elevation: 1,
                                     child: Row(
                                       children: [
                                         SizedBox(width: 10.w),
                                         Text(
                                           name,
-                                          style: TextStyle(color: MyColors.textColor, fontSize: 18.sp, ),
+                                          style: TextStyle(
+                                            color: MyColors.textColor,
+                                            fontSize: 18.sp,
+                                          ),
                                         ),
                                         Spacer(),
                                         Consumer(
@@ -232,7 +227,8 @@ elevation: 1,
                                                   return;
                                                 }
 
-                                                controller.editarCuadrante(name);
+                                                controller
+                                                    .editarCuadrante(name);
                                               },
                                               icon: const Icon(
                                                 Icons.edit_calendar,
@@ -246,7 +242,6 @@ elevation: 1,
                                           icon: const Icon(
                                               Icons.delete_forever_outlined),
                                         )
-
                                       ],
                                     ),
                                   ),
@@ -325,10 +320,10 @@ elevation: 1,
       return TextButton(
         child: controller.cuadranteLoading.value
             ? const SizedBox(
-          height: 25,
-          width: 25,
-          child: CircularProgressIndicator(),
-        )
+                height: 25,
+                width: 25,
+                child: CircularProgressIndicator(),
+              )
             : const Text('Calendario'),
         onPressed: () async {
           adcontroller.staticHomeAd.load();

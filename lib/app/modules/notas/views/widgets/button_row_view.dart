@@ -1,4 +1,6 @@
 import 'package:calendario2/app/modules/notas/controllers/notas_controller.dart';
+import 'package:calendario2/app/controllers/tutorial_provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -6,16 +8,19 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 class ButtonRowView extends StatelessWidget {
-
-  const ButtonRowView( {Key? key} ) : super(key: key);
+  const ButtonRowView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final tutorialController = ProviderScope.containerOf(
+      context,
+      listen: false,
+    ).read(tutorialControllerProvider);
     return GetX<NotasListController>(
       init: NotasListController(),
       builder: (controller) {
         return Padding(
-          padding:  EdgeInsets.only(left: 2.w, right: 2.w),
+          padding: EdgeInsets.only(left: 2.w, right: 2.w),
           child: Row(
             children: <Widget>[
               GestureDetector(
@@ -42,9 +47,9 @@ class ButtonRowView extends StatelessWidget {
                             : MyColors.borderAccentLine,
                       ),
                       borderRadius: BorderRadius.all(Radius.circular(10.r))),
-                  key: controller.firstTime.value ? controller
-                      .tutorialController.keyButton11 : key,
-
+                  key: controller.firstTime.value
+                      ? tutorialController.keyButton11
+                      : key,
                   child: Icon(
                     controller.isFlagOn.value
                         ? Icons.flag
@@ -56,8 +61,9 @@ class ButtonRowView extends StatelessWidget {
                 ),
               ),
               Expanded(
-                key: controller.firstTime.value ? controller
-                    .tutorialController.keyButton12 : key,
+                key: controller.firstTime.value
+                    ? tutorialController.keyButton12
+                    : key,
                 child: Container(
                   alignment: Alignment.center,
                   margin: EdgeInsets.only(left: 4.w),
@@ -84,7 +90,6 @@ class ButtonRowView extends StatelessWidget {
                                 fontSize: 18.sp, fontWeight: FontWeight.w500),
                             textInputAction: TextInputAction.search,
                             decoration: InputDecoration.collapsed(
-
                               hintText: 'Busqueda',
                               hintStyle: TextStyle(
                                   color: MyColors.borderAccentLine,
@@ -92,15 +97,17 @@ class ButtonRowView extends StatelessWidget {
                                   fontWeight: FontWeight.w500),
                               border: InputBorder.none,
                             ).copyWith(
-                              focusedBorder: const OutlineInputBorder(borderSide: BorderSide(
+                              focusedBorder: const OutlineInputBorder(
+                                borderSide: BorderSide(
                                     style: BorderStyle.solid,
-                                    color: Colors.transparent
-                                ),),
+                                    color: Colors.transparent),
+                              ),
                               enabledBorder: const OutlineInputBorder(
-
-                                  borderSide: BorderSide(width: 2.0, color: Colors.transparent)),
+                                  borderSide: BorderSide(
+                                      width: 2.0, color: Colors.transparent)),
                               border: const OutlineInputBorder(
-                                  borderSide: BorderSide(width: 2.0, color: Colors.transparent)),
+                                  borderSide: BorderSide(
+                                      width: 2.0, color: Colors.transparent)),
                             ),
                           ),
                         ),

@@ -1,5 +1,3 @@
-
-import 'package:calendario2/app/controllers/tutorialController.dart';
 import 'package:calendario2/app/data/local/my_shared_pref.dart';
 import 'package:calendario2/app/data/local/taskDatabase.dart';
 import 'package:calendario2/app/data/model/taskModel.dart';
@@ -10,8 +8,8 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 
 class AddNotasController extends GetxController {
-  TutorialController tutorialController = TutorialController();
-  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
 
   Map<DateTime, List<Task>> events = <DateTime, List<Task>>{}.obs;
 
@@ -35,9 +33,6 @@ class AddNotasController extends GetxController {
   Rx<DateTime> endTime = DateTime.now().obs;
   RxBool isImportant = false.obs;
 
-
-
-
   var idGenerated;
 
   ///ALARMA
@@ -54,6 +49,7 @@ class AddNotasController extends GetxController {
     alarmTime = value;
     alarmaHora = value.formatDateTime24H.toString();
   }
+
   String alarmaHora = '';
 
   RxBool firstTime = false.obs;
@@ -63,35 +59,23 @@ class AddNotasController extends GetxController {
     idGenerated = int.parse(randomIdGenerator());
     var dateTimeCalendar = Get.arguments;
     if (dateTimeCalendar != null) {
-      startTime.value =  DateTime.fromMillisecondsSinceEpoch(dateTimeCalendar);
-      endTime.value =  DateTime.fromMillisecondsSinceEpoch(dateTimeCalendar);
+      startTime.value = DateTime.fromMillisecondsSinceEpoch(dateTimeCalendar);
+      endTime.value = DateTime.fromMillisecondsSinceEpoch(dateTimeCalendar);
     }
     super.onInit();
 
-
     // if (MySharedPref.getTutoAddTaskFirst()) {
     //   firstTime.value = true;
-    //   tutorialController.firstInstall('taskAdd');
     // }
     // textController.addListener(() {
     //   subtractTimeString.value = textController.text;
     // });
-
   }
 
   @override
   void onReady() {
-    Future.delayed(const Duration(milliseconds: 300), () {
-      // MySharedPref.setTutoAddTaskFirst(true);
-      if (MySharedPref.getTutoAddTaskFirst()) {
-        firstTime.value = true;
-        tutorialController.firstInstall('taskAdd');
-      }
-    });
-
     super.onReady();
   }
-
 
   @override
   void onClose() {
@@ -157,31 +141,24 @@ class AddNotasController extends GetxController {
   //   }
   // }
 
-
-
   saveNota() async {
-
-
-
     await NotasDB.instance.insertNotas(
-        Task(
-          id: idGenerated,
-          title: title.text,
-          site: site.text,
-          notes: notes.text,
-          isImportant: isImportant.value,
-          startTimeMilliseconds: startTime.value.millisecondsSinceEpoch,
-          endTimeMilliseconds: endTime.value.millisecondsSinceEpoch,
-          idAlarma: idGenerated,
-          alarmaHora: alarmaHora,
-          alarmaActivadaString: alarmaActivadaString.value,
-          isAlarmaCreated: alarmaCreada,
-          // time: Jiffy().format('yyyy-MM-dd h:mm:ss a')
-        ),
-
+      Task(
+        id: idGenerated,
+        title: title.text,
+        site: site.text,
+        notes: notes.text,
+        isImportant: isImportant.value,
+        startTimeMilliseconds: startTime.value.millisecondsSinceEpoch,
+        endTimeMilliseconds: endTime.value.millisecondsSinceEpoch,
+        idAlarma: idGenerated,
+        alarmaHora: alarmaHora,
+        alarmaActivadaString: alarmaActivadaString.value,
+        isAlarmaCreated: alarmaCreada,
+        // time: Jiffy().format('yyyy-MM-dd h:mm:ss a')
+      ),
     );
-    print( alarmaHora);
-
+    print(alarmaHora);
   }
 
   void markImportantAsDirty() {
@@ -193,9 +170,4 @@ class AddNotasController extends GetxController {
   ///
 
   RxString alarmaActivadaString = 'Sin recordatorio'.obs;
-
-
-
-
-
 }

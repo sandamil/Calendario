@@ -1,6 +1,9 @@
 import 'dart:io';
 
 import 'package:calendario2/app/controllers/ads_controller.dart';
+import 'package:calendario2/app/controllers/tutorial_provider.dart';
+import 'package:calendario2/app/data/local/my_shared_pref.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:calendario2/app/modules/notas/controllers/notas_controller.dart';
 import 'package:calendario2/app/modules/notas/views/widgets/important_indicator_text_view.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
@@ -16,11 +19,33 @@ import 'widgets/button_row_view.dart';
 
 class NotasListView extends GetView<NotasListController> {
   NotasListView({Key? key}) : super(key: key);
+
+  bool _tutorialStartScheduled = false;
   final adcontroller = Get.find<AdsController>();
 
   @override
   Widget build(BuildContext context) {
     final adcontroller = Get.find<AdsController>();
+    final tutorialController = ProviderScope.containerOf(
+      context,
+      listen: false,
+    ).read(tutorialControllerProvider);
+
+    if (!_tutorialStartScheduled && MySharedPref.getTutoTaskFirst()) {
+      _tutorialStartScheduled = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!context.mounted) return;
+        controller.firstTime.value = true;
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (!context.mounted) return;
+          tutorialController.firstInstall(
+            'task',
+            context: context,
+            onFinished: () => controller.firstTime.value = false,
+          );
+        });
+      });
+    }
 
     return WillPopScope(
       onWillPop: () async {
@@ -59,13 +84,17 @@ class NotasListView extends GetView<NotasListController> {
             actions: <Widget>[
               IconButton(
                 key: controller.firstTime.value
-                    ? controller.tutorialController.keyNotasListAyuda
+                    ? tutorialController.keyNotasListAyuda
                     : key,
                 icon: const AppIcon(AppIcons.informacion, color: Colors.green),
                 tooltip: '',
                 onPressed: () {
                   controller.firstTime.value = true;
-                  controller.tutorialController.showTutorial(context, 'task');
+                  tutorialController.showTutorial(
+                    context,
+                    'task',
+                    onFinished: () => controller.firstTime.value = false,
+                  );
                 },
               ),
               // add your custom action widget
@@ -80,7 +109,7 @@ class NotasListView extends GetView<NotasListController> {
             label: Text(
               'Añade Nota'.toUpperCase(),
               key: controller.firstTime.value
-                  ? controller.tutorialController.keyButton10
+                  ? tutorialController.keyButton10
                   : key,
             ),
             icon: const Icon(Icons.add),

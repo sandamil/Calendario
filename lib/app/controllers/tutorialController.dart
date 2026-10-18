@@ -1,90 +1,105 @@
 import 'package:calendario2/app/data/local/my_shared_pref.dart';
-import 'package:calendario2/app/modules/notas/controllers/notas_controller.dart';
-import 'package:calendario2/app/modules/notas/views/AddNotas/controllers/add_notas_controller.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/config/tutorial/tutorialAddTask.dart';
 import 'package:calendario2/config/tutorial/tutorialCuadrantes.dart';
 import 'package:calendario2/config/tutorial/tutorialInicio.dart';
 import 'package:calendario2/config/tutorial/tutorialTask.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
-class TutorialController extends GetxController {
+class TutorialController {
+  static final TutorialController _instance = TutorialController._internal();
+
+  factory TutorialController() => _instance;
+
+  TutorialController._internal();
+
   TutorialCoachMark? tutorialCoachMark;
   List<TargetFocus> targets = [];
 
-  firstInstall(String view,
-      {BuildContext? context,
-      VoidCallback? onFinished,
-      VoidCallback? onCuadranteTutorialFinished}) async {
+  Future<void> firstInstall(
+    String view, {
+    BuildContext? context,
+    VoidCallback? onFinished,
+    VoidCallback? onCuadranteTutorialFinished,
+  }) async {
+    // No consumir la preferencia si no hay una pantalla válida donde mostrarlo.
+    if (context == null || !context.mounted) return;
+
+    bool show = false;
+
     switch (view) {
       case 'home':
-        if (MySharedPref.getTutoHomeFirst()) {
-          final tutorialContext = context ?? Get.overlayContext;
-          if (tutorialContext == null) return;
-          showTutorial(tutorialContext, view,
-              onFinished: onFinished,
-              onCuadranteTutorialFinished: onCuadranteTutorialFinished);
-          MySharedPref.setTutoHomeFirst(false);
-        }
+        show = MySharedPref.getTutoHomeFirst();
         break;
       case 'task':
-        if (MySharedPref.getTutoTaskFirst()) {
-          showTutorial(Get.overlayContext, view);
-          MySharedPref.setTutoTaskFirst(false);
-        }
+        show = MySharedPref.getTutoTaskFirst();
         break;
       case 'taskAdd':
-        if (MySharedPref.getTutoAddTaskFirst()) {
-          showTutorial(Get.overlayContext, view);
-          MySharedPref.setTutoAddTaskFirst(false);
-        }
+        show = MySharedPref.getTutoAddTaskFirst();
         break;
       case 'cuadrante':
-        if (MySharedPref.getTutoCuadranteFirst()) {
-          showTutorial(Get.overlayContext, view);
-          MySharedPref.setTutoCuadranteFirst(false);
-        }
+        show = MySharedPref.getTutoCuadranteFirst();
         break;
       default:
+        return;
+    }
+
+    if (!show || !context.mounted) return;
+
+    showTutorial(
+      context,
+      view,
+      onFinished: onFinished,
+      onCuadranteTutorialFinished: onCuadranteTutorialFinished,
+    );
+
+    // Marcarlo como visto solo después de iniciar el tutorial con contexto válido.
+    switch (view) {
+      case 'home':
+        await MySharedPref.setTutoHomeFirst(false);
+        break;
+      case 'task':
+        await MySharedPref.setTutoTaskFirst(false);
+        break;
+      case 'taskAdd':
+        await MySharedPref.setTutoAddTaskFirst(false);
+        break;
+      case 'cuadrante':
+        await MySharedPref.setTutoCuadranteFirst(false);
         break;
     }
   }
 
-  void showTutorial(context, String view,
-      {VoidCallback? onFinished, VoidCallback? onCuadranteTutorialFinished}) {
+  void showTutorial(
+    BuildContext context,
+    String view, {
+    VoidCallback? onFinished,
+    VoidCallback? onCuadranteTutorialFinished,
+  }) {
+    if (!context.mounted) return;
+
     switch (view) {
       case 'home':
         createTutorialHome(onFinished: onFinished);
-        tutorialCoachMark?.show(context: context);
         break;
       case 'task':
-        createTutorialNotas();
-        tutorialCoachMark?.show(context: context);
+        createTutorialNotas(onFinished: onFinished);
         break;
       case 'taskAdd':
-        createTutorialAddNotas();
-        tutorialCoachMark?.show(context: context);
+        createTutorialAddNotas(onFinished: onFinished);
         break;
       case 'cuadrante':
         createTutorialCuadrante(onCuadranteTutorialFinished);
-        tutorialCoachMark?.show(context: context);
         break;
       default:
-        break;
+        return;
     }
+
+    tutorialCoachMark?.show(context: context);
   }
 
-  ///Home
-  ///
-
-//
-//   GlobalKey<FormState> keyButton6 = GlobalKey<FormState>();
-//   GlobalKey<FormState> keyButton7 = GlobalKey<FormState>();
-//   GlobalKey<FormState> keyButton8 = GlobalKey<FormState>();
-//   GlobalKey<FormState> keyButton9 = GlobalKey<FormState>();
-
+  // Tutorial de inicio
   GlobalKey? keyButton6 = GlobalKey();
   GlobalKey? keyButton7 = GlobalKey();
   GlobalKey? keyButton8 = GlobalKey();
@@ -100,12 +115,10 @@ class TutorialController extends GetxController {
         keyButton9,
       ),
       colorShadow: PRIMARY_COLOR_DARK,
-      textSkip: "Finalizar",
+      textSkip: 'Finalizar',
       paddingFocus: 2,
       opacityShadow: 0.92,
-      onFinish: () {
-        onFinished?.call();
-      },
+      onFinish: () => onFinished?.call(),
       onClickTarget: (target) {},
       onClickTargetWithTapPosition: (target, tapDetails) {},
       onClickOverlay: (target) {},
@@ -116,8 +129,7 @@ class TutorialController extends GetxController {
     );
   }
 
-  ///Cuadrantes
-  ///
+  // Tutorial de cuadrantes
   GlobalKey keyButton = GlobalKey();
   GlobalKey keyButton1 = GlobalKey();
   GlobalKey keyButton2 = GlobalKey();
@@ -138,7 +150,7 @@ class TutorialController extends GetxController {
       ),
       alignSkip: Alignment.bottomLeft,
       colorShadow: PRIMARY_COLOR_DARK,
-      textSkip: "Finalizar",
+      textSkip: 'Finalizar',
       paddingFocus: 2,
       opacityShadow: 0.92,
       onFinish: onFinished,
@@ -152,17 +164,13 @@ class TutorialController extends GetxController {
     );
   }
 
-  ///NOtas
-  ///
-
+  // Tutorial de notas
   GlobalKey keyButton10 = GlobalKey();
   GlobalKey keyButton11 = GlobalKey();
   GlobalKey keyButton12 = GlobalKey();
   GlobalKey keyNotasListAyuda = GlobalKey();
 
-  void createTutorialNotas() {
-    var notasController = Get.put(NotasListController());
-
+  void createTutorialNotas({VoidCallback? onFinished}) {
     tutorialCoachMark = TutorialCoachMark(
       alignSkip: Alignment.bottomLeft,
       targets: ListTargetTask().createTargets(
@@ -172,25 +180,21 @@ class TutorialController extends GetxController {
         keyNotasListAyuda,
       ),
       colorShadow: PRIMARY_COLOR_DARK,
-      textSkip: "Finalizar",
+      textSkip: 'Finalizar',
       paddingFocus: 2,
       opacityShadow: 0.92,
-      onFinish: () {
-        notasController.firstTime.value = false;
-      },
+      onFinish: () => onFinished?.call(),
       onClickTarget: (target) {},
       onClickTargetWithTapPosition: (target, tapDetails) {},
       onClickOverlay: (target) {},
       onSkip: () {
-        notasController.firstTime.value = false;
+        onFinished?.call();
         return true;
       },
     );
   }
 
-  ///AddNotas
-  ///
-
+  // Tutorial de creación de notas
   GlobalKey keyButton13 = GlobalKey();
   GlobalKey keyButton14 = GlobalKey();
   GlobalKey keyButton15 = GlobalKey();
@@ -198,9 +202,7 @@ class TutorialController extends GetxController {
   GlobalKey keyButton17 = GlobalKey();
   GlobalKey keyNotasAyuda = GlobalKey();
 
-  void createTutorialAddNotas() {
-    var addNotasController = Get.put(AddNotasController());
-
+  void createTutorialAddNotas({VoidCallback? onFinished}) {
     tutorialCoachMark = TutorialCoachMark(
       targets: ListTargetAddTask().createTargets(
         keyButton13,
@@ -211,17 +213,15 @@ class TutorialController extends GetxController {
         keyNotasAyuda,
       ),
       colorShadow: PRIMARY_COLOR_DARK,
-      textSkip: "Finalizar",
+      textSkip: 'Finalizar',
       paddingFocus: 2,
       opacityShadow: 0.92,
-      onFinish: () {
-        addNotasController.firstTime.value = false;
-      },
+      onFinish: () => onFinished?.call(),
       onClickTarget: (target) {},
       onClickTargetWithTapPosition: (target, tapDetails) {},
       onClickOverlay: (target) {},
       onSkip: () {
-        addNotasController.firstTime.value = false;
+        onFinished?.call();
         return true;
       },
     );
