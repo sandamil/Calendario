@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
+
 
 
 class InputField extends StatelessWidget {
@@ -39,7 +39,9 @@ class InputField extends StatelessWidget {
                   child: TextFormField(
                     controller: controller,
                     cursorColor:
-                        Get.isDarkMode ? Colors.grey[100] : Colors.grey[700],
+                        Theme.of(context).brightness == Brightness.dark
+                            ? Colors.grey[100]
+                            : Colors.grey[700],
                     readOnly: widget != null,
                     // style: subTitleStyle,
                     decoration: InputDecoration(

@@ -152,8 +152,23 @@ class TurnoTypesNotifier extends AsyncNotifier<List<TurnoType>> {
   Future<void> addTurno(TurnoType turno) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
-      await CalendarioDB.db.addTypeModel(turno);
-      return CalendarioDB.db.getTypeModels();
+      final id = await CalendarioDB.db.addTypeModel(turno);
+
+      if (id < 0) {
+        throw StateError(
+          'La base de datos ha rechazado la inserción del tipo de turno.',
+        );
+      }
+
+      final turnos = await CalendarioDB.db.getTypeModels();
+
+      if (!turnos.any((item) => item.id == id)) {
+        throw StateError(
+          'No se ha podido confirmar la inserción del tipo de turno.',
+        );
+      }
+
+      return turnos;
     });
   }
 
@@ -161,14 +176,52 @@ class TurnoTypesNotifier extends AsyncNotifier<List<TurnoType>> {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
       await CalendarioDB.db.deleteTypeId(id);
-      return CalendarioDB.db.getTypeModels();
+      final turnos = await CalendarioDB.db.getTypeModels();
+
+      if (turnos.any((item) => item.id == id)) {
+        throw StateError(
+          'No se ha podido confirmar la eliminación del tipo de turno.',
+        );
+      }
+
+      return turnos;
     });
   }
 
   Future<void> updateTurno(TurnoType turno) async {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
+      final id = turno.id;
+
+      if (id == null) {
+        throw ArgumentError(
+          'No se puede editar un tipo de turno sin identificador.',
+        );
+      }
+
+      final anterior = await CalendarioDB.db.fetchTurnoType(id);
+
+      if (anterior == null) {
+        throw StateError(
+          'El tipo de turno que se intenta editar ya no existe.',
+        );
+      }
+
       await CalendarioDB.db.updateTurno(turno);
+
+      final actualizado = await CalendarioDB.db.fetchTurnoType(id);
+
+      if (actualizado == null ||
+          actualizado.title != turno.title ||
+          actualizado.description != turno.description ||
+          actualizado.startHour != turno.startHour ||
+          actualizado.endHour != turno.endHour ||
+          actualizado.color != turno.color) {
+        throw StateError(
+          'No se ha podido confirmar la actualización del tipo de turno.',
+        );
+      }
+
       return CalendarioDB.db.getTypeModels();
     });
   }

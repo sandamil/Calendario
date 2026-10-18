@@ -5,7 +5,6 @@ import 'package:calendario2/app/modules/ajustes/views/pages/log_console.dart';
 import 'package:calendario2/app/modules/ayuda/views/pages/videotutoriales/views/videotutoriales_view.dart';
 import 'package:get/get.dart';
 
-import '../modules/CrearTurno/bindings/crear_turno_binding.dart';
 import '../modules/CrearTurno/views/turno_view.dart';
 import '../modules/ajustes/bindings/ajustes_binding.dart';
 import '../modules/ajustes/views/ajustes_view.dart';
@@ -68,7 +67,6 @@ class AppPages {
       transitionDuration: const Duration(microseconds: 100),
       name: _Paths.CREAR_TURNO,
       page: () => const TurnoView(),
-      binding: CrearTurnoBinding(),
     ),
     GetPage(
       transition: Transition.fadeIn,
