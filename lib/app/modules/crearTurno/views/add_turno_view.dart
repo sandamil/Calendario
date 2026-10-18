@@ -10,6 +10,7 @@ import 'package:get/get.dart';
 import '../../../../config/theme/my_fonts.dart';
 import '../../CrearTurno/views/turno_view.dart';
 import '../../home/providers/calendar_providers.dart';
+import '../../../data/model/turnoType.dart';
 import '../controllers/crear_turno_controller.dart';
 import 'widgets/input_field.dart';
 
@@ -222,7 +223,9 @@ class AddTurnoView extends GetView<CrearTurnoController> {
                               /*[VERBOSE-2:dart_vm_initializer.cc(41)] Unhandled Exception: Null check operator used on a null value
                               #0      AddTurnoView.build.<anonymous closure>.<anonymous closure> (package:calendario2/app/modules/CrearTurno/views/add_turno_view.dart:190:61)
                               <asynchronous suspension>*/
-                              controller.endDate(_pickedTime!.format(context));
+                              if (_pickedTime != null) {
+                                controller.endDate(_pickedTime.format(context));
+                              }
                             },
                             icon: const Icon(Icons.access_time_rounded),
                           ),
@@ -262,12 +265,22 @@ class AddTurnoView extends GetView<CrearTurnoController> {
                         ),
                         onPressed: controller.isValidResponse()
                             ? () async {
-                                await controller.addTurno();
                                 final container = ProviderScope.containerOf(
                                   context,
                                   listen: false,
                                 );
-                                container.invalidate(turnoTypesProvider);
+                                await container
+                                    .read(turnoTypesProvider.notifier)
+                                    .addTurno(
+                                      TurnoType(
+                                        title: controller.title.value,
+                                        description: controller.description.value,
+                                        startHour: controller.startDate.value,
+                                        endHour: controller.endDate.value,
+                                        color: controller.turnoColor.value.value
+                                            .toRadixString(16),
+                                      ),
+                                    );
                                 Get.back(closeOverlays: true);
                               }
                             : () {
