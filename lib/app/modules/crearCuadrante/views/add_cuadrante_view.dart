@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:calendario2/app/components/custom_dialog.dart';
 import 'package:calendario2/app/controllers/tutorial_provider.dart';
 import 'package:calendario2/app/controllers/ads_provider.dart';
-import 'package:calendario2/app/modules/CrearTurno/views/widgets/input_field.dart';
+import 'package:calendario2/app/modules/crearTurno/views/widgets/input_field.dart';
 import 'package:calendario2/app/modules/crearCuadrante/widgets/beautifulAlertDialog.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/config/theme/my_fonts.dart';

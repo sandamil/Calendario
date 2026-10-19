@@ -122,10 +122,33 @@ class _AddNotasViewState extends ConsumerState<AddNotasView> {
                   listen: false,
                 ).read(addNotaProvider.notifier);
 
-                await notaNotifier.saveNota(
-                  id: notaState.idGenerated,
-                );
-                context.go('/notas');
+                try {
+                  final saved = await notaNotifier.saveNota(
+                    id: notaState.idGenerated,
+                  );
+
+                  if (!mounted) return;
+
+                  if (saved) {
+                    context.go('/notas');
+                  } else {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text(
+                          'No se ha podido guardar la nota. '
+                          'Prueba de nuevo.',
+                        ),
+                      ),
+                    );
+                  }
+                } catch (error) {
+                  if (!mounted) return;
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Error al guardar la nota: $error'),
+                    ),
+                  );
+                }
               },
             )
           ],

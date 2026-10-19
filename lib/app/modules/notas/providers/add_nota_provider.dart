@@ -40,6 +40,7 @@ class AddNotaState {
     String? alarmaHora,
     String? alarmaActivadaString,
     bool? firstTime,
+    int? idGenerated,
   }) {
     return AddNotaState(
       startTime: startTime ?? this.startTime,
@@ -51,7 +52,7 @@ class AddNotaState {
       alarmaActivadaString:
           alarmaActivadaString ?? this.alarmaActivadaString,
       firstTime: firstTime ?? this.firstTime,
-      idGenerated: idGenerated,
+      idGenerated: idGenerated ?? this.idGenerated,
     );
   }
 }
@@ -134,45 +135,88 @@ class AddNotaNotifier extends Notifier<AddNotaState> {
     state = state.copyWith(firstTime: value);
   }
 
-  Future<void> saveNota({int? id}) async {
-    final notaId = id ?? state.idGenerated;
+  /// Reinicia el formulario tras guardar correctamente una nota.
+  void resetForm() {
+    title.clear();
+    site.clear();
+    notes.clear();
+
+    final now = DateTime.now();
+    state = AddNotaState(
+      startTime: now,
+      endTime: now,
+      isImportant: false,
+      alarmaCreada: false,
+      alarmTime: now,
+      alarmaHora: '',
+      alarmaActivadaString: 'Sin recordatorio',
+      firstTime: false,
+      idGenerated: int.parse(randomIdGenerator()),
+    );
+  }
+
+  Future<bool> saveNota({int? id}) async {
+    final currentState = state;
+    final notaId = id ?? currentState.idGenerated;
+    final titleText = title.text;
+    final siteText = site.text;
+    final notesText = notes.text;
 
     final nota = Task(
       id: notaId,
-      title: title.text,
-      site: site.text,
-      notes: notes.text,
-      isImportant: state.isImportant,
-      startTimeMilliseconds: state.startTime.millisecondsSinceEpoch,
-      endTimeMilliseconds: state.endTime.millisecondsSinceEpoch,
+      title: titleText,
+      site: siteText,
+      notes: notesText,
+      isImportant: currentState.isImportant,
+      startTimeMilliseconds:
+          currentState.startTime.millisecondsSinceEpoch,
+      endTimeMilliseconds:
+          currentState.endTime.millisecondsSinceEpoch,
       idAlarma: notaId,
-      alarmaHora: state.alarmaHora,
-      alarmaTimestamp: state.alarmaCreada
-          ? state.alarmTime.millisecondsSinceEpoch
+      alarmaHora: currentState.alarmaHora,
+      alarmaTimestamp: currentState.alarmaCreada
+          ? currentState.alarmTime.millisecondsSinceEpoch
           : null,
-      alarmaActivadaString: state.alarmaActivadaString,
-      isAlarmaCreated: state.alarmaCreada,
+      alarmaActivadaString: currentState.alarmaActivadaString,
+      isAlarmaCreated: currentState.alarmaCreada,
     );
 
-    // Primero guardamos la nota. La notificación nunca debe existir
-    // como consecuencia de un guardado que todavía no ha terminado.
-    await NotasDB.instance.insertNotas(nota);
+    // SQLite devuelve un resultado no positivo si ignora un ID duplicado.
+    var insertedId = await NotasDB.instance.insertNotas(nota);
 
-    // Sincronizamos la notificación DESPUÉS de guardar correctamente.
-    if (state.alarmaCreada) {
+    // Si SQLite ignora un ID duplicado, generar otro y reintentar.
+    var attempts = 0;
+    while (insertedId <= 0 && attempts < 5) {
+      final newId = int.parse(randomIdGenerator());
+      nota.id = newId;
+      nota.idAlarma = newId;
+      state = state.copyWith(idGenerated: newId);
+      insertedId = await NotasDB.instance.insertNotas(nota);
+      attempts++;
+    }
+
+    if (insertedId <= 0) {
+      return false;
+    }
+
+    // La notificación se sincroniza después de insertar la nota.
+    if (currentState.alarmaCreada) {
       await NotificacionesService.instance.programar(
-        id: notaId,
-        titulo: 'Nota: ${title.text}',
-        mensaje: notes.text,
-        fechaRecordatorio: state.alarmTime,
+        id: nota.id!,
+        titulo: 'Nota: $titleText',
+        mensaje: notesText,
+        fechaRecordatorio: currentState.alarmTime,
       );
     } else {
-      // Garantiza que no quede una notificación antigua con este ID.
-      await NotificacionesService.instance.cancelar(notaId);
+      await NotificacionesService.instance.cancelar(nota.id!);
     }
 
     await ref.read(notasListProvider.notifier).reload();
     await ref.read(notasProvider.notifier).reload();
+
+    // Prepara un formulario limpio para la próxima nota.
+    resetForm();
+    return true;
   }
 }
 
