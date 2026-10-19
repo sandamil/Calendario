@@ -10,8 +10,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../home/providers/calendar_providers.dart';
-import 'add_turno_view.dart';
-import 'edit_turno_view.dart';
 
 class TurnoView extends ConsumerWidget {
   const TurnoView({super.key});
@@ -25,13 +23,13 @@ class TurnoView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final turnosAsync = ref.watch(turnoTypesProvider);
 
-    return WillPopScope(
-      onWillPop: () async {
+    return PopScope(
+      canPop: !Platform.isAndroid,
+      onPopInvokedWithResult: (bool didPop, Object? result) {
+        if (didPop) return;
         if (Platform.isAndroid) {
           _volverInicio(context, ref);
-          return false;
         }
-        return true;
       },
       child: Scaffold(
         appBar: AppBar(
@@ -44,7 +42,7 @@ class TurnoView extends ConsumerWidget {
               color: PRIMARY_COLOR,
               size: 26.sp,
             ),
-            onPressed: () => _volverInicio(ref),
+            onPressed: () => _volverInicio(context, ref),
           ),
           title: Text(
             'Tipos de Días',

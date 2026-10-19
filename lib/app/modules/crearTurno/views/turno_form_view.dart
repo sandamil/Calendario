@@ -8,9 +8,9 @@ import 'package:calendario2/config/util/hexColor.dart';
 import 'package:calendario2/config/util/validation_utils.dart';
 import 'package:flex_color_picker/flex_color_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
 
 import '../../home/providers/calendar_providers.dart';
 import 'widgets/input_field.dart';
@@ -175,9 +175,9 @@ class _TurnoFormViewState extends ConsumerState<TurnoFormView> {
   Future<void> _guardar() async {
     if (!ValidationUtils.isValidString(_tituloController.text)) {
       MyCustomDialog.alertaError(
+        'Necesitas añadir un Título válido.',
         duracion: 3,
-        'Necesitas añadir un Título válido.'
-        '\nLa abreviatura puede ir vacía si no quieres mostrarla en el calendario',
+        context: context,
       );
       return;
     }
@@ -210,8 +210,9 @@ class _TurnoFormViewState extends ConsumerState<TurnoFormView> {
 
       if (resultado.hasError) {
         MyCustomDialog.alertaError(
-          duracion: 4,
           'No se pudo guardar el tipo de turno. Comprueba los datos e inténtalo de nuevo.',
+          duracion: 4,
+          context: context,
         );
         return;
       }
@@ -235,19 +236,21 @@ class _TurnoFormViewState extends ConsumerState<TurnoFormView> {
 
       if (!guardadoConfirmado) {
         MyCustomDialog.alertaError(
-          duracion: 4,
           'No se ha podido confirmar el guardado del tipo de turno. Comprueba si ya existe y vuelve a intentarlo.',
+          duracion: 4,
+          context: context,
         );
         return;
       }
 
-      Get.back(closeOverlays: true);
+      context.pop();
     } catch (error) {
       if (!mounted) return;
 
       MyCustomDialog.alertaError(
-        duracion: 4,
         'No se pudo guardar el tipo de turno: $error',
+        duracion: 4,
+        context: context,
       );
     } finally {
       if (mounted) {
@@ -274,7 +277,7 @@ class _TurnoFormViewState extends ConsumerState<TurnoFormView> {
               size: 26.sp,
               color: colorTexto,
             ),
-            onPressed: () => Get.back(),
+            onPressed: () => context.pop(),
           ),
           elevation: 0,
           centerTitle: false,

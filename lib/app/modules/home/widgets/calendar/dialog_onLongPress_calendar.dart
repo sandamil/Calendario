@@ -3,7 +3,6 @@ import 'package:calendario2/app/modules/home/widgets/calendar/widget/customAlert
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
 
 import '../../../../../config/theme/my_colors.dart';
 import '../../../../../config/theme/my_fonts.dart';
@@ -31,8 +30,8 @@ class _OnLongPressDialogState extends State<OnLongPressDialog> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: Get.height,
-      width: Get.width - 20.w,
+      height: MediaQuery.sizeOf(context).height,
+      width: MediaQuery.sizeOf(context).width - 20.w,
       child: Stack(
         children: [
           Positioned(
@@ -45,7 +44,7 @@ class _OnLongPressDialogState extends State<OnLongPressDialog> {
                 children: [
                   SizedBox(
                     height: 30,
-                    width: Get.width - 20.w,
+                    width: MediaQuery.sizeOf(context).width - 20.w,
                     child: Stack(
                       children: [
                         Positioned(
@@ -59,7 +58,7 @@ class _OnLongPressDialogState extends State<OnLongPressDialog> {
                   ),
                   Container(
                     height: 220,
-                    width: Get.width - 20.w,
+                    width: MediaQuery.sizeOf(context).width - 20.w,
                     padding: EdgeInsets.symmetric(horizontal: 10.w),
                     decoration: BoxDecoration(
                       border: Border.all(color: PRIMARY_COLOR),

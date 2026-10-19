@@ -13,7 +13,6 @@ import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
-import 'package:get/get.dart';
 
 import 'pages/feedback_screen.dart';
 
@@ -67,15 +66,16 @@ class AyudaView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
+    return PopScope(
+      canPop: !Platform.isAndroid,
+      onPopInvokedWithResult: (bool didPop, Object? result) {
+        if (didPop) return;
         if (Platform.isAndroid) {
           ProviderScope.containerOf(context, listen: false)
               .read(adsProvider.notifier)
               .ensureHomeBanner();
           context.go('/home');
         }
-        return false;
       },
       child: Scaffold(
         appBar: AppBar(

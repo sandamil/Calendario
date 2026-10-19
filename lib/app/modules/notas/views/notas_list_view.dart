@@ -13,7 +13,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
 
 import 'widgets/button_row_view.dart';
 import 'widgets/taskCard.dart';
@@ -75,15 +74,16 @@ class _NotasListViewState extends ConsumerState<NotasListView> {
       });
     }
 
-    return WillPopScope(
-      onWillPop: () async {
+    return PopScope(
+      canPop: !Platform.isAndroid,
+      onPopInvokedWithResult: (bool didPop, Object? result) {
+        if (didPop) return;
         if (Platform.isAndroid) {
           ProviderScope.containerOf(context, listen: false)
               .read(adsProvider.notifier)
               .ensureHomeBanner();
           context.go('/home');
         }
-        return false;
       },
       child: Scaffold(
         appBar: AppBar(

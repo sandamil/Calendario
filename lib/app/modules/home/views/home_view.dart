@@ -16,7 +16,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:table_calendar/table_calendar.dart';
 import '../../../../config/util/constant.dart';
@@ -58,7 +57,7 @@ class _HomeViewState extends State<HomeView> {
       btnCancelText: 'Salir',
       btnOkText: 'Quedarme',
       onTapOK: () async {
-        Get.back();
+        Navigator.of(context).pop();
       },
       onTapCancel: () async {
         SystemNavigator.pop();
@@ -216,18 +215,18 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-        onWillPop: () async {
+    return PopScope(
+        canPop: !Platform.isAndroid,
+        onPopInvokedWithResult: (bool didPop, Object? result) {
+          if (didPop) return;
           if (Platform.isAndroid) {
             //? to close quick order floating if its open when click back btn
             if (isDialOpen.value) {
               isDialOpen.value = false;
-              return false;
             } else {
               _appCloseConfirm(context);
             }
           }
-          return false;
         },
         child: Scaffold(
             appBar: AppBar(

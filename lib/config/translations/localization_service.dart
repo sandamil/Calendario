@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../app/data/local/my_shared_pref.dart';
@@ -7,65 +7,75 @@ import 'ar_AR/ar_ar_translation.dart';
 import 'en_US/en_us_translation.dart';
 import 'es_ES/es_es_translation.dart';
 
-class LocalizationService extends Translations {
-  // prevent creating instance
+class LocalizationService {
   LocalizationService._();
 
-  static LocalizationService? _instance;
-
-  static LocalizationService getInstance() {
-    _instance ??= LocalizationService._();
-    return _instance!;
-  }
-
-  // default language
-  // todo change the default language
   static Locale defaultLanguage = supportedLanguages['es']!;
 
-  // supported languages
-  static Map<String,Locale> supportedLanguages = {
-    'en' : const Locale('en', 'US'),
-    'ar' : const Locale('ar', 'AR'),
-    'es' : const Locale('es', 'ES'),
+  static final Map<String, Locale> supportedLanguages = {
+    'en': const Locale('en', 'US'),
+    'ar': const Locale('ar', 'AR'),
+    'es': const Locale('es', 'ES'),
   };
 
-
-
-  // add font
-  //  supported languages fonts family (must be in assets & pubspec yaml) or you can use google fonts
-  static Map<String,TextStyle> supportedLanguagesFontsFamilies = {
-    //add your English font families (add to assets/fonts, pubspec and name it here) default is poppins for english and cairo for arabic
-    'es' : GoogleFonts.titilliumWeb(),
-    'en' : GoogleFonts.titilliumWeb(),
+  static final Map<String, TextStyle> supportedLanguagesFontsFamilies = {
+    'es': GoogleFonts.titilliumWeb(),
+    'en': GoogleFonts.titilliumWeb(),
     'ar': GoogleFonts.cairo(),
   };
 
-  @override
-  Map<String, Map<String, String>> get keys => {
-    'es_ES': esES,
-    'en_US': enUs,
-    'ar_AR': arAR,
-  };
+  static bool isLanguageSupported(String languageCode) =>
+      supportedLanguages.containsKey(languageCode);
 
-  /// check if the language is supported
-  static isLanguageSupported(String languageCode) =>
-    supportedLanguages.keys.contains(languageCode);
-
-
-  /// update app language by code language for example (en,ar..etc)
-  static Future<void> changeLanguage(String languageCode) async {
-    assert(isLanguageSupported(languageCode), languageCode);
-    // update current language in shared pref
-    await MySharedPref.setCurrentLanguage(languageCode);
-    await Get.updateLocale(supportedLanguages[languageCode]!);
-
-  }
-
-  /// check if the language is english
   static bool isItEnglish() =>
       MySharedPref.getCurrentLocal().languageCode.toLowerCase().contains('en');
 
-  /// get current locale
-  static Locale getCurrentLocal () => MySharedPref.getCurrentLocal();
+  static Locale getCurrentLocal() => MySharedPref.getCurrentLocal();
+
+  /// Traduce un texto español usando los diccionarios existentes.
+  /// Si falta una traducción, conserva el texto original.
+  static String translate(String source, Locale locale) {
+    final languageCode = locale.languageCode;
+    final Map<String, String> target;
+
+    switch (languageCode) {
+      case 'en':
+        target = enUs;
+        break;
+      case 'ar':
+        target = arAR;
+        break;
+      case 'es':
+      default:
+        target = esES;
+    }
+
+    for (final entry in esES.entries) {
+      if (entry.value == source) {
+        return target[entry.key] ?? source;
+      }
+    }
+
+    return source;
+  }
 }
 
+final localeProvider = NotifierProvider<LocaleNotifier, Locale>(
+  LocaleNotifier.new,
+);
+
+class LocaleNotifier extends Notifier<Locale> {
+  @override
+  Locale build() => MySharedPref.getCurrentLocal();
+
+  Future<void> changeLanguage(String languageCode) async {
+    if (!LocalizationService.isLanguageSupported(languageCode)) {
+      throw ArgumentError.value(languageCode, 'languageCode', 'Idioma no soportado');
+    }
+
+    final newLocale = LocalizationService.supportedLanguages[languageCode]!;
+
+    await MySharedPref.setCurrentLanguage(languageCode);
+    state = newLocale;
+  }
+}

@@ -18,7 +18,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
     as dp;
 
-import 'package:get/get.dart';
 
 import '../../../../../../config/util/app_icons.dart';
 
@@ -37,7 +36,7 @@ class _AddNotasViewState extends ConsumerState<AddNotasView> {
   void initState() {
     super.initState();
 
-    final arguments = widget.routeArguments ?? Get.arguments;
+    final arguments = widget.routeArguments;
 
     if (arguments is DateTime) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -281,7 +280,7 @@ class _AddNotasViewState extends ConsumerState<AddNotasView> {
                 TextButton(
                     onPressed: () async {
                       notaState.alarmaCreada
-                          ? buildDialogAlarma(theme, notaState, notaNotifier)
+                          ? buildDialogAlarma(context, theme, notaState, notaNotifier)
                           : context.push(
                               '/alarmas',
                               extra: {
@@ -404,8 +403,8 @@ class _AddNotasViewState extends ConsumerState<AddNotasView> {
   }
 
   Future<dynamic> buildDialogAlarma(
-      ThemeData theme, AddNotaState notaState, AddNotaNotifier notaNotifier) {
-    return Get.dialog(Align(
+      BuildContext context, ThemeData theme, AddNotaState notaState, AddNotaNotifier notaNotifier) {
+    return showDialog(context: context, builder: (context) => Align(
       alignment: Alignment.center,
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 10.w),
@@ -451,7 +450,7 @@ class _AddNotasViewState extends ConsumerState<AddNotasView> {
                         // ).format(context)}'
                         ''
                         ', quieres borrarla?',
-                        style: Theme.of(Get.context!).textTheme.headlineSmall,
+                        style: Theme.of(context).textTheme.headlineSmall,
                       ),
                     ),
                   ),

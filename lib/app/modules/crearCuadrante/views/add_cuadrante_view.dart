@@ -14,7 +14,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import 'package:get/get.dart';
 
 import '../../../data/local/my_shared_pref.dart';
 import '../../../../config/util/app_icons.dart';
@@ -52,15 +51,16 @@ class _AddCuadranteViewState extends ConsumerState<AddCuadranteView> {
       listen: false,
     ).read(tutorialControllerProvider);
 
-    return WillPopScope(
-      onWillPop: () async {
+    return PopScope(
+      canPop: !Platform.isAndroid,
+      onPopInvokedWithResult: (bool didPop, Object? result) {
+        if (didPop) return;
         if (Platform.isAndroid) {
           ProviderScope.containerOf(context, listen: false)
               .read(adsProvider.notifier)
               .ensureHomeBanner();
           context.go('/home');
         }
-        return false;
       },
       child: GestureDetector(
         onTap: () {
@@ -125,7 +125,9 @@ class _AddCuadranteViewState extends ConsumerState<AddCuadranteView> {
                         ? () async {
                             if (state.cuadranteName.isEmpty) {
                               MyCustomDialog.alertaError(
-                                  'Es necesario añadir nombre al cuadrante');
+                                  'Es necesario añadir nombre al cuadrante',
+                                  context: context,
+                              );
                               return;
                             }
                             //Todo carcgar primera pagina de calendario

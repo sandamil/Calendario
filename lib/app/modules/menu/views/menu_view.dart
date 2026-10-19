@@ -6,7 +6,7 @@ import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/config/theme/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:get/get.dart';
+
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../config/theme/my_fonts.dart';

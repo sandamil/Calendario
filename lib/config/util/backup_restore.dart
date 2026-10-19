@@ -1,23 +1,14 @@
-import 'dart:convert';
-import 'dart:io';
-import 'package:device_info_plus/device_info_plus.dart';
-import 'package:flutter/foundation.dart';
-import 'package:get/get.dart';
-import 'package:path/path.dart';
-import 'package:intl/intl.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:flutter_file_dialog/flutter_file_dialog.dart';
-
-import 'dart:io';
-
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'dart:async';
+import 'dart:io';
 
-import 'package:flutter/services.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_file_dialog/flutter_file_dialog.dart';
+import 'package:intl/intl.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class Backup {
   DirectoryLocation? _pickedDirecotry;
@@ -74,9 +65,7 @@ class Backup {
     final String db = await databaseRepository.databasePath();
     final params = SaveFileDialogParams(sourceFilePath: db, data: currentFile);
     final filePath = await FlutterFileDialog.saveFile(params: params);
-    print(filePath);
-
-    final fileData = currentFile!.readAsBytesSync();
+    debugPrint(filePath);
   }
 
   static Future<File> get _localFile async {
@@ -86,7 +75,7 @@ class Backup {
   }
 
   static Future<File> writeBackup(path) async {
-    print(path);
+    debugPrint(path);
     final file = await _localFile;
     print(file);
     return file.copy(path);
@@ -115,7 +104,6 @@ createBackup(notas) async {
     print('ERROR: Creating backup failed. $e');
   }
 }
-
 
 const ENCRYPT_DB = false;
 
@@ -171,20 +159,8 @@ Future<bool> restoreJson(databaseRepository) async {
 }
 
 backupDb(databaseRepository) async {
-  print('backupDb');
-  final Directory downloadDirectory = Directory('/sdcard/Download/');
-  final DateTime now = DateTime.now();
-  final String fecha = DateFormat('yyMMdd').format(now);
-  final String nombre = '${fecha}_bkp_${databaseRepository.databaseName}';
-  final directory = await getApplicationDocumentsDirectory();
-  final path = directory.path;
-  final String newPath = join('${downloadDirectory.absolute.path}$nombre');
-  final String db = await databaseRepository.databasePath();
-  final File file = File(db);
-  final params = SaveFileDialogParams(sourceFilePath: newPath);
-  // final filePath = await FlutterFileDialog.saveFile(params: params);
-
-  await Backup().pickDirectory;
+  debugPrint('backupDb');
+  await Backup().pickDirectory();
 
   // if (!await FlutterFileDialog.isPickDirectorySupported()) {
   //   print("Picking directory not supported");

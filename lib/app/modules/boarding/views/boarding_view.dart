@@ -7,7 +7,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:calendario2/config/theme/theme_provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import 'package:get/get.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 
 import '../../../../config/theme/my_fonts.dart';

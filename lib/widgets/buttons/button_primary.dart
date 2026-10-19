@@ -2,7 +2,6 @@ import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/config/theme/my_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
 
 import '../../config/theme/styles.dart';
 
@@ -49,7 +48,7 @@ class ButtonPrimary extends StatelessWidget {
     return Center(
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 120),
-        width: isLoading ? height ?? 42.w : width ?? Get.width,
+        width: isLoading ? height ?? 42.w : width ?? MediaQuery.sizeOf(context).width,
         height: height ?? 42.w,
         decoration: isOutline
             ? BoxDecoration(

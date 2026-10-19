@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
 
 import '../../../../../config/theme/my_colors.dart';
 
@@ -26,7 +25,7 @@ class AyudaRowWidget extends StatelessWidget {
             Row(
               children: [
                 SizedBox(
-                  width: Get.width - 90.w,
+                  width: MediaQuery.sizeOf(context).width - 90.w,
                   child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                     Text(
                       title,

@@ -1,11 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'app/components/custom_snackbar.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 import 'app/controllers/ads_provider.dart';
@@ -76,36 +76,34 @@ Widget buildApp() {
       return Consumer(
         builder: (context, ref, _) {
           final themeMode = ref.watch(themeModeProvider);
+            final locale = ref.watch(localeProvider);
 
-          return GetMaterialApp.router(
-            routeInformationProvider: appRouter.routeInformationProvider,
-            routeInformationParser: appRouter.routeInformationParser,
-            routerDelegate: appRouter.routerDelegate,
-            backButtonDispatcher: appRouter.backButtonDispatcher,
+          return MaterialApp.router(
+              scaffoldMessengerKey: CustomSnackBar.messengerKey,
+            routerConfig: appRouter,
             title: "Calendario",
             theme: MyTheme.getThemeData(isLight: true),
             darkTheme: MyTheme.getThemeData(isLight: false),
             themeMode: themeMode,
+            locale: locale,
             localizationsDelegates: const [
               GlobalMaterialLocalizations.delegate,
               GlobalWidgetsLocalizations.delegate,
               GlobalCupertinoLocalizations.delegate,
             ],
             supportedLocales: LocalizationService.supportedLanguages.values,
-            useInheritedMediaQuery: true,
             debugShowCheckedModeBanner: false,
             builder: (context, child) {
               final mediaQuery = MediaQuery.of(context);
               return MediaQuery(
                 data: mediaQuery.copyWith(
-                  textScaleFactor:
-                      mediaQuery.size.width <= 360 ? .85 : 1,
+                  textScaler: TextScaler.linear(
+                    mediaQuery.size.width <= 360 ? .85 : 1,
+                  ),
                 ),
                 child: child ?? const SizedBox.shrink(),
               );
             },
-            locale: MySharedPref.getCurrentLocal(),
-            translations: LocalizationService.getInstance(),
           );
         },
       );

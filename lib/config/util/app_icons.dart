@@ -1,17 +1,14 @@
-// ignore_for_file: constant_identifier_names
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class AppIcon extends StatelessWidget {
-  const AppIcon(this.icon, {Key? key, this.size = 22, this.color}) : super(key: key);
+  const AppIcon(this.icon, {super.key, this.size = 22, this.color});
   final AppIcons icon;
   final double size;
   final Color? color;
 
   @override
   Widget build(BuildContext context) {
-    String i = describeEnum(icon).toLowerCase().replaceAll('_', '-');
+    String i = icon.name.toLowerCase().replaceAll('_', '-');
     String path = 'assets/images/_common/icons/icon-$i.png';
     //print(path);
     return SizedBox(
@@ -19,7 +16,10 @@ class AppIcon extends StatelessWidget {
       height: size,
       child: Center(
         child: Image.asset(path,
-            width: size, height: size, color: color ?? const Color(0xFFF8ECE5), filterQuality: FilterQuality.high),
+            width: size,
+            height: size,
+            color: color ?? const Color(0xFFF8ECE5),
+            filterQuality: FilterQuality.high),
       ),
     );
   }

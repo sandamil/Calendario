@@ -13,8 +13,6 @@ import 'package:calendario2/app/controllers/ads_provider.dart';
 import 'package:flutter_animated_dialog_updated/flutter_animated_dialog.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import 'package:get/get.dart';
-
 import '../../../data/local/my_shared_pref.dart';
 import '../../home/providers/calendar_providers.dart';
 import '../providers/crear_cuadrante_provider.dart';
@@ -27,15 +25,16 @@ class CrearCuadranteView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     double qaButtonHeight = 100.h;
     double qaButtonWidth = 120.w;
-    return WillPopScope(
-      onWillPop: () async {
+    return PopScope(
+      canPop: !Platform.isAndroid,
+      onPopInvokedWithResult: (bool didPop, Object? result) {
+        if (didPop) return;
         if (Platform.isAndroid) {
           ProviderScope.containerOf(context, listen: false)
               .read(adsProvider.notifier)
               .ensureHomeBanner();
           context.go('/home');
         }
-        return false;
       },
       child: Scaffold(
         appBar: AppBar(

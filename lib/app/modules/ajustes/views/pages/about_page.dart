@@ -84,7 +84,6 @@ class _AboutPageState extends State<AboutPage> {
         // }
         break;
       case OnListViewPress.contribution:
-        // RouteUtils.toContributorsPage();
         break;
       case OnListViewPress.version:
         String mainVersion = await AppUtils.getAppVersion();

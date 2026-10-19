@@ -14,7 +14,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_file_dialog/flutter_file_dialog.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:get/get.dart';
 
 class AjustesState {
   final List<Language> languages;
@@ -63,9 +62,9 @@ class AjustesNotifier extends Notifier<AjustesState> {
   }
 
   List<Language> _getSupportedLanguages() => [
-        Language(name: 'Español'.tr, languageCode: 'es'),
-        Language(name: 'Arabe'.tr, languageCode: 'ar'),
-        Language(name: 'English'.tr, languageCode: 'en'),
+        Language(name: 'Español', languageCode: 'es'),
+        Language(name: 'العربية', languageCode: 'ar'),
+        Language(name: 'English', languageCode: 'en'),
       ];
 
   Future<void> cambioModo() async {
@@ -80,18 +79,14 @@ class AjustesNotifier extends Notifier<AjustesState> {
     await ref.read(themeModeProvider.notifier).setMode(mode);
 
     if (isDark) {
-      Get.snackbar(
-        'Tema oscuro',
-        'Modo oscuro activado',
-        colorText: Colors.white,
-        snackPosition: SnackPosition.BOTTOM,
+      CustomSnackBar.showCustomSnackBar(
+        title: 'Tema oscuro',
+        message: 'Modo oscuro activado',
       );
     } else {
-      Get.snackbar(
-        'Tema claro',
-        'Modo brillante activado',
-        colorText: Colors.white,
-        snackPosition: SnackPosition.BOTTOM,
+      CustomSnackBar.showCustomSnackBar(
+        title: 'Tema claro',
+        message: 'Modo brillante activado',
       );
     }
   }
@@ -99,7 +94,7 @@ class AjustesNotifier extends Notifier<AjustesState> {
   Future<void> onLanguageTilePressed(String languageCode) async {
     if (!LocalizationService.isLanguageSupported(languageCode)) return;
 
-    await LocalizationService.changeLanguage(languageCode);
+    await ref.read(localeProvider.notifier).changeLanguage(languageCode);
 
     final languages = _getSupportedLanguages();
     final selected = languages.firstWhere(

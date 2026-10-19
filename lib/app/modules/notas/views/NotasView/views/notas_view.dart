@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
 import 'package:share_plus/share_plus.dart';
 
 class NotasView extends ConsumerStatefulWidget {
@@ -29,7 +28,7 @@ class _NotasViewState extends ConsumerState<NotasView> {
   void initState() {
     super.initState();
 
-    final args = widget.routeArguments ?? Get.arguments;
+    final args = widget.routeArguments;
     final noteData = args is Map ? args['noteData'] : null;
 
     if (noteData is Task) {

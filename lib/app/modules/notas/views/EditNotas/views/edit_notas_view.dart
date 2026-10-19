@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
 
 class EditNotasView extends ConsumerStatefulWidget {
   const EditNotasView({super.key, this.routeArguments});
@@ -29,7 +28,7 @@ class _EditNotasViewState extends ConsumerState<EditNotasView> {
     if (_loadStarted) return;
     _loadStarted = true;
 
-    final args = widget.routeArguments ?? Get.arguments;
+    final args = widget.routeArguments;
     int? id;
 
     if (args is Map) {
@@ -302,7 +301,7 @@ class _EditNotasViewState extends ConsumerState<EditNotasView> {
                 TextButton(
                   onPressed: () {
                     if (state.alarmaCreada) {
-                      Get.dialog(
+                      showDialog(context: context, builder: (context) =>
                         AlertDialog(
                           backgroundColor: theme.scaffoldBackgroundColor,
                           title: const Icon(

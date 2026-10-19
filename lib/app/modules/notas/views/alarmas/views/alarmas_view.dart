@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:get/get.dart';
 
 class AlarmasView extends ConsumerStatefulWidget {
   const AlarmasView({super.key, this.routeArguments});
@@ -20,7 +19,7 @@ class _AlarmasViewState extends ConsumerState<AlarmasView> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
-      final args = widget.routeArguments ?? Get.arguments;
+      final args = widget.routeArguments;
       ref.read(alarmasProvider.notifier).initialize(
             args is Map ? args : null,
           );

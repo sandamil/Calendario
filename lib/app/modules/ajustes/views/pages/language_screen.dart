@@ -1,8 +1,8 @@
 import 'package:calendario2/app/modules/ajustes/providers/ajustes_provider.dart';
 import 'package:calendario2/config/theme/my_fonts.dart';
 import 'package:flutter/material.dart';
+import 'package:calendario2/config/translations/localization_service.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:get/get.dart';
 
 class LanguageScreen extends ConsumerWidget {
   const LanguageScreen({Key? key}) : super(key: key);
@@ -16,7 +16,7 @@ class LanguageScreen extends ConsumerWidget {
       appBar: AppBar(
         iconTheme: Theme.of(context).iconTheme,
         title: Text(
-          'Idioma'.tr,
+          LocalizationService.translate('Idioma', Localizations.localeOf(context)),
           style: CustomTextStyle.appBarTitle(context: context),
         ),
       ),

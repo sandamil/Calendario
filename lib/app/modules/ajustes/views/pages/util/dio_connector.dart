@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:dart_big5/big5.dart';
 
-import 'package:get/get.dart' as k;
 import 'package:get/get_core/src/get_main.dart';
 
 import 'connector_parameter.dart';

@@ -33,7 +33,6 @@ class AppCycleService {
       // calendarController.onInit();
       appRouter.go('/home');
     } on Exception {
-      // await Get.offNamed(Routes.LOGIN);
     }
   }
 

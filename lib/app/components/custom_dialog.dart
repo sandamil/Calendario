@@ -7,7 +7,6 @@ import 'package:calendario2/widgets/buttons/app_round_mini_btn.dart';
 import 'package:calendario2/widgets/buttons/button_primary.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_animated_dialog_updated/flutter_animated_dialog.dart';
 
@@ -30,7 +29,7 @@ class MyCustomDialog {
       context: context,
       barrierDismissible: true,
 
-      builder: (BuildContext context) {
+      builder: (BuildContext dialogContext) {
         return AlertDialog(
             insetPadding: EdgeInsets.all(0.sp),
             titlePadding: EdgeInsets.all(0.sp),
@@ -155,10 +154,12 @@ class MyCustomDialog {
     );
   }
 
-  static alertaInfo(String msj) {
+  static alertaInfo(String msj, {required BuildContext context}) {
+    BuildContext? dialogContext;
     showDialog(
-      context: Get.context!,
-      builder: (BuildContext context) {
+      context: context,
+      builder: (BuildContext innerContext) {
+        dialogContext = innerContext;
         return AlertDialog(
           title: const Text('Mensaje de Información'),
           titlePadding: const EdgeInsets.all(10),
@@ -192,14 +193,20 @@ class MyCustomDialog {
       },
     );
     Future.delayed(const Duration(seconds: 1), () {
-      Get.back();
+      final activeDialogContext = dialogContext;
+      if (activeDialogContext == null || !activeDialogContext.mounted) return;
+      final route = ModalRoute.of(activeDialogContext);
+      if (route == null || !route.isCurrent) return;
+      Navigator.of(activeDialogContext).pop();
     });
   }
 
-  static alertaError(String msj, {duracion}) {
+  static alertaError(String msj, {required BuildContext context, duracion}) {
+    BuildContext? dialogContext;
     showDialog(
-      context: Get.context!,
-      builder: (BuildContext context) {
+      context: context,
+      builder: (BuildContext innerContext) {
+        dialogContext = innerContext;
         return AlertDialog(
           title: const Text('Error'),
           titlePadding: const EdgeInsets.all(10),
@@ -233,7 +240,11 @@ class MyCustomDialog {
       },
     );
     Future.delayed(Duration(seconds: duracion ?? 1), () {
-      Get.back();
+      final activeDialogContext = dialogContext;
+      if (activeDialogContext == null || !activeDialogContext.mounted) return;
+      final route = ModalRoute.of(activeDialogContext);
+      if (route == null || !route.isCurrent) return;
+      Navigator.of(activeDialogContext).pop();
     });
   }
 
@@ -277,7 +288,7 @@ class MyCustomDialog {
                   ),
                   verticalSpace(Insets.xl),
                   ButtonPrimary(
-                    onTap: onPress ?? Get.back,
+                    onTap: onPress ?? () => Navigator.of(context).pop(),
                     label: labelButton ?? 'OK',
                   ),
                   SizedBox(height: 20.h),
@@ -357,8 +368,9 @@ class MyCustomDialog {
 
 
     );
+    final navigator = Navigator.of(context);
     Future.delayed(const Duration(seconds: 2), () {
-      Get.back();
+      if (navigator.mounted && navigator.canPop()) navigator.pop();
     });
   }
 }
