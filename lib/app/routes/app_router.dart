@@ -8,6 +8,7 @@ import '../modules/ajustes/views/ajustes_view.dart';
 import '../modules/menu/views/menu_view.dart';
 import '../modules/CrearTurno/views/turno_view.dart';
 import '../modules/crearCuadrante/views/cuadrante_view.dart';
+import '../modules/crearCuadrante/views/add_cuadrante_view.dart';
 import '../modules/notas/views/notas_list_view.dart';
 import '../modules/notas/views/NotasView/views/notas_view.dart';
 import '../modules/notas/views/AddNotas/views/add_notas_view.dart';
@@ -62,16 +63,28 @@ final GoRouter appRouter = GoRouter(
       builder: (context, state) => const CrearCuadranteView(),
     ),
     GoRoute(
+      path: '/add-cuadrante',
+      builder: (context, state) => const AddCuadranteView(),
+    ),
+    GoRoute(
       path: '/notas',
       builder: (context, state) => NotasListView(),
     ),
-    GoRoute(path: '/notas-view', builder: (context, state) => NotasView(routeArguments: state.extra)),
+    GoRoute(
+      path: '/notas-view',
+      builder: (context, state) => NotasView(routeArguments: state.extra),
     ),
-    GoRoute(path: '/add-notas', builder: (context, state) => AddNotasView(routeArguments: state.extra)),
+    GoRoute(
+      path: '/add-notas',
+      builder: (context, state) => AddNotasView(routeArguments: state.extra),
     ),
-    GoRoute(path: '/edit-notas', builder: (context, state) => EditNotasView(routeArguments: state.extra)),
+    GoRoute(
+      path: '/edit-notas',
+      builder: (context, state) => EditNotasView(routeArguments: state.extra),
     ),
-    GoRoute(path: '/alarmas', builder: (context, state) => AlarmasView(routeArguments: state.extra)),
+    GoRoute(
+      path: '/alarmas',
+      builder: (context, state) => AlarmasView(routeArguments: state.extra),
     ),
     GoRoute(
       path: '/ayuda',

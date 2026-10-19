@@ -9,6 +9,7 @@ import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/config/theme/my_fonts.dart';
 import 'package:calendario2/config/util/hexColor.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -57,7 +58,7 @@ class _AddCuadranteViewState extends ConsumerState<AddCuadranteView> {
           ProviderScope.containerOf(context, listen: false)
               .read(adsProvider.notifier)
               .ensureHomeBanner();
-          Get.offAllNamed('/home');
+          context.go('/home');
         }
         return false;
       },
@@ -111,7 +112,7 @@ class _AddCuadranteViewState extends ConsumerState<AddCuadranteView> {
                         .read(adsProvider.notifier)
                         .ensureHomeBanner();
 
-                    Get.offAllNamed('/home');
+                    context.go('/home');
                   },
                 ),
                 title: Text(
@@ -471,7 +472,7 @@ class _AddCuadranteViewState extends ConsumerState<AddCuadranteView> {
                           ProviderScope.containerOf(context, listen: false)
                               .read(adsProvider.notifier)
                               .ensureHomeBanner();
-                          Get.offAllNamed('/home');
+                          context.go('/home');
                         },
                   child: loading
                       ? const SizedBox(

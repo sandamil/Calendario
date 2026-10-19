@@ -6,6 +6,7 @@ import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/config/theme/my_fonts.dart';
 import 'package:calendario2/config/theme/styles.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:calendario2/app/controllers/tutorial_provider.dart';
 import 'package:calendario2/app/controllers/ads_provider.dart';
@@ -32,7 +33,7 @@ class CrearCuadranteView extends ConsumerWidget {
           ProviderScope.containerOf(context, listen: false)
               .read(adsProvider.notifier)
               .ensureHomeBanner();
-          Get.offAllNamed('/home');
+          context.go('/home');
         }
         return false;
       },
@@ -51,7 +52,7 @@ class CrearCuadranteView extends ConsumerWidget {
               ProviderScope.containerOf(context, listen: false)
                   .read(adsProvider.notifier)
                   .ensureHomeBanner();
-              Get.offAllNamed('/home');
+              context.go('/home');
             },
           ),
           title: Text(
@@ -113,7 +114,7 @@ class CrearCuadranteView extends ConsumerWidget {
                         .read(crearCuadranteProvider.notifier)
                         .resetForCreate();
                     // Get.toNamed('/notas', (r) => false);
-                    Get.to(() => const AddCuadranteView()); //   Navigator.push(
+                    context.push('/add-cuadrante'); //   Navigator.push(
                     //       context,
                     //       MaterialPageRoute(
                     //           builder: (context) =>
@@ -232,8 +233,7 @@ class CrearCuadranteView extends ConsumerWidget {
                                                   return;
                                                 }
 
-                                                Get.to(() =>
-                                                    const AddCuadranteView());
+                                                context.push('/add-cuadrante');
                                               },
                                               icon: const Icon(
                                                 Icons.edit_calendar,
@@ -335,7 +335,7 @@ class CrearCuadranteView extends ConsumerWidget {
               .read(adsProvider.notifier)
               .ensureHomeBanner();
 
-          Get.offAllNamed('/home');
+          context.go('/home');
         },
       );
     });
