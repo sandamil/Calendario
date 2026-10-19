@@ -2,6 +2,8 @@ import 'dart:ui';
 
 import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:calendario2/config/theme/theme_provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
@@ -9,27 +11,23 @@ import 'package:introduction_screen/introduction_screen.dart';
 
 import '../../../../config/theme/my_fonts.dart';
 import '../../../../config/theme/styles.dart';
-import '../../../../config/theme/my_theme.dart';
 import '../../../../config/util/constant.dart';
 import '../../../data/local/app_storage.dart';
-import '../../../data/local/my_shared_pref.dart';
 
-class BoardingView extends StatefulWidget {
+class BoardingView extends ConsumerStatefulWidget {
   const BoardingView({super.key});
 
   @override
-  State<BoardingView> createState() => _BoardingViewState();
+  ConsumerState<BoardingView> createState() => _BoardingViewState();
 }
 
-class _BoardingViewState extends State<BoardingView> {
-  bool _on = MySharedPref.getThemeIsLight();
+class _BoardingViewState extends ConsumerState<BoardingView> {
+  bool get _on => ref.watch(themeModeProvider) == ThemeMode.light;
 
   String get temaString => _on ? 'Claro' : 'Oscuro';
 
-  void _toggleTheme() {
-    MyTheme.changeTheme();
-    setState(() => _on = !_on);
-  }
+  Future<void> _toggleTheme() =>
+      ref.read(themeModeProvider.notifier).toggle();
 
   List<PageViewModel> get listPagesViewModel => [
         PageViewModel(

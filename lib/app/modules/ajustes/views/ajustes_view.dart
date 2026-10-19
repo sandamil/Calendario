@@ -7,6 +7,7 @@ import 'package:calendario2/app/modules/ajustes/views/pages/backup_screen.dart';
 import 'package:calendario2/app/modules/ajustes/views/pages/language_screen.dart';
 import 'package:calendario2/app/routes/app_pages.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
+import 'package:calendario2/config/theme/theme_provider.dart';
 import 'package:calendario2/config/theme/my_fonts.dart';
 import 'package:calendario2/config/util/assets.dart';
 import 'package:calendario2/widgets/setting_title.dart';
@@ -28,6 +29,7 @@ class AjustesView extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final settings = ref.watch(ajustesProvider);
+    final isDark = ref.watch(themeModeProvider) == ThemeMode.dark;
     final notifier = ref.read(ajustesProvider.notifier);
 
     return WillPopScope(
@@ -65,7 +67,7 @@ class AjustesView extends ConsumerWidget {
                       width: 50,
                     ),
                     child: Icon(
-                      settings.isDark ? Icons.dark_mode : Icons.light_mode,
+                      isDark ? Icons.dark_mode : Icons.light_mode,
                       size: 32,
                     ),
                   ),
@@ -78,7 +80,7 @@ class AjustesView extends ConsumerWidget {
                         width: 80,
                       ),
                       child: Icon(
-                        settings.isDark ? Icons.toggle_on : Icons.toggle_off,
+                        isDark ? Icons.toggle_on : Icons.toggle_off,
                         size: 40,
                       ),
                     ),

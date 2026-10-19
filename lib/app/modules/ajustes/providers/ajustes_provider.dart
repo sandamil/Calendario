@@ -8,7 +8,7 @@ import 'package:calendario2/app/modules/home/providers/calendar_providers.dart';
 import 'package:calendario2/app/data/model/language.dart';
 import 'package:calendario2/app/modules/ajustes/views/pages/util/connector_parameter.dart';
 import 'package:calendario2/app/modules/ajustes/views/pages/util/dio_connector.dart';
-import 'package:calendario2/config/theme/my_theme.dart';
+import 'package:calendario2/config/theme/theme_provider.dart';
 import 'package:calendario2/config/translations/localization_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,27 +17,23 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 
 class AjustesState {
-  final bool isDark;
   final List<Language> languages;
   final Language selectedLanguage;
   final DirectoryLocation? pickedDirectory;
 
   const AjustesState({
-    required this.isDark,
     required this.languages,
     required this.selectedLanguage,
     this.pickedDirectory,
   });
 
   AjustesState copyWith({
-    bool? isDark,
     List<Language>? languages,
     Language? selectedLanguage,
     DirectoryLocation? pickedDirectory,
     bool clearPickedDirectory = false,
   }) {
     return AjustesState(
-      isDark: isDark ?? this.isDark,
       languages: languages ?? this.languages,
       selectedLanguage: selectedLanguage ?? this.selectedLanguage,
       pickedDirectory: clearPickedDirectory
@@ -61,7 +57,6 @@ class AjustesNotifier extends Notifier<AjustesState> {
     );
 
     return AjustesState(
-      isDark: !MySharedPref.getThemeIsLight(),
       languages: List.unmodifiable(languages),
       selectedLanguage: selectedLanguage,
     );
@@ -74,13 +69,15 @@ class AjustesNotifier extends Notifier<AjustesState> {
       ];
 
   Future<void> cambioModo() async {
-    await changeTheme(!state.isDark);
+    final currentMode = ref.read(themeModeProvider);
+    await changeTheme(currentMode != ThemeMode.dark);
   }
 
   Future<void> changeTheme(bool isDark) async {
-    if (state.isDark == isDark) return;
+    final mode = isDark ? ThemeMode.dark : ThemeMode.light;
+    if (ref.read(themeModeProvider) == mode) return;
 
-    state = state.copyWith(isDark: isDark);
+    await ref.read(themeModeProvider.notifier).setMode(mode);
 
     if (isDark) {
       Get.snackbar(
@@ -97,9 +94,6 @@ class AjustesNotifier extends Notifier<AjustesState> {
         snackPosition: SnackPosition.BOTTOM,
       );
     }
-
-    // Conserva la persistencia y el mecanismo de tema existente de la app.
-    MyTheme.changeTheme();
   }
 
   Future<void> onLanguageTilePressed(String languageCode) async {

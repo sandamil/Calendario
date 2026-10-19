@@ -15,6 +15,7 @@ import 'app/modules/ajustes/views/pages/util/notifications/notifications.dart';
 
 import 'app/routes/app_pages.dart';
 import 'config/theme/my_theme.dart';
+import 'config/theme/theme_provider.dart';
 import 'config/translations/localization_service.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
@@ -65,7 +66,7 @@ Future<void> initMemory() async {
   // }
 }
 
-buildApp() {
+Widget buildApp() {
   return ScreenUtilInit(
     designSize: const Size(375, 812),
     minTextAdapt: true,
@@ -73,36 +74,40 @@ buildApp() {
     useInheritedMediaQuery: true,
     rebuildFactor: (old, data) => true,
     builder: (context, widget) {
-      return GetMaterialApp(
-        title: "Calendario",
-        localizationsDelegates: const [
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        supportedLocales: LocalizationService.supportedLanguages.values,
-        useInheritedMediaQuery: true,
-        debugShowCheckedModeBanner: false,
-        builder: (context, widget) {
-          bool themeIsLight = MySharedPref.getThemeIsLight();
-          return Theme(
-            data: MyTheme.getThemeData(isLight: themeIsLight),
-            child: MediaQuery(
-              // prevent font from scalling (some people use big/small device fonts)
-              // but we want our app font to still the same and dont get affected
-              data: MediaQuery.of(context).copyWith(
+      return Consumer(
+        builder: (context, ref, _) {
+          final themeMode = ref.watch(themeModeProvider);
+
+          return GetMaterialApp(
+            title: "Calendario",
+            theme: MyTheme.getThemeData(isLight: true),
+            darkTheme: MyTheme.getThemeData(isLight: false),
+            themeMode: themeMode,
+            localizationsDelegates: const [
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: LocalizationService.supportedLanguages.values,
+            useInheritedMediaQuery: true,
+            debugShowCheckedModeBanner: false,
+            builder: (context, child) {
+              final mediaQuery = MediaQuery.of(context);
+              return MediaQuery(
+                data: mediaQuery.copyWith(
                   textScaleFactor:
-                      MediaQuery.of(context).size.width <= 360 ? .85 : 1),
-              child: widget!,
-            ),
+                      mediaQuery.size.width <= 360 ? .85 : 1,
+                ),
+                child: child ?? const SizedBox.shrink(),
+              );
+            },
+            initialRoute: '/inicio',
+            getPages: AppPages.routes,
+            initialBinding: InitialBindings(),
+            locale: MySharedPref.getCurrentLocal(),
+            translations: LocalizationService.getInstance(),
           );
         },
-        initialRoute: '/inicio', // first screen to show when app is running
-        getPages: AppPages.routes, // app screens
-        initialBinding: InitialBindings(),
-        locale: MySharedPref.getCurrentLocal(), // app language
-        translations: LocalizationService
-            .getInstance(), // localization services in app (controller app language)
       );
     },
   );
