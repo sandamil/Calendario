@@ -24,7 +24,6 @@ import '../../../components/toast.dart';
 import '../../../components/custom_dialog.dart';
 import '../../../controllers/tutorial_provider.dart';
 import '../../../controllers/tutorialController.dart';
-import '../../../data/local/taskDatabase.dart';
 import '../../../data/model/cuadranteDay.dart';
 import '../../menu/views/menu_view.dart';
 import '../widgets/calendar/dialog_onLongPress_calendar.dart';
@@ -40,10 +39,8 @@ class HomeView extends StatefulWidget {
 
   static notaHomeDelete(
       BuildContext context, id, selectedDay, focusedDay) async {
-    await NotasDB.instance.delete(id);
     final container = ProviderScope.containerOf(context, listen: false);
-    await container.read(notasProvider.notifier).reload();
-    await container.read(notasListProvider.notifier).reload();
+    await container.read(notasListProvider.notifier).eliminarNota(id);
 
     Toast.toast(context, msg: "Eliminada!");
   }

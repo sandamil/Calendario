@@ -1,7 +1,5 @@
 import 'package:calendario2/app/components/toast.dart';
-import 'package:calendario2/app/data/local/taskDatabase.dart';
 import 'package:calendario2/app/data/model/taskModel.dart';
-import 'package:calendario2/app/modules/home/providers/calendar_providers.dart';
 import 'package:calendario2/app/modules/notas/providers/notas_list_provider.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/config/theme/my_fonts.dart';
@@ -80,14 +78,12 @@ class _NotasViewState extends ConsumerState<NotasView> {
       isAlarmaCreated: _note.isAlarmaCreated,
     );
 
-    await NotasDB.instance.update(updated);
+    await ref.read(notasListProvider.notifier).actualizarNota(updated);
     if (!mounted) return;
 
     setState(() {
       _note = updated;
     });
-    await ref.read(notasListProvider.notifier).reload();
-    await ref.read(notasProvider.notifier).reload();
   }
 
   Future<void> _shareNote() async {
@@ -154,9 +150,7 @@ class _NotasViewState extends ConsumerState<NotasView> {
 
     setState(() => _deleting = true);
     try {
-      await NotasDB.instance.delete(id);
-      await ref.read(notasListProvider.notifier).reload();
-      await ref.read(notasProvider.notifier).reload();
+      await ref.read(notasListProvider.notifier).eliminarNota(id);
 
       if (!mounted) return;
       Toast.toast(context, msg: 'Eliminado exitosamente!');

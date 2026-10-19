@@ -1,9 +1,7 @@
 import 'dart:math';
 
 import 'package:calendario2/app/components/toast.dart';
-import 'package:calendario2/app/data/local/taskDatabase.dart';
 import 'package:calendario2/app/data/model/taskModel.dart';
-import 'package:calendario2/app/modules/home/providers/calendar_providers.dart';
 import 'package:calendario2/app/modules/notas/providers/notas_list_provider.dart';
 import 'package:calendario2/config/util/dateUtils.dart';
 import 'package:flutter/material.dart';
@@ -104,11 +102,6 @@ class TaskCard extends ConsumerWidget {
                               ),
                             ),
                             onPressed: () async {
-                              final container = ProviderScope.containerOf(
-                                context,
-                                listen: false,
-                              );
-
                               final notaId = noteData.id;
                               Navigator.of(dialogContext).pop();
 
@@ -120,14 +113,9 @@ class TaskCard extends ConsumerWidget {
                                 return;
                               }
 
-                              await NotasDB.instance.delete(notaId);
-
-                              await container
-                                  .read(notasProvider.notifier)
-                                  .reload();
-                              await container
+                              await ref
                                   .read(notasListProvider.notifier)
-                                  .reload();
+                                  .eliminarNota(notaId);
 
                               if (routeToNotas) {
                                 Get.offAllNamed('/notas');

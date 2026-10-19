@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:calendario2/app/data/local/taskDatabase.dart';
 import 'package:calendario2/app/data/model/taskModel.dart';
+import 'package:calendario2/app/modules/home/providers/calendar_providers.dart';
 
 class NotasListState {
   final List<Task> notas;
@@ -61,6 +62,18 @@ class NotasListNotifier extends Notifier<NotasListState> {
   Future<void> reload() async {
     final notas = await NotasDB.instance.getNotesFromDB();
     state = state.copyWith(notas: List<Task>.unmodifiable(notas));
+  }
+
+  Future<void> actualizarNota(Task nota) async {
+    await NotasDB.instance.update(nota);
+    await reload();
+    await ref.read(notasProvider.notifier).reload();
+  }
+
+  Future<void> eliminarNota(int id) async {
+    await NotasDB.instance.delete(id);
+    await reload();
+    await ref.read(notasProvider.notifier).reload();
   }
 
   void setBusqueda(String value) {
