@@ -16,6 +16,7 @@ import '../modules/notas/views/EditNotas/views/edit_notas_view.dart';
 import '../modules/notas/views/alarmas/views/alarmas_view.dart';
 import '../modules/ayuda/views/ayuda_view.dart';
 import '../modules/ayuda/views/pages/videotutoriales/views/videotutoriales_view.dart';
+import '../modules/ayuda/views/pages/videotutoriales/views/widgets/video_view.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: '/inicio',
@@ -93,6 +94,12 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: '/videotutoriales',
       builder: (context, state) => const VideotutorialesView(),
+    ),
+    GoRoute(
+      path: '/videotutoriales/:id',
+      builder: (context, state) => FullscreenVideoViewer(
+        id: state.pathParameters['id']!,
+      ),
     ),
   ],
 );

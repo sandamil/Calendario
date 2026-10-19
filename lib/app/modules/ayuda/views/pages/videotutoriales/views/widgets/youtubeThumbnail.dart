@@ -1,7 +1,7 @@
 import 'package:calendario2/app/modules/ayuda/views/pages/videotutoriales/views/widgets/video_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../../../../../config/theme/my_colors.dart';
 import '../../../../../../../../config/util/app_image.dart';
@@ -16,7 +16,7 @@ class YouTubeThumbnail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    void handlePressed() => Get.to(FullscreenVideoViewer(id: id,));
+    void handlePressed() => context.push('/videotutoriales/${id}');
     return MergeSemantics(
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 400),

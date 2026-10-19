@@ -5,7 +5,7 @@ import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../../../../config/theme/my_fonts.dart';
 
@@ -36,7 +36,7 @@ class VideotutorialesView extends StatelessWidget {
             size: 26.sp,
           ),
           onPressed: () {
-            Get.offAndToNamed('/ayuda');
+            context.go('/ayuda');
           },
         ),
         title: Text(
@@ -59,7 +59,7 @@ class VideotutorialesView extends StatelessWidget {
                       subtitle:
                           "Video donde podrás ver alguna de las funciones de la pantalla principal. "
                           "Acceso a menu, Calendario anterior, uso de calendario, etc..",
-                      onTap: () => Get.to(FullscreenVideoViewer(id: _urlHome)),
+                      onTap: () => context.push('/videotutoriales/${_urlHome}'),
                       id: _urlHome),
                 ],
               ),
@@ -74,21 +74,20 @@ class VideotutorialesView extends StatelessWidget {
                       subtitle:
                           "Video mostrando como crear un cuadrante para marcar los días de trabajo en el calendario.",
                       onTap: () =>
-                          Get.to(FullscreenVideoViewer(id: _urlCrearCuadrante)),
+                          context.push('/videotutoriales/${_urlCrearCuadrante}'),
                       id: _urlCrearCuadrante),
                   VideotutorialesRowWidget(
                       title: "Editar un dia",
                       subtitle:
                           "Video mostrando como editar un día de cuadrante en el calendario.",
                       onTap: () =>
-                          Get.to(FullscreenVideoViewer(id: _urlEditarUnDia)),
+                          context.push('/videotutoriales/${_urlEditarUnDia}'),
                       id: _urlEditarUnDia),
                   VideotutorialesRowWidget(
                       title: "Editar varios dias",
                       subtitle:
                           "Como editar varis días juntos, sin tener que modificar de uno en uno.",
-                      onTap: () => Get.to(
-                          FullscreenVideoViewer(id: _urlEditarVariosDias)),
+                      onTap: () => context.push('/videotutoriales/${_urlEditarVariosDias}'),
                       id: _urlEditarVariosDias),
                 ],
               ),
@@ -103,7 +102,7 @@ class VideotutorialesView extends StatelessWidget {
                       subtitle:
                           "Video mostrando como hacer copia de seguridad y restaurar datos de app.",
                       onTap: () =>
-                          Get.to(FullscreenVideoViewer(id: _urlBackup)),
+                          context.push('/videotutoriales/${_urlBackup}'),
                       id: _urlBackup),
                 ],
               ),
@@ -119,7 +118,7 @@ class VideotutorialesView extends StatelessWidget {
                           "Video mostrando como crear un turno para marcar los días en el calendario,"
                           " o crear cuadrantes con ese turno o tipo de dia.",
                       onTap: () =>
-                          Get.to(FullscreenVideoViewer(id: _urlCrearTurno)),
+                          context.push('/videotutoriales/${_urlCrearTurno}'),
                       id: _urlCrearTurno),
                 ],
               ),
@@ -133,14 +132,14 @@ class VideotutorialesView extends StatelessWidget {
                       title: "Crear Nota",
                       subtitle:
                           "Video general de la pantalla Notas, donde verás las principales características.",
-                      onTap: () => Get.to(FullscreenVideoViewer(id: _urlNotas)),
+                      onTap: () => context.push('/videotutoriales/${_urlNotas}'),
                       id: _urlNotas),
                   VideotutorialesRowWidget(
                       title: "Filtros de busqueda",
                       subtitle:
                           "Video mostrando como se buscan y filtran las notas dentro de la lista de todas las notas",
                       onTap: () =>
-                          Get.to(FullscreenVideoViewer(id: _urlFiltrosNotas)),
+                          context.push('/videotutoriales/${_urlFiltrosNotas}'),
                       id: _urlFiltrosNotas),
                   VideotutorialesRowWidget(
                       title: "Añadir alarma",
@@ -148,15 +147,14 @@ class VideotutorialesView extends StatelessWidget {
                           "Video mostrando como añadir alarma y notificacion a las notas creadas, "
                           "solo funciona si no se cierra app.",
                       onTap: () =>
-                          Get.to(FullscreenVideoViewer(id: _urlAddAlarma)),
+                          context.push('/videotutoriales/${_urlAddAlarma}'),
                       id: _urlAddAlarma),
                   VideotutorialesRowWidget(
                       title: "Vista detalle de Nota",
                       subtitle:
                           "Video mostrando como ver cada nota en detalle, se accede, "
                           "tanto desde pantalla principal como desde Notas.",
-                      onTap: () => Get.to(
-                          FullscreenVideoViewer(id: _urlVistaNotaDetalle)),
+                      onTap: () => context.push('/videotutoriales/${_urlVistaNotaDetalle}'),
                       id: _urlVistaNotaDetalle),
                 ],
               ),
