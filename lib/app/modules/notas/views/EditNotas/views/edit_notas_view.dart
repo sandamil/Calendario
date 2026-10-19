@@ -5,8 +5,6 @@ import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/config/theme/my_fonts.dart';
 import 'package:calendario2/config/util/dateUtils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
-    as dp;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -53,36 +51,30 @@ class _EditNotasViewState extends ConsumerState<EditNotasView> {
     });
   }
 
-  Future<void> _pickDate({
-    required BuildContext context,
-    required DateTime initialDate,
-    required ValueChanged<DateTime> onChanged,
-  }) async {
-    dp.DatePicker.showDateTimePicker(
-      context,
-      theme: dp.DatePickerTheme(
-        cancelStyle: TextStyle(
-          color: Colors.redAccent.shade200,
-          fontSize: 16.sp,
-          fontWeight: FontWeight.bold,
+  Widget _dateTimeRow(String label, String value) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Text(label, style: CustomTextStyle.rowButomText),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              value,
+              style: TextStyle(
+                color: MyColors.textButtomBlack,
+                fontSize: 16.sp,
+              ),
+            ),
+            Icon(
+              Icons.arrow_forward_ios,
+              size: 16.sp,
+              color: PRIMARY_COLOR,
+            ),
+          ],
         ),
-        doneStyle: TextStyle(
-          color: MyColors.textColorPrimary,
-          fontSize: 16.sp,
-          fontWeight: FontWeight.bold,
-        ),
-        itemStyle: TextStyle(
-          color: MyColors.textColorPrimary,
-          fontSize: 16.sp,
-          fontWeight: FontWeight.bold,
-        ),
-        backgroundColor: MyColors.backgroundLowAccent,
-      ),
-      showTitleActions: true,
-      onChanged: onChanged,
-      onConfirm: (_) {},
-      currentTime: initialDate,
-      locale: dp.LocaleType.es,
+      ],
     );
   }
 
@@ -209,84 +201,97 @@ class _EditNotasViewState extends ConsumerState<EditNotasView> {
                 ),
                 SizedBox(height: 6.h),
                 TextButton(
-                  onPressed: () {
-                    _pickDate(
+                  onPressed: () async {
+                    final initial = state.startTime;
+                    final selected = await showDatePicker(
                       context: context,
-                      initialDate: state.startTime,
-                      onChanged: (date) {
-                        notifier.setStartTime(date);
-                        if (state.endTime.isBefore(date)) {
-                          notifier.setEndTime(date);
-                        }
-                      },
+                      initialDate: initial,
+                      firstDate: DateTime(1900),
+                      lastDate: DateTime(2200),
                     );
+                    if (!context.mounted || selected == null) return;
+                    notifier.setStartTime(DateTime(
+                      selected.year, selected.month, selected.day,
+                      initial.hour, initial.minute,
+                    ));
                   },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Hora de inicio',
-                        style: CustomTextStyle.rowButomText,
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            '${state.startTime.formatDateYMD} '
-                            '${state.startTime.formatDateTime24H}',
-                            style: TextStyle(
-                              color: MyColors.textButtomBlack,
-                              fontSize: 16.sp,
-                            ),
-                          ),
-                          Icon(
-                            Icons.arrow_forward_ios,
-                            size: 16.sp,
-                            color: PRIMARY_COLOR,
-                          ),
-                        ],
-                      ),
-                    ],
+                  child: _dateTimeRow(
+                    'Fecha de inicio',
+                    state.startTime.formatDateYMD,
                   ),
                 ),
                 TextButton(
-                  onPressed: () {
-                    _pickDate(
+                  onPressed: () async {
+                    final initial = state.startTime;
+                    final selected = await showTimePicker(
                       context: context,
-                      initialDate: state.endTime,
-                      onChanged: (date) {
-                        notifier.setEndTime(
-                          date.isBefore(state.startTime)
-                              ? state.startTime
-                              : date,
-                        );
-                      },
+                      initialTime: TimeOfDay.fromDateTime(initial),
                     );
+                    if (!context.mounted || selected == null) return;
+                    notifier.setStartTime(DateTime(
+                      initial.year, initial.month, initial.day,
+                      selected.hour, selected.minute,
+                    ));
                   },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Hora final',
-                        style: CustomTextStyle.rowButomText,
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            '${state.endTime.formatDateYMD} '
-                            '${state.endTime.formatDateTime24H}',
-                            style: TextStyle(
-                              color: MyColors.textButtomBlack,
-                              fontSize: 16.sp,
-                            ),
-                          ),
-                          Icon(
-                            Icons.arrow_forward_ios,
-                            size: 16.sp,
-                            color: PRIMARY_COLOR,
-                          ),
-                        ],
-                      ),
-                    ],
+                  child: _dateTimeRow(
+                    'Hora de inicio',
+                    state.startTime.formatDateTime24H,
+                  ),
+                ),
+                TextButton(
+                  onPressed: () async {
+                    final initial = state.endTime;
+                    final selected = await showDatePicker(
+                      context: context,
+                      initialDate: initial,
+                      firstDate: DateTime(1900),
+                      lastDate: DateTime(2200),
+                    );
+                    if (!context.mounted || selected == null) return;
+                    var updated = DateTime(
+                      selected.year, selected.month, selected.day,
+                      initial.hour, initial.minute,
+                    );
+                    if (updated.isBefore(state.startTime)) {
+                      updated = state.startTime;
+                    }
+                    notifier.setEndTime(updated);
+                  },
+                  child: _dateTimeRow(
+                    'Fecha de fin',
+                    state.endTime.formatDateYMD,
+                  ),
+                ),
+                TextButton(
+                  onPressed: () async {
+                    final initial = state.endTime;
+                    final selected = await showTimePicker(
+                      context: context,
+                      initialTime: TimeOfDay.fromDateTime(initial),
+                    );
+                    if (!context.mounted || selected == null) return;
+                    var updated = DateTime(
+                      initial.year, initial.month, initial.day,
+                      selected.hour, selected.minute,
+                    );
+                    if (updated.isBefore(state.startTime)) {
+                        final start = state.startTime;
+                        updated = DateTime(
+                          start.year,
+                          start.month,
+                          start.day,
+                          selected.hour,
+                          selected.minute,
+                        );
+                        if (updated.isBefore(start)) {
+                          updated = updated.add(const Duration(days: 1));
+                        }
+                    }
+                    notifier.setEndTime(updated);
+                  },
+                  child: _dateTimeRow(
+                    'Hora de fin',
+                    state.endTime.formatDateTime24H,
                   ),
                 ),
                 SizedBox(height: 2.h),
