@@ -5,6 +5,8 @@ import '../modules/inicio/views/inicio_view.dart';
 import '../modules/boarding/views/boarding_view.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/ajustes/views/ajustes_view.dart';
+import '../modules/ajustes/views/pages/backup_screen.dart';
+import '../modules/ajustes/views/pages/language_screen.dart';
 import '../modules/menu/views/menu_view.dart';
 import '../modules/CrearTurno/views/turno_view.dart';
 import '../modules/crearCuadrante/views/cuadrante_view.dart';
@@ -50,6 +52,14 @@ final GoRouter appRouter = GoRouter(
           return FadeTransition(opacity: animation, child: child);
         },
       ),
+    ),
+    GoRoute(
+      path: '/backup',
+      builder: (context, state) => const BackupScreen(),
+    ),
+    GoRoute(
+      path: '/idioma',
+      builder: (context, state) => const LanguageScreen(),
     ),
     GoRoute(
       path: '/menu',

@@ -13,6 +13,7 @@ import 'package:calendario2/config/util/assets.dart';
 import 'package:calendario2/widgets/setting_title.dart';
 import 'package:calendario2/widgets/setting_title_tile.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -20,9 +21,9 @@ import 'package:get/get.dart';
 class AjustesView extends ConsumerWidget {
   AjustesView({Key? key}) : super(key: key);
 
-  Future<bool> _goHome(WidgetRef ref) async {
+  Future<bool> _goHome(BuildContext context, WidgetRef ref) async {
     ref.read(adsProvider.notifier).ensureHomeBanner();
-    Get.offAllNamed('/home');
+    context.go('/home');
     return false;
   }
 
@@ -35,7 +36,7 @@ class AjustesView extends ConsumerWidget {
     return WillPopScope(
       onWillPop: () async {
         if (Platform.isAndroid) {
-          return _goHome(ref);
+          return _goHome(context, ref);
         }
         return false;
       },
@@ -43,7 +44,7 @@ class AjustesView extends ConsumerWidget {
         appBar: AppBar(
           leading: IconButton(
             icon: Icon(Icons.home, color: PRIMARY_COLOR, size: 26.sp),
-            onPressed: () => _goHome(ref),
+            onPressed: () => _goHome(context, ref),
           ),
           centerTitle: false,
           elevation: 0,
@@ -90,11 +91,7 @@ class AjustesView extends ConsumerWidget {
                   icon: const Icon(Icons.backup, size: 20),
                   btnText: 'Backup'.tr,
                   onPressed: () {
-                    Get.to(
-                      () => const BackupScreen(),
-                      transition: Transition.fadeIn,
-                      duration: const Duration(milliseconds: 100),
-                    );
+                    context.push('/backup');
                   },
                 ),
                 Divider(indent: 15.w, endIndent: 15.w),
@@ -118,11 +115,7 @@ class AjustesView extends ConsumerWidget {
                   btnText: 'Idioma'.tr,
                   trailing: Text(settings.selectedLanguage.name),
                   onPressed: () {
-                    Get.to(
-                      () => const LanguageScreen(),
-                      transition: Transition.fadeIn,
-                      duration: const Duration(milliseconds: 100),
-                    );
+                    context.push('/idioma');
                   },
                 ),
                 SettingTile(
@@ -141,7 +134,7 @@ class AjustesView extends ConsumerWidget {
                   icon: const ImageIcon(AssetImage(MyIcon.candadoIcon)),
                   btnText: 'Login'.tr,
                   trailing: const Text(''),
-                  onPressed: () => Get.toNamed('/boarding'),
+                  onPressed: () => context.push('/boarding'),
                 ),
                 SettingTile(
                   icon: const ImageIcon(AssetImage(MyIcon.candadoIcon)),
