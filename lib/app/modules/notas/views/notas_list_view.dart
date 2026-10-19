@@ -10,6 +10,7 @@ import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/config/theme/my_fonts.dart';
 import 'package:calendario2/config/util/app_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -37,10 +38,7 @@ class _NotasListViewState extends ConsumerState<NotasListView> {
   }
 
   void _openNote(Task note) {
-    Get.toNamed(
-      '/notas-view',
-      arguments: {'id': note.id!, 'noteData': note},
-    );
+    context.push('/notas-view', extra: {'id': note.id!, 'noteData': note});
   }
 
   @override
@@ -83,7 +81,7 @@ class _NotasListViewState extends ConsumerState<NotasListView> {
           ProviderScope.containerOf(context, listen: false)
               .read(adsProvider.notifier)
               .ensureHomeBanner();
-          Get.offAllNamed('/home');
+          context.go('/home');
         }
         return false;
       },
@@ -95,7 +93,7 @@ class _NotasListViewState extends ConsumerState<NotasListView> {
               ProviderScope.containerOf(context, listen: false)
                   .read(adsProvider.notifier)
                   .ensureHomeBanner();
-              Get.offAllNamed('/home');
+              context.go('/home');
             },
           ),
           centerTitle: false,
@@ -134,7 +132,7 @@ class _NotasListViewState extends ConsumerState<NotasListView> {
         ),
         floatingActionButton: FloatingActionButton.extended(
           backgroundColor: PRIMARY_COLOR,
-          onPressed: () => Get.toNamed('/add-notas'),
+          onPressed: () => context.push('/add-notas'),
           label: Text(
             'Añade Nota'.toUpperCase(),
             key: state.tutorialVisible

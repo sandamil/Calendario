@@ -5,6 +5,7 @@ import 'package:calendario2/app/data/model/taskModel.dart';
 import 'package:calendario2/app/modules/notas/providers/notas_list_provider.dart';
 import 'package:calendario2/config/util/dateUtils.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -118,7 +119,7 @@ class TaskCard extends ConsumerWidget {
                                   .eliminarNota(notaId);
 
                               if (routeToNotas) {
-                                Get.offAllNamed('/notas');
+                                context.go('/notas');
                               }
 
                               if (context.mounted) {

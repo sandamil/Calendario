@@ -5,13 +5,16 @@ import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/config/theme/my_fonts.dart';
 import 'package:calendario2/config/util/dateUtils.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:share_plus/share_plus.dart';
 
 class NotasView extends ConsumerStatefulWidget {
-  const NotasView({Key? key}) : super(key: key);
+  const NotasView({Key? key, this.routeArguments}) : super(key: key);
+
+  final Object? routeArguments;
 
   @override
   ConsumerState<NotasView> createState() => _NotasViewState();
@@ -26,7 +29,7 @@ class _NotasViewState extends ConsumerState<NotasView> {
   void initState() {
     super.initState();
 
-    final args = Get.arguments;
+    final args = widget.routeArguments ?? Get.arguments;
     final noteData = args is Map ? args['noteData'] : null;
 
     if (noteData is Task) {
@@ -105,10 +108,7 @@ class _NotasViewState extends ConsumerState<NotasView> {
       return;
     }
 
-    Get.toNamed(
-      '/edit-notas',
-      arguments: {'id': id, 'noteData': _note},
-    );
+    context.push('/edit-notas', extra: {'id': id, 'noteData': _note});
   }
 
   Future<void> _deleteNote() async {
@@ -154,7 +154,7 @@ class _NotasViewState extends ConsumerState<NotasView> {
 
       if (!mounted) return;
       Toast.toast(context, msg: 'Eliminado exitosamente!');
-      Get.offAllNamed('/notas');
+      context.go('/notas');
     } finally {
       if (mounted) setState(() => _deleting = false);
     }

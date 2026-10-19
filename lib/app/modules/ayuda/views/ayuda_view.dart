@@ -7,6 +7,7 @@ import 'package:calendario2/app/modules/ayuda/views/widgets/ayuda_row_widget.dar
 import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/config/theme/my_fonts.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -72,7 +73,7 @@ class AyudaView extends StatelessWidget {
           ProviderScope.containerOf(context, listen: false)
               .read(adsProvider.notifier)
               .ensureHomeBanner();
-          Get.offAllNamed('/home');
+          context.go('/home');
         }
         return false;
       },
@@ -88,7 +89,7 @@ class AyudaView extends StatelessWidget {
               ProviderScope.containerOf(context, listen: false)
                   .read(adsProvider.notifier)
                   .ensureHomeBanner();
-              Get.offAllNamed('/home');
+              context.go('/home');
             },
           ),
           centerTitle: false,
@@ -112,13 +113,13 @@ class AyudaView extends StatelessWidget {
                       title: "Resumen",
                       subtitle:
                           "Presiona aquí para ver el resumen que aparece la primera vez que instalas la aplicacion.",
-                      onTap: () => Get.toNamed('/boarding'),
+                      onTap: () => context.push('/boarding'),
                     ),
                     AyudaRowWidget(
                       title: "Videotutoriales",
                       subtitle:
                           "Aquí podrás ver videotutoriales para ver ejemplos de uso de la aplicación.",
-                      onTap: () => Get.toNamed('/videotutoriales'),
+                      onTap: () => context.push('/videotutoriales'),
                     ),
                   ],
                 ),

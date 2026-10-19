@@ -12,6 +12,7 @@ import 'package:calendario2/config/theme/my_styles.dart';
 import 'package:calendario2/config/util/app_utils.dart';
 import 'package:calendario2/config/util/dateUtils.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
@@ -22,7 +23,9 @@ import 'package:get/get.dart';
 import '../../../../../../config/util/app_icons.dart';
 
 class AddNotasView extends ConsumerStatefulWidget {
-  const AddNotasView({super.key});
+  const AddNotasView({super.key, this.routeArguments});
+
+  final Object? routeArguments;
 
   @override
   ConsumerState<AddNotasView> createState() => _AddNotasViewState();
@@ -34,7 +37,7 @@ class _AddNotasViewState extends ConsumerState<AddNotasView> {
   void initState() {
     super.initState();
 
-    final arguments = Get.arguments;
+    final arguments = widget.routeArguments ?? Get.arguments;
 
     if (arguments is DateTime) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -101,7 +104,7 @@ class _AddNotasViewState extends ConsumerState<AddNotasView> {
               onPressed: () async {
                 // adcontroller.loadNotesListBannerAd();
 
-                Get.offAllNamed('/notas');
+                context.go('/notas');
               }),
           actions: <Widget>[
             IconButton(
@@ -123,7 +126,7 @@ class _AddNotasViewState extends ConsumerState<AddNotasView> {
                 await notaNotifier.saveNota(
                   id: notaState.idGenerated,
                 );
-                Get.offAllNamed('/notas');
+                context.go('/notas');
               },
             )
           ],
@@ -279,9 +282,9 @@ class _AddNotasViewState extends ConsumerState<AddNotasView> {
                     onPressed: () async {
                       notaState.alarmaCreada
                           ? buildDialogAlarma(theme, notaState, notaNotifier)
-                          : Get.toNamed(
+                          : context.push(
                               '/alarmas',
-                              arguments: {
+                              extra: {
                                 'isEditing': false,
                                 'id': notaState.idGenerated,
                                 'startTime': notaState.startTime,
@@ -457,7 +460,7 @@ class _AddNotasViewState extends ConsumerState<AddNotasView> {
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () {
-                            Get.back();
+                            context.pop();
                             // Get.toNamed('/add-notas', arguments: selectedDate);
                           },
                           child: const Text("Cancelar"),
@@ -470,7 +473,7 @@ class _AddNotasViewState extends ConsumerState<AddNotasView> {
                           child: ElevatedButton(
                         onPressed: () async {
                           // La alarma se gestiona desde /alarmas.
-                          Get.toNamed('/alarmas', arguments: {
+                          context.push('/alarmas', extra: {
                             'id': notaState.idGenerated,
                             'startTime': notaState.startTime,
                             'notes': notaNotifier.notes.text,

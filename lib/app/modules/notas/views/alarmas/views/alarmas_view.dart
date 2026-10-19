@@ -1,11 +1,14 @@
 import 'package:calendario2/app/modules/notas/providers/alarmas_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 
 class AlarmasView extends ConsumerStatefulWidget {
-  const AlarmasView({super.key});
+  const AlarmasView({super.key, this.routeArguments});
+
+  final Object? routeArguments;
 
   @override
   ConsumerState<AlarmasView> createState() => _AlarmasViewState();
@@ -17,7 +20,7 @@ class _AlarmasViewState extends ConsumerState<AlarmasView> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
-      final args = Get.arguments;
+      final args = widget.routeArguments ?? Get.arguments;
       ref.read(alarmasProvider.notifier).initialize(
             args is Map ? args : null,
           );
@@ -42,7 +45,7 @@ class _AlarmasViewState extends ConsumerState<AlarmasView> {
         title: const Text('Recordatorio'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: Get.back,
+          onPressed: () => context.pop(),
         ),
         actions: [
           IconButton(
@@ -50,7 +53,7 @@ class _AlarmasViewState extends ConsumerState<AlarmasView> {
             icon: const Icon(Icons.check),
             onPressed: () async {
               await notifier.confirm();
-              if (context.mounted) Get.back();
+              if (context.mounted) context.pop();
             },
           ),
         ],
@@ -189,7 +192,7 @@ class _AlarmasViewState extends ConsumerState<AlarmasView> {
             ),
             onPressed: () async {
               await notifier.confirm();
-              if (context.mounted) Get.back();
+              if (context.mounted) context.pop();
             },
             icon: const Icon(Icons.check),
             label: const Text('Confirmar'),

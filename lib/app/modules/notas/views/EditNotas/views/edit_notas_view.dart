@@ -5,12 +5,15 @@ import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/config/theme/my_fonts.dart';
 import 'package:calendario2/config/util/dateUtils.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 class EditNotasView extends ConsumerStatefulWidget {
-  const EditNotasView({super.key});
+  const EditNotasView({super.key, this.routeArguments});
+
+  final Object? routeArguments;
 
   @override
   ConsumerState<EditNotasView> createState() => _EditNotasViewState();
@@ -26,7 +29,7 @@ class _EditNotasViewState extends ConsumerState<EditNotasView> {
     if (_loadStarted) return;
     _loadStarted = true;
 
-    final args = Get.arguments;
+    final args = widget.routeArguments ?? Get.arguments;
     int? id;
 
     if (args is Map) {
@@ -150,7 +153,7 @@ class _EditNotasViewState extends ConsumerState<EditNotasView> {
             color: PRIMARY_COLOR,
             size: 26.sp,
           ),
-          onPressed: () => Get.offAllNamed('/notas'),
+          onPressed: () => context.go('/notas'),
         ),
         actions: [
           IconButton(
@@ -163,7 +166,7 @@ class _EditNotasViewState extends ConsumerState<EditNotasView> {
             onPressed: () async {
               await notifier.editNote(note);
               if (mounted) {
-                Get.offAllNamed('/notas');
+                context.go('/notas');
               }
             },
           ),
@@ -313,15 +316,15 @@ class _EditNotasViewState extends ConsumerState<EditNotasView> {
                           ),
                           actions: [
                             TextButton(
-                              onPressed: Get.back,
+                              onPressed: () => context.pop(),
                               child: const Text('Cancelar'),
                             ),
                             ElevatedButton(
                               onPressed: () {
-                                Get.back();
-                                Get.toNamed(
+                                context.pop();
+                                context.push(
                                   '/alarmas',
-                                  arguments: {
+                                  extra: {
                                     'isEditing': true,
                                     'currentNota': note,
                                     'currentNote': note,
@@ -334,9 +337,9 @@ class _EditNotasViewState extends ConsumerState<EditNotasView> {
                         ),
                       );
                     } else {
-                      Get.toNamed(
+                      context.push(
                         '/alarmas',
-                        arguments: {
+                        extra: {
                           'currentNote': note,
                           'currentNota': note,
                           'isEditing': true,

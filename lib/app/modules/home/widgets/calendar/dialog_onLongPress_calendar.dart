@@ -1,6 +1,7 @@
 import 'package:calendario2/app/data/local/calendarDatabase.dart';
 import 'package:calendario2/app/modules/home/widgets/calendar/widget/customAlertDialogDaySelected.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
@@ -105,8 +106,8 @@ class _OnLongPressDialogState extends State<OnLongPressDialog> {
                                 padding: EdgeInsets.all(2.h),
                                 child: ElevatedButton(
                                   onPressed: () {
-                                    Get.toNamed('/add-notas',
-                                        arguments: widget.selectedDate
+                                    context.push('/add-notas',
+                                        extra: widget.selectedDate
                                             .millisecondsSinceEpoch);
                                   },
                                   child: Text(

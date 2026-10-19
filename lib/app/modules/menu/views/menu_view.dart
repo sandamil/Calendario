@@ -5,6 +5,7 @@ import 'package:calendario2/app/modules/home/views/home_view.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/config/theme/styles.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -33,7 +34,7 @@ class MenuView extends StatelessWidget {
             ProviderScope.containerOf(context, listen: false)
                 .read(adsProvider.notifier)
                 .ensureHomeBanner();
-            Get.offAllNamed('/home');
+            context.go('/home');
           },
         ),
         title: Text(
@@ -80,8 +81,7 @@ class MenuView extends StatelessWidget {
 
                 onPressed: () {
                   // Get.toNamed('/notas', (r) => false);
-                  Navigator.pushNamedAndRemoveUntil(
-                      context, "/notas", (r) => false);
+                  context.go('/notas');
                   //   Navigator.push(
                   //       context,
                   //       MaterialPageRoute(
@@ -126,8 +126,7 @@ class MenuView extends StatelessWidget {
                 ),
                 onPressed: () {
                   // Get.toNamed('/crear-cuadrante');
-                  Navigator.pushNamedAndRemoveUntil(
-                      context, "/crear-cuadrante", (r) => false);
+                  context.go('/crear-cuadrante');
                 },
                 //splashColor: AAThemeData.buttonColor,
               ),
@@ -167,8 +166,7 @@ class MenuView extends StatelessWidget {
                 ),
                 onPressed: () {
                   // Get.toNamed('/crear-turno');
-                  Navigator.pushNamedAndRemoveUntil(
-                      context, "/crear-turno", (r) => false);
+                  context.go('/crear-turno');
 
                   // Get.to(() => const TurnoView());
                 },
@@ -210,8 +208,7 @@ class MenuView extends StatelessWidget {
                 ),
                 onPressed: () {
                   // Get.toNamed('/ajustes');
-                  Navigator.pushNamedAndRemoveUntil(
-                      context, "/ajustes", (r) => false);
+                  context.go('/ajustes');
                 },
                 //splashColor: AAThemeData.buttonColor,
               ),
@@ -250,8 +247,7 @@ class MenuView extends StatelessWidget {
                   ],
                 ),
                 onPressed: () {
-                  Navigator.pushNamedAndRemoveUntil(
-                      context, "/ayuda", (r) => false);
+                  context.go('/ayuda');
                 },
                 //splashColor: AAThemeData.buttonColor,
               ),

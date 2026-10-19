@@ -13,6 +13,7 @@ import 'package:calendario2/app/modules/home/widgets/calendar/widget/line.dart';
 import 'package:calendario2/app/modules/home/widgets/calendar/widget/selected_day_widget.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -245,9 +246,7 @@ class _HomeViewState extends State<HomeView> {
                       size: 26.sp,
                     ),
                     onPressed: () {
-                      Get.to(() => const MenuView(),
-                          duration: const Duration(milliseconds: 100),
-                          transition: Transition.leftToRight);
+                      context.push('/menu');
                     },
                     tooltip:
                         MaterialLocalizations.of(context).openAppDrawerTooltip,
@@ -366,13 +365,10 @@ class _HomeViewState extends State<HomeView> {
                         TaskCard(
                           noteData: event,
                           onTapAction: (Task noteData) {
-                            Get.toNamed(
-                              '/notas-view',
-                              arguments: {
-                                'id': noteData.id!,
-                                'noteData': noteData,
-                              },
-                            );
+                            context.push('/notas-view', extra: {
+                              'id': noteData.id!,
+                              'noteData': noteData,
+                            });
                           },
                           routeToNotas: false,
                           selectedDay:

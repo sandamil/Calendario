@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:calendario2/config/theme/theme_provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -221,7 +222,7 @@ class _BoardingViewState extends ConsumerState<BoardingView> {
           value: 'true',
         );
         // calendarController.onInit();
-        Get.toNamed('/home');
+        context.go('/home');
         // if (Provider.of<SettingsManager>(context, listen: false)
         //     .getSeenOnboarding) {
         //   Navigator.pop(context);
