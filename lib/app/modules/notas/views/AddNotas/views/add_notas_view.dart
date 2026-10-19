@@ -358,7 +358,7 @@ class _AddNotasViewState extends ConsumerState<AddNotasView> {
                                     : Icons.outlined_flag,
                                 color: notaState.isImportant
                                     ? Colors.red
-                                    : Colors.black45,
+                                    : Theme.of(context).colorScheme.onSurface.withOpacity(0.65),
                               )
                             ],
                           )

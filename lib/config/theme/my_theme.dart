@@ -37,16 +37,83 @@ class MyTheme {
       scaffoldBackgroundColor: isLight
           ? LightThemeColors.scaffoldBackgroundColor
           : DarkThemeColors.scaffoldBackgroundColor,
-      colorScheme: ColorScheme.fromSwatch().copyWith(
-        brightness: isLight
-            ? Brightness.light
-            : Brightness.dark,
-          background: isLight
-              ? LightThemeColors.backgroundColor
-              : DarkThemeColors.backgroundColor,
-          secondary: isLight
-              ? LightThemeColors.accentColor
-              : DarkThemeColors.accentColor
+      colorScheme: isLight
+          ? ColorScheme.light(
+              primary: PRIMARY_COLOR,
+              onPrimary: Colors.black,
+              secondary: PRIMARY_COLOR,
+              onSecondary: Colors.black,
+              surface: LightThemeColors.cardColor,
+              onSurface: LightThemeColors.bodyTextColor,
+              background: LightThemeColors.backgroundColor,
+              onBackground: LightThemeColors.bodyTextColor,
+              error: Colors.red,
+              onError: Colors.white,
+            )
+          : ColorScheme.dark(
+              primary: PRIMARY_COLOR,
+              onPrimary: Colors.black,
+              secondary: PRIMARY_COLOR,
+              onSecondary: Colors.black,
+              surface: DarkThemeColors.cardColor,
+              onSurface: DarkThemeColors.bodyTextColor,
+              background: DarkThemeColors.backgroundColor,
+              onBackground: DarkThemeColors.bodyTextColor,
+              error: Colors.redAccent,
+              onError: Colors.white,
+            ),
+
+      datePickerTheme: DatePickerThemeData(
+        backgroundColor: isLight
+            ? LightThemeColors.cardColor
+            : DarkThemeColors.cardColor,
+        headerBackgroundColor: PRIMARY_COLOR,
+        headerForegroundColor: Colors.black,
+        surfaceTintColor: Colors.transparent,
+        todayForegroundColor:
+            MaterialStateProperty.all(PRIMARY_COLOR),
+        todayBorder: const BorderSide(color: PRIMARY_COLOR),
+        yearForegroundColor:
+            MaterialStateProperty.resolveWith<Color?>((states) {
+          if (states.contains(MaterialState.selected)) {
+            return Colors.black;
+          }
+          return isLight
+              ? LightThemeColors.bodyTextColor
+              : DarkThemeColors.bodyTextColor;
+        }),
+        yearBackgroundColor:
+            MaterialStateProperty.resolveWith<Color?>((states) {
+          if (states.contains(MaterialState.selected)) {
+            return PRIMARY_COLOR;
+          }
+          return Colors.transparent;
+        }),
+        dayForegroundColor:
+            MaterialStateProperty.resolveWith<Color?>((states) {
+          if (states.contains(MaterialState.selected)) {
+            return Colors.black;
+          }
+          if (states.contains(MaterialState.disabled)) {
+            return isLight ? Colors.black38 : Colors.white30;
+          }
+          return isLight
+              ? LightThemeColors.bodyTextColor
+              : DarkThemeColors.bodyTextColor;
+        }),
+        dayBackgroundColor:
+            MaterialStateProperty.resolveWith<Color?>((states) {
+          if (states.contains(MaterialState.selected)) {
+            return PRIMARY_COLOR;
+          }
+          return Colors.transparent;
+        }),
+        confirmButtonStyle: TextButton.styleFrom(
+          foregroundColor: PRIMARY_COLOR,
+        ),
+        cancelButtonStyle: TextButton.styleFrom(
+          foregroundColor: PRIMARY_COLOR,
+        ),
       ),
 
 
@@ -89,8 +156,27 @@ class MyTheme {
 
 
       switchTheme: SwitchThemeData(
-        thumbColor: MaterialStateProperty.resolveWith(getSwitchColorThumb),
-        trackColor: MaterialStateProperty.resolveWith(getSwitchTrackColor),
+        thumbColor: MaterialStateProperty.resolveWith<Color?>((states) {
+          if (states.contains(MaterialState.selected)) {
+            return Colors.black;
+          }
+          return isLight ? Colors.grey.shade500 : Colors.grey.shade400;
+        }),
+        trackColor: MaterialStateProperty.resolveWith<Color?>((states) {
+          if (states.contains(MaterialState.selected)) {
+            return PRIMARY_COLOR;
+          }
+          return isLight ? Colors.black26 : Colors.white24;
+        }),
+      ),
+
+      radioTheme: RadioThemeData(
+        fillColor: MaterialStateProperty.resolveWith<Color?>((states) {
+          if (states.contains(MaterialState.disabled)) {
+            return isLight ? Colors.black38 : Colors.white30;
+          }
+          return PRIMARY_COLOR;
+        }),
       ),
 
 

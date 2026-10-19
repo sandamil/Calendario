@@ -391,7 +391,7 @@ class _EditNotasViewState extends ConsumerState<EditNotasView> {
                       ),
                       Icon(
                         state.isImportant ? Icons.flag : Icons.outlined_flag,
-                        color: state.isImportant ? Colors.red : Colors.black45,
+                        color: state.isImportant ? Colors.red : Theme.of(context).colorScheme.onSurface.withOpacity(0.65),
                       ),
                     ],
                   ),

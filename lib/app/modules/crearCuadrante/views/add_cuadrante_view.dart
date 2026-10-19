@@ -293,11 +293,14 @@ class _AddCuadranteViewState extends ConsumerState<AddCuadranteView> {
                                 color: HexColor(state.list[index].color!),
                                 border: Border.all(width: 0.8),
                                 borderRadius: BorderRadius.circular(5.r),
-                                boxShadow: const <BoxShadow>[
+                                boxShadow: <BoxShadow>[
                                   BoxShadow(
-                                      color: Colors.black45,
-                                      offset: Offset(0, 1),
-                                      blurRadius: 3),
+                                    color: Theme.of(context)
+                                        .shadowColor
+                                        .withOpacity(0.25),
+                                    offset: const Offset(0, 1),
+                                    blurRadius: 3,
+                                  ),
                                 ]),
                             margin: const EdgeInsets.all(2.0),
                             child: Column(

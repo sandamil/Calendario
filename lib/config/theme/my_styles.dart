@@ -71,7 +71,9 @@ class MyStyles {
         elevation: 0,
         titleTextStyle:
             getTextTheme(isLightTheme: isLightTheme).bodyLarge!.copyWith(
-                  color: Colors.white,
+                  color: isLightTheme
+                      ? LightThemeColors.bodyTextColor
+                      : DarkThemeColors.bodyTextColor,
                   fontSize: MyFonts.appBarTittleSize,
                 ),
         iconTheme: IconThemeData(
@@ -148,17 +150,24 @@ class MyStyles {
       );
 
   static ChipThemeData getChipTheme({required bool isLightTheme}) {
+    final primaryColor = isLightTheme
+        ? LightThemeColors.primaryColor
+        : DarkThemeColors.primaryColor;
+    final disabledColor = isLightTheme
+        ? LightThemeColors.buttonDisabledColor
+        : DarkThemeColors.buttonDisabledColor;
+
     return ChipThemeData(
       backgroundColor: isLightTheme
           ? LightThemeColors.chipBackground
           : DarkThemeColors.chipBackground,
-      brightness: Brightness.light,
+      brightness: isLightTheme ? Brightness.light : Brightness.dark,
       labelStyle: getChipTextStyle(isLightTheme: isLightTheme),
       secondaryLabelStyle: getChipTextStyle(isLightTheme: isLightTheme),
-      selectedColor: Colors.black,
-      disabledColor: Colors.green,
+      selectedColor: primaryColor,
+      disabledColor: disabledColor,
       padding: const EdgeInsets.all(5),
-      secondarySelectedColor: Colors.purple,
+      secondarySelectedColor: primaryColor,
     );
   }
 
@@ -250,12 +259,16 @@ class MyStyles {
           side: BorderSide(color: Colors.orange, width: 1),
         ),
         dayPeriodBorderSide: const BorderSide(color: Colors.orange, width: 1),
-        dayPeriodColor: Colors.blueGrey.shade600,
+        dayPeriodColor: isLightTheme
+            ? LightThemeColors.cardColor
+            : DarkThemeColors.scaffoldBackgroundColor,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(5)),
           side: BorderSide(color: Colors.orange, width: 1),
         ),
-        dayPeriodTextColor: Colors.white,
+        dayPeriodTextColor: isLightTheme
+            ? LightThemeColors.bodyTextColor
+            : DarkThemeColors.bodyTextColor,
         dayPeriodShape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(5)),
           side: BorderSide(color: Colors.orange, width: 1),
@@ -268,11 +281,11 @@ class MyStyles {
                     : DarkThemeColors.scaffoldBackgroundColor),
         hourMinuteTextColor: MaterialStateColor.resolveWith((states) =>
             states.contains(MaterialState.selected)
-                ? Colors.white
-                : Colors.orange),
-        dialHandColor: isLightTheme
-            ? LightThemeColors.dividerColor
-            : DarkThemeColors.dividerColor,
+                ? Colors.black
+                : isLightTheme
+                    ? LightThemeColors.bodyTextColor
+                    : DarkThemeColors.bodyTextColor),
+        dialHandColor: const Color(0xFFFF9800),
         dialBackgroundColor: isLightTheme
             ? LightThemeColors.scaffoldBackgroundColor
             : DarkThemeColors.scaffoldBackgroundColor,
@@ -294,7 +307,9 @@ class MyStyles {
 
         inputDecorationTheme: InputDecorationTheme(
 
-          errorStyle: const TextStyle(color: Colors.blue),
+          errorStyle: TextStyle(
+            color: isLightTheme ? Colors.red : Colors.redAccent,
+          ),
           prefixIconColor: isLightTheme
               ? LightThemeColors.darkTextColor
               : DarkThemeColors.lightTextColor,
@@ -354,7 +369,7 @@ class MyStyles {
         // ),
         dialTextColor: MaterialStateColor.resolveWith(
             (states) => states.contains(MaterialState.selected)
-                ? Colors.orange
+                ? Colors.black
                 : isLightTheme
                     ? LightThemeColors.bodyTextColor
                     : DarkThemeColors.bodyTextColor),

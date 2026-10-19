@@ -93,25 +93,25 @@ class CustomTextStyle {
     color: PRIMARY_COLOR,
   );
 
-  static TextStyle text = TextStyle(
+  static TextStyle get text => TextStyle(
     fontWeight: FontWeight.w400,
     fontSize: 14.w,
     color: MyColors.textColor,
   );
 
-  static TextStyle textLarge = TextStyle(
+  static TextStyle get textLarge => TextStyle(
     fontWeight: FontWeight.w400,
     fontSize: 18.w,
     color: MyColors.textColor,
   );
 
-  static TextStyle title = TextStyle(
+  static TextStyle get title => TextStyle(
     fontWeight: FontWeight.w700,
     fontSize: 25.w,
     color: MyColors.textColor,
   );
 
-  static TextStyle titleLarge = TextStyle(
+  static TextStyle get titleLarge => TextStyle(
     fontWeight: FontWeight.w900,
     fontSize: 50.sp,
     color: MyColors.textColor,
@@ -122,13 +122,13 @@ class CustomTextStyle {
   static TextStyle get button => text.copyWith(
       fontWeight: FontWeight.w600, fontSize: 18.w, color: MyColors.textButtom);
 
-  static TextStyle hintText = TextStyle(
+  static TextStyle get hintText => TextStyle(
     fontWeight: FontWeight.w400,
     fontSize: 16.w,
     color: MyColors.textDisable,
   );
 
-  static TextStyle rowButomText = TextStyle(
+  static TextStyle get rowButomText => TextStyle(
     fontWeight: FontWeight.w500,
     fontSize: 16.w,
     color: MyColors.textColor,

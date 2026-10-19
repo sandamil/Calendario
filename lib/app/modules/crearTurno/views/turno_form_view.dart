@@ -376,7 +376,7 @@ class _TurnoFormViewState extends ConsumerState<TurnoFormView> {
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 12.sp,
-                              color: MyColors.textDisable,
+                              color: Theme.of(context).colorScheme.onSurfaceVariant,
                             ),
                           ),
                         ),

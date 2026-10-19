@@ -191,7 +191,9 @@ class _NotasViewState extends ConsumerState<NotasView> {
             icon: Icon(
               important ? Icons.flag : Icons.outlined_flag,
               size: 26.sp,
-              color: important ? Colors.red : Colors.black45,
+              color: important
+                  ? Colors.red
+                  : Theme.of(context).colorScheme.onSurface.withOpacity(0.65),
             ),
             onPressed: _toggleImportant,
           ),
@@ -274,8 +276,8 @@ class _NotasViewState extends ConsumerState<NotasView> {
                           style: TextStyle(
                             fontSize: 18.sp,
                             fontWeight: FontWeight.w500,
-                            color: _note.site == null
-                                ? Colors.grey.shade600
+                            color: (_note.site == null || _note.site!.isEmpty)
+                                ? Theme.of(context).colorScheme.onSurface.withOpacity(0.65)
                                 : null,
                           ),
                         ),
@@ -356,7 +358,7 @@ class _NotasViewState extends ConsumerState<NotasView> {
             style: TextStyle(
               fontSize: 14.sp,
               fontWeight: FontWeight.w500,
-              color: Colors.grey.shade600,
+              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.65),
             ),
           ),
         ),
@@ -365,7 +367,7 @@ class _NotasViewState extends ConsumerState<NotasView> {
           style: TextStyle(
             fontSize: 14.sp,
             fontWeight: FontWeight.w500,
-            color: Colors.grey.shade600,
+            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.65),
           ),
         ),
         SizedBox(width: 4.w),
@@ -374,7 +376,7 @@ class _NotasViewState extends ConsumerState<NotasView> {
           style: TextStyle(
             fontSize: 14.sp,
             fontWeight: FontWeight.w500,
-            color: Colors.grey.shade600,
+            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.65),
           ),
         ),
         const Spacer(),

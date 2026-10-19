@@ -193,7 +193,7 @@ class TaskCard extends ConsumerWidget {
                                     : Icons.flag_outlined,
                                 color: noteData.isImportant!
                                     ? Colors.red
-                                    : Colors.grey,
+                                    : Theme.of(context).colorScheme.onSurface.withOpacity(0.65),
                               ),
                             ),
                           ],

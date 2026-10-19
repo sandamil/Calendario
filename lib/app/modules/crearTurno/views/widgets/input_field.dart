@@ -31,17 +31,14 @@ class InputField extends StatelessWidget {
             margin: const EdgeInsets.only(top: 8),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(5.r),
-              border: Border.all(color: Colors.grey),
+              border: Border.all(color: Theme.of(context).dividerColor),
             ),
             child: Row(
               children: [
                 Expanded(
                   child: TextFormField(
                     controller: controller,
-                    cursorColor:
-                        Theme.of(context).brightness == Brightness.dark
-                            ? Colors.grey[100]
-                            : Colors.grey[700],
+                    cursorColor: Theme.of(context).colorScheme.primary,
                     readOnly: widget != null,
                     // style: subTitleStyle,
                     decoration: InputDecoration(

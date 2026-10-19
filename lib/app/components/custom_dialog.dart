@@ -162,15 +162,15 @@ class MyCustomDialog {
         return AlertDialog(
           title: const Text('Mensaje de Información'),
           titlePadding: const EdgeInsets.all(10),
-          titleTextStyle: const TextStyle(
-            color: Colors.orange,
+          titleTextStyle: TextStyle(
+            color: Theme.of(context).colorScheme.primary,
             fontSize: 20,
             fontWeight: FontWeight.bold,
           ),
           content: Text(msj),
           contentPadding: const EdgeInsets.all(10),
-          contentTextStyle: const TextStyle(
-            color: Colors.black,
+          contentTextStyle: TextStyle(
+            color: Theme.of(context).colorScheme.onSurface,
             fontSize: 15,
             fontWeight: FontWeight.normal,
           ),
@@ -181,11 +181,11 @@ class MyCustomDialog {
           ),
           icon: Icon(
             Icons.info,
-            color: Colors.orangeAccent,
+            color: Theme.of(context).colorScheme.primary,
             size: MediaQuery.of(context).size.width * 0.1,
           ),
           elevation: 2,
-          backgroundColor: Colors.white,
+          backgroundColor: Theme.of(context).colorScheme.surface,
           scrollable: false,
           insetPadding: const EdgeInsets.all(10),
         );
@@ -204,14 +204,14 @@ class MyCustomDialog {
           title: const Text('Error'),
           titlePadding: const EdgeInsets.all(10),
           titleTextStyle:  TextStyle(
-            color: Colors.red,
+            color: Theme.of(context).colorScheme.error,
             fontSize: 20.sp,
             fontWeight: FontWeight.bold,
           ),
           content: Text(msj,textAlign: TextAlign.center,),
           contentPadding: const EdgeInsets.all(10),
           contentTextStyle:  TextStyle(
-            color: Colors.black,
+            color: Theme.of(context).colorScheme.onSurface,
             fontSize: 15.sp,
             fontWeight: FontWeight.normal,
           ),
@@ -222,11 +222,11 @@ class MyCustomDialog {
           ),
           icon: Icon(
             Icons.info,
-            color: Colors.redAccent,
+            color: Theme.of(context).colorScheme.error,
             size: MediaQuery.of(context).size.width * 0.1,
           ),
           elevation: 2,
-          backgroundColor: Colors.white,
+          backgroundColor: Theme.of(context).colorScheme.surface,
           scrollable: false,
           insetPadding: const EdgeInsets.all(10),
         );

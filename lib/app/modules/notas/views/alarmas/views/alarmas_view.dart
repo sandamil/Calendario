@@ -183,6 +183,10 @@ class _AlarmasViewState extends ConsumerState<AlarmasView> {
           ),
           const SizedBox(height: 12),
           FilledButton.icon(
+            style: FilledButton.styleFrom(
+              backgroundColor: theme.colorScheme.primary,
+              foregroundColor: theme.colorScheme.onPrimary,
+            ),
             onPressed: () async {
               await notifier.confirm();
               if (context.mounted) Get.back();
