@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import '../data/model/turnoType.dart';
 import '../modules/inicio/views/inicio_view.dart';
 import '../modules/boarding/views/boarding_view.dart';
 import '../modules/home/views/home_view.dart';
@@ -8,7 +9,13 @@ import '../modules/ajustes/views/ajustes_view.dart';
 import '../modules/ajustes/views/pages/backup_screen.dart';
 import '../modules/ajustes/views/pages/language_screen.dart';
 import '../modules/menu/views/menu_view.dart';
-import '../modules/CrearTurno/views/turno_view.dart';
+import '../modules/crearTurno/views/turno_view.dart';
+import '../modules/crearTurno/views/add_turno_view.dart';
+import '../modules/crearTurno/views/edit_turno_view.dart';
+import '../modules/ajustes/views/pages/about_page.dart';
+import '../modules/ajustes/views/pages/privacy_policy_page.dart';
+import '../modules/ajustes/views/pages/dev_page.dart';
+import '../modules/ajustes/views/pages/log_console.dart';
 import '../modules/crearCuadrante/views/cuadrante_view.dart';
 import '../modules/crearCuadrante/views/add_cuadrante_view.dart';
 import '../modules/notas/views/notas_list_view.dart';
@@ -70,6 +77,14 @@ final GoRouter appRouter = GoRouter(
       builder: (context, state) => const TurnoView(),
     ),
     GoRoute(
+      path: '/add-turno',
+      builder: (context, state) => const AddTurnoView(),
+    ),
+    GoRoute(
+      path: '/edit-turno',
+      builder: (context, state) => EditTurnoView(state.extra as TurnoType),
+    ),
+    GoRoute(
       path: '/crear-cuadrante',
       builder: (context, state) => const CrearCuadranteView(),
     ),
@@ -96,6 +111,22 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: '/alarmas',
       builder: (context, state) => AlarmasView(routeArguments: state.extra),
+    ),
+    GoRoute(
+      path: '/about',
+      builder: (context, state) => const AboutPage(),
+    ),
+    GoRoute(
+      path: '/privacy-policy',
+      builder: (context, state) => PrivacyPolicyPage(),
+    ),
+    GoRoute(
+      path: '/dev',
+      builder: (context, state) => const DevPage(),
+    ),
+    GoRoute(
+      path: '/log-console',
+      builder: (context, state) => LogConsole(dark: true),
     ),
     GoRoute(
       path: '/ayuda',

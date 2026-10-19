@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import '../../../../../config/theme/my_fonts.dart';
 import '../../../../../config/util/app_utils.dart';
 import '../../../../../config/util/list_view_animator.dart';
-import '../../../../routes/app_pages.dart';
+import 'package:go_router/go_router.dart';
 
 enum OnListViewPress { appUpdate, contribution, privacyPolicy, version, dev }
 
@@ -104,10 +104,10 @@ class _AboutPageState extends State<AboutPage> {
         }
         break;
       case OnListViewPress.privacyPolicy:
-        RouteUtils.toPrivacyPolicyPage();
+        context.push('/privacy-policy');
         break;
       case OnListViewPress.dev:
-        RouteUtils.toDevPage();
+        context.push('/dev');
         break;
       default:
       Toast.toast(context, msg: 'No function');

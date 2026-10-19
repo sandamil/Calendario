@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:calendario2/app/data/local/app_storage.dart';
 import 'package:calendario2/config/util/app_utils.dart';
 import 'package:calendario2/config/util/constant.dart';
-import 'package:get/get.dart';
+import 'package:calendario2/app/routes/app_router.dart';
 
-import '../../app/routes/app_pages.dart';
+
 
 class AppCycleService {
   factory AppCycleService() {
@@ -25,13 +25,13 @@ class AppCycleService {
       //* CHECK FIRST TIME OPEN APP
       final value = await AppStorage.read(key: APP_FIRST_TIME_OPEN);
       if (value.isEmpty) {
-        await Get.offNamed(Routes.BOARDING);
+        appRouter.go('/boarding');
         return;
       }
 
       //* DEFAULT ROUTES TO HOME
       // calendarController.onInit();
-      await Get.offNamed(Routes.HOME);
+      appRouter.go('/home');
     } on Exception {
       // await Get.offNamed(Routes.LOGIN);
     }

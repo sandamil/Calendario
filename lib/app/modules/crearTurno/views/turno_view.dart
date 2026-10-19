@@ -7,7 +7,7 @@ import 'package:calendario2/config/util/hexColor.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../home/providers/calendar_providers.dart';
 import 'add_turno_view.dart';
@@ -16,9 +16,9 @@ import 'edit_turno_view.dart';
 class TurnoView extends ConsumerWidget {
   const TurnoView({super.key});
 
-  void _volverInicio(WidgetRef ref) {
+  void _volverInicio(BuildContext context, WidgetRef ref) {
     ref.read(adsProvider.notifier).ensureHomeBanner();
-    Get.offAllNamed('/home');
+    context.go('/home');
   }
 
   @override
@@ -28,7 +28,7 @@ class TurnoView extends ConsumerWidget {
     return WillPopScope(
       onWillPop: () async {
         if (Platform.isAndroid) {
-          _volverInicio(ref);
+          _volverInicio(context, ref);
           return false;
         }
         return true;
@@ -147,11 +147,7 @@ class TurnoView extends ConsumerWidget {
                                 ?.color,
                           ),
                           onPressed: () {
-                            Get.to(
-                              () => EditTurnoView(turno),
-                              transition: Transition.fadeIn,
-                              duration: const Duration(milliseconds: 100),
-                            );
+                            context.push('/edit-turno', extra: turno);
                           },
                         ),
                         IconButton(
@@ -203,11 +199,7 @@ class TurnoView extends ConsumerWidget {
           ),
           heroTag: 'botonAddTurno',
           onPressed: () {
-            Get.to(
-              () => const AddTurnoView(),
-              transition: Transition.fadeIn,
-              duration: const Duration(milliseconds: 100),
-            );
+            context.push('/add-turno');
           },
           icon: const Icon(Icons.add),
           label: const Text('Añadir'),

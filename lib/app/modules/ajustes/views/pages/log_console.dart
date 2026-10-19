@@ -2,7 +2,7 @@ import 'dart:collection';
 
 import 'package:calendario2/app/modules/ajustes/views/pages/util/ansi_parser.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:logger/logger.dart';
 
 import '../../../../../debug/log/log.dart';
@@ -141,7 +141,7 @@ class _LogConsoleState extends State<LogConsole> {
         appBar: AppBar(
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
-            onPressed: () => Get.back(),
+            onPressed: () => context.pop(),
           ),
           title: const Text("Log Console"),
           actions: [
