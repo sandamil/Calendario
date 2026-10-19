@@ -5,7 +5,6 @@ import 'package:calendario2/app/components/custom_dialog.dart';
 import 'package:calendario2/app/modules/ajustes/providers/ajustes_provider.dart';
 import 'package:calendario2/app/modules/ajustes/views/pages/backup_screen.dart';
 import 'package:calendario2/app/modules/ajustes/views/pages/language_screen.dart';
-import 'package:calendario2/app/routes/app_pages.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/config/theme/theme_provider.dart';
 import 'package:calendario2/config/theme/my_fonts.dart';
@@ -99,7 +98,7 @@ class AjustesView extends ConsumerWidget {
                 SettingTile(
                   icon: const ImageIcon(AssetImage(MyIcon.notificationIcon)),
                   btnText: 'Información App'.tr,
-                  onPressed: RouteUtils.toAboutPage,
+                  onPressed: () => context.push('/about'),
                 ),
                 Divider(indent: 15.w, endIndent: 15.w),
                 const SettingTitleTile('Proximamente...'),

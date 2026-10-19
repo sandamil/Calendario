@@ -8,12 +8,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
-import 'app/bindings/initial_bindings.dart';
 import 'app/controllers/ads_provider.dart';
 import 'app/data/local/my_shared_pref.dart';
 import 'app/modules/ajustes/views/pages/util/notifications/notifications.dart';
 
-import 'app/routes/app_pages.dart';
+import 'app/routes/app_router.dart';
 import 'config/theme/my_theme.dart';
 import 'config/theme/theme_provider.dart';
 import 'config/translations/localization_service.dart';
@@ -78,7 +77,11 @@ Widget buildApp() {
         builder: (context, ref, _) {
           final themeMode = ref.watch(themeModeProvider);
 
-          return GetMaterialApp(
+          return GetMaterialApp.router(
+            routeInformationProvider: appRouter.routeInformationProvider,
+            routeInformationParser: appRouter.routeInformationParser,
+            routerDelegate: appRouter.routerDelegate,
+            backButtonDispatcher: appRouter.backButtonDispatcher,
             title: "Calendario",
             theme: MyTheme.getThemeData(isLight: true),
             darkTheme: MyTheme.getThemeData(isLight: false),
@@ -101,9 +104,6 @@ Widget buildApp() {
                 child: child ?? const SizedBox.shrink(),
               );
             },
-            initialRoute: '/inicio',
-            getPages: AppPages.routes,
-            initialBinding: InitialBindings(),
             locale: MySharedPref.getCurrentLocal(),
             translations: LocalizationService.getInstance(),
           );
