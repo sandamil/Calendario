@@ -1,13 +1,15 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 import 'app/bindings/initial_bindings.dart';
+import 'app/controllers/ads_provider.dart';
 import 'app/data/local/my_shared_pref.dart';
 import 'app/modules/ajustes/views/pages/util/notifications/notifications.dart';
 
@@ -31,7 +33,14 @@ Future<void> main() async {
   // );
   // Log.init();
 
-  MobileAds.instance.initialize();
+  unawaited(
+    initializeMobileAds().then<void>(
+      (_) {},
+      onError: (Object error, StackTrace stackTrace) {
+        debugPrint('[ADS] Error al inicializar Mobile Ads: $error');
+      },
+    ),
+  );
 
   await initMemory();
   initializeDateFormatting("es_ES");

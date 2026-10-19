@@ -55,3 +55,6 @@ app.*.map.json
 
 # Copias de seguridad locales, incluidos sufijos
 *.bak*
+
+# Copias de seguridad locales de la migración
+.migration_backups/

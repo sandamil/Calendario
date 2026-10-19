@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:calendario2/app/components/custom_dialog.dart';
 import 'package:calendario2/app/controllers/tutorial_provider.dart';
-import 'package:calendario2/app/controllers/ads_controller.dart';
+import 'package:calendario2/app/controllers/ads_provider.dart';
 import 'package:calendario2/app/modules/CrearTurno/views/widgets/input_field.dart';
 import 'package:calendario2/app/modules/crearCuadrante/widgets/beautifulAlertDialog.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
@@ -46,7 +46,6 @@ class _AddCuadranteViewState extends ConsumerState<AddCuadranteView> {
 
   @override
   Widget build(BuildContext context) {
-    final adcontroller = Get.find<AdsController>();
     final tutorialController = ProviderScope.containerOf(
       context,
       listen: false,
@@ -55,7 +54,9 @@ class _AddCuadranteViewState extends ConsumerState<AddCuadranteView> {
     return WillPopScope(
       onWillPop: () async {
         if (Platform.isAndroid) {
-          adcontroller.staticHomeAd.load();
+          ProviderScope.containerOf(context, listen: false)
+              .read(adsProvider.notifier)
+              .ensureHomeBanner();
           Get.offAllNamed('/home');
         }
         return false;
@@ -106,7 +107,9 @@ class _AddCuadranteViewState extends ConsumerState<AddCuadranteView> {
                     size: 26.sp,
                   ),
                   onPressed: () {
-                    adcontroller.staticHomeAd.load();
+                    ProviderScope.containerOf(context, listen: false)
+                        .read(adsProvider.notifier)
+                        .ensureHomeBanner();
 
                     Get.offAllNamed('/home');
                   },
@@ -444,8 +447,6 @@ class _AddCuadranteViewState extends ConsumerState<AddCuadranteView> {
   }
 
   showAlertLoadingDialog(BuildContext context) {
-    final adcontroller = Get.find<AdsController>();
-
     showDialog<void>(
       context: context,
       builder: (dialogContext) {
@@ -464,7 +465,9 @@ class _AddCuadranteViewState extends ConsumerState<AddCuadranteView> {
                   onPressed: loading
                       ? null
                       : () async {
-                          adcontroller.staticHomeAd.load();
+                          ProviderScope.containerOf(context, listen: false)
+                              .read(adsProvider.notifier)
+                              .ensureHomeBanner();
                           Get.offAllNamed('/home');
                         },
                   child: loading

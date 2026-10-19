@@ -1,7 +1,7 @@
+import 'package:calendario2/app/controllers/ads_provider.dart';
 import 'dart:io';
 
 import 'package:calendario2/app/components/custom_dialog.dart';
-import 'package:calendario2/app/controllers/ads_controller.dart';
 import 'package:calendario2/app/modules/ajustes/providers/ajustes_provider.dart';
 import 'package:calendario2/app/modules/ajustes/views/pages/backup_screen.dart';
 import 'package:calendario2/app/modules/ajustes/views/pages/language_screen.dart';
@@ -20,7 +20,7 @@ class AjustesView extends ConsumerWidget {
   AjustesView({Key? key}) : super(key: key);
 
   Future<bool> _goHome(WidgetRef ref) async {
-    Get.find<AdsController>().staticHomeAd.load();
+    ref.read(adsProvider.notifier).ensureHomeBanner();
     Get.offAllNamed('/home');
     return false;
   }

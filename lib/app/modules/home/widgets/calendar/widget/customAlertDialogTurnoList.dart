@@ -1,4 +1,3 @@
-import 'package:calendario2/app/controllers/ads_controller.dart';
 import 'package:calendario2/app/data/local/calendarDatabase.dart';
 import 'package:calendario2/app/data/model/cuadranteDay.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
@@ -18,8 +17,6 @@ class CustomAlertDialogTurnoList extends StatelessWidget {
   //
   @override
   Widget build(BuildContext context) {
-    final adcontroller = Get.find<AdsController>();
-
     var theme = Theme.of(context);
 
     return Align(
@@ -83,7 +80,6 @@ class CustomAlertDialogTurnoList extends StatelessWidget {
                               ),
                             );
                             // await calendarController.getCuadrante();
-                            // adcontroller.staticHomeAd.load();
                             Navigator.pop(context);
                             // Get.offAllNamed('/home');
                           },

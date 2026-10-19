@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:calendario2/app/components/custom_dialog.dart';
-import 'package:calendario2/app/controllers/ads_controller.dart';
 import 'package:calendario2/app/modules/crearCuadrante/widgets/beautifulAlertDialog.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/config/theme/my_fonts.dart';
@@ -9,6 +8,7 @@ import 'package:calendario2/config/theme/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:calendario2/app/controllers/tutorial_provider.dart';
+import 'package:calendario2/app/controllers/ads_provider.dart';
 import 'package:flutter_animated_dialog_updated/flutter_animated_dialog.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -26,11 +26,12 @@ class CrearCuadranteView extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     double qaButtonHeight = 100.h;
     double qaButtonWidth = 120.w;
-    final adcontroller = Get.find<AdsController>();
     return WillPopScope(
       onWillPop: () async {
         if (Platform.isAndroid) {
-          adcontroller.staticHomeAd.load();
+          ProviderScope.containerOf(context, listen: false)
+              .read(adsProvider.notifier)
+              .ensureHomeBanner();
           Get.offAllNamed('/home');
         }
         return false;
@@ -47,7 +48,9 @@ class CrearCuadranteView extends ConsumerWidget {
               size: 26.sp,
             ),
             onPressed: () {
-              adcontroller.staticHomeAd.load();
+              ProviderScope.containerOf(context, listen: false)
+                  .read(adsProvider.notifier)
+                  .ensureHomeBanner();
               Get.offAllNamed('/home');
             },
           ),
@@ -318,8 +321,6 @@ class CrearCuadranteView extends ConsumerWidget {
   }
 
   showAlertLoadingDialog(BuildContext context) {
-    final adcontroller = Get.find<AdsController>();
-
     Widget okButton = Consumer(builder: (context, ref, child) {
       return TextButton(
         child: ref.watch(crearCuadranteProvider).cuadranteLoading
@@ -330,7 +331,9 @@ class CrearCuadranteView extends ConsumerWidget {
               )
             : const Text('Calendario'),
         onPressed: () async {
-          adcontroller.staticHomeAd.load();
+          ProviderScope.containerOf(context, listen: false)
+              .read(adsProvider.notifier)
+              .ensureHomeBanner();
 
           Get.offAllNamed('/home');
         },

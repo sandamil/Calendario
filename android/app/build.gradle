@@ -36,7 +36,7 @@ if (keystorePropertiesFile.exists()) {
 
 android {
     namespace "ajat.calendario.turnos"
-    compileSdkVersion flutter.compileSdkVersion
+    compileSdk = 37
     ndkVersion "28.2.13676358"
 
     compileOptions {

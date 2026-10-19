@@ -1,3 +1,4 @@
+import 'package:calendario2/app/controllers/ads_provider.dart';
 import 'dart:collection';
 import 'dart:io';
 
@@ -21,7 +22,6 @@ import '../../../../config/util/constant.dart';
 
 import '../../../components/toast.dart';
 import '../../../components/custom_dialog.dart';
-import '../../../controllers/ads_controller.dart';
 import '../../../controllers/tutorial_provider.dart';
 import '../../../controllers/tutorialController.dart';
 import '../../../data/local/taskDatabase.dart';
@@ -69,7 +69,6 @@ class _HomeViewState extends State<HomeView> {
   }
 
   final isDialOpen = ValueNotifier(false);
-  final adcontroller = Get.find<AdsController>();
   late final TutorialController tutorialController;
 
   bool _showHomeTutorial = false;
@@ -160,6 +159,12 @@ class _HomeViewState extends State<HomeView> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      ProviderScope.containerOf(context, listen: false)
+          .read(adsProvider.notifier)
+          .ensureHomeBanner();
+    });
     tutorialController = ProviderScope.containerOf(
       context,
       listen: false,
@@ -243,7 +248,6 @@ class _HomeViewState extends State<HomeView> {
                       size: 26.sp,
                     ),
                     onPressed: () {
-                      adcontroller.staticHomeAd.dispose();
                       Get.to(() => const MenuView(),
                           duration: const Duration(milliseconds: 100),
                           transition: Transition.leftToRight);
@@ -281,25 +285,26 @@ class _HomeViewState extends State<HomeView> {
             floatingActionButtonLocation:
                 FloatingActionButtonLocation.centerDocked,
             floatingActionButton: Platform.isAndroid
-                ? FloatingActionButton.extended(
-                    backgroundColor: Colors.transparent,
-                    elevation: 0,
-                    onPressed: () {
-                      // MyTheme.changeTheme();
+                ? Consumer(
+                    builder: (context, ref, child) {
+                      final ads = ref.watch(adsProvider);
+                      final banner = ads.homeBanner;
+
+                      if (!ads.isLoaded || banner == null) {
+                        return const SizedBox.shrink();
+                      }
+
+                      return FloatingActionButton.extended(
+                        backgroundColor: Colors.transparent,
+                        elevation: 0,
+                        onPressed: () {},
+                        label: SizedBox(
+                          width: banner.size.width.toDouble(),
+                          height: banner.size.height.toDouble(),
+                          child: AdWidget(ad: banner),
+                        ),
+                      );
                     },
-                    label: adcontroller.staticAdHomeLoaded.value
-                        ? Container(
-                            color: Colors.transparent,
-                            width:
-                                adcontroller.staticHomeAd.size.width.toDouble(),
-                            height: adcontroller.staticHomeAd.size.height
-                                .toDouble(),
-                            alignment: Alignment.bottomCenter,
-                            child: AdWidget(
-                              ad: adcontroller.staticHomeAd,
-                            ),
-                          )
-                        : const SizedBox(),
                   )
                 : null,
             body: Column(

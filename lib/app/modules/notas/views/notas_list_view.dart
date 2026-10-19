@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:calendario2/app/controllers/ads_controller.dart';
 import 'package:calendario2/app/controllers/tutorial_provider.dart';
+import 'package:calendario2/app/controllers/ads_provider.dart';
 import 'package:calendario2/app/data/local/my_shared_pref.dart';
 import 'package:calendario2/app/data/model/taskModel.dart';
 import 'package:calendario2/app/modules/notas/providers/notas_list_provider.dart';
@@ -27,14 +27,9 @@ class NotasListView extends ConsumerStatefulWidget {
 class _NotasListViewState extends ConsumerState<NotasListView> {
   bool _tutorialStartScheduled = false;
 
-  late final AdsController _adController;
-
   @override
   void initState() {
     super.initState();
-
-    // AdsController sigue siendo compartido con otras pantallas GetX.
-    _adController = Get.find<AdsController>();
 
     Future.microtask(() async {
       await ref.read(notasListProvider.notifier).reload();
@@ -85,7 +80,9 @@ class _NotasListViewState extends ConsumerState<NotasListView> {
     return WillPopScope(
       onWillPop: () async {
         if (Platform.isAndroid) {
-          _adController.staticHomeAd.load();
+          ProviderScope.containerOf(context, listen: false)
+              .read(adsProvider.notifier)
+              .ensureHomeBanner();
           Get.offAllNamed('/home');
         }
         return false;
@@ -95,7 +92,9 @@ class _NotasListViewState extends ConsumerState<NotasListView> {
           leading: IconButton(
             icon: Icon(Icons.home, color: PRIMARY_COLOR, size: 26.sp),
             onPressed: () {
-              _adController.staticHomeAd.load();
+              ProviderScope.containerOf(context, listen: false)
+                  .read(adsProvider.notifier)
+                  .ensureHomeBanner();
               Get.offAllNamed('/home');
             },
           ),

@@ -1,6 +1,7 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:calendario2/app/controllers/ads_provider.dart';
 import 'dart:io';
 
-import 'package:calendario2/app/controllers/ads_controller.dart';
 import 'package:calendario2/app/modules/ayuda/views/widgets/ayuda_group_widget.dart';
 import 'package:calendario2/app/modules/ayuda/views/widgets/ayuda_row_widget.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
@@ -65,12 +66,12 @@ class AyudaView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final adcontroller = Get.find<AdsController>();
-
     return WillPopScope(
       onWillPop: () async {
         if (Platform.isAndroid) {
-          adcontroller.staticHomeAd.load();
+          ProviderScope.containerOf(context, listen: false)
+              .read(adsProvider.notifier)
+              .ensureHomeBanner();
           Get.offAllNamed('/home');
         }
         return false;
@@ -84,7 +85,9 @@ class AyudaView extends StatelessWidget {
               size: 26.sp,
             ),
             onPressed: () {
-              adcontroller.staticHomeAd.load();
+              ProviderScope.containerOf(context, listen: false)
+                  .read(adsProvider.notifier)
+                  .ensureHomeBanner();
               Get.offAllNamed('/home');
             },
           ),

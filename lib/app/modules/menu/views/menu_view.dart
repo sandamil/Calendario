@@ -1,5 +1,6 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:calendario2/app/controllers/ads_provider.dart';
 
-import 'package:calendario2/app/controllers/ads_controller.dart';
 import 'package:calendario2/app/modules/home/views/home_view.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/config/theme/styles.dart';
@@ -7,18 +8,15 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-
 import '../../../../config/theme/my_fonts.dart';
 
 class MenuView extends StatelessWidget {
-
   const MenuView({super.key});
 
   @override
   Widget build(BuildContext context) {
     double qaButtonHeight = 200.h;
     double qaButtonWidth = 120.w;
-    final adcontroller = Get.find<AdsController>();
 
     return Scaffold(
       appBar: AppBar(
@@ -32,11 +30,10 @@ class MenuView extends StatelessWidget {
             size: 26.sp,
           ),
           onPressed: () {
-            adcontroller.staticHomeAd.load();
-            Get.to(() => HomeView(),
-                duration: const Duration(microseconds: 700),
-                transition: Transition.rightToLeft);
-
+            ProviderScope.containerOf(context, listen: false)
+                .read(adsProvider.notifier)
+                .ensureHomeBanner();
+            Get.offAllNamed('/home');
           },
         ),
         title: Text(
@@ -55,8 +52,7 @@ class MenuView extends StatelessWidget {
               child: MaterialButton(
                 elevation: 10,
                 padding: const EdgeInsets.all(0),
-                shape: RoundedRectangleBorder(
-                    borderRadius: Corners.xmBorder),
+                shape: RoundedRectangleBorder(borderRadius: Corners.xmBorder),
                 height: qaButtonHeight,
                 minWidth: qaButtonWidth,
                 color: MyColors.menuCardBackground,
@@ -84,7 +80,8 @@ class MenuView extends StatelessWidget {
 
                 onPressed: () {
                   // Get.toNamed('/notas', (r) => false);
-                  Navigator.pushNamedAndRemoveUntil(context, "/notas", (r) => false);
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, "/notas", (r) => false);
                   //   Navigator.push(
                   //       context,
                   //       MaterialPageRoute(
@@ -102,8 +99,7 @@ class MenuView extends StatelessWidget {
               child: MaterialButton(
                 elevation: 10,
                 padding: const EdgeInsets.all(0),
-                shape: RoundedRectangleBorder(
-                    borderRadius: Corners.xmBorder),
+                shape: RoundedRectangleBorder(borderRadius: Corners.xmBorder),
                 height: qaButtonHeight,
                 minWidth: qaButtonWidth,
                 color: MyColors.menuCardBackground,
@@ -130,8 +126,8 @@ class MenuView extends StatelessWidget {
                 ),
                 onPressed: () {
                   // Get.toNamed('/crear-cuadrante');
-                  Navigator.pushNamedAndRemoveUntil(context, "/crear-cuadrante", (r) => false);
-
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, "/crear-cuadrante", (r) => false);
                 },
                 //splashColor: AAThemeData.buttonColor,
               ),
@@ -144,8 +140,7 @@ class MenuView extends StatelessWidget {
               child: MaterialButton(
                 elevation: 10,
                 padding: const EdgeInsets.all(0),
-                shape: RoundedRectangleBorder(
-                    borderRadius: Corners.xmBorder),
+                shape: RoundedRectangleBorder(borderRadius: Corners.xmBorder),
                 height: qaButtonHeight,
                 minWidth: qaButtonWidth,
                 color: MyColors.menuCardBackground,
@@ -172,7 +167,8 @@ class MenuView extends StatelessWidget {
                 ),
                 onPressed: () {
                   // Get.toNamed('/crear-turno');
-                  Navigator.pushNamedAndRemoveUntil(context, "/crear-turno", (r) => false);
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, "/crear-turno", (r) => false);
 
                   // Get.to(() => const TurnoView());
                 },
@@ -187,8 +183,7 @@ class MenuView extends StatelessWidget {
               child: MaterialButton(
                 elevation: 10,
                 padding: const EdgeInsets.all(0),
-                shape: RoundedRectangleBorder(
-                    borderRadius: Corners.xmBorder),
+                shape: RoundedRectangleBorder(borderRadius: Corners.xmBorder),
                 height: qaButtonHeight,
                 minWidth: qaButtonWidth,
                 color: MyColors.menuCardBackground,
@@ -215,8 +210,8 @@ class MenuView extends StatelessWidget {
                 ),
                 onPressed: () {
                   // Get.toNamed('/ajustes');
-                  Navigator.pushNamedAndRemoveUntil(context, "/ajustes", (r) => false);
-
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, "/ajustes", (r) => false);
                 },
                 //splashColor: AAThemeData.buttonColor,
               ),
@@ -229,8 +224,7 @@ class MenuView extends StatelessWidget {
               child: MaterialButton(
                 elevation: 10,
                 padding: const EdgeInsets.all(0),
-                shape: RoundedRectangleBorder(
-                    borderRadius: Corners.xmBorder),
+                shape: RoundedRectangleBorder(borderRadius: Corners.xmBorder),
                 height: qaButtonHeight,
                 minWidth: qaButtonWidth,
                 color: MyColors.menuCardBackground,
@@ -256,8 +250,8 @@ class MenuView extends StatelessWidget {
                   ],
                 ),
                 onPressed: () {
-                  Navigator.pushNamedAndRemoveUntil(context, "/ayuda", (r) => false);
-
+                  Navigator.pushNamedAndRemoveUntil(
+                      context, "/ayuda", (r) => false);
                 },
                 //splashColor: AAThemeData.buttonColor,
               ),

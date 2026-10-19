@@ -1,6 +1,6 @@
+import 'package:calendario2/app/controllers/ads_provider.dart';
 import 'dart:io';
 
-import 'package:calendario2/app/controllers/ads_controller.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/config/theme/my_fonts.dart';
 import 'package:calendario2/config/util/hexColor.dart';
@@ -16,20 +16,19 @@ import 'edit_turno_view.dart';
 class TurnoView extends ConsumerWidget {
   const TurnoView({super.key});
 
-  void _volverInicio(AdsController adsController) {
-    adsController.staticHomeAd.load();
+  void _volverInicio(WidgetRef ref) {
+    ref.read(adsProvider.notifier).ensureHomeBanner();
     Get.offAllNamed('/home');
   }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final adsController = Get.find<AdsController>();
     final turnosAsync = ref.watch(turnoTypesProvider);
 
     return WillPopScope(
       onWillPop: () async {
         if (Platform.isAndroid) {
-          _volverInicio(adsController);
+          _volverInicio(ref);
           return false;
         }
         return true;
@@ -45,7 +44,7 @@ class TurnoView extends ConsumerWidget {
               color: PRIMARY_COLOR,
               size: 26.sp,
             ),
-            onPressed: () => _volverInicio(adsController),
+            onPressed: () => _volverInicio(ref),
           ),
           title: Text(
             'Tipos de Días',
