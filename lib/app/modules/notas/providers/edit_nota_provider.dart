@@ -99,26 +99,96 @@ class EditNotaNotifier extends Notifier<EditNotaState> {
       note.endTimeMilliseconds!,
     );
 
+    final alarmaCreada = note.isAlarmaCreated ?? false;
+    final etiquetaAlarma =
+        note.alarmaActivadaString ?? 'Sin recordatorio';
+
+    // Preferir siempre la fecha completa si la base de datos la conserva.
+    DateTime horaAlarma = start;
+    if (alarmaCreada) {
+      if (note.alarmaTimestamp != null) {
+        horaAlarma = DateTime.fromMillisecondsSinceEpoch(
+          note.alarmaTimestamp!,
+        );
+      } else {
+        // Recuperar las opciones estándar usando la fecha del evento.
+        switch (etiquetaAlarma) {
+          case 'Al Principio':
+            horaAlarma = start;
+            break;
+          case '5 minutos de anticipación':
+            horaAlarma = start.subtract(const Duration(minutes: 5));
+            break;
+          case '30 minutos de anticipación':
+            horaAlarma = start.subtract(const Duration(minutes: 30));
+            break;
+          case '1 hora de anticipación':
+            horaAlarma = start.subtract(const Duration(hours: 1));
+            break;
+          case '1 día de antelación':
+            horaAlarma = start.subtract(const Duration(days: 1));
+            break;
+          default:
+            // Para recordatorios personalizados, recuperar HH:mm.
+            final partes = (note.alarmaHora ?? '').split(':');
+            if (partes.length == 2) {
+              final hora = int.tryParse(partes[0]);
+              final minuto = int.tryParse(partes[1]);
+              if (hora != null &&
+                  minuto != null &&
+                  hora >= 0 &&
+                  hora <= 23 &&
+                  minuto >= 0 &&
+                  minuto <= 59) {
+                horaAlarma = DateTime(
+                  start.year,
+                  start.month,
+                  start.day,
+                  hora,
+                  minuto,
+                );
+                // Si la hora supera la hora del evento, el aviso
+                // corresponde al día anterior.
+                if (horaAlarma.isAfter(start)) {
+                  horaAlarma = horaAlarma.subtract(
+                    const Duration(days: 1),
+                  );
+                }
+              }
+            }
+            break;
+        }
+      }
+    }
+
     state = state.copyWith(
       currentNote: note,
       startTime: start,
       endTime: end,
       isImportant: note.isImportant ?? false,
-      alarmaCreada: note.isAlarmaCreated ?? false,
-      alarmTime: note.alarmaTimestamp != null
-          ? DateTime.fromMillisecondsSinceEpoch(note.alarmaTimestamp!)
-          : start,
+      alarmaCreada: alarmaCreada,
+      alarmTime: horaAlarma,
       alarmaHora: note.alarmaHora ?? '',
-      alarmaActivadaString:
-          note.alarmaActivadaString ?? 'Sin recordatorio',
+      alarmaActivadaString: etiquetaAlarma,
       loading: false,
     );
   }
 
   void setStartTime(DateTime value) {
+    final alarmaActual = state.alarmTime;
+    final alarmaActualizada = DateTime(
+      value.year,
+      value.month,
+      value.day,
+      alarmaActual.hour,
+      alarmaActual.minute,
+    );
+
     state = state.copyWith(
       startTime: value,
       endTime: state.endTime.isBefore(value) ? value : null,
+      alarmTime: alarmaActualizada,
+      alarmaHora: alarmaActualizada.formatDateTime24H.toString(),
     );
   }
 
@@ -189,15 +259,26 @@ class EditNotaNotifier extends Notifier<EditNotaState> {
       ),
     );
 
-    if (alarmaCreada) {
-      await NotificacionesService.instance.programar(
-        id: alarmaId,
-        titulo: 'Nota: $titulo',
-        mensaje: textoNotas,
-        fechaRecordatorio: horaAlarma,
+    // La nota ya está guardada. Un fallo de notificaciones no debe
+    // impedir que se actualicen las listas ni confundirse con un fallo
+    // al guardar los datos de la nota.
+    try {
+      if (alarmaCreada) {
+        await NotificacionesService.instance.programar(
+          id: alarmaId,
+          titulo: 'Nota: $titulo',
+          mensaje: textoNotas,
+          fechaRecordatorio: horaAlarma,
+        );
+      } else {
+        await NotificacionesService.instance.cancelar(alarmaId);
+      }
+    } catch (error, stackTrace) {
+      debugPrint(
+        'La nota $notaId se guardó, pero falló la sincronización '
+        'de su recordatorio: $error',
       );
-    } else {
-      await NotificacionesService.instance.cancelar(alarmaId);
+      debugPrintStack(stackTrace: stackTrace);
     }
 
     // No usar ref si este notifier ya se ha destruido.

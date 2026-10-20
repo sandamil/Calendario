@@ -230,16 +230,13 @@ class AlarmasNotifier extends Notifier<AlarmasState> {
     final option = enabled ? state.selectedOption : sinRecordatorio;
     final start = state.startTime;
 
-    var alarm = enabled ? start.subtract(duration) : start;
-    var finalEnabled = enabled;
-    var finalOption = option;
+    final alarm = enabled ? start.subtract(duration) : start;
+    final finalEnabled = enabled;
+    final finalOption = option;
 
-    // No programar recordatorios en el pasado.
-    if (enabled && alarm.isBefore(DateTime.now())) {
-      finalEnabled = false;
-      finalOption = sinRecordatorio;
-      alarm = start;
-    }
+    // Conservar la selección del usuario aunque la hora calculada
+    // ya haya pasado. El servicio de notificaciones se ocupa
+    // de decidir si todavía puede programarse el aviso.
 
     if (state.isEditing) {
       final notifier = ref.read(editNotaProvider.notifier);

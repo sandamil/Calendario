@@ -58,3 +58,8 @@ app.*.map.json
 
 # Copias de seguridad locales de la migración
 .migration_backups/
+
+# Claves privadas de firma Android
+android/key.properties
+*.jks
+*.keystore

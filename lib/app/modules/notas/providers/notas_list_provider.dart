@@ -1,4 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter/foundation.dart';
+import 'package:calendario2/app/modules/notas/services/notificaciones_service.dart';
 import 'package:calendario2/app/data/local/taskDatabase.dart';
 import 'package:calendario2/app/data/model/taskModel.dart';
 import 'package:calendario2/app/modules/home/providers/calendar_providers.dart';
@@ -65,17 +67,75 @@ class NotasListNotifier extends Notifier<NotasListState> {
   }
 
   Future<void> actualizarNota(Task nota) async {
+    // Si falla la escritura en SQLite, el error se propaga.
     await NotasDB.instance.update(nota);
-    await reload();
-    await ref.read(notasProvider.notifier).reload();
+
+    // La actualización ya se guardó: los fallos de refresco
+    // se registran por separado.
+    try {
+      await reload();
+    } catch (error, stackTrace) {
+      debugPrint(
+        'La nota ${nota.id} se actualizó, pero falló la recarga de la lista: $error',
+      );
+      debugPrintStack(stackTrace: stackTrace);
+    }
+
+    try {
+      await ref.read(notasProvider.notifier).reload();
+    } catch (error, stackTrace) {
+      debugPrint(
+        'La nota ${nota.id} se actualizó, pero falló la recarga del calendario: $error',
+      );
+      debugPrintStack(stackTrace: stackTrace);
+    }
   }
 
   Future<void> eliminarNota(int id) async {
-    await NotasDB.instance.delete(id);
-    await reload();
-    await ref.read(notasProvider.notifier).reload();
-  }
+    Task? nota;
 
+    try {
+      nota = await NotasDB.instance.select(id);
+    } catch (error) {
+      debugPrint(
+        'No se pudo recuperar la nota $id antes de eliminarla: $error',
+      );
+    }
+
+    final alarmaId = nota?.idAlarma ?? nota?.id ?? id;
+
+    try {
+      await NotificacionesService.instance.cancelar(alarmaId);
+    } catch (error, stackTrace) {
+      debugPrint(
+        'No se pudo cancelar el recordatorio de la nota $id: $error',
+      );
+      debugPrintStack(stackTrace: stackTrace);
+    }
+
+    // Si el borrado falla, el error debe propagarse.
+    await NotasDB.instance.delete(id);
+
+    // El borrado ya se completó: un fallo de refresco no debe
+    // confundirse con un fallo al eliminar el registro.
+    try {
+      await reload();
+    } catch (error, stackTrace) {
+      debugPrint(
+        'La nota $id se eliminó, pero falló la recarga de la lista: $error',
+      );
+      debugPrintStack(stackTrace: stackTrace);
+    }
+
+    try {
+      await ref.read(notasProvider.notifier).reload();
+    } catch (error, stackTrace) {
+      debugPrint(
+        'La nota $id se eliminó, pero falló la recarga del calendario: $error',
+      );
+      debugPrintStack(stackTrace: stackTrace);
+    }
+  }
   void setBusqueda(String value) {
     state = state.copyWith(busqueda: value);
   }

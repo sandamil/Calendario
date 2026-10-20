@@ -32,6 +32,7 @@ class AddNotasView extends ConsumerStatefulWidget {
 
 class _AddNotasViewState extends ConsumerState<AddNotasView> {
   bool _tutorialStartScheduled = false;
+  bool _savingNote = false;
   @override
   void initState() {
     super.initState();
@@ -113,7 +114,8 @@ class _AddNotasViewState extends ConsumerState<AddNotasView> {
                 size: 26.sp,
               ),
               padding: EdgeInsets.only(right: 3.w),
-              onPressed: () async {
+              onPressed: _savingNote ? null : () async {
+                setState(() => _savingNote = true);
                 // adcontroller.loadNotesListBannerAd();
 
                 // controller.addTravelEvent();
@@ -148,6 +150,8 @@ class _AddNotasViewState extends ConsumerState<AddNotasView> {
                       content: Text('Error al guardar la nota: $error'),
                     ),
                   );
+                } finally {
+                  if (mounted) setState(() => _savingNote = false);
                 }
               },
             )
@@ -493,14 +497,13 @@ class _AddNotasViewState extends ConsumerState<AddNotasView> {
                       ),
                       Expanded(
                           child: ElevatedButton(
-                        onPressed: () async {
-                          // La alarma se gestiona desde /alarmas.
-                          context.push('/alarmas', extra: {
-                            'id': notaState.idGenerated,
-                            'startTime': notaState.startTime,
-                            'notes': notaNotifier.notes.text,
-                            'title': notaNotifier.title.text
-                          });
+                        onPressed: () {
+                          notaNotifier.setAlarmaCreada(false);
+                          notaNotifier.setAlarmaActivadaString(
+                            'Sin recordatorio',
+                          );
+                          notaNotifier.setAlarmaTime(notaState.startTime);
+                          context.pop();
                         },
                         child: const Text("Borrar"),
                       )),

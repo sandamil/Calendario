@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
-const String _androidHomeBannerId = 'ca-app-pub-5849370961147264/6650380002';
+const String _androidHomeBannerId = 'ca-app-pub-5849370961147264/1629081245';
 
 Future<InitializationStatus>? _mobileAdsInitialization;
 

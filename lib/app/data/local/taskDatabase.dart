@@ -14,8 +14,7 @@ class NotasDB {
   static Database? _db;
   final String databaseName = 'notas_database.db';
   final String taskTable = 'Notas';
-  static const int _version = 3;
-
+  static const int _version = 2;
 
   get db async {
     if (_db != null) {
@@ -26,12 +25,10 @@ class NotasDB {
     }
   }
 
-
   Future<String> databasePath() async {
     Directory doucumentDirectory = await getApplicationDocumentsDirectory();
     return join(doucumentDirectory.path, databaseName);
   }
-
 
   Future<Database> init() async {
     // Directory doucumentDirectory = await getApplicationDocumentsDirectory();
@@ -60,7 +57,6 @@ class NotasDB {
   //   );
   // }
 
-
   Future<void> _onCreate(Database db, int version) async {
     await db.execute('CREATE TABLE IF NOT EXISTS $taskTable('
         'id INTEGER PRIMARY KEY, '
@@ -73,33 +69,34 @@ class NotasDB {
         'isImportant INTEGER, '
         'idAlarma INTEGER, '
         'alarmaHora TEXT, '
-        'alarmaTimestamp INTEGER, '
         'alarmaActivadaString TEXT, '
-        'isAlarmaCreated INTEGER)'
-    );
+        'isAlarmaCreated INTEGER)');
   }
 
-  // Actualizaciones incrementales: conservan las notas existentes.
-  Future<void> _onUpgrade(
-      Database db, int oldVersion, int newVersion) async {
-    if (oldVersion < 2) {
-      await db.execute(
-        'ALTER TABLE $taskTable ADD COLUMN alarmaHora TEXT'
-      );
-    }
-    if (oldVersion < 3) {
-      await db.execute(
-        'ALTER TABLE $taskTable ADD COLUMN alarmaTimestamp INTEGER'
-      );
+  // UPGRADE DATABASE TABLES
+  Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    print(' ------------------------------------------${oldVersion}');
+    print(' ------------------------------------------${newVersion}');
+    (newVersion);
+    if (oldVersion < newVersion) {
+      // you can execute drop table and create table
+      await db.execute("ALTER TABLE $taskTable ADD COLUMN alarmaHora TEXT;");
     }
   }
 
+  // Adapta Task al esquema existente de la base de datos v2.
+  // alarmaTimestamp pertenece al modelo, pero no existe en SQLite.
+  Map<String, Object?> _mapParaBD(Task notas) {
+    final map = notas.toMap();
+    map.remove('alarmaTimestamp');
+    return map;
+  }
 
   Future<int> insertNotas(Task notas) async {
     var dbClient = await db;
     int res = await dbClient.insert(
       taskTable,
-      notas.toMap(),
+      _mapParaBD(notas),
       conflictAlgorithm: ConflictAlgorithm.ignore,
     );
 
@@ -125,7 +122,6 @@ class NotasDB {
         isImportant: maps[0]['isImportant'] == 1 ? true : false,
         idAlarma: maps[0]['idAlarma'],
         alarmaHora: maps[0]['alarmaHora'],
-        alarmaTimestamp: maps[0]['alarmaTimestamp'],
         alarmaActivadaString: maps[0]['alarmaActivadaString'],
         isAlarmaCreated: maps[0]['isAlarmaCreated'] == 1 ? true : false,
       );
@@ -149,7 +145,6 @@ class NotasDB {
       'isImportant',
       'idAlarma',
       'alarmaHora',
-      'alarmaTimestamp',
       'alarmaActivadaString',
       'isAlarmaCreated'
     ]);
@@ -165,7 +160,7 @@ class NotasDB {
     var dbClient = await db;
     await dbClient.update(
       taskTable,
-      notas.toMap(),
+      _mapParaBD(notas),
       where: "id = ?",
       whereArgs: [notas.id],
     );
@@ -175,7 +170,7 @@ class NotasDB {
     var dbClient = await db;
     await dbClient.update(
       taskTable,
-      notas.toMap(),
+      _mapParaBD(notas),
       where: "id = ?",
       whereArgs: [notas.id],
     );
@@ -199,5 +194,4 @@ class NotasDB {
     _db = null;
     return db.close();
   }
-
 }

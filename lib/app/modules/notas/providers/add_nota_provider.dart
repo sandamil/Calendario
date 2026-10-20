@@ -98,9 +98,20 @@ class AddNotaNotifier extends Notifier<AddNotaState> {
   }
 
   void setStartTime(DateTime value) {
+    final alarmaActual = state.alarmTime;
+    final alarmaActualizada = DateTime(
+      value.year,
+      value.month,
+      value.day,
+      alarmaActual.hour,
+      alarmaActual.minute,
+    );
+
     state = state.copyWith(
       startTime: value,
-      alarmaHora: value.formatDateTime24H.toString(),
+      endTime: state.endTime.isBefore(value) ? value : null,
+      alarmTime: alarmaActualizada,
+      alarmaHora: alarmaActualizada.formatDateTime24H.toString(),
     );
   }
 
@@ -155,68 +166,85 @@ class AddNotaNotifier extends Notifier<AddNotaState> {
     );
   }
 
+  bool _saving = false;
+
   Future<bool> saveNota({int? id}) async {
-    final currentState = state;
-    final notaId = id ?? currentState.idGenerated;
-    final titleText = title.text;
-    final siteText = site.text;
-    final notesText = notes.text;
+    // Impide dos inserciones simultáneas desde el mismo formulario.
+    if (_saving) return false;
+    _saving = true;
 
-    final nota = Task(
-      id: notaId,
-      title: titleText,
-      site: siteText,
-      notes: notesText,
-      isImportant: currentState.isImportant,
-      startTimeMilliseconds:
-          currentState.startTime.millisecondsSinceEpoch,
-      endTimeMilliseconds:
-          currentState.endTime.millisecondsSinceEpoch,
-      idAlarma: notaId,
-      alarmaHora: currentState.alarmaHora,
-      alarmaTimestamp: currentState.alarmaCreada
-          ? currentState.alarmTime.millisecondsSinceEpoch
-          : null,
-      alarmaActivadaString: currentState.alarmaActivadaString,
-      isAlarmaCreated: currentState.alarmaCreada,
-    );
+    try {
+      final currentState = state;
+      final notaId = id ?? currentState.idGenerated;
+      final titleText = title.text;
+      final siteText = site.text;
+      final notesText = notes.text;
 
-    // SQLite devuelve un resultado no positivo si ignora un ID duplicado.
-    var insertedId = await NotasDB.instance.insertNotas(nota);
-
-    // Si SQLite ignora un ID duplicado, generar otro y reintentar.
-    var attempts = 0;
-    while (insertedId <= 0 && attempts < 5) {
-      final newId = int.parse(randomIdGenerator());
-      nota.id = newId;
-      nota.idAlarma = newId;
-      state = state.copyWith(idGenerated: newId);
-      insertedId = await NotasDB.instance.insertNotas(nota);
-      attempts++;
-    }
-
-    if (insertedId <= 0) {
-      return false;
-    }
-
-    // La notificación se sincroniza después de insertar la nota.
-    if (currentState.alarmaCreada) {
-      await NotificacionesService.instance.programar(
-        id: nota.id!,
-        titulo: 'Nota: $titleText',
-        mensaje: notesText,
-        fechaRecordatorio: currentState.alarmTime,
+      final nota = Task(
+        id: notaId,
+        title: titleText,
+        site: siteText,
+        notes: notesText,
+        isImportant: currentState.isImportant,
+        startTimeMilliseconds:
+            currentState.startTime.millisecondsSinceEpoch,
+        endTimeMilliseconds:
+            currentState.endTime.millisecondsSinceEpoch,
+        idAlarma: notaId,
+        alarmaHora: currentState.alarmaHora,
+        alarmaTimestamp: currentState.alarmaCreada
+            ? currentState.alarmTime.millisecondsSinceEpoch
+            : null,
+        alarmaActivadaString: currentState.alarmaActivadaString,
+        isAlarmaCreated: currentState.alarmaCreada,
       );
-    } else {
-      await NotificacionesService.instance.cancelar(nota.id!);
+
+      // Reintentar con otro ID si SQLite rechaza una colisión.
+      var insertedId = await NotasDB.instance.insertNotas(nota);
+      var attempts = 0;
+
+      while (insertedId <= 0 && attempts < 5) {
+        final newId = int.parse(randomIdGenerator());
+        nota.id = newId;
+        nota.idAlarma = newId;
+        state = state.copyWith(idGenerated: newId);
+        insertedId = await NotasDB.instance.insertNotas(nota);
+        attempts++;
+      }
+
+      // Si no se insertó, no limpiar el formulario.
+      if (insertedId <= 0) return false;
+
+      // Una vez insertada, un error posterior no debe provocar otro alta.
+      try {
+        if (currentState.alarmaCreada) {
+          await NotificacionesService.instance.programar(
+            id: nota.id!,
+            titulo: 'Nota: $titleText',
+            mensaje: notesText,
+            fechaRecordatorio: currentState.alarmTime,
+          );
+        } else {
+          await NotificacionesService.instance.cancelar(nota.id!);
+        }
+      } catch (error, stackTrace) {
+        debugPrint('Nota guardada; error al sincronizar recordatorio: $error');
+        debugPrintStack(stackTrace: stackTrace);
+      }
+
+      try {
+        await ref.read(notasListProvider.notifier).reload();
+        await ref.read(notasProvider.notifier).reload();
+      } catch (error, stackTrace) {
+        debugPrint('Nota guardada; error al actualizar las listas: $error');
+        debugPrintStack(stackTrace: stackTrace);
+      }
+
+      resetForm();
+      return true;
+    } finally {
+      _saving = false;
     }
-
-    await ref.read(notasListProvider.notifier).reload();
-    await ref.read(notasProvider.notifier).reload();
-
-    // Prepara un formulario limpio para la próxima nota.
-    resetForm();
-    return true;
   }
 }
 

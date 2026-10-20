@@ -43,7 +43,7 @@ class TaskCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     var date =
-        DateTime.fromMillisecondsSinceEpoch(noteData.startTimeMilliseconds!);
+        DateTime.fromMillisecondsSinceEpoch(noteData.startTimeMilliseconds ?? DateTime.now().millisecondsSinceEpoch);
     String neatDate = DateFormat('dd-MM-yyyy HH:mm').format(date);
 
     Color color =
@@ -72,8 +72,8 @@ class TaskCard extends ConsumerWidget {
                     Share.share(''
                         'Titulo: ${noteData.title}'
                         '\nNota: ${noteData.notes}'
-                        '\nInicio: ${DateTime.fromMillisecondsSinceEpoch(noteData.startTimeMilliseconds!).formatDateTime24H} h.  ${DateTime.fromMillisecondsSinceEpoch(noteData.startTimeMilliseconds!).formatDateYMMMd}'
-                        '\nFin: ${DateTime.fromMillisecondsSinceEpoch(noteData.endTimeMilliseconds!).formatDateTime24H} h.  ${DateTime.fromMillisecondsSinceEpoch(noteData.endTimeMilliseconds!).formatDateYMMMd}'
+                        '\nInicio: ${DateTime.fromMillisecondsSinceEpoch(noteData.startTimeMilliseconds ?? DateTime.now().millisecondsSinceEpoch).formatDateTime24H} h.  ${DateTime.fromMillisecondsSinceEpoch(noteData.startTimeMilliseconds ?? DateTime.now().millisecondsSinceEpoch).formatDateYMMMd}'
+                        '\nFin: ${DateTime.fromMillisecondsSinceEpoch(noteData.endTimeMilliseconds ?? noteData.startTimeMilliseconds ?? DateTime.now().millisecondsSinceEpoch).formatDateTime24H} h.  ${DateTime.fromMillisecondsSinceEpoch(noteData.endTimeMilliseconds ?? noteData.startTimeMilliseconds ?? DateTime.now().millisecondsSinceEpoch).formatDateYMMMd}'
                     );
                   },
                 ),
@@ -175,9 +175,9 @@ class TaskCard extends ConsumerWidget {
                             Container(
                               margin: EdgeInsets.only(top: 6.h, left: 6.w),
                               child: Text(
-                                noteData.title!.trim().length <= 20
-                                    ? noteData.title!.trim()
-                                    : '${noteData.title!.trim().substring(0, 20)}...',
+                                (noteData.title ?? '').trim().length <= 20
+                                    ? (noteData.title ?? '').trim()
+                                    : '${(noteData.title ?? '').trim().substring(0, 20)}...',
                                 style: TextStyle(
                                     // fontFamily: 'ZillaSlab',
                                     fontSize: 18.sp,
@@ -188,10 +188,10 @@ class TaskCard extends ConsumerWidget {
                             Padding(
                               padding: EdgeInsets.only(right: 4.w),
                               child: Icon(
-                                noteData.isImportant!
+                                noteData.isImportant == true
                                     ? Icons.flag
                                     : Icons.flag_outlined,
-                                color: noteData.isImportant!
+                                color: noteData.isImportant == true
                                     ? Colors.red
                                     : Theme.of(context).colorScheme.onSurface.withOpacity(0.65),
                               ),
@@ -206,14 +206,14 @@ class TaskCard extends ConsumerWidget {
                               Container(
                                 margin: EdgeInsets.only(bottom: 4.h, left: 6.w),
                                 child: Text(
-                                  noteData.notes!
+                                  (noteData.notes ?? '')
                                               .trim()
                                               .split('\n')
                                               .first
                                               .length <=
                                           30
-                                      ? noteData.notes!.trim().split('\n').first
-                                      : '${noteData.notes!.trim().split('\n').first.substring(0, 30)}...',
+                                      ? (noteData.notes ?? '').trim().split('\n').first
+                                      : '${(noteData.notes ?? '').trim().split('\n').first.substring(0, 30)}...',
                                   style: TextStyle(
                                     fontSize: 12.sp,
                                   ),
