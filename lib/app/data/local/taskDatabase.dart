@@ -14,7 +14,7 @@ class NotasDB {
   static Database? _db;
   final String databaseName = 'notas_database.db';
   final String taskTable = 'Notas';
-  static const int _version = 2;
+  static const int _version = 3;
 
   get db async {
     if (_db != null) {
@@ -39,6 +39,7 @@ class NotasDB {
       version: _version,
       onCreate: _onCreate,
       onUpgrade: _onUpgrade,
+      onOpen: _ensureColumns,
     );
   }
 
@@ -69,27 +70,43 @@ class NotasDB {
         'isImportant INTEGER, '
         'idAlarma INTEGER, '
         'alarmaHora TEXT, '
+        'alarmaTimestamp INTEGER, '
         'alarmaActivadaString TEXT, '
         'isAlarmaCreated INTEGER)');
   }
 
-  // UPGRADE DATABASE TABLES
+  // Asegura las columnas necesarias tanto en actualizaciones como al abrir.
   Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
-    print(' ------------------------------------------${oldVersion}');
-    print(' ------------------------------------------${newVersion}');
-    (newVersion);
-    if (oldVersion < newVersion) {
-      // you can execute drop table and create table
-      await db.execute("ALTER TABLE $taskTable ADD COLUMN alarmaHora TEXT;");
+    await _ensureColumns(db);
+  }
+
+  // Añade solo columnas ausentes; nunca borra ni recrea la tabla.
+  Future<void> _ensureColumns(Database db) async {
+    final info = await db.rawQuery('PRAGMA table_info($taskTable)');
+    final columns = info
+        .map((column) => column['name'] as String)
+        .toSet();
+
+    if (columns.isEmpty) {
+      throw StateError('No existe la tabla $taskTable; se cancela la reparación.');
+    }
+
+    if (!columns.contains('alarmaHora')) {
+      await db.execute(
+        'ALTER TABLE $taskTable ADD COLUMN alarmaHora TEXT',
+      );
+    }
+
+    if (!columns.contains('alarmaTimestamp')) {
+      await db.execute(
+        'ALTER TABLE $taskTable ADD COLUMN alarmaTimestamp INTEGER',
+      );
     }
   }
 
-  // Adapta Task al esquema existente de la base de datos v2.
-  // alarmaTimestamp pertenece al modelo, pero no existe en SQLite.
+  // El modelo y SQLite comparten los campos persistidos.
   Map<String, Object?> _mapParaBD(Task notas) {
-    final map = notas.toMap();
-    map.remove('alarmaTimestamp');
-    return map;
+    return notas.toMap();
   }
 
   Future<int> insertNotas(Task notas) async {
@@ -122,6 +139,7 @@ class NotasDB {
         isImportant: maps[0]['isImportant'] == 1 ? true : false,
         idAlarma: maps[0]['idAlarma'],
         alarmaHora: maps[0]['alarmaHora'],
+        alarmaTimestamp: maps[0]['alarmaTimestamp'] as int?,
         alarmaActivadaString: maps[0]['alarmaActivadaString'],
         isAlarmaCreated: maps[0]['isAlarmaCreated'] == 1 ? true : false,
       );
@@ -145,6 +163,7 @@ class NotasDB {
       'isImportant',
       'idAlarma',
       'alarmaHora',
+      'alarmaTimestamp',
       'alarmaActivadaString',
       'isAlarmaCreated'
     ]);
