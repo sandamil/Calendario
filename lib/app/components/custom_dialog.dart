@@ -8,9 +8,28 @@ import 'package:calendario2/widgets/buttons/button_primary.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:flutter_animated_dialog_updated/flutter_animated_dialog.dart';
+
 
 import '../../widgets/big_text.dart';
+
+// Adaptador temporal compatible con las llamadas existentes.
+// Usa el diálogo nativo de Flutter sin depender de un paquete externo.
+enum DialogTransitionType { scale, fadeScale }
+
+Future<T?> showAnimatedDialog<T>({
+  required BuildContext context,
+  required WidgetBuilder builder,
+  bool barrierDismissible = true,
+  DialogTransitionType? animationType,
+  Curve? curve,
+  Duration? duration,
+}) {
+  return showDialog<T>(
+    context: context,
+    barrierDismissible: barrierDismissible,
+    builder: builder,
+  );
+}
 
 class MyCustomDialog {
 

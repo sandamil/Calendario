@@ -6,8 +6,6 @@ import 'package:calendario2/app/data/local/my_shared_pref.dart';
 import 'package:calendario2/app/data/local/taskDatabase.dart';
 import 'package:calendario2/app/modules/home/providers/calendar_providers.dart';
 import 'package:calendario2/app/data/model/language.dart';
-import 'package:calendario2/app/modules/ajustes/views/pages/util/connector_parameter.dart';
-import 'package:calendario2/app/modules/ajustes/views/pages/util/dio_connector.dart';
 import 'package:calendario2/config/theme/theme_provider.dart';
 import 'package:calendario2/config/translations/localization_service.dart';
 import 'package:flutter/material.dart';
@@ -107,9 +105,6 @@ class AjustesNotifier extends Notifier<AjustesState> {
     );
   }
 
-  Future<String> getDataByGet(ConnectorParameter parameter) {
-    return DioConnector.instance.getDataByGet(parameter);
-  }
 
   Future<void> pickDirectory() async {
     try {

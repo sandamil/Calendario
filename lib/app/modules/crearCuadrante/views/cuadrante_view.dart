@@ -10,7 +10,6 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:calendario2/app/controllers/tutorial_provider.dart';
 import 'package:calendario2/app/controllers/ads_provider.dart';
-import 'package:flutter_animated_dialog_updated/flutter_animated_dialog.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../data/local/my_shared_pref.dart';
@@ -308,7 +307,7 @@ class CrearCuadranteView extends ConsumerWidget {
 
   alertDialog(BuildContext context) {
     showAnimatedDialog(
-      animationType: DialogTransitionType.slideFromRightFade,
+      animationType: DialogTransitionType.scale,
       curve: Curves.fastOutSlowIn,
       duration: const Duration(milliseconds: 900),
       barrierDismissible: false,
