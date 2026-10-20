@@ -19,7 +19,6 @@ dependencies:
   flutter_screenutil: ^5.9.3
   google_fonts: ^9.0.0
 #  flutter_datetime_picker: ^1.5.1
-  flutter_datetime_picker_plus: ^3.0.1
   flex_color_picker: ^4.0.0
   flutter_slidable: ^4.0.3
   flutter_animated_dialog_updated: 1.0.1

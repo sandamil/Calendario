@@ -8,8 +8,6 @@ class AppStorage {
   }) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString(key, value);
-    // Mantener sincronizado el almacén antiguo durante la transición.
-    await GetStorage().write(key, value);
   }
 
   static Future<String> read({required String key}) async {
@@ -19,35 +17,14 @@ class AppStorage {
       return prefs.getString(key) ?? '';
     }
 
-    // Compatibilidad con datos creados por versiones anteriores.
+    // Migrar el valor antiguo si existe en instalaciones anteriores.
     final oldValue = GetStorage().read(key);
     if (oldValue is String) {
       await prefs.setString(key, oldValue);
+      await GetStorage().remove(key);
       return oldValue;
     }
 
     return '';
-  }
-
-  static Future<void> delete({required String key}) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove(key);
-    await GetStorage().remove(key);
-  }
-
-  static Future<bool> isContain({required String key}) async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.containsKey(key) || GetStorage().hasData(key);
-  }
-
-  static Future<void> setBool() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('bool', true);
-    await GetStorage().write('bool', true);
-  }
-
-  static bool? hasBool() {
-    final prefsValue = GetStorage().read('bool');
-    return prefsValue is bool ? prefsValue : null;
   }
 }
