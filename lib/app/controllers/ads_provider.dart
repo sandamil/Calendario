@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -54,7 +55,7 @@ class AdsNotifier extends Notifier<AdsState> {
   /// repetidamente si ya está cargando o se encuentra cargado.
   Future<void> ensureHomeBanner() async {
     // El banner actual solo se muestra en Android.
-    if (!Platform.isAndroid) return;
+    if (kIsWeb || !Platform.isAndroid) return;
 
     if (state.isLoading || state.isLoaded) return;
 

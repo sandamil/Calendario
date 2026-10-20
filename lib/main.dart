@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'app/components/custom_snackbar.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -33,14 +34,16 @@ Future<void> main() async {
   // );
   // Log.init();
 
-  unawaited(
-    initializeMobileAds().then<void>(
-      (_) {},
-      onError: (Object error, StackTrace stackTrace) {
-        debugPrint('[ADS] Error al inicializar Mobile Ads: $error');
-      },
-    ),
-  );
+  if (!kIsWeb) {
+    unawaited(
+      initializeMobileAds().then<void>(
+        (_) {},
+        onError: (Object error, StackTrace stackTrace) {
+          debugPrint('[ADS] Error al inicializar Mobile Ads: $error');
+        },
+      ),
+    );
+  }
 
   await initMemory();
   initializeDateFormatting("es_ES");

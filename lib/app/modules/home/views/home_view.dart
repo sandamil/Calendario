@@ -1,6 +1,6 @@
 import 'package:calendario2/app/controllers/ads_provider.dart';
 import 'dart:collection';
-import 'dart:io';
+import 'package:flutter/foundation.dart' show defaultTargetPlatform, kIsWeb, TargetPlatform;
 
 import 'package:calendario2/app/data/model/taskModel.dart';
 import 'package:calendario2/app/data/local/my_shared_pref.dart';
@@ -216,10 +216,10 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     return PopScope(
-        canPop: !Platform.isAndroid,
+        canPop: !(!kIsWeb && defaultTargetPlatform == TargetPlatform.android),
         onPopInvokedWithResult: (bool didPop, Object? result) {
           if (didPop) return;
-          if (Platform.isAndroid) {
+          if ((!kIsWeb && defaultTargetPlatform == TargetPlatform.android)) {
             //? to close quick order floating if its open when click back btn
             if (isDialOpen.value) {
               isDialOpen.value = false;
@@ -279,7 +279,7 @@ class _HomeViewState extends State<HomeView> {
             ),
             floatingActionButtonLocation:
                 FloatingActionButtonLocation.centerDocked,
-            floatingActionButton: Platform.isAndroid
+            floatingActionButton: (!kIsWeb && defaultTargetPlatform == TargetPlatform.android)
                 ? Consumer(
                     builder: (context, ref, child) {
                       final ads = ref.watch(adsProvider);
