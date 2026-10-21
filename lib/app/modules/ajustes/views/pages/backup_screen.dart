@@ -1,5 +1,3 @@
-import 'package:calendario2/app/data/local/calendarDatabase.dart';
-import 'package:calendario2/app/data/local/taskDatabase.dart';
 import 'package:calendario2/app/modules/ajustes/providers/ajustes_provider.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/config/theme/my_fonts.dart';
@@ -44,6 +42,38 @@ class BackupScreen extends ConsumerWidget {
                 style: TextStyle(fontSize: 16.sp),
               ),
             ),
+            Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: 12.w,
+                vertical: 10.h,
+              ),
+              child: SizedBox(
+                width: double.infinity,
+                child: ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: MyColors.botonBgColor,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 20.w,
+                      vertical: 14.h,
+                    ),
+                  ),
+                  onPressed: () => notifier.backupCompleteJson(context),
+                  icon: Icon(
+                    Icons.save_alt,
+                    color: MyColors.textColor,
+                  ),
+                  label: Text(
+                    'Guardar copia completa (JSON)',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      color: MyColors.textColor,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
+            ),
             FutureBuilder<bool>(
               future: notifier.isPickDirectorySupported,
               builder: (context, snapshot) {
@@ -73,7 +103,34 @@ class BackupScreen extends ConsumerWidget {
               },
             ),
             SizedBox(height: 12.h),
-            const _BackupSection(title: 'Quieres hacer backup de Notas guardadas?'),
+            Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: 12.w,
+                vertical: 10.h,
+              ),
+              child: AppBtn(
+                minimumSize: Size(120.w, 40.h),
+                padding: EdgeInsets.all(12.h),
+                expand: true,
+                border: BorderSide(
+                  color: Theme.of(context).dividerColor,
+                ),
+                bgColor: MyColors.botonBgColor,
+                semanticLabel: 'Restaurar copia completa',
+                onPressed: () => notifier.restoreCompleteJson(context),
+                child: Text(
+                  'Restaurar copia completa',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: MyColors.textColor,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+            const _BackupSection(
+                title: 'Quieres hacer backup de Notas guardadas?'),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [

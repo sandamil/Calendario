@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:calendario2/app/controllers/ads_provider.dart';
 import 'dart:io';
 
@@ -33,10 +34,10 @@ class AjustesView extends ConsumerWidget {
     final notifier = ref.read(ajustesProvider.notifier);
 
     return PopScope(
-      canPop: !Platform.isAndroid,
+      canPop: !(!kIsWeb && defaultTargetPlatform == TargetPlatform.android),
       onPopInvokedWithResult: (bool didPop, Object? result) {
         if (didPop) return;
-        if (Platform.isAndroid) {
+        if ((!kIsWeb && defaultTargetPlatform == TargetPlatform.android)) {
           _goHome(context, ref);
         }
       },

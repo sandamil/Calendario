@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'package:flutter/foundation.dart' show defaultTargetPlatform, kIsWeb, TargetPlatform;
 
 import 'package:calendario2/app/controllers/tutorial_provider.dart';
 import 'package:calendario2/app/controllers/ads_provider.dart';
@@ -74,11 +74,13 @@ class _NotasListViewState extends ConsumerState<NotasListView> {
       });
     }
 
+    final isAndroid = !kIsWeb && defaultTargetPlatform == TargetPlatform.android;
+
     return PopScope(
-      canPop: !Platform.isAndroid,
+      canPop: !isAndroid,
       onPopInvokedWithResult: (bool didPop, Object? result) {
         if (didPop) return;
-        if (Platform.isAndroid) {
+        if (isAndroid) {
           ProviderScope.containerOf(context, listen: false)
               .read(adsProvider.notifier)
               .ensureHomeBanner();

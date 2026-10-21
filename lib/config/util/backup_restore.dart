@@ -182,7 +182,7 @@ backupDb(databaseRepository) async {
   // }
 
 // // Todo fotos?
-//   if (Platform.isAndroid) {
+//   if ((!kIsWeb && defaultTargetPlatform == TargetPlatform.android)) {
 //     final androidInfo = await DeviceInfoPlugin().androidInfo;
 //     if (androidInfo.version.sdkInt <= 32) {
 //       if (await Permission.storage.request().isGranted) {

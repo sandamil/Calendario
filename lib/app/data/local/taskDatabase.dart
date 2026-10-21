@@ -1,8 +1,10 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'dart:async';
 import 'dart:io';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
 
 import '../model/taskModel.dart';
 
@@ -26,13 +28,17 @@ class NotasDB {
   }
 
   Future<String> databasePath() async {
-    Directory doucumentDirectory = await getApplicationDocumentsDirectory();
-    return join(doucumentDirectory.path, databaseName);
+    if (kIsWeb) {
+      return databaseName;
+    }
+    final documentDirectory = await getApplicationDocumentsDirectory();
+    return join(documentDirectory.path, databaseName);
   }
 
   Future<Database> init() async {
-    // Directory doucumentDirectory = await getApplicationDocumentsDirectory();
-    // String path = join(doucumentDirectory.path, 'notas_database.db');
+    if (kIsWeb) {
+      databaseFactory = databaseFactoryFfiWeb;
+    }
     final path = await databasePath();
     return await openDatabase(
       path,

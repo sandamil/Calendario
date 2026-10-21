@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'dart:io';
 
 class AppLink {
@@ -21,11 +22,11 @@ class AppLink {
         feedbackBaseUrl.host,
         feedbackBaseUrl.path,
         {
-          "entry.978972557": (Platform.isAndroid) ? "Android" : "IOS",
+          "entry.978972557": ((!kIsWeb && defaultTargetPlatform == TargetPlatform.android)) ? "Android" : "IOS",
           "entry.823909330": mainVersion,
           "entry.517392071": log,
         },
       );
 
-  static String get storeUrlString => (Platform.isAndroid) ? _playStoreUrl : _appleStoreUrl;
+  static String get storeUrlString => ((!kIsWeb && defaultTargetPlatform == TargetPlatform.android)) ? _playStoreUrl : _appleStoreUrl;
 }

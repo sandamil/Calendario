@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'package:flutter/foundation.dart' show defaultTargetPlatform, kIsWeb, TargetPlatform;
 import 'package:intl/intl.dart';
 import 'package:calendario2/app/modules/home/widgets/calendar/widget/customAlertDialogDaySelected.dart';
 import 'package:flutter/material.dart';
@@ -191,7 +191,7 @@ class _TableCalendarWidgetState extends ConsumerState<TableCalendarWidget> {
         locale: 'es_ES',
         daysOfWeekHeight: 25.h,
         rowHeight: 90.h,
-        headerVisible: Platform.isMacOS ? true : false,
+        headerVisible: (kIsWeb || defaultTargetPlatform == TargetPlatform.macOS),
         calendarStyle: const CalendarStyle(
           outsideDaysVisible: false,
         ),

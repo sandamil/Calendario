@@ -1,4 +1,6 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:sqflite/sqflite.dart';
+import 'package:sqflite_common_ffi_web/sqflite_ffi_web.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'package:path/path.dart';
@@ -24,22 +26,28 @@ class CalendarioDB {
   }
 
   Future<String> databasePath() async {
-    Directory doucumentDirectory = await getApplicationDocumentsDirectory();
-    return join(doucumentDirectory.path, databaseName);
+    if (kIsWeb) {
+      return databaseName;
+    }
+    final documentDirectory = await getApplicationDocumentsDirectory();
+    return join(documentDirectory.path, databaseName);
   }
 
   Future<Database> initDb() async {
-    // Directory doucumentDirectory = await getApplicationDocumentsDirectory();
-    // String path = join(doucumentDirectory.path, databaseName);
+    if (kIsWeb) {
+      databaseFactory = databaseFactoryFfiWeb;
+    }
+
     final path = await databasePath();
-    return await openDatabase(
+    return openDatabase(
       path,
       version: _version,
       onCreate: _onCreate,
+      onOpen: _ensureDefaultTurnos,
     );
   }
 
-  void _onCreate(Database db, int version) async {
+  Future<void> _onCreate(Database db, int version) async {
     await db.execute(
       'CREATE TABLE $_cuadrantesTable('
       'id INTEGER PRIMARY KEY AUTOINCREMENT, '
@@ -57,29 +65,71 @@ class CalendarioDB {
         id INTEGER PRIMARY KEY,
         description TEXT,
         title TEXT,
-        startHour  TEXT,
+        startHour TEXT,
         endHour TEXT,
         color TEXT,
         status TEXT
       )
     ''');
 
-    db.execute("CREATE TABLE theme ("
-        "id INTEGER NOT NULL"
-        ")");
+    await db.execute('CREATE TABLE theme (id INTEGER NOT NULL)');
+    await _insertDefaultTurnos(db);
+  }
 
-    db.execute(
-        "INSERT into $_turnosTable(id, title, description, color, startHour, endHour) "
-        ' VALUES(1, "M", "Mañana", "4287f5", "07:00", "15:00") ');
-    db.execute(
-        "INSERT into $_turnosTable(id, title, description, color, startHour, endHour) "
-        ' VALUES(2, "T", "Tarde", "71bd48", "15:00", "22:00")  ');
-    db.execute(
-        "INSERT into $_turnosTable(id, title, description, color, startHour, endHour) "
-        ' VALUES(3, "N", "Noche", "bd9648", "22:00", "07:00")  ');
-    db.execute(
-        "INSERT into $_turnosTable(id, title, description, color, startHour, endHour) "
-        ' VALUES(4, "L", "Libre", "ffffff", "00:00", "23:59")  ');
+  Future<void> _ensureDefaultTurnos(Database db) async {
+    final result = await db.rawQuery(
+      'SELECT COUNT(*) AS total FROM $_turnosTable',
+    );
+    final total = (result.first['total'] as num?)?.toInt() ?? 0;
+
+    if (total == 0) {
+      await _insertDefaultTurnos(db);
+    }
+  }
+
+  Future<void> _insertDefaultTurnos(Database db) async {
+    const turnos = <Map<String, Object?>>[
+      {
+        'id': 1,
+        'title': 'M',
+        'description': 'Mañana',
+        'color': '4287f5',
+        'startHour': '07:00',
+        'endHour': '15:00',
+      },
+      {
+        'id': 2,
+        'title': 'T',
+        'description': 'Tarde',
+        'color': '71bd48',
+        'startHour': '15:00',
+        'endHour': '22:00',
+      },
+      {
+        'id': 3,
+        'title': 'N',
+        'description': 'Noche',
+        'color': 'bd9648',
+        'startHour': '22:00',
+        'endHour': '07:00',
+      },
+      {
+        'id': 4,
+        'title': 'L',
+        'description': 'Libre',
+        'color': 'ffffff',
+        'startHour': '00:00',
+        'endHour': '23:59',
+      },
+    ];
+
+    for (final turno in turnos) {
+      await db.insert(
+        _turnosTable,
+        turno,
+        conflictAlgorithm: ConflictAlgorithm.ignore,
+      );
+    }
   }
 
   Future<CuadranteDay?> fetchItem(int id) async {

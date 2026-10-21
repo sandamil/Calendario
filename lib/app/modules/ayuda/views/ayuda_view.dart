@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:calendario2/app/controllers/ads_provider.dart';
 import 'dart:io';
@@ -39,12 +40,12 @@ void _giveFeedbackClicked(BuildContext context) {
 }
 
 Future<void> _onRateThisAppPress() async {
-  if (Platform.isAndroid || Platform.isIOS) {
+  if ((!kIsWeb && defaultTargetPlatform == TargetPlatform.android) || (!kIsWeb && defaultTargetPlatform == TargetPlatform.iOS)) {
     const androidPackageName = 'ajat.calendario.turnos';
-    final appId = Platform.isAndroid ? androidPackageName : 'YOUR_IOS_APP_ID';
+    final appId = (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) ? androidPackageName : 'YOUR_IOS_APP_ID';
 
     final url = Uri.parse(
-      Platform.isAndroid
+      (!kIsWeb && defaultTargetPlatform == TargetPlatform.android)
           ? 'market://details?id=$androidPackageName'
           : 'https://apps.apple.com/app/id$appId',
     );
@@ -67,10 +68,10 @@ class AyudaView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      canPop: !Platform.isAndroid,
+      canPop: !(!kIsWeb && defaultTargetPlatform == TargetPlatform.android),
       onPopInvokedWithResult: (bool didPop, Object? result) {
         if (didPop) return;
-        if (Platform.isAndroid) {
+        if ((!kIsWeb && defaultTargetPlatform == TargetPlatform.android)) {
           ProviderScope.containerOf(context, listen: false)
               .read(adsProvider.notifier)
               .ensureHomeBanner();

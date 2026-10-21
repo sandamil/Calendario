@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'dart:io';
 
 import 'package:calendario2/app/components/custom_dialog.dart';
@@ -25,10 +26,10 @@ class CrearCuadranteView extends ConsumerWidget {
     double qaButtonHeight = 100.h;
     double qaButtonWidth = 120.w;
     return PopScope(
-      canPop: !Platform.isAndroid,
+      canPop: !(!kIsWeb && defaultTargetPlatform == TargetPlatform.android),
       onPopInvokedWithResult: (bool didPop, Object? result) {
         if (didPop) return;
-        if (Platform.isAndroid) {
+        if ((!kIsWeb && defaultTargetPlatform == TargetPlatform.android)) {
           ProviderScope.containerOf(context, listen: false)
               .read(adsProvider.notifier)
               .ensureHomeBanner();
