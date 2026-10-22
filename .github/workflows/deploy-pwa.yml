@@ -3,7 +3,7 @@ name: Publicar PWA de Calendario
 on:
   push:
     branches:
-      - migracion-riverpod
+      - ui-home-calendar-v1
   workflow_dispatch:
 
 permissions:
