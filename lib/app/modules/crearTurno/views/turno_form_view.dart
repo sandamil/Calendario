@@ -263,207 +263,355 @@ class _TurnoFormViewState extends ConsumerState<TurnoFormView> {
 
   @override
   Widget build(BuildContext context) {
-    final colorTexto =
-        _color.computeLuminance() > 0.5 ? Colors.black : Colors.white;
+    final theme = Theme.of(context);
+    final textColor = theme.colorScheme.onSurface;
+    final mutedColor = textColor.withOpacity(.58);
 
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: AppUtils.dismissKeyboard,
       child: Scaffold(
+        backgroundColor: theme.scaffoldBackgroundColor,
         appBar: AppBar(
           leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back_ios,
-              size: 26.sp,
-              color: colorTexto,
-            ),
+            icon: Icon(Icons.arrow_back_rounded, size: 24.sp, color: textColor),
             onPressed: () => context.pop(),
           ),
           elevation: 0,
           centerTitle: false,
-          backgroundColor: _color,
+          backgroundColor: theme.scaffoldBackgroundColor,
           title: Text(
-            _esEdicion ? 'Editar Turno' : 'Crear Turno',
+            _esEdicion ? 'Editar turno' : 'Crear turno',
             style: CustomTextStyle.appBarTitle(context: context)
-                .copyWith(color: colorTexto),
+                .copyWith(color: textColor),
           ),
         ),
         body: SingleChildScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           child: Padding(
-            padding: EdgeInsets.only(
-              top: 50.h,
-              left: 15.w,
-              right: 15.w,
-              bottom: 30.h,
-            ),
+            padding: EdgeInsets.fromLTRB(18.w, 10.h, 18.w, 28.h),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                Text(
+                  'Personaliza tu turno',
+                  style: TextStyle(
+                    fontSize: 21.sp,
+                    fontWeight: FontWeight.w800,
+                    color: textColor,
+                  ),
+                ),
+                SizedBox(height: 4.h),
+                Text(
+                  'Elige un nombre, horario y color para reconocerlo en el calendario.',
+                  style: TextStyle(fontSize: 13.sp, color: mutedColor),
+                ),
+                SizedBox(height: 22.h),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Spacer(),
-                    SizedBox(
-                      width: 60.w,
-                      child: TextField(
+                    Expanded(
+                      child: _turnoField(
                         controller: _abreviaturaController,
+                        label: 'Abreviatura',
+                        hint: 'Ej. M, N, L',
+                        icon: Icons.short_text_rounded,
                         maxLength: 3,
                         onChanged: (_) => setState(() {}),
-                        decoration: const InputDecoration(
-                          hintText: 'Abreviatura',
-                          labelText: 'Abreviatura',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(15),
-                            ),
-                          ),
-                        ),
                       ),
                     ),
-                    const Spacer(),
-                    const Spacer(),
+                    SizedBox(width: 14.w),
                     Column(
                       children: [
                         Container(
+                          width: 66.w,
+                          height: 82.h,
                           decoration: BoxDecoration(
+                            color: theme.colorScheme.surfaceContainerHighest
+                                .withOpacity(.5),
                             border: Border.all(
-                              color: MyColors.borderCellColor,
-                              width: 2,
+                              color: theme.colorScheme.outlineVariant
+                                  .withOpacity(.5),
                             ),
-                            color: MyColors.backgroundLowAccent,
-                            borderRadius: BorderRadius.circular(5.r),
+                            borderRadius: BorderRadius.circular(13.r),
                           ),
-                          width: 65,
-                          height: 90,
+                          padding: EdgeInsets.all(7.w),
                           child: Column(
                             children: [
-                              const Padding(
-                                padding: EdgeInsets.all(4),
-                                child: Text(
-                                  '15',
-                                  style: TextStyle(fontSize: 18),
+                              Text(
+                                '15',
+                                style: TextStyle(
+                                  fontSize: 16.sp,
+                                  fontWeight: FontWeight.w700,
+                                  color: textColor,
                                 ),
                               ),
+                              SizedBox(height: 4.h),
                               Container(
+                                width: double.infinity,
+                                padding: EdgeInsets.symmetric(vertical: 4.h),
                                 decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: _color,
-                                    width: 2,
-                                  ),
-                                  color: _color.withAlpha(100),
-                                  borderRadius: BorderRadius.circular(5.r),
-                                ),
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 5.w,
+                                  color: _color.withOpacity(.18),
+                                  borderRadius: BorderRadius.circular(6.r),
+                                  border: Border.all(color: _color),
                                 ),
                                 child: Text(
                                   _abreviaturaController.text
-                                          .toUpperCase()
+                                          .trim()
                                           .isEmpty
-                                      ? '        '
+                                      ? '—'
                                       : _abreviaturaController.text
                                           .toUpperCase(),
+                                  textAlign: TextAlign.center,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
-                                    fontSize: 16,
+                                    fontSize: 12.sp,
                                     color: _color,
-                                    fontWeight: FontWeight.w700,
+                                    fontWeight: FontWeight.w800,
                                   ),
                                 ),
                               ),
                             ],
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 5),
-                          child: Text(
-                            'VISTA PREVIA\nEN CALENDARIO',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 12.sp,
-                              color: Theme.of(context).colorScheme.onSurfaceVariant,
-                            ),
-                          ),
+                        SizedBox(height: 4.h),
+                        Text(
+                          'Vista previa',
+                          style: TextStyle(fontSize: 10.sp, color: mutedColor),
                         ),
                       ],
                     ),
-                    const Spacer(),
                   ],
                 ),
-                const SizedBox(height: 30),
-                TextField(
+                SizedBox(height: 16.h),
+                _turnoField(
                   controller: _tituloController,
-                  onChanged: (_) => setState(() {}),
-                  decoration: const InputDecoration(
-                    hintText: 'Nombre del tipo de turno o día creado',
-                    labelText: 'Título',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(15)),
-                    ),
-                  ),
-                  maxLines: 1,
+                  label: 'Título del turno',
+                  hint: 'Ej. Mañana, Noche, Descanso',
+                  icon: Icons.work_history_outlined,
                   maxLength: 12,
+                  onChanged: (_) => setState(() {}),
                 ),
-                const SizedBox(height: 30),
+                SizedBox(height: 18.h),
+                Text(
+                  'Horario',
+                  style: TextStyle(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w700,
+                    color: textColor.withOpacity(.8),
+                  ),
+                ),
+                SizedBox(height: 8.h),
                 Row(
                   children: [
                     Expanded(
-                      child: InputField(
+                      child: _timeTile(
                         label: 'Inicio',
-                        hintText: _inicio,
-                        widget: IconButton(
-                          onPressed: () => _seleccionarHora(esInicio: true),
-                          icon: const Icon(Icons.access_time_rounded),
-                        ),
+                        value: _inicio,
+                        onTap: () => _seleccionarHora(esInicio: true),
                       ),
                     ),
-                    const SizedBox(width: 12),
+                    SizedBox(width: 10.w),
                     Expanded(
-                      child: InputField(
+                      child: _timeTile(
                         label: 'Fin',
-                        hintText: _fin,
-                        widget: IconButton(
-                          onPressed: () => _seleccionarHora(esInicio: false),
-                          icon: const Icon(Icons.access_time_rounded),
-                        ),
+                        value: _fin,
+                        onTap: () => _seleccionarHora(esInicio: false),
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 50),
-                InkWell(
-                  onTap: _seleccionarColor,
-                  child: Material(
-                    type: MaterialType.circle,
-                    color: _color,
-                    child: const SizedBox(
-                      height: 100,
-                      width: 100,
-                    ),
+                SizedBox(height: 18.h),
+                Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.all(13.w),
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.surfaceContainerHighest
+                        .withOpacity(.45),
+                    borderRadius: BorderRadius.circular(16.r),
+                  ),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 42.w,
+                        height: 42.w,
+                        decoration: BoxDecoration(
+                          color: _color,
+                          borderRadius: BorderRadius.circular(12.r),
+                        ),
+                      ),
+                      SizedBox(width: 12.w),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Color del turno',
+                              style: TextStyle(
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w700,
+                                color: textColor,
+                              ),
+                            ),
+                            SizedBox(height: 3.h),
+                            Text(
+                              'Te ayudará a identificarlo rápidamente.',
+                              style: TextStyle(fontSize: 11.sp, color: mutedColor),
+                            ),
+                          ],
+                        ),
+                      ),
+                      OutlinedButton(
+                        onPressed: _seleccionarColor,
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: PRIMARY_COLOR,
+                          side: BorderSide(
+                            color: PRIMARY_COLOR.withOpacity(.5),
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12.r),
+                          ),
+                        ),
+                        child: const Text('Cambiar'),
+                      ),
+                    ],
                   ),
                 ),
-                const SizedBox(height: 50),
-                Hero(
-                  tag: 'botonAddTurno',
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 16.w,
-                        vertical: 4.h,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5.r),
-                      ),
-                    ),
+                SizedBox(height: 24.h),
+                SizedBox(
+                  width: double.infinity,
+                  height: 50.h,
+                  child: FilledButton.icon(
                     onPressed: _guardando ? null : _guardar,
-                    child: Text(
+                    icon: _guardando
+                        ? SizedBox(
+                            width: 18.sp,
+                            height: 18.sp,
+                            child: const CircularProgressIndicator(
+                              strokeWidth: 2,
+                            ),
+                          )
+                        : Icon(_esEdicion
+                            ? Icons.check_rounded
+                            : Icons.add_rounded),
+                    label: Text(
                       _guardando
-                          ? 'Guardando...'
-                          : (_esEdicion ? 'Editar' : 'Añadir'),
-                      style: CustomTextStyle.button,
+                          ? 'Guardando…'
+                          : (_esEdicion ? 'Guardar cambios' : 'Crear turno'),
+                      style: TextStyle(
+                        fontSize: 15.sp,
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                   ),
                 ),
               ],
             ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _turnoField({
+    required TextEditingController controller,
+    required String label,
+    required String hint,
+    required IconData icon,
+    int? maxLength,
+    ValueChanged<String>? onChanged,
+  }) {
+    final theme = Theme.of(context);
+    final textColor = theme.colorScheme.onSurface;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(left: 3.w, bottom: 6.h),
+          child: Text(
+            label,
+            style: TextStyle(
+              fontSize: 12.sp,
+              fontWeight: FontWeight.w700,
+              color: textColor.withOpacity(.72),
+            ),
+          ),
+        ),
+        Container(
+          decoration: BoxDecoration(
+            color: theme.colorScheme.surfaceContainerHighest.withOpacity(.48),
+            borderRadius: BorderRadius.circular(15.r),
+            border: Border.all(
+              color: theme.colorScheme.outlineVariant.withOpacity(.35),
+            ),
+          ),
+          child: TextField(
+            controller: controller,
+            maxLength: maxLength,
+            onChanged: onChanged,
+            textCapitalization: TextCapitalization.sentences,
+            style: TextStyle(fontSize: 14.sp, color: textColor),
+            decoration: InputDecoration(
+              hintText: hint,
+              prefixIcon: Icon(icon, size: 20.sp, color: PRIMARY_COLOR),
+              hintStyle: TextStyle(
+                fontSize: 13.sp,
+                color: textColor.withOpacity(.42),
+              ),
+              counterText: '',
+              border: InputBorder.none,
+              contentPadding: EdgeInsets.symmetric(vertical: 14.h),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _timeTile({
+    required String label,
+    required String value,
+    required VoidCallback onTap,
+  }) {
+    final theme = Theme.of(context);
+    final textColor = theme.colorScheme.onSurface;
+    return Material(
+      color: theme.colorScheme.surfaceContainerHighest.withOpacity(.48),
+      borderRadius: BorderRadius.circular(14.r),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(14.r),
+        onTap: onTap,
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 13.h),
+          child: Row(
+            children: [
+              Icon(Icons.schedule_rounded, color: PRIMARY_COLOR, size: 21.sp),
+              SizedBox(width: 9.w),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(label,
+                        style: TextStyle(
+                          fontSize: 11.sp,
+                          color: textColor.withOpacity(.6),
+                        )),
+                    SizedBox(height: 3.h),
+                    Text(
+                      value,
+                      style: TextStyle(
+                        fontSize: 15.sp,
+                        fontWeight: FontWeight.w700,
+                        color: textColor,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Icon(Icons.edit_outlined,
+                  size: 16.sp, color: textColor.withOpacity(.5)),
+            ],
           ),
         ),
       ),
