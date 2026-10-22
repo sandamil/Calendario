@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import '../data/model/turnoType.dart';
 import '../modules/boarding/views/boarding_view.dart';
+import '../modules/inicio/views/inicio_view.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/ajustes/views/ajustes_view.dart';
 import '../modules/ajustes/views/pages/backup_screen.dart';
@@ -27,8 +28,12 @@ import '../modules/ayuda/views/pages/videotutoriales/views/videotutoriales_view.
 import '../modules/ayuda/views/pages/videotutoriales/views/widgets/video_view.dart';
 
 final GoRouter appRouter = GoRouter(
-  initialLocation: '/home',
+  initialLocation: '/inicio',
   routes: [
+    GoRoute(
+      path: '/inicio',
+      builder: (context, state) => const InicioView(),
+    ),
     GoRoute(
       path: '/boarding',
       builder: (context, state) => BoardingView(),
