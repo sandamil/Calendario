@@ -54,57 +54,22 @@ class _CalendarAddNoteSheetState extends ConsumerState<CalendarAddNoteSheet> {
     final color = theme.colorScheme.onSurface;
 
     return SafeArea(
+      top: false,
       child: Padding(
-        padding: EdgeInsets.fromLTRB(18.w, 8.h, 18.w, 16.h),
+        padding: EdgeInsets.fromLTRB(18.w, 0, 18.w, 2.h),
         child: SingleChildScrollView(
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Center(
-                child: Container(
-                  width: 38.w,
-                  height: 4.h,
-                  decoration: BoxDecoration(
-                    color: color.withOpacity(.22),
-                    borderRadius: BorderRadius.circular(20.r),
-                  ),
+              Text(
+                _dateLabel(state.startTime),
+                style: TextStyle(
+                  fontSize: 13.sp,
+                  color: color.withOpacity(.58),
                 ),
               ),
-              SizedBox(height: 14.h),
-              Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Nueva nota',
-                          style: TextStyle(
-                            fontSize: 22.sp,
-                            fontWeight: FontWeight.w700,
-                            color: color,
-                          ),
-                        ),
-                        SizedBox(height: 3.h),
-                        Text(
-                          _dateLabel(state.startTime),
-                          style: TextStyle(
-                            fontSize: 13.sp,
-                            color: color.withOpacity(.60),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    icon: const Icon(Icons.close_rounded),
-                    tooltip: 'Cerrar',
-                  ),
-                ],
-              ),
-              SizedBox(height: 16.h),
+              SizedBox(height: 12.h),
               _field(
                 controller: notifier.title,
                 label: 'Título',
