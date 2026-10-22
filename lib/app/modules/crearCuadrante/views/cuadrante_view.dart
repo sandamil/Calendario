@@ -23,8 +23,6 @@ class CrearCuadranteView extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    double qaButtonHeight = 100.h;
-    double qaButtonWidth = 120.w;
     return PopScope(
       canPop: !(!kIsWeb && defaultTargetPlatform == TargetPlatform.android),
       onPopInvokedWithResult: (bool didPop, Object? result) {
@@ -110,18 +108,14 @@ class CrearCuadranteView extends ConsumerWidget {
               SizedBox(height: 4.h),
               Expanded(
                 flex: 1,
-                child: MaterialButton(
-                  elevation: 0,
-                  padding: EdgeInsets.all(8.w),
-                  shape: RoundedRectangleBorder(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.surfaceContainerHighest.withOpacity(.42),
                     borderRadius: BorderRadius.circular(22.r),
-                    side: BorderSide(
+                    border: Border.all(
                       color: Theme.of(context).colorScheme.outlineVariant.withOpacity(.4),
                     ),
                   ),
-                  height: qaButtonHeight,
-                  minWidth: qaButtonWidth,
-                  color: Theme.of(context).colorScheme.surfaceContainerHighest.withOpacity(.42),
                   child: Padding(
                     padding: const EdgeInsets.all(0),
                     child: Column(
@@ -300,17 +294,6 @@ class CrearCuadranteView extends ConsumerWidget {
                       ],
                     ),
                   ),
-
-                  onPressed: () {
-                    // Get.toNamed('/notas', (r) => false);
-                    // Navigator.pushNamedAndRemoveUntil(context, "/notas", (r) => false);
-                    //   Navigator.push(
-                    //       context,
-                    //       MaterialPageRoute(
-                    //           builder: (context) =>
-                    //               TaskListVIew(widget.time, widget.events)));
-                  },
-                  // splashColor: AAThemeData.buttonColor,
                 ),
               ),
               SizedBox(
