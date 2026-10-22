@@ -17,9 +17,9 @@ import 'turnos_notas_onHomeDialog.dart';
 
 class TableCalendarWidget extends ConsumerStatefulWidget {
   TableCalendarWidget(
-      {super.key, this.onDaySelected, this.onDaySelectedLongPress});
+      {super.key, this.onDaySelected, this.onDayTap});
   void Function(DateTime, DateTime)? onDaySelected;
-  void Function(DateTime, DateTime, Offset)? onDaySelectedLongPress;
+  void Function(DateTime, DateTime, Offset)? onDayTap;
 
   @override
   ConsumerState<TableCalendarWidget> createState() =>
@@ -190,8 +190,8 @@ class _TableCalendarWidgetState extends ConsumerState<TableCalendarWidget> {
       child: TableCalendar(
         locale: 'es_ES',
         daysOfWeekHeight: 25.h,
-        rowHeight: 90.h,
-        headerVisible: (kIsWeb || defaultTargetPlatform == TargetPlatform.macOS),
+        rowHeight: 96.h,
+        headerVisible: false,
         calendarStyle: CalendarStyle(
           outsideDaysVisible: false,
           cellMargin: EdgeInsets.symmetric(horizontal: 2.w, vertical: 2.h),
@@ -217,13 +217,9 @@ class _TableCalendarWidgetState extends ConsumerState<TableCalendarWidget> {
         selectedDayPredicate: (day) =>
             isSameDay(ref.watch(selectedDayProvider), day),
 
-        onDaySelected: widget.onDaySelected,
-        onDayLongPressed: (selectedDay, focusedDay) {
-          widget.onDaySelectedLongPress?.call(
-            selectedDay,
-            focusedDay,
-            _lastTapPosition,
-          );
+        onDaySelected: (selectedDay, focusedDay) {
+          widget.onDaySelected?.call(selectedDay, focusedDay);
+          widget.onDayTap?.call(selectedDay, focusedDay, _lastTapPosition);
         },
         // onFormatChanged: (format) {
         //   if (controller.calendarFormat != format) {
@@ -251,14 +247,14 @@ class _TableCalendarWidgetState extends ConsumerState<TableCalendarWidget> {
           final notasDelDia = notasPorDia[fecha] ?? const <Task>[];
           return Container(
             alignment: Alignment.topCenter,
-            margin: EdgeInsets.only(top: 20.h),
+            margin: EdgeInsets.only(top: 25.h),
             child: SingleChildScrollView(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   ...events.map((turno) => Padding(
                         padding: EdgeInsets.symmetric(
-                            vertical: 0.5.h, horizontal: 3.w),
+                            vertical: 1.2.h, horizontal: 3.w),
                         child: Container(
                           decoration: BoxDecoration(
                             color: HexColor(turno.color!).withAlpha(42),
