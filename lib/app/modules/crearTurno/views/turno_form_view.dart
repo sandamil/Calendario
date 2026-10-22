@@ -572,49 +572,53 @@ class _TurnoFormViewState extends ConsumerState<TurnoFormView> {
     ValueChanged<String>? onChanged,
   }) {
     final theme = Theme.of(context);
-    final textColor = theme.colorScheme.onSurface;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: EdgeInsets.only(left: 3.w, bottom: 6.h),
-          child: Text(
-            label,
-            style: TextStyle(
-              fontSize: 12.sp,
-              fontWeight: FontWeight.w700,
-              color: textColor.withOpacity(.72),
-            ),
-          ),
+    final colors = theme.colorScheme;
+    final outline = colors.outlineVariant.withOpacity(.65);
+    final roundedBorder = OutlineInputBorder(
+      borderRadius: BorderRadius.circular(17.r),
+      borderSide: BorderSide(color: outline, width: 1),
+    );
+    return TextField(
+      controller: controller,
+      maxLength: maxLength,
+      onChanged: onChanged,
+      textCapitalization: TextCapitalization.sentences,
+      style: TextStyle(
+        fontSize: 14.sp,
+        color: colors.onSurface,
+        fontWeight: FontWeight.w500,
+      ),
+      decoration: InputDecoration(
+        labelText: label,
+        hintText: hint,
+        prefixIcon: Icon(icon, size: 21.sp, color: PRIMARY_COLOR),
+        labelStyle: TextStyle(
+          fontSize: 13.sp,
+          color: colors.onSurface.withOpacity(.72),
         ),
-        Container(
-          decoration: BoxDecoration(
-            color: theme.colorScheme.surfaceContainerHighest.withOpacity(.48),
-            borderRadius: BorderRadius.circular(15.r),
-            border: Border.all(
-              color: theme.colorScheme.outlineVariant.withOpacity(.35),
-            ),
-          ),
-          child: TextField(
-            controller: controller,
-            maxLength: maxLength,
-            onChanged: onChanged,
-            textCapitalization: TextCapitalization.sentences,
-            style: TextStyle(fontSize: 14.sp, color: textColor),
-            decoration: InputDecoration(
-              hintText: hint,
-              prefixIcon: Icon(icon, size: 20.sp, color: PRIMARY_COLOR),
-              hintStyle: TextStyle(
-                fontSize: 13.sp,
-                color: textColor.withOpacity(.42),
-              ),
-              counterText: '',
-              border: InputBorder.none,
-              contentPadding: EdgeInsets.symmetric(vertical: 14.h),
-            ),
-          ),
+        floatingLabelStyle: TextStyle(
+          fontSize: 13.sp,
+          color: PRIMARY_COLOR,
+          fontWeight: FontWeight.w700,
         ),
-      ],
+        hintStyle: TextStyle(
+          fontSize: 13.sp,
+          color: colors.onSurface.withOpacity(.42),
+        ),
+        filled: true,
+        fillColor: colors.surfaceContainerHighest.withOpacity(.32),
+        counterText: '',
+        contentPadding: EdgeInsets.symmetric(
+          horizontal: 16.w,
+          vertical: 17.h,
+        ),
+        border: roundedBorder,
+        enabledBorder: roundedBorder,
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(17.r),
+          borderSide: BorderSide(color: PRIMARY_COLOR, width: 1.6),
+        ),
+      ),
     );
   }
 
