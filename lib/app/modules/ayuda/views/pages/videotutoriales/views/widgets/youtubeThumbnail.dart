@@ -12,7 +12,7 @@ class YouTubeThumbnail extends StatelessWidget {
   final String id;
 
 
-  String get imageUrl => 'http://img.youtube.com/vi/$id/hqdefault.jpg';
+  String get imageUrl => 'https://img.youtube.com/vi/$id/hqdefault.jpg';
 
   @override
   Widget build(BuildContext context) {
@@ -25,25 +25,35 @@ class YouTubeThumbnail extends StatelessWidget {
             AppBtn.basic(
               semanticLabel: 'Youtube thumbnail',
               onPressed: handlePressed,
-              child: Stack(children: [
-                AppImage(image: NetworkImage(imageUrl), fit: BoxFit.cover, scale: 1.0),
-                Positioned.fill(
-                  child: Center(
-                    child: Container(
-                      padding: const EdgeInsets.all(4),
-                      decoration: BoxDecoration(
-                        color: black.withOpacity(0.66),
-                        borderRadius: BorderRadius.circular(999),
-                      ),
-                      child: Icon(
-                        Icons.play_arrow,
-                        color: white,
-                        size: 48.sp,
+              child: AspectRatio(
+                aspectRatio: 16 / 9,
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    AppImage(
+                      image: NetworkImage(imageUrl),
+                      fit: BoxFit.cover,
+                      scale: 1.0,
+                    ),
+                    Positioned.fill(
+                      child: Center(
+                        child: Container(
+                          padding: const EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                            color: black.withOpacity(0.66),
+                            borderRadius: BorderRadius.circular(999),
+                          ),
+                          child: Icon(
+                            Icons.play_arrow,
+                            color: white,
+                            size: 48.sp,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                  ],
                 ),
-              ]),
+              ),
             ),
             SizedBox(height: 8.h,),
             // Padding(
