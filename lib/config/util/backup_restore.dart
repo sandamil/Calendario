@@ -22,7 +22,6 @@ class Backup {
     FlutterFileDialog.saveFileToDirectory(
       directory: _pickedDirecotry!,
       data: fileData,
-      // mimeType: mimeType,
       fileName: 'newFileName',
       replace: false,
       onFileExists: () async {
@@ -43,7 +42,6 @@ class Backup {
                     FlutterFileDialog.saveFileToDirectory(
                       directory: _pickedDirecotry!,
                       data: fileData,
-                      // mimeType: mimeType,
                       fileName: 'newFileName',
                       replace: true,
                     );
@@ -143,86 +141,42 @@ Future<bool> backupJson(databaseRepository) async {
 }
 
 Future<bool> restoreJson(databaseRepository) async {
-  final File? fileBackup = await getFileStorage();
+  try {
+    final pickedFile = await FilePicker.pickFile(
+      type: FileType.custom,
+      allowedExtensions: ['json'],
+      withData: kIsWeb,
+    );
 
-  if (fileBackup != null) {
-    try {
-      final backup = await getStringFile(fileBackup);
-      await databaseRepository.clearAllTables();
-      final List json =
-          databaseRepository.jsonBackup(backup, isEncrypted: ENCRYPT_DB);
-      await databaseRepository.restoreBackup(json);
-      return true;
-    } on Exception catch (_) {}
+    if (pickedFile == null) return false;
+
+    final String backup;
+
+    if (kIsWeb) {
+      final bytes = pickedFile.bytes;
+      if (bytes == null) return false;
+      backup = String.fromCharCodes(bytes);
+    } else {
+      final path = pickedFile.path;
+      if (path == null) return false;
+      backup = await File(path).readAsString();
+    }
+
+    final List json =
+        databaseRepository.jsonBackup(backup, isEncrypted: ENCRYPT_DB);
+    await databaseRepository.clearAllTables();
+    await databaseRepository.restoreBackup(json);
+    return true;
+  } catch (e, stackTrace) {
+    debugPrint('ERROR: Restoring JSON backup failed: $e');
+    debugPrint('$stackTrace');
+    return false;
   }
-  return false;
 }
 
 backupDb(databaseRepository) async {
   debugPrint('backupDb');
   await Backup().pickDirectory();
-
-  // if (!await FlutterFileDialog.isPickDirectorySupported()) {
-  //   print("Picking directory not supported");
-  //   return;
-  // }
-  //
-  // final pickedDirectory = await FlutterFileDialog.pickDirectory();
-  //
-  // if (pickedDirectory != null) {
-  //   final filePath = await FlutterFileDialog.saveFileToDirectory(
-  //     directory: pickedDirectory!,
-  //     data: file.readAsBytesSync(),
-  //     mimeType: "image/jpeg",
-  //     fileName: "fileName.jpeg",
-  //     replace: true,
-  //   );
-  //   await Backup.writeBackup(filePath);
-  //
-  // }
-
-// // Todo fotos?
-//   if ((!kIsWeb && defaultTargetPlatform == TargetPlatform.android)) {
-//     final androidInfo = await DeviceInfoPlugin().androidInfo;
-//     if (androidInfo.version.sdkInt <= 32) {
-//       if (await Permission.storage.request().isGranted) {
-//
-//         print('yes <<<<<32  ');
-//         // await file.copy(path);
-//         final params = SaveFileDialogParams(sourceFilePath: newPath);
-//         // final filePath = await FlutterFileDialog.saveFile(params: params);
-//         // await Backup.writeBackup(filePath);
-//
-//         // await Backup.writeBackup(path);
-//         // ajustesController.errorBackup = false;
-//
-//         return true;
-//       } else {
-//         print('nooooooooo <<<<<32');
-//         // ajustesController.errorBackup = true;
-//
-//         return false;
-//       }
-//     }  else {
-//       if (await Permission.photos.request().isGranted) {
-//         print('yes > 32');
-//         // await file.copy(path);
-//         final params = SaveFileDialogParams(sourceFilePath: newPath);
-//         final filePath = await FlutterFileDialog.saveFile(params: params);
-//         await Backup.writeBackup(filePath);
-//
-//         // ajustesController.errorBackup = false;
-//
-//         return true;
-//       } else {
-//         print('nooooooooo  >>>>>32');
-//         // ajustesController.errorBackup = true;
-//
-//         return false;
-//       }
-//     }
-//
-//   }
 }
 
 Future<bool> restaurarDb(databaseRepository) async {
@@ -246,28 +200,3 @@ Future<bool> restaurarDb(databaseRepository) async {
     return false;
   }
 }
-
-// Future<bool> restoreDb() async {
-//
-//   DbProvider databaseRepository = DbProvider();
-//
-//   final File? fileBackup = await getFileStorage();
-//   final String db = await databaseRepository.databasePath();
-//   databaseRepository.close();
-//   if (fileBackup != null) {
-//     try {
-//       final Uint8List backup = await getBytesFile(fileBackup);
-//       final String txt = utf8.decode(backup.sublist(0, 6));
-//       if (txt != 'SQLite') {
-//         throw Exception();
-//       }
-//       await fileBackup.copy(db);
-//       Get.snackbar('Database restaurada', '$db');
-//
-//       return true;
-//     } on Exception catch (_) {
-//       Get.snackbar('Error', '$_');
-//     }
-//   }
-//   return false;
-// }
