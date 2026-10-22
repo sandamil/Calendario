@@ -100,7 +100,9 @@ class _AddCuadranteViewState extends ConsumerState<AddCuadranteView> {
             return Scaffold(
               appBar: AppBar(
                 elevation: 0,
-                backgroundColor: Colors.transparent,
+                toolbarHeight: 58.h,
+                titleSpacing: 2.w,
+                backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                 centerTitle: false,
                 leading: IconButton(
                   icon: Icon(
@@ -161,7 +163,9 @@ class _AddCuadranteViewState extends ConsumerState<AddCuadranteView> {
                     Column(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
-                        Row(
+                        Padding(
+                          padding: EdgeInsets.fromLTRB(16.w, 8.h, 8.w, 0),
+                          child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: <Widget>[
                             Text(
@@ -186,6 +190,7 @@ class _AddCuadranteViewState extends ConsumerState<AddCuadranteView> {
                             ),
                           ],
                         ),
+                        ),
                         Padding(
                           padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
                           child: TextField(
@@ -199,9 +204,13 @@ class _AddCuadranteViewState extends ConsumerState<AddCuadranteView> {
                             decoration: InputDecoration(
                               hintText: 'Nombre del cuadrante',
                               labelText: 'Nombre del cuadrante',
+                              prefixIcon: Icon(Icons.edit_note_rounded, color: Theme.of(context).colorScheme.primary),
                               filled: true,
-                              fillColor: Theme.of(context).colorScheme.surfaceContainerHighest,
-                              border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(16)), borderSide: BorderSide.none),
+                              fillColor: Theme.of(context).colorScheme.surfaceContainerHighest.withOpacity(.48),
+                              contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 15.h),
+                              border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(16.r)), borderSide: BorderSide.none),
+                              enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(16.r)), borderSide: BorderSide(color: Theme.of(context).colorScheme.outlineVariant.withOpacity(.45))),
+                              focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(16.r)), borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 1.4)),
                             ),
                             maxLines: 1,
                             maxLength: 20,
