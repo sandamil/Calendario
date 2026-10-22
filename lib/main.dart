@@ -25,7 +25,10 @@ import 'package:intl/date_symbol_data_local.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Notifications.instance.init();
+  await Future.wait<void>([
+    Notifications.instance.init(),
+    initMemory(),
+  ]);
   // MySharedPref.init();
   // GetStorage.init();
 
@@ -45,7 +48,6 @@ Future<void> main() async {
     );
   }
 
-  await initMemory();
   initializeDateFormatting("es_ES");
 
   runApp(
@@ -56,8 +58,10 @@ Future<void> main() async {
 }
 
 Future<void> initMemory() async {
-  await MySharedPref.init();
-  await GetStorage.init();
+  await Future.wait<void>([
+    MySharedPref.init(),
+    GetStorage.init().then<void>((_) {}),
+  ]);
   // var status = await Permission.storage.status;
   // if (status.isDenied) {
   //   // You can request multiple permissions at once.
