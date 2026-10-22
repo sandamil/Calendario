@@ -266,6 +266,11 @@ class _TurnoFormViewState extends ConsumerState<TurnoFormView> {
     final theme = Theme.of(context);
     final textColor = theme.colorScheme.onSurface;
     final mutedColor = textColor.withOpacity(.58);
+    final previewTextColor =
+        _color.computeLuminance() > .52 ? Colors.black87 : Colors.white;
+    final previewBorderColor = _color.computeLuminance() > .86
+        ? theme.colorScheme.outline
+        : _color;
 
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
@@ -351,9 +356,12 @@ class _TurnoFormViewState extends ConsumerState<TurnoFormView> {
                                 width: double.infinity,
                                 padding: EdgeInsets.symmetric(vertical: 4.h),
                                 decoration: BoxDecoration(
-                                  color: _color.withOpacity(.18),
+                                  color: _color.withOpacity(.30),
                                   borderRadius: BorderRadius.circular(6.r),
-                                  border: Border.all(color: _color),
+                                  border: Border.all(
+                                    color: previewBorderColor,
+                                    width: 1,
+                                  ),
                                 ),
                                 child: Text(
                                   _abreviaturaController.text
@@ -367,7 +375,7 @@ class _TurnoFormViewState extends ConsumerState<TurnoFormView> {
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
                                     fontSize: 12.sp,
-                                    color: _color,
+                                    color: previewTextColor,
                                     fontWeight: FontWeight.w800,
                                   ),
                                 ),
