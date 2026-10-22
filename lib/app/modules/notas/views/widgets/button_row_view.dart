@@ -89,7 +89,7 @@ class _ButtonRowViewState extends ConsumerState<ButtonRowView> {
               alignment: Alignment.center,
               margin: EdgeInsets.only(left: 4.w),
               padding: EdgeInsets.only(left: 12.w, right: 4.w),
-              height: 46.h,
+              height: 48.h,
               decoration: BoxDecoration(
                 color: Theme.of(context).colorScheme.surfaceContainerHighest.withOpacity(.48),
                 border: Border.all(color: Theme.of(context).colorScheme.outlineVariant.withOpacity(.55)),
