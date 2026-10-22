@@ -192,8 +192,9 @@ class _TableCalendarWidgetState extends ConsumerState<TableCalendarWidget> {
         daysOfWeekHeight: 25.h,
         rowHeight: 90.h,
         headerVisible: (kIsWeb || defaultTargetPlatform == TargetPlatform.macOS),
-        calendarStyle: const CalendarStyle(
+        calendarStyle: CalendarStyle(
           outsideDaysVisible: false,
+          cellMargin: EdgeInsets.symmetric(horizontal: 2.w, vertical: 2.h),
         ),
         holidayPredicate: (day) {
           final fecha = DateTime(day.year, day.month, day.day);
@@ -260,10 +261,10 @@ class _TableCalendarWidgetState extends ConsumerState<TableCalendarWidget> {
                             vertical: 0.5.h, horizontal: 3.w),
                         child: Container(
                           decoration: BoxDecoration(
-                            color: HexColor(turno.color!).withAlpha(600),
+                            color: HexColor(turno.color!).withAlpha(42),
                             // border: Border.all(
                             //     color: HexColor(turno.color!), width: 1.h),
-                            borderRadius: BorderRadius.circular(3.r),
+                            borderRadius: BorderRadius.circular(4.r),
                           ),
                           height: 15.h,
                           child: Container(
@@ -273,9 +274,9 @@ class _TableCalendarWidgetState extends ConsumerState<TableCalendarWidget> {
                             child: Text(turno.title!.toUpperCase(),
                                 style: TextStyle(
                                     height: 1.2.h,
-                                    fontSize: 12.sp,
+                                    fontSize: 10.sp,
                                     color: HexColor(turno.color!),
-                                    fontWeight: FontWeight.w900)),
+                                    fontWeight: FontWeight.w700)),
                           ),
                         ),
                       )),
@@ -320,8 +321,11 @@ class _TableCalendarWidgetState extends ConsumerState<TableCalendarWidget> {
               width: double.maxFinite,
               height: double.maxFinite,
               decoration: BoxDecoration(
-                border: Border.all(width: 1.w, color: MyColors.borderCellColor),
-                borderRadius: BorderRadius.circular(5.r),
+                border: Border.all(
+                  width: 0.7.w,
+                  color: MyColors.borderCellColor.withAlpha(150),
+                ),
+                borderRadius: BorderRadius.circular(8.r),
               ),
               child: Padding(
                 padding: EdgeInsets.symmetric(vertical: 1.h),
@@ -353,8 +357,11 @@ class _TableCalendarWidgetState extends ConsumerState<TableCalendarWidget> {
               height: double.maxFinite,
               decoration: BoxDecoration(
                 color: MyColors.cellColor,
-                border: Border.all(width: 1.w, color: MyColors.borderCellColor),
-                borderRadius: BorderRadius.circular(5.r),
+                border: Border.all(
+                  width: 0.7.w,
+                  color: MyColors.borderCellColor.withAlpha(150),
+                ),
+                borderRadius: BorderRadius.circular(8.r),
               ),
               child: Padding(
                 padding: EdgeInsets.symmetric(vertical: 1.h),
@@ -384,9 +391,9 @@ class _TableCalendarWidgetState extends ConsumerState<TableCalendarWidget> {
                 // backgroundBlendMode: dayType == 'outside' ? BlendMode.modulate :  BlendMode.darken,
                 border: Border.all(
                   color: PRIMARY_COLOR,
-                  width: 0.05.w,
+                  width: 1.w,
                 ),
-                borderRadius: BorderRadius.circular(5.r),
+                borderRadius: BorderRadius.circular(8.r),
               ),
               child: Align(
                 alignment: Alignment.topCenter,
@@ -409,13 +416,13 @@ class _TableCalendarWidgetState extends ConsumerState<TableCalendarWidget> {
             child: Container(
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                color: MyColors.cellTodayColor,
+                color: PRIMARY_COLOR.withAlpha(28),
                 // backgroundBlendMode: dayType == 'outside' ? BlendMode.modulate :  BlendMode.darken,
                 border: Border.all(
                   color: PRIMARY_COLOR,
                   width: 1.w,
                 ),
-                borderRadius: BorderRadius.circular(5.r),
+                borderRadius: BorderRadius.circular(8.r),
               ),
               child: Align(
                 alignment: Alignment.topCenter,
