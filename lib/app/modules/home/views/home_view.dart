@@ -119,27 +119,6 @@ class _HomeViewState extends State<HomeView> {
     DateTime focusedDate,
     Offset tapPosition,
   ) async {
-    // En Android, un bottom sheet evita problemas de coordenadas y tamaño
-    // del overlay que pueden impedir ver el popup anclado al día.
-    if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
-      await showModalBottomSheet<void>(
-        context: context,
-        isScrollControlled: true,
-        useSafeArea: true,
-        backgroundColor: Colors.transparent,
-        builder: (sheetContext) => Padding(
-          padding: EdgeInsets.fromLTRB(12.w, 8.h, 12.w, 12.h),
-          child: CalendarDaySheet(
-            selectedDate: selectedDate,
-            getCuadrante: getCuadrante(),
-            arrowX: 180.w,
-            pointerOnTop: true,
-          ),
-        ),
-      );
-      return;
-    }
-
     // El toque viene en coordenadas globales. Convertirlo al sistema de
     // coordenadas del Overlay evita desplazamientos por AppBar/área segura.
     final overlay = Navigator.of(context, rootNavigator: true).overlay;
