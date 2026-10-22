@@ -102,7 +102,9 @@ class CalendarDaySheet extends StatelessWidget {
             top: widgetPointerTop(pointerOnTop, pointerHeight),
             bottom: widgetPointerTop(!pointerOnTop, pointerHeight),
           ),
-          child: Material(
+          child: SizedBox(
+            width: double.infinity,
+            child: Material(
           color: theme.scaffoldBackgroundColor,
           elevation: 18,
           shadowColor: Colors.black.withOpacity(.25),
@@ -197,6 +199,7 @@ class CalendarDaySheet extends StatelessWidget {
               ),
             ),
           ),
+            ),
           ),
         ),
         Positioned(
