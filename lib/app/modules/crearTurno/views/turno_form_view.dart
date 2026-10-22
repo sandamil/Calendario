@@ -298,20 +298,61 @@ class _TurnoFormViewState extends ConsumerState<TurnoFormView> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Personaliza tu turno',
-                  style: TextStyle(
-                    fontSize: 21.sp,
-                    fontWeight: FontWeight.w800,
-                    color: textColor,
+                Container(
+                  width: double.infinity,
+                  padding: EdgeInsets.all(14.w),
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.surfaceContainerHighest.withOpacity(.38),
+                    borderRadius: BorderRadius.circular(20.r),
+                    border: Border.all(
+                      color: theme.colorScheme.outlineVariant.withOpacity(.35),
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 46.w,
+                        height: 46.w,
+                        decoration: BoxDecoration(
+                          color: PRIMARY_COLOR.withOpacity(.14),
+                          borderRadius: BorderRadius.circular(15.r),
+                        ),
+                        child: Icon(
+                          _esEdicion
+                              ? Icons.edit_calendar_rounded
+                              : Icons.add_task_rounded,
+                          color: PRIMARY_COLOR,
+                          size: 24.sp,
+                        ),
+                      ),
+                      SizedBox(width: 12.w),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              _esEdicion ? 'Personaliza tu turno' : 'Crea tu turno',
+                              style: TextStyle(
+                                fontSize: 18.sp,
+                                fontWeight: FontWeight.w800,
+                                color: textColor,
+                              ),
+                            ),
+                            SizedBox(height: 4.h),
+                            Text(
+                              'Nombre, horario y color para reconocerlo en el calendario.',
+                              style: TextStyle(
+                                fontSize: 12.sp,
+                                color: mutedColor,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                SizedBox(height: 4.h),
-                Text(
-                  'Elige un nombre, horario y color para reconocerlo en el calendario.',
-                  style: TextStyle(fontSize: 13.sp, color: mutedColor),
-                ),
-                SizedBox(height: 22.h),
+                SizedBox(height: 20.h),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -586,7 +627,12 @@ class _TurnoFormViewState extends ConsumerState<TurnoFormView> {
     final textColor = theme.colorScheme.onSurface;
     return Material(
       color: theme.colorScheme.surfaceContainerHighest.withOpacity(.48),
-      borderRadius: BorderRadius.circular(14.r),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(14.r),
+        side: BorderSide(
+          color: theme.colorScheme.outlineVariant.withOpacity(.35),
+        ),
+      ),
       child: InkWell(
         borderRadius: BorderRadius.circular(14.r),
         onTap: onTap,
