@@ -145,7 +145,6 @@ Future<bool> restoreJson(databaseRepository) async {
     final pickedFile = await FilePicker.pickFile(
       type: FileType.custom,
       allowedExtensions: ['json'],
-      withData: kIsWeb,
     );
 
     if (pickedFile == null) return false;
@@ -153,8 +152,7 @@ Future<bool> restoreJson(databaseRepository) async {
     final String backup;
 
     if (kIsWeb) {
-      final bytes = pickedFile.bytes;
-      if (bytes == null) return false;
+      final bytes = await pickedFile.readAsBytes();
       backup = String.fromCharCodes(bytes);
     } else {
       final path = pickedFile.path;
