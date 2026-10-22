@@ -30,8 +30,11 @@ class Notifications {
     // final notificationAppLaunchDetails =
     //     await flutterLocalNotificationsPlugin.getNotificationAppLaunchDetails();
 
+    // Use a real drawable resource. This default is also persisted by the
+    // plugin so scheduled notifications can resolve it when the app process
+    // is not running.
     const initializationSettingsAndroid =
-        AndroidInitializationSettings('@mipmap/launcher_icon');
+        AndroidInitializationSettings('ic_stat_notification');
     // Note: permissions aren't requested here just to demonstrate that can be done later using the `requestPermissions()` method
     // of the `IOSFlutterLocalNotificationsPlugin` class
     final initializationSettingsIOS = DarwinInitializationSettings(
@@ -111,6 +114,7 @@ class Notifications {
       downloadChannelId,
       downloadChannelName,
       channelDescription: downloadChannelDescription,
+      icon: 'ic_stat_notification',
       channelShowBadge: false,
       importance: Importance.max,
       priority: Priority.high,
@@ -141,6 +145,7 @@ class Notifications {
       downloadChannelId,
       downloadChannelName,
       channelDescription: downloadChannelDescription,
+      icon: 'ic_stat_notification',
       channelShowBadge: false,
       importance: Importance.max,
       priority: Priority.high,
@@ -168,6 +173,7 @@ class Notifications {
       downloadChannelId,
       downloadChannelName,
       channelDescription: downloadChannelDescription,
+      icon: 'ic_stat_notification',
       importance: Importance.max,
       priority: Priority.high,
       onlyAlertOnce: true,
