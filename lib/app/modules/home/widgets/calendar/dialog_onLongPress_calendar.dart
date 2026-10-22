@@ -86,112 +86,151 @@ class CalendarDaySheet extends StatelessWidget {
     final theme = Theme.of(context);
     final onSurface = theme.colorScheme.onSurface;
 
-    return Material(
-      color: theme.scaffoldBackgroundColor,
-      elevation: 18,
-      shadowColor: Colors.black.withOpacity(.25),
-      clipBehavior: Clip.antiAlias,
-      borderRadius: BorderRadius.circular(24.r),
-      child: ConstrainedBox(
-        constraints: BoxConstraints(
-          maxWidth: 390.w,
-          maxHeight: MediaQuery.sizeOf(context).height * .68,
-        ),
-        child: Padding(
-          padding: EdgeInsets.fromLTRB(14.w, 10.h, 14.w, 14.h),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                width: 38.w,
-                height: 4.h,
-                decoration: BoxDecoration(
-                  color: onSurface.withOpacity(.18),
-                  borderRadius: BorderRadius.circular(20.r),
-                ),
-              ),
-              SizedBox(height: 10.h),
-              Row(
-                children: [
-                  Container(
-                    width: 42.w,
-                    height: 42.w,
-                    decoration: BoxDecoration(
-                      color: PRIMARY_COLOR.withOpacity(.11),
-                      borderRadius: BorderRadius.circular(13.r),
-                    ),
-                    alignment: Alignment.center,
-                    child: Text(
-                      '${selectedDate.day}',
-                      style: TextStyle(
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.w800,
-                        color: PRIMARY_COLOR,
-                      ),
-                    ),
-                  ),
-                  SizedBox(width: 11.w),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '${selectedDate.day} de ${_month(selectedDate)}',
-                          style: TextStyle(
-                            fontSize: 20.sp,
-                            fontWeight: FontWeight.w700,
-                            color: onSurface,
-                          ),
-                        ),
-                        SizedBox(height: 1.h),
-                        Text(
-                          '${_weekday(selectedDate)} · ${selectedDate.year}',
-                          style: TextStyle(
-                            fontSize: 12.sp,
-                            color: onSurface.withOpacity(.58),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    icon: const Icon(Icons.close_rounded),
-                    tooltip: 'Cerrar',
-                  ),
-                ],
-              ),
-              SizedBox(height: 9.h),
-              ClipRRect(
-                borderRadius: BorderRadius.circular(14.r),
-                child: const TurnosNotasOnHomeDialog(),
-              ),
-              SizedBox(height: 10.h),
-              Row(
-                children: [
-                  Expanded(
-                    child: _ActionTile(
-                      icon: Icons.add_rounded,
-                      title: 'Añadir turno',
-                      onTap: () => _openAddShift(context),
-                    ),
-                  ),
-                  SizedBox(width: 8.w),
-                  Expanded(
-                    child: _ActionTile(
-                      icon: Icons.note_add_outlined,
-                      title: 'Añadir nota',
-                      onTap: () => _openAddNote(context),
-                    ),
-                  ),
-                ],
-              ),
-            ],
+    // El primer popup es un globo contextual: la punta queda en el centro
+    // del borde que mira hacia el día que se ha pulsado. El posicionamiento
+    // exterior lo hace HomeView usando la posición real del toque.
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        CustomPaint(
+          size: Size(22.w, 10.h),
+          painter: _BubblePointerPainter(
+            color: theme.scaffoldBackgroundColor,
+            pointDown: true,
           ),
         ),
-      ),
+        Material(
+          color: theme.scaffoldBackgroundColor,
+          elevation: 18,
+          shadowColor: Colors.black.withOpacity(.25),
+          clipBehavior: Clip.antiAlias,
+          borderRadius: BorderRadius.circular(24.r),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(
+              maxWidth: 390.w,
+              maxHeight: MediaQuery.sizeOf(context).height * .68,
+            ),
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(14.w, 10.h, 14.w, 14.h),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    children: [
+                      Container(
+                        width: 42.w,
+                        height: 42.w,
+                        decoration: BoxDecoration(
+                          color: PRIMARY_COLOR.withOpacity(.11),
+                          borderRadius: BorderRadius.circular(13.r),
+                        ),
+                        alignment: Alignment.center,
+                        child: Text(
+                          '${selectedDate.day}',
+                          style: TextStyle(
+                            fontSize: 18.sp,
+                            fontWeight: FontWeight.w800,
+                            color: PRIMARY_COLOR,
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 11.w),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '${selectedDate.day} de ${_month(selectedDate)}',
+                              style: TextStyle(
+                                fontSize: 20.sp,
+                                fontWeight: FontWeight.w700,
+                                color: onSurface,
+                              ),
+                            ),
+                            SizedBox(height: 1.h),
+                            Text(
+                              '${_weekday(selectedDate)} · ${selectedDate.year}',
+                              style: TextStyle(
+                                fontSize: 12.sp,
+                                color: onSurface.withOpacity(.58),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        icon: const Icon(Icons.close_rounded),
+                        tooltip: 'Cerrar',
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 9.h),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(14.r),
+                    child: const TurnosNotasOnHomeDialog(),
+                  ),
+                  SizedBox(height: 10.h),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _ActionTile(
+                          icon: Icons.add_rounded,
+                          title: 'Añadir turno',
+                          onTap: () => _openAddShift(context),
+                        ),
+                      ),
+                      SizedBox(width: 8.w),
+                      Expanded(
+                        child: _ActionTile(
+                          icon: Icons.note_add_outlined,
+                          title: 'Añadir nota',
+                          onTap: () => _openAddNote(context),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
+}
+
+class _BubblePointerPainter extends CustomPainter {
+  const _BubblePointerPainter({
+    required this.color,
+    required this.pointDown,
+  });
+
+  final Color color;
+  final bool pointDown;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final path = Path();
+    if (pointDown) {
+      path
+        ..moveTo(0, 0)
+        ..lineTo(size.width, 0)
+        ..lineTo(size.width / 2, size.height)
+        ..close();
+    } else {
+      path
+        ..moveTo(0, size.height)
+        ..lineTo(size.width, size.height)
+        ..lineTo(size.width / 2, 0)
+        ..close();
+    }
+    canvas.drawPath(path, Paint()..color = color);
+  }
+
+  @override
+  bool shouldRepaint(covariant _BubblePointerPainter oldDelegate) =>
+      oldDelegate.color != color || oldDelegate.pointDown != pointDown;
 }
 
 class _ActionTile extends StatelessWidget {
