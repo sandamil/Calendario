@@ -61,14 +61,14 @@ class _ButtonRowViewState extends ConsumerState<ButtonRowView> {
               decoration: BoxDecoration(
                 color: state.soloImportantes
                     ? Colors.red
-                    : Colors.transparent,
+                    : Theme.of(context).colorScheme.surfaceContainerHighest.withOpacity(.48),
                 border: Border.all(
-                  width: state.soloImportantes ? 2 : 1,
+                  width: state.soloImportantes ? 1.5 : 1,
                   color: state.soloImportantes
                       ? Colors.red.shade700
-                      : MyColors.borderAccentLine,
+                      : Theme.of(context).colorScheme.outlineVariant.withOpacity(.55),
                 ),
-                borderRadius: BorderRadius.all(Radius.circular(10.r)),
+                borderRadius: BorderRadius.all(Radius.circular(14.r)),
               ),
               key: state.tutorialVisible
                   ? tutorialController.keyButton11
@@ -88,11 +88,12 @@ class _ButtonRowViewState extends ConsumerState<ButtonRowView> {
             child: Container(
               alignment: Alignment.center,
               margin: EdgeInsets.only(left: 4.w),
-              padding: EdgeInsets.only(left: 10.w),
-              height: 42.h,
+              padding: EdgeInsets.only(left: 12.w, right: 4.w),
+              height: 46.h,
               decoration: BoxDecoration(
-                border: Border.all(color: MyColors.borderAccentLine),
-                borderRadius: BorderRadius.all(Radius.circular(10.r)),
+                color: Theme.of(context).colorScheme.surfaceContainerHighest.withOpacity(.48),
+                border: Border.all(color: Theme.of(context).colorScheme.outlineVariant.withOpacity(.55)),
+                borderRadius: BorderRadius.all(Radius.circular(16.r)),
               ),
               child: Row(
                 children: [
@@ -108,13 +109,19 @@ class _ButtonRowViewState extends ConsumerState<ButtonRowView> {
                         fontWeight: FontWeight.w500,
                       ),
                       textInputAction: TextInputAction.search,
-                      decoration: InputDecoration.collapsed(
-                        hintText: 'Busqueda',
+                      decoration: InputDecoration(
+                        isDense: true,
+                        prefixIcon: Icon(Icons.search_rounded, size: 20.sp, color: Theme.of(context).colorScheme.onSurface.withOpacity(.55)),
+                        hintText: 'Buscar notas',
                         hintStyle: TextStyle(
-                          color: MyColors.borderAccentLine,
-                          fontSize: 18.sp,
+                          color: Theme.of(context).colorScheme.onSurface.withOpacity(.48),
+                          fontSize: 14.sp,
                           fontWeight: FontWeight.w500,
                         ),
+                        border: InputBorder.none,
+                        enabledBorder: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                        contentPadding: EdgeInsets.symmetric(vertical: 12.h),
                       ),
                     ),
                   ),
@@ -123,7 +130,7 @@ class _ButtonRowViewState extends ConsumerState<ButtonRowView> {
                       state.busqueda.isEmpty
                           ? Icons.search
                           : Icons.cancel,
-                      color: MyColors.borderAccentLine,
+                      color: Theme.of(context).colorScheme.onSurface.withOpacity(.65),
                     ),
                     onPressed: () {
                       if (state.busqueda.isEmpty) {
