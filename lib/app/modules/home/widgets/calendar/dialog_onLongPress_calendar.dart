@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../config/theme/my_colors.dart';
-import '../../../../../config/theme/my_fonts.dart';
 import '../../../../data/model/cuadranteDay.dart';
 import 'dialog_addTurnosTo_calendar.dart';
 import 'turnos_notas_onHomeDialog.dart';
@@ -74,7 +73,11 @@ class CalendarDaySheet extends StatelessWidget {
       isScrollControlled: true,
       useSafeArea: true,
       backgroundColor: Colors.transparent,
-      builder: (_) => CalendarAddNoteSheet(selectedDate: selectedDate),
+      builder: (_) => _CalendarSheetFrame(
+        title: 'Nueva nota',
+        icon: Icons.note_add_outlined,
+        child: CalendarAddNoteSheet(selectedDate: selectedDate),
+      ),
     );
   }
 
@@ -83,15 +86,19 @@ class CalendarDaySheet extends StatelessWidget {
     final theme = Theme.of(context);
     final onSurface = theme.colorScheme.onSurface;
 
-    return Container(
-      decoration: BoxDecoration(
-        color: theme.scaffoldBackgroundColor,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(28.r)),
-      ),
-      child: SafeArea(
-        top: false,
+    return Material(
+      color: theme.scaffoldBackgroundColor,
+      elevation: 18,
+      shadowColor: Colors.black.withOpacity(.25),
+      clipBehavior: Clip.antiAlias,
+      borderRadius: BorderRadius.circular(24.r),
+      child: ConstrainedBox(
+        constraints: BoxConstraints(
+          maxWidth: 390.w,
+          maxHeight: MediaQuery.sizeOf(context).height * .68,
+        ),
         child: Padding(
-          padding: EdgeInsets.fromLTRB(18.w, 8.h, 18.w, 16.h),
+          padding: EdgeInsets.fromLTRB(14.w, 10.h, 14.w, 14.h),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -99,13 +106,31 @@ class CalendarDaySheet extends StatelessWidget {
                 width: 38.w,
                 height: 4.h,
                 decoration: BoxDecoration(
-                  color: onSurface.withOpacity(.2),
+                  color: onSurface.withOpacity(.18),
                   borderRadius: BorderRadius.circular(20.r),
                 ),
               ),
-              SizedBox(height: 14.h),
+              SizedBox(height: 10.h),
               Row(
                 children: [
+                  Container(
+                    width: 42.w,
+                    height: 42.w,
+                    decoration: BoxDecoration(
+                      color: PRIMARY_COLOR.withOpacity(.11),
+                      borderRadius: BorderRadius.circular(13.r),
+                    ),
+                    alignment: Alignment.center,
+                    child: Text(
+                      '${selectedDate.day}',
+                      style: TextStyle(
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.w800,
+                        color: PRIMARY_COLOR,
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 11.w),
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -113,16 +138,16 @@ class CalendarDaySheet extends StatelessWidget {
                         Text(
                           '${selectedDate.day} de ${_month(selectedDate)}',
                           style: TextStyle(
-                            fontSize: 22.sp,
+                            fontSize: 20.sp,
                             fontWeight: FontWeight.w700,
                             color: onSurface,
                           ),
                         ),
-                        SizedBox(height: 2.h),
+                        SizedBox(height: 1.h),
                         Text(
                           '${_weekday(selectedDate)} · ${selectedDate.year}',
                           style: TextStyle(
-                            fontSize: 13.sp,
+                            fontSize: 12.sp,
                             color: onSurface.withOpacity(.58),
                           ),
                         ),
@@ -136,12 +161,12 @@ class CalendarDaySheet extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(height: 10.h),
+              SizedBox(height: 9.h),
               ClipRRect(
-                borderRadius: BorderRadius.circular(16.r),
+                borderRadius: BorderRadius.circular(14.r),
                 child: const TurnosNotasOnHomeDialog(),
               ),
-              SizedBox(height: 12.h),
+              SizedBox(height: 10.h),
               Row(
                 children: [
                   Expanded(
@@ -151,7 +176,7 @@ class CalendarDaySheet extends StatelessWidget {
                       onTap: () => _openAddShift(context),
                     ),
                   ),
-                  SizedBox(width: 10.w),
+                  SizedBox(width: 8.w),
                   Expanded(
                     child: _ActionTile(
                       icon: Icons.note_add_outlined,
@@ -185,21 +210,21 @@ class _ActionTile extends StatelessWidget {
     final theme = Theme.of(context);
     return Material(
       color: theme.colorScheme.surfaceContainerHighest.withOpacity(.65),
-      borderRadius: BorderRadius.circular(16.r),
+      borderRadius: BorderRadius.circular(14.r),
       child: InkWell(
-        borderRadius: BorderRadius.circular(16.r),
+        borderRadius: BorderRadius.circular(14.r),
         onTap: onTap,
         child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 13.h, horizontal: 10.w),
+          padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 8.w),
           child: Column(
             children: [
-              Icon(icon, color: PRIMARY_COLOR, size: 25.sp),
-              SizedBox(height: 6.h),
+              Icon(icon, color: PRIMARY_COLOR, size: 24.sp),
+              SizedBox(height: 5.h),
               Text(
                 title,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 13.sp,
+                  fontSize: 12.sp,
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -225,11 +250,10 @@ class _CalendarSheetFrame extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Container(
-      decoration: BoxDecoration(
-        color: theme.scaffoldBackgroundColor,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(28.r)),
-      ),
+    return Material(
+      color: theme.scaffoldBackgroundColor,
+      clipBehavior: Clip.antiAlias,
+      borderRadius: BorderRadius.vertical(top: Radius.circular(28.r)),
       child: SafeArea(
         top: false,
         child: Padding(
