@@ -36,6 +36,9 @@ jobs:
       - name: Compilar PWA
         run: flutter build web --release --base-href /Calendario/
 
+      - name: Publicar configuración de AdMob
+        run: cp app-ads.txt build/web/app-ads.txt
+
       - name: Preparar publicación
         uses: actions/upload-pages-artifact@v3
         with:
