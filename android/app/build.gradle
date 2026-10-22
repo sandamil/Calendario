@@ -14,7 +14,6 @@ if (localPropertiesFile.exists()) {
 }
 
 def flutterRoot = localProperties.getProperty('flutter.sdk')
-
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
 if (flutterVersionCode == null) {
     flutterVersionCode = '1'
@@ -30,9 +29,6 @@ def keystorePropertiesFile = rootProject.file('key.properties')
 if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 }
-
-
-
 
 android {
     namespace "ajat.calendario.turnos"
@@ -55,16 +51,15 @@ android {
 
     defaultConfig {
         applicationId "ajat.calendario.turnos"
-        // You can update the following values to match your application needs.
-        // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdkVersion flutter.minSdkVersion
+        // google_mobile_ads 9.1.0 utiliza GMA Android 25.4.0,
+        // cuyo mínimo soportado es API 24.
+        minSdkVersion 24
         targetSdkVersion 36
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         multiDexEnabled true
-
-
     }
+
     signingConfigs {
         release {
             keyAlias keystoreProperties['keyAlias']
@@ -73,6 +68,7 @@ android {
             storePassword keystoreProperties['storePassword']
         }
     }
+
     buildTypes {
         release {
             signingConfig signingConfigs.release
@@ -86,11 +82,5 @@ flutter {
 
 dependencies {
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.4'
-    implementation 'com.google.android.gms:play-services-ads:22.1.0'
     implementation 'com.android.support:multidex:1.0.3'
-
-//    implementation platform('com.google.firebase:firebase-bom:32.1.0')
-//    implementation 'com.google.firebase:firebase-analytics-ktx'
-//    implementation 'com.google.firebase:firebase-crashlytics-ktx:18.3.7'
 }
-
