@@ -11,7 +11,6 @@ import 'package:calendario2/app/modules/home/providers/calendar_providers.dart';
 import 'package:calendario2/app/modules/home/widgets/calendar/table_calendar.dart';
 import 'package:calendario2/app/modules/home/widgets/calendar/widget/line.dart';
 import 'package:calendario2/app/modules/home/widgets/calendar/widget/selected_day_widget.dart';
-import 'package:calendario2/app/modules/home/widgets/calendar/dialog_onLongPress_calendar.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -27,6 +26,7 @@ import '../../../controllers/tutorial_provider.dart';
 import '../../../controllers/tutorialController.dart';
 import '../../../data/model/cuadranteDay.dart';
 import '../../menu/views/menu_view.dart';
+import '../widgets/calendar/dialog_onLongPress_calendar.dart';
 
 typedef HomeCallback = void Function(int id, DateTime selectedDate);
 typedef HomeCallback2 = void Function();
@@ -151,6 +151,7 @@ class _HomeViewState extends State<HomeView> {
         _showHomeTutorial = true;
       });
 
+      // Esperar al siguiente frame: las claves ya estarán en el árbol.
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!mounted || !_showHomeTutorial) return;
 
@@ -170,6 +171,7 @@ class _HomeViewState extends State<HomeView> {
     _selectedDays.add(ProviderScope.containerOf(context, listen: false)
         .read(focusedMonthProvider));
 
+    // Cargar el cuadrante antes de consultar los turnos del día inicial.
     getCuadrante().then((mapa) {
       if (!mounted) return;
       ProviderScope.containerOf(context, listen: false)
@@ -195,6 +197,7 @@ class _HomeViewState extends State<HomeView> {
         onPopInvokedWithResult: (bool didPop, Object? result) {
           if (didPop) return;
           if ((!kIsWeb && defaultTargetPlatform == TargetPlatform.android)) {
+            //? to close quick order floating if its open when click back btn
             if (isDialOpen.value) {
               isDialOpen.value = false;
             } else {
@@ -254,61 +257,113 @@ class _HomeViewState extends State<HomeView> {
                 ),
               ],
             ),
-            bottomNavigationBar: null,
-            body: SafeArea(
-              child: Column(
-                children: [
-                  Expanded(
-                    child: TableCalendarWidget(
-                      onDaySelected: onDaySelected,
-                      onDayTap: onDayTap,
+            bottomNavigationBar:
+                (!kIsWeb && defaultTargetPlatform == TargetPlatform.android)
+                    ? Consumer(
+                        builder: (context, ref, child) {
+                          final ads = ref.watch(adsProvider);
+                          final banner = ads.homeBanner;
+
+                          if (!ads.isLoaded || banner == null) {
+                            return const SizedBox.shrink();
+                          }
+
+                          return SafeArea(
+                            top: false,
+                            child: Center(
+                              child: SizedBox(
+                                width: banner.size.width.toDouble(),
+                                height: banner.size.height.toDouble(),
+                                child: AdWidget(ad: banner),
+                              ),
+                            ),
+                          );
+                        },
+                      )
+                    : null,
+            body: Column(
+              children: [
+                SizedBox(height: 4.h),
+                Column(
+                  key: _showHomeTutorial
+                      ? tutorialController.keyButton8
+                      : widget.key,
+                  children: [
+                    Container(
+                      alignment: Alignment.center,
+                      child: TableCalendarWidget(
+                        onDaySelected: onDaySelected,
+                        onDayTap: onDayTap,
+                      ),
                     ),
+                  ],
+                ),
+                SizedBox(height: 8.h),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 12.w),
+                  child: LineWidget(),
+                ),
+                // SizedBox(height: 2.h),
+                // Obx(() => _buildSelectedDay()),
+                SizedBox(height: 2.h),
+
+                Expanded(
+                  key: _showHomeTutorial
+                      ? tutorialController.keyButton9
+                      : widget.key,
+                  child: Consumer(
+                    builder: (context, ref, child) {
+                      ref.watch(notasProvider);
+                      final DateTime selectedDate =
+                          ref.watch(selectedDayProvider) ??
+                              ref.watch(focusedMonthProvider);
+                      final selectedDayNotas = ref
+                          .read(notasProvider.notifier)
+                          .getNotasOfDay(selectedDate);
+
+                      return _buildListEvent(context, selectedDayNotas);
+                    },
                   ),
-                  const LineWidget(),
-                  SizedBox(height: 4.h),
-                  _buildSelectedDayTasks(),
-                ],
-              ),
+                )
+              ],
             )));
   }
 
-  Widget _buildSelectedDayTasks() {
-    final container = ProviderScope.containerOf(context, listen: false);
-    final selectedDay = container.read(selectedDayProvider);
-    if (selectedDay == null) return const SizedBox.shrink();
-
-    return Consumer(
-      builder: (context, ref, child) {
-        final notas = ref.watch(notasProvider);
-        final tasks = ref.read(notasProvider.notifier).getNotasOfDay(selectedDay);
-        if (tasks.isEmpty) {
-          return const SizedBox.shrink();
-        }
-
-        return ConstrainedBox(
-          constraints: BoxConstraints(maxHeight: 210.h),
-          child: ListView.separated(
-            padding: EdgeInsets.fromLTRB(8.w, 0, 8.w, 8.h),
-            shrinkWrap: true,
-            itemCount: tasks.length,
-            separatorBuilder: (_, __) => SizedBox(height: 4.h),
-            itemBuilder: (context, index) {
-              final task = tasks[index];
-              return TaskCard(
-                task: task,
-                onDelete: () async {
-                  await HomeView.notaHomeDelete(
-                    context,
-                    task.id,
-                    selectedDay,
-                    container.read(focusedMonthProvider),
-                  );
-                },
-              );
-            },
+  Widget _buildListEvent(BuildContext context, List<Task> events) {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          SingleChildScrollView(
+            child: Column(
+              children: events
+                  .map(
+                    (event) => Column(
+                      children: [
+                        // CardEvent(event: event),
+                        TaskCard(
+                          noteData: event,
+                          onTapAction: (Task noteData) {
+                            context.push('/notas-view', extra: {
+                              'id': noteData.id!,
+                              'noteData': noteData,
+                            });
+                          },
+                          routeToNotas: false,
+                          selectedDay:
+                              ProviderScope.containerOf(context, listen: false)
+                                  .read(selectedDayProvider),
+                          focusedDay:
+                              ProviderScope.containerOf(context, listen: false)
+                                  .read(focusedMonthProvider),
+                        )
+                      ],
+                    ),
+                  )
+                  .toList(),
+            ),
           ),
-        );
-      },
+        ],
+      ),
     );
   }
 }
