@@ -178,11 +178,14 @@ class _TableCalendarWidgetState extends ConsumerState<TableCalendarWidget> {
     final turnosPorDia = _cachedTurnosPorDia;
     final notasPorDia = _cachedNotasPorDia;
 
-    return GestureDetector(
-      behavior: HitTestBehavior.translucent,
-      onTapDown: (TapDownDetails details) {
-        _lastTapPosition = details.globalPosition;
+    return Listener(
+      // Listener recibe la posición global al bajar el dedo, sin depender
+      // de qué GestureDetector gane después la arena de gestos.
+      onPointerDown: (event) {
+        _lastTapPosition = event.position;
       },
+      child: GestureDetector(
+      behavior: HitTestBehavior.translucent,
       onVerticalDragEnd: _onVerticalSwipeEnd,
       onHorizontalDragStart: (_) {
         _horizontalDragDistance = 0;
@@ -236,6 +239,7 @@ class _TableCalendarWidgetState extends ConsumerState<TableCalendarWidget> {
               .setFocusedDay(focusedDay);
         },
         calendarBuilders: _calendarBuilders(notasPorDia),
+      ),
       ),
     );
   }
