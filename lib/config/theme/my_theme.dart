@@ -21,6 +21,14 @@ class MyTheme {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22)),
         surfaceTintColor: Colors.transparent,
       ),
+      bottomSheetTheme: BottomSheetThemeData(
+        backgroundColor: isLight ? LightThemeColors.cardColor : DarkThemeColors.cardColor,
+        surfaceTintColor: Colors.transparent,
+        showDragHandle: true,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        ),
+      ),
       listTileTheme: ListTileThemeData(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
