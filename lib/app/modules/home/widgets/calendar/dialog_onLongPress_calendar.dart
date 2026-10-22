@@ -203,6 +203,7 @@ class CalendarDaySheet extends StatelessWidget {
             ),
           ),
         ),
+        ),
         Positioned(
           left: arrowX - 11.w,
           top: pointerOnTop ? 0 : null,
