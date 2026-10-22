@@ -117,7 +117,7 @@ class _EditNotasViewState extends ConsumerState<EditNotasView> {
           child: TextFormField(
             controller: controller,
             maxLines: lines,
-            minLines: lines > 1 ? 3 : 1,
+            minLines: lines > 1 ? (lines < 3 ? lines : 3) : 1,
             textCapitalization: TextCapitalization.sentences,
             style: TextStyle(fontSize: 14.sp, color: textColor),
             decoration: InputDecoration(
