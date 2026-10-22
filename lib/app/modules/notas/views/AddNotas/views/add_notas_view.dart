@@ -88,7 +88,9 @@ class _AddNotasViewState extends ConsumerState<AddNotasView> {
         appBar: AppBar(
           centerTitle: false,
           elevation: 0,
-          backgroundColor: Colors.transparent,
+          toolbarHeight: 58.h,
+          titleSpacing: 2.w,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           title: Text(
             'Añadir Nota',
             style: CustomTextStyle.appBarTitle(context: context),
