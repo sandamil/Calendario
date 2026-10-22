@@ -170,6 +170,8 @@ class _TableCalendarWidgetState extends ConsumerState<TableCalendarWidget> {
   Widget build(BuildContext context) {
     final cuadranteMap = ref.watch(cuadranteMapProvider);
     final notas = ref.watch(notasProvider);
+    final selectedDay =
+        ref.watch(selectedDayProvider) ?? ref.watch(focusedMonthProvider);
 
     // Recalcular los índices solo cuando Riverpod publica nuevos datos.
     _actualizarIndices(cuadranteMap, notas);
@@ -214,10 +216,7 @@ class _TableCalendarWidgetState extends ConsumerState<TableCalendarWidget> {
         // selectedDayPredicate: (day) {
         //   return isSameDay(calendarController.selectedDayRx.value, day);
         // },
-        selectedDayPredicate: (day) => isSameDay(
-          ref.watch(selectedDayProvider) ?? ref.watch(focusedMonthProvider),
-          day,
-        ),
+        selectedDayPredicate: (day) => isSameDay(selectedDay, day),
 
         onDaySelected: (selectedDay, focusedDay) {
           widget.onDaySelected?.call(selectedDay, focusedDay);
