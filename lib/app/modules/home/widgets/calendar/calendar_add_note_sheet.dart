@@ -177,21 +177,72 @@ class _CalendarAddNoteSheetState extends ConsumerState<CalendarAddNoteSheet> {
     required IconData icon,
     int maxLines = 1,
   }) {
-    return TextField(
-      controller: controller,
-      maxLines: maxLines,
-      textCapitalization: TextCapitalization.sentences,
-      decoration: InputDecoration(
-        labelText: label,
-        hintText: hint,
-        prefixIcon: Icon(icon, size: 21.sp),
-        filled: true,
-        fillColor: Theme.of(context).colorScheme.surfaceContainerHighest.withOpacity(.55),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14.r),
-          borderSide: BorderSide.none,
+    final theme = Theme.of(context);
+    final textColor = theme.colorScheme.onSurface;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(left: 3.w, bottom: 6.h),
+          child: Text(
+            label,
+            style: TextStyle(
+              fontSize: 12.sp,
+              fontWeight: FontWeight.w700,
+              color: textColor.withOpacity(.72),
+            ),
+          ),
         ),
-      ),
+        Container(
+          decoration: BoxDecoration(
+            color: theme.colorScheme.surfaceContainerHighest.withOpacity(.48),
+            borderRadius: BorderRadius.circular(15.r),
+            border: Border.all(
+              color: theme.colorScheme.outlineVariant.withOpacity(.35),
+            ),
+          ),
+          child: Row(
+            crossAxisAlignment:
+                maxLines > 1 ? CrossAxisAlignment.start : CrossAxisAlignment.center,
+            children: [
+              Padding(
+                padding: EdgeInsets.fromLTRB(13.w, maxLines > 1 ? 14.h : 0, 0,
+                    maxLines > 1 ? 0 : 0),
+                child: Icon(
+                  icon,
+                  size: 20.sp,
+                  color: PRIMARY_COLOR.withOpacity(.9),
+                ),
+              ),
+              SizedBox(width: 10.w),
+              Expanded(
+                child: TextField(
+                  controller: controller,
+                  maxLines: maxLines,
+                  minLines: maxLines > 1 ? 3 : 1,
+                  textCapitalization: TextCapitalization.sentences,
+                  style: TextStyle(fontSize: 14.sp, color: textColor),
+                  decoration: InputDecoration(
+                    hintText: hint,
+                    hintStyle: TextStyle(
+                      fontSize: 13.sp,
+                      color: textColor.withOpacity(.42),
+                    ),
+                    border: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: 0,
+                      vertical: maxLines > 1 ? 12.h : 14.h,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(width: 13.w),
+            ],
+          ),
+        ),
+      ],
     );
   }
 
