@@ -140,8 +140,8 @@ class _HomeViewState extends State<HomeView> {
         .clamp(20.w, popupWidth - 20.w)
         .toDouble();
 
-    final belowTop = tap.dy + 8.h;
-    final aboveTop = tap.dy - totalHeight - 8.h;
+    final belowTop = tap.dy - 2.h;
+    final aboveTop = tap.dy - totalHeight - 2.h;
     final showBelow = belowTop + totalHeight <= overlaySize.height - 12.h;
     final top = showBelow
         ? belowTop
