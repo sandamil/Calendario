@@ -29,7 +29,7 @@ class _InicioViewState extends State<InicioView> {
   }
 
   Future<void> _checkRoute() async {
-    await Future.delayed(const Duration(milliseconds: 1400));
+    await Future.delayed(const Duration(milliseconds: 1050));
     if (!mounted) return;
     await AppCycleService().checkFirstTimeAndRoute();
   }
