@@ -129,7 +129,7 @@ class _HomeViewState extends State<HomeView> {
 
     final popupWidth = math.min(360.w, overlaySize.width - 24.w);
     const pointerHeight = 10.0;
-    const estimatedBodyHeight = 340.0;
+    const estimatedBodyHeight = 400.0;
     final totalHeight = estimatedBodyHeight + pointerHeight;
     final horizontalMargin = 12.w;
 
