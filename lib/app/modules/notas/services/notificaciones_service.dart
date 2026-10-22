@@ -122,6 +122,7 @@ class NotificacionesService {
           'calendario_recordatorios',
           'Recordatorios de notas',
           channelDescription: 'Avisos programados para las notas del calendario',
+          icon: 'ic_stat_notification',
           importance: Importance.high,
           priority: Priority.high,
         ),
