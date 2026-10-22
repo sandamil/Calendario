@@ -21,253 +21,310 @@ class TurnosNotasOnHomeDialog extends ConsumerStatefulWidget {
 
 class _TurnosNotasOnHomeDialogState
     extends ConsumerState<TurnosNotasOnHomeDialog> {
-  Future<Map<DateTime, List<CuadranteDay>>> getCuadrante() async {
+  Future<void> _reloadCuadrante(DateTime selectedDate) async {
     final container = ProviderScope.containerOf(context, listen: false);
     await container.read(cuadranteMapProvider.notifier).reload();
-    final result = container.read(cuadranteMapProvider);
-    if (mounted) setState(() {});
-    return result;
-  }
-
-  deleteTurnoCuadrante(id, DateTime selectedDate) async {
-    await CalendarioDB.db.deleteItemID(id);
-
-    await getCuadrante();
-    ProviderScope.containerOf(context, listen: false)
+    container
         .read(focusedMonthProvider.notifier)
         .setFocusedDay(selectedDate);
+  }
 
-    Navigator.pop(context);
+  Future<void> _deleteTurno(int? id, DateTime? selectedDate) async {
+    if (id == null || selectedDate == null) return;
+    await CalendarioDB.db.deleteItemID(id);
+    await _reloadCuadrante(selectedDate);
+    if (mounted) Navigator.of(context).pop();
   }
 
   @override
   Widget build(BuildContext context) {
-    final selectedDayTurnos = ref.watch(selectedDayTurnosProvider);
+    final theme = Theme.of(context);
+    final turnos = ref.watch(selectedDayTurnosProvider);
     final notas = ref.watch(notasProvider);
     final selectedDate = ref.watch(selectedDayProvider);
     final selectedDayNotas = selectedDate == null
-        ? notas.take(0).toList()
+        ? const []
         : ref.read(notasProvider.notifier).getNotasOfDay(selectedDate);
+    final surface = theme.colorScheme.surfaceContainerHighest.withOpacity(.48);
+    final textColor = theme.colorScheme.onSurface;
 
-    return Container(
-      color: MyColors.backgroundColor,
-      height: 150,
+    if (turnos.isEmpty && selectedDayNotas.isEmpty) {
+      return Container(
+        width: double.infinity,
+        padding: EdgeInsets.symmetric(vertical: 22.h, horizontal: 12.w),
+        decoration: BoxDecoration(
+          color: surface,
+          borderRadius: BorderRadius.circular(14.r),
+        ),
+        child: Column(
+          children: [
+            Icon(Icons.event_available_rounded,
+                size: 28.sp, color: PRIMARY_COLOR.withOpacity(.8)),
+            SizedBox(height: 6.h),
+            Text(
+              'No hay turnos ni notas para este día',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 12.sp,
+                color: textColor.withOpacity(.65),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    return ConstrainedBox(
+      constraints: BoxConstraints(maxHeight: 210.h),
       child: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            selectedDayTurnos.isEmpty
-                ? Container()
-                : ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: selectedDayTurnos.length,
-                    itemBuilder: (context, index) {
-                      return Slidable(
-                        endActionPane: ActionPane(
-                          motion: const DrawerMotion(),
-                          extentRatio: 0.3,
-                          children: [
-                            SlidableAction(
-                              label: 'Eliminar',
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(5.r)),
-                              backgroundColor: Colors.redAccent,
-                              // icon: Icons.send,
-                              onPressed: (context) {
-                                final selectedDate =
-                                    ref.read(selectedDayProvider);
-                                if (selectedDate == null) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text(
-                                          'No hay ningún día seleccionado.'),
-                                    ),
-                                  );
-                                  return;
-                                }
-                                deleteTurnoCuadrante(
-                                  selectedDayTurnos[index].id,
-                                  selectedDate,
-                                );
-                              },
-                            ),
-                          ],
+            if (turnos.isNotEmpty) ...[
+              _SectionLabel(
+                icon: Icons.work_history_outlined,
+                title: 'Turnos',
+                count: turnos.length,
+              ),
+              SizedBox(height: 5.h),
+              ...turnos.map((turno) {
+                final turnoColor = HexColor(turno.color ?? '#607D8B');
+                final foreground =
+                    turnoColor.computeLuminance() > .52 ? Colors.black87 : Colors.white;
+                return Padding(
+                  padding: EdgeInsets.only(bottom: 6.h),
+                  child: Slidable(
+                    key: ValueKey('turno-${turno.id}'),
+                    endActionPane: ActionPane(
+                      motion: const DrawerMotion(),
+                      extentRatio: .28,
+                      children: [
+                        SlidableAction(
+                          label: 'Eliminar',
+                          backgroundColor: Colors.redAccent,
+                          foregroundColor: Colors.white,
+                          borderRadius: BorderRadius.circular(12.r),
+                          icon: Icons.delete_outline_rounded,
+                          onPressed: (_) => _deleteTurno(turno.id, selectedDate),
                         ),
-                        child: Container(
-                          height: 22.h,
-                          padding: EdgeInsets.symmetric(
-                              vertical: 1.h, horizontal: 2.w),
-                          decoration: BoxDecoration(
-                            color: HexColor(selectedDayTurnos[index].color!),
-                            border: Border.all(width: 0.8.r),
-                            borderRadius: BorderRadius.circular(5.r),
+                      ],
+                    ),
+                    child: Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 11.w,
+                        vertical: 10.h,
+                      ),
+                      decoration: BoxDecoration(
+                        color: turnoColor.withOpacity(.16),
+                        borderRadius: BorderRadius.circular(12.r),
+                        border: Border.all(color: turnoColor.withOpacity(.6)),
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 4.w,
+                            height: 34.h,
+                            decoration: BoxDecoration(
+                              color: turnoColor,
+                              borderRadius: BorderRadius.circular(8.r),
+                            ),
                           ),
-                          margin: EdgeInsets.symmetric(
-                              horizontal: 2.w, vertical: 2.h),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              // FittedBox(
-                              //   child: Text(
-                              //     '${calendarController.selectedEvents.value[index].dateTime.toString().substring(8, 10)}-${calendarController.selectedEvents.value[index].dateTime.toString().substring(5, 7)}-${calendarController.selectedEvents.value[index].dateTime.toString().substring(0, 4)}',
-                              //     style: TextStyle(
-                              //         fontSize: 14.sp,
-                              //         color: HexColor(calendarController.selectedEvents
-                              //                         .value[index].color!)
-                              //                     .computeLuminance() >
-                              //                 0.5
-                              //             ? Colors.black
-                              //             : Colors.white),
-                              //   ),
-                              // ),
-                              // SizedBox(
-                              //   width: 20.w,
-                              // ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 6.0),
-                                child: FittedBox(
-                                  child: DefaultTextStyle(
-                                    style: TextStyle(
-                                        height: 1.2.h,
-                                        fontSize: 14.sp,
-                                        fontWeight: FontWeight.bold,
-                                        color: HexColor(selectedDayTurnos[index]
-                                                        .color!)
-                                                    .computeLuminance() >
-                                                0.5
-                                            ? Colors.black
-                                            : Colors.white),
-                                    child: Text(
-                                      selectedDayTurnos[index].description!,
-                                    ),
+                          SizedBox(width: 9.w),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  turno.description ?? turno.title ?? 'Turno',
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    color: textColor,
+                                    fontSize: 13.sp,
+                                    fontWeight: FontWeight.w700,
                                   ),
                                 ),
-                              ),
-                              // SizedBox(
-                              //   width: 20.w,
-                              // ),
-                              selectedDayTurnos[index].startHour != null &&
-                                      selectedDayTurnos[index].endHour != null
-                                  ? Padding(
-                                      padding: EdgeInsets.only(left: 15.w),
-                                      child: FittedBox(
-                                        child: DefaultTextStyle(
-                                          style: TextStyle(
-                                              height: 1.2.h,
-                                              fontSize: 14.sp,
-                                              color: HexColor(selectedDayTurnos[
-                                                                  index]
-                                                              .color!)
-                                                          .computeLuminance() >
-                                                      0.5
-                                                  ? Colors.black
-                                                  : Colors.white),
-                                          child: Text(
-                                            'de ${selectedDayTurnos[index].startHour.toString()} '
-                                            'a ${selectedDayTurnos[index].endHour.toString()}',
-                                          ),
+                                if (turno.startHour != null && turno.endHour != null) ...[
+                                  SizedBox(height: 3.h),
+                                  Row(
+                                    children: [
+                                      Icon(Icons.schedule_rounded,
+                                          size: 13.sp,
+                                          color: textColor.withOpacity(.65)),
+                                      SizedBox(width: 4.w),
+                                      Text(
+                                        '${turno.startHour} – ${turno.endHour}',
+                                        style: TextStyle(
+                                          color: textColor.withOpacity(.7),
+                                          fontSize: 11.sp,
                                         ),
                                       ),
-                                    )
-                                  : Container(
-                                      padding: EdgeInsets.only(right: 20.w),
-                                    ),
-                              Spacer(),
-                              Icon(
-                                Icons.arrow_back,
-                                size: 16,
-                                color: MyColors.textColor,
-                              ),
-                              Icon(
-                                Icons.delete_forever,
-                                size: 18,
-                                color: MyColors.textColor,
-                              ),
-                            ],
+                                    ],
+                                  ),
+                                ],
+                              ],
+                            ),
                           ),
-                        ),
-                      );
-                    },
+                          Icon(Icons.drag_indicator_rounded,
+                              size: 18.sp, color: foreground.withOpacity(.65)),
+                          Icon(Icons.chevron_left_rounded,
+                              size: 18.sp, color: textColor.withOpacity(.5)),
+                        ],
+                      ),
+                    ),
                   ),
-            SizedBox(
-              height: 3.h,
-            ),
-            ...selectedDayNotas.map((nota) => Padding(
-                  padding: EdgeInsets.symmetric(vertical: 1.h, horizontal: 2.w),
-                  child: GestureDetector(
-                    onTap: () {
-                      MyCustomDialog.mostrarTask(nota, context);
-                    },
-                    child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 4.w),
-                        decoration: BoxDecoration(
-                          color: MyColors.cellSelectedColor,
-                          border: Border.all(
-                              color: MyColors.borderAccentLine, width: 1),
-                          borderRadius: BorderRadius.circular(3.r),
+                );
+              }),
+            ],
+            if (selectedDayNotas.isNotEmpty) ...[
+              if (turnos.isNotEmpty) SizedBox(height: 4.h),
+              _SectionLabel(
+                icon: Icons.sticky_note_2_outlined,
+                title: 'Notas',
+                count: selectedDayNotas.length,
+              ),
+              SizedBox(height: 5.h),
+              ...selectedDayNotas.map((nota) {
+                final start = nota.startTimeMilliseconds == null
+                    ? null
+                    : DateTime.fromMillisecondsSinceEpoch(
+                        nota.startTimeMilliseconds!);
+                return Padding(
+                  padding: EdgeInsets.only(bottom: 6.h),
+                  child: Material(
+                    color: surface,
+                    borderRadius: BorderRadius.circular(12.r),
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(12.r),
+                      onTap: () => MyCustomDialog.mostrarTask(nota, context),
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 11.w,
+                          vertical: 10.h,
                         ),
-                        height: 22.h,
                         child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            SizedBox(
-                              width: 4.w,
-                            ),
-                            SizedBox(
-                              width: 50.w,
-                              child: DefaultTextStyle(
-                                style: TextStyle(
-                                    height: 1.2.h,
-                                    fontSize: 14.sp,
-                                    fontWeight: FontWeight.w600,
-                                    color: MyColors.textColor),
-                                child: Text(
-                                  DateTime.fromMillisecondsSinceEpoch(
-                                          nota.startTimeMilliseconds!)
-                                      .formatDateTime24H,
-                                ),
+                            Container(
+                              width: 34.w,
+                              height: 34.w,
+                              decoration: BoxDecoration(
+                                color: PRIMARY_COLOR.withOpacity(.12),
+                                borderRadius: BorderRadius.circular(10.r),
+                              ),
+                              alignment: Alignment.center,
+                              child: Icon(
+                                nota.isImportant == true
+                                    ? Icons.star_rounded
+                                    : Icons.notes_rounded,
+                                color: PRIMARY_COLOR,
+                                size: 18.sp,
                               ),
                             ),
-                            SizedBox(
-                              width: 4.w,
-                            ),
-                            SizedBox(
-                              width: 85.w,
-                              child: DefaultTextStyle(
-                                style: TextStyle(
-                                    height: 1.2.h,
-                                    fontSize: 14.sp,
-                                    fontWeight: FontWeight.w600,
-                                    color: MyColors.textColor),
-                                child: Text(
-                                  nota.title!.toUpperCase(),
-                                ),
+                            SizedBox(width: 9.w),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    nota.title?.trim().isNotEmpty == true
+                                        ? nota.title!
+                                        : 'Nota sin título',
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      fontSize: 13.sp,
+                                      fontWeight: FontWeight.w700,
+                                      color: textColor,
+                                    ),
+                                  ),
+                                  if ((nota.notes ?? '').trim().isNotEmpty) ...[
+                                    SizedBox(height: 3.h),
+                                    Text(
+                                      nota.notes!,
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        fontSize: 11.sp,
+                                        color: textColor.withOpacity(.66),
+                                      ),
+                                    ),
+                                  ],
+                                  if (start != null) ...[
+                                    SizedBox(height: 4.h),
+                                    Text(
+                                      start.formatDateTime24H,
+                                      style: TextStyle(
+                                        fontSize: 11.sp,
+                                        color: PRIMARY_COLOR,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ],
+                                ],
                               ),
                             ),
-                            SizedBox(
-                              width: 4.w,
-                            ),
-                            SizedBox(
-                              width: 170.w,
-                              child: DefaultTextStyle(
-                                style: TextStyle(
-                                    height: 1.2.h,
-                                    fontSize: 14.sp,
-                                    fontWeight: FontWeight.w600,
-                                    color: MyColors.textColor),
-                                child: Text(
-                                  nota.notes!,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
-                            ),
+                            Icon(Icons.chevron_right_rounded,
+                                color: textColor.withOpacity(.45)),
                           ],
-                        )),
+                        ),
+                      ),
+                    ),
                   ),
-                )),
+                );
+              }),
+            ],
           ],
         ),
       ),
+    );
+  }
+}
+
+class _SectionLabel extends StatelessWidget {
+  const _SectionLabel({
+    required this.icon,
+    required this.title,
+    required this.count,
+  });
+
+  final IconData icon;
+  final String title;
+  final int count;
+
+  @override
+  Widget build(BuildContext context) {
+    final color = Theme.of(context).colorScheme.onSurface.withOpacity(.65);
+    return Row(
+      children: [
+        Icon(icon, size: 15.sp, color: color),
+        SizedBox(width: 6.w),
+        Text(
+          title,
+          style: TextStyle(
+            color: color,
+            fontSize: 11.sp,
+            fontWeight: FontWeight.w700,
+            letterSpacing: .3,
+          ),
+        ),
+        SizedBox(width: 5.w),
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 1.h),
+          decoration: BoxDecoration(
+            color: PRIMARY_COLOR.withOpacity(.12),
+            borderRadius: BorderRadius.circular(20.r),
+          ),
+          child: Text(
+            '$count',
+            style: TextStyle(
+              fontSize: 10.sp,
+              color: PRIMARY_COLOR,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
