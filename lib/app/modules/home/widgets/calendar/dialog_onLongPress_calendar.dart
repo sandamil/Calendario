@@ -316,10 +316,11 @@ class _CalendarSheetFrame extends StatelessWidget {
       borderRadius: BorderRadius.vertical(top: Radius.circular(28.r)),
       child: SafeArea(
         top: false,
-        child: Padding(
-          padding: EdgeInsets.fromLTRB(18.w, 8.h, 18.w, 18.h),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(18.w, 8.h, 18.w, 18.h),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
             children: [
               Container(
                 width: 38.w,
@@ -354,8 +355,9 @@ class _CalendarSheetFrame extends StatelessWidget {
                 ],
               ),
               SizedBox(height: 8.h),
-              child,
-            ],
+                child,
+              ],
+            ),
           ),
         ),
       ),
