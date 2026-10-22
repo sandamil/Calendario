@@ -93,12 +93,28 @@ class AdsNotifier extends Notifier<AdsState> {
           onAdFailedToLoad: (failedAd, error) {
             final elapsed = DateTime.now().difference(startedAt);
 
+            final responseInfo = error.responseInfo;
+            final adapterDiagnostics =
+                responseInfo?.adapterResponses
+                    ?.map(
+                      (adapter) =>
+                          '${adapter.adapterClassName}: '
+                          '${adapter.description} '
+                          '(latency=${adapter.latencyMillis}ms, '
+                          'error=${adapter.adError})',
+                    )
+                    .join(' | ') ??
+                'sin datos de adaptadores';
+
             debugPrint(
               '[ADS] Error de carga: '
               'code=${error.code}, '
               'domain=${error.domain}, '
               'message=${error.message}, '
-              'elapsedMs=${elapsed.inMilliseconds}',
+              'elapsedMs=${elapsed.inMilliseconds}, '
+              'responseId=${responseInfo?.responseId}, '
+              'mediationAdapter=${responseInfo?.mediationAdapterClassName}, '
+              'adapters=[$adapterDiagnostics]',
             );
 
             unawaited(failedAd.dispose());
