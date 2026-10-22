@@ -105,7 +105,7 @@ class _ButtonRowViewState extends ConsumerState<ButtonRowView> {
                       autofocus: false,
                       keyboardType: TextInputType.text,
                       style: TextStyle(
-                        fontSize: 18.sp,
+                        fontSize: 14.sp,
                         fontWeight: FontWeight.w500,
                       ),
                       textInputAction: TextInputAction.search,
