@@ -127,17 +127,26 @@ class _HomeViewState extends State<HomeView> {
     final overlaySize = overlayBox?.size ?? MediaQuery.sizeOf(context);
     final tap = overlayBox?.globalToLocal(tapPosition) ?? tapPosition;
 
-    final popupWidth = math.min(360.w, overlaySize.width - 24.w);
+    final horizontalMargin = math.min(12.w, overlaySize.width / 4);
+    final availableWidth = math.max(
+      1.0,
+      overlaySize.width - horizontalMargin * 2,
+    );
+    final popupWidth = math.min(360.w, availableWidth);
     const pointerHeight = 10.0;
     const estimatedBodyHeight = 400.0;
     final totalHeight = estimatedBodyHeight + pointerHeight;
-    final horizontalMargin = 12.w;
 
+    final maxLeft = math.max(
+      horizontalMargin,
+      overlaySize.width - popupWidth - horizontalMargin,
+    );
     final left = (tap.dx - popupWidth / 2)
-        .clamp(horizontalMargin, overlaySize.width - popupWidth - horizontalMargin)
+        .clamp(horizontalMargin, maxLeft)
         .toDouble();
+    final arrowInset = math.min(20.w, popupWidth / 2);
     final arrowX = (tap.dx - left)
-        .clamp(20.w, popupWidth - 20.w)
+        .clamp(arrowInset, popupWidth - arrowInset)
         .toDouble();
 
     final belowTop = tap.dy - 2.h;
