@@ -100,7 +100,9 @@ class _NotasListViewState extends ConsumerState<NotasListView> {
           ),
           centerTitle: false,
           elevation: 0,
-          backgroundColor: Colors.transparent,
+          toolbarHeight: 58.h,
+          titleSpacing: 2.w,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           title: Text(
             'Notas',
             style: CustomTextStyle.appBarTitle(context: context),
@@ -133,8 +135,10 @@ class _NotasListViewState extends ConsumerState<NotasListView> {
           ],
         ),
         floatingActionButton: FloatingActionButton.extended(
+          elevation: 2,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.r)),
           backgroundColor: PRIMARY_COLOR,
+          foregroundColor: Colors.white,
           onPressed: () => context.push('/add-notas'),
           label: Text(
             'Añade Nota'.toUpperCase(),
