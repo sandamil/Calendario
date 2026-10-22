@@ -11,11 +11,15 @@ class CalendarDaySheet extends StatelessWidget {
   const CalendarDaySheet({
     required this.selectedDate,
     required this.getCuadrante,
+    required this.arrowX,
+    required this.pointerOnTop,
     super.key,
   });
 
   final DateTime selectedDate;
   final Future<Map<DateTime, List<CuadranteDay>>> getCuadrante;
+  final double arrowX;
+  final bool pointerOnTop;
 
   String _weekday(DateTime date) {
     const days = <String>[
@@ -86,20 +90,19 @@ class CalendarDaySheet extends StatelessWidget {
     final theme = Theme.of(context);
     final onSurface = theme.colorScheme.onSurface;
 
-    // El primer popup es un globo contextual: la punta queda en el centro
-    // del borde que mira hacia el día que se ha pulsado. El posicionamiento
-    // exterior lo hace HomeView usando la posición real del toque.
-    return Column(
-      mainAxisSize: MainAxisSize.min,
+    // La punta se alinea con la coordenada horizontal real del toque.
+    // Si el globo aparece debajo del día, apunta hacia arriba; si aparece
+    // encima, apunta hacia abajo.
+    const pointerHeight = 10.0;
+    return Stack(
+      clipBehavior: Clip.none,
       children: [
-        CustomPaint(
-          size: Size(22.w, 10.h),
-          painter: _BubblePointerPainter(
-            color: theme.scaffoldBackgroundColor,
-            pointDown: true,
+        Padding(
+          padding: EdgeInsets.only(
+            top: widgetPointerTop(pointerOnTop, pointerHeight),
+            bottom: widgetPointerTop(!pointerOnTop, pointerHeight),
           ),
-        ),
-        Material(
+          child: Material(
           color: theme.scaffoldBackgroundColor,
           elevation: 18,
           shadowColor: Colors.black.withOpacity(.25),
@@ -194,11 +197,26 @@ class CalendarDaySheet extends StatelessWidget {
               ),
             ),
           ),
+          ),
+        ),
+        Positioned(
+          left: arrowX - 11.w,
+          top: pointerOnTop ? 0 : null,
+          bottom: pointerOnTop ? null : 0,
+          child: CustomPaint(
+            size: Size(22.w, pointerHeight.h),
+            painter: _BubblePointerPainter(
+              color: theme.scaffoldBackgroundColor,
+              pointDown: !pointerOnTop,
+            ),
+          ),
         ),
       ],
     );
   }
 }
+
+double widgetPointerTop(bool include, double height) => include ? height.h : 0;
 
 class _BubblePointerPainter extends CustomPainter {
   const _BubblePointerPainter({
