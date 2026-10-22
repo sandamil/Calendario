@@ -68,9 +68,14 @@ class AdsNotifier extends Notifier<AdsState> {
     );
 
     try {
-      // Mobile Ads se inicializa en paralelo desde main(). La documentación
-      // oficial permite solicitar el anuncio antes de que termine el Future
-      // de inicialización; el SDK espera internamente si es necesario.
+      // No solicitar el banner hasta que la inicialización del SDK haya
+      // terminado. Se comparte el Future iniciado desde main().
+      final initializationStatus = await initializeMobileAds();
+      debugPrint(
+        '[ADS] SDK inicializado. Unidad=$_androidHomeBannerId; '
+        'adaptadores=${initializationStatus.adapterStatus.keys.join(', ')}',
+      );
+
       final ad = BannerAd(
         adUnitId: _androidHomeBannerId,
         size: AdSize.banner,
@@ -151,7 +156,7 @@ class AdsNotifier extends Notifier<AdsState> {
 
       await ad.load();
     } catch (error, stackTrace) {
-      debugPrint('[ADS] No se pudo iniciar la carga: $error');
+      debugPrint('[ADS] Falló la inicialización o el inicio de carga: $error');
       debugPrintStack(stackTrace: stackTrace);
 
       final currentAd = state.homeBanner;
