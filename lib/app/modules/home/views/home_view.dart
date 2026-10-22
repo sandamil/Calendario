@@ -134,8 +134,12 @@ class _HomeViewState extends State<HomeView> {
     );
     final popupWidth = math.min(360.w, availableWidth);
     const pointerHeight = 10.0;
-    const estimatedBodyHeight = 400.0;
-    final totalHeight = estimatedBodyHeight + pointerHeight;
+    final verticalMargin = math.min(12.h, overlaySize.height / 4);
+    // El popup limita su cuerpo al 68 % de la altura disponible.
+    // Usamos ese mismo límite para decidir el lado y evitar que la punta
+    // pierda el anclaje cuando cambia la altura del dispositivo.
+    final popupBodyMaxHeight = overlaySize.height * .68;
+    final totalHeight = popupBodyMaxHeight + pointerHeight;
 
     final maxLeft = math.max(
       horizontalMargin,
@@ -149,12 +153,15 @@ class _HomeViewState extends State<HomeView> {
         .clamp(arrowInset, popupWidth - arrowInset)
         .toDouble();
 
-    final belowTop = tap.dy - 2.h;
-    final aboveTop = tap.dy - totalHeight - 2.h;
-    final showBelow = belowTop + totalHeight <= overlaySize.height - 12.h;
-    final top = showBelow
-        ? belowTop
-        : math.max(12.h, aboveTop).toDouble();
+    // La punta del globo coincide con el punto pulsado. Preferimos mostrarlo
+    // debajo si cabe; en caso contrario, encima. Solo se limita la posición
+    // cuando el dispositivo es demasiado bajo para cualquiera de las dos.
+    final spaceBelow = overlaySize.height - tap.dy - verticalMargin;
+    final spaceAbove = tap.dy - verticalMargin;
+    final showBelow = spaceBelow >= totalHeight || spaceBelow >= spaceAbove;
+    final desiredTop = showBelow ? tap.dy : tap.dy - totalHeight;
+    final maxTop = math.max(verticalMargin, overlaySize.height - totalHeight - verticalMargin);
+    final top = desiredTop.clamp(verticalMargin, maxTop).toDouble();
 
     await showGeneralDialog<void>(
       context: context,
@@ -185,13 +192,11 @@ class _HomeViewState extends State<HomeView> {
           curve: Curves.easeOutCubic,
           reverseCurve: Curves.easeInCubic,
         );
+        // Solo fundido: escalar desde el centro hace que el popup parezca
+        // desplazarse al abrirse aunque su posición final sea correcta.
         return FadeTransition(
           opacity: curved,
-          child: ScaleTransition(
-            scale: Tween<double>(begin: .94, end: 1).animate(curved),
-            alignment: Alignment.center,
-            child: child,
-          ),
+          child: child,
         );
       },
     );
