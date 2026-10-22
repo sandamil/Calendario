@@ -119,8 +119,6 @@ class _HomeViewState extends State<HomeView> {
     DateTime focusedDate,
     Offset tapPosition,
   ) async {
-    // El toque viene en coordenadas globales. Convertirlo al sistema de
-    // coordenadas del Overlay evita desplazamientos por AppBar/área segura.
     final overlay = Navigator.of(context, rootNavigator: true).overlay;
     final overlayObject = overlay?.context.findRenderObject();
     final overlayBox = overlayObject is RenderBox ? overlayObject : null;
@@ -133,13 +131,7 @@ class _HomeViewState extends State<HomeView> {
       overlaySize.width - horizontalMargin * 2,
     );
     final popupWidth = math.min(360.w, availableWidth);
-    const pointerHeight = 10.0;
     final verticalMargin = math.min(12.h, overlaySize.height / 4);
-    // El popup limita su cuerpo al 68 % de la altura disponible.
-    // Usamos ese mismo límite para decidir el lado y evitar que la punta
-    // pierda el anclaje cuando cambia la altura del dispositivo.
-    final popupBodyMaxHeight = overlaySize.height * .68;
-    final totalHeight = popupBodyMaxHeight + pointerHeight;
 
     final maxLeft = math.max(
       horizontalMargin,
@@ -153,15 +145,19 @@ class _HomeViewState extends State<HomeView> {
         .clamp(arrowInset, popupWidth - arrowInset)
         .toDouble();
 
-    // La punta del globo coincide con el punto pulsado. Preferimos mostrarlo
-    // debajo si cabe; en caso contrario, encima. Solo se limita la posición
-    // cuando el dispositivo es demasiado bajo para cualquiera de las dos.
-    final spaceBelow = overlaySize.height - tap.dy - verticalMargin;
-    final spaceAbove = tap.dy - verticalMargin;
-    final showBelow = spaceBelow >= totalHeight || spaceBelow >= spaceAbove;
-    final desiredTop = showBelow ? tap.dy : tap.dy - totalHeight;
-    final maxTop = math.max(verticalMargin, overlaySize.height - totalHeight - verticalMargin);
-    final top = desiredTop.clamp(verticalMargin, maxTop).toDouble();
+    // Elegir el lado con más espacio y limitar el alto al espacio real.
+    // El borde del globo queda anclado al toque, sin estimar su altura.
+    final spaceBelow = math.max(
+      0.0,
+      overlaySize.height - tap.dy - verticalMargin,
+    );
+    final spaceAbove = math.max(0.0, tap.dy - verticalMargin);
+    final showBelow = spaceBelow >= spaceAbove;
+    final availableHeight = showBelow ? spaceBelow : spaceAbove;
+    final popupMaxHeight = math.max(
+      1.0,
+      math.min(overlaySize.height * .68, availableHeight),
+    );
 
     await showGeneralDialog<void>(
       context: context,
@@ -174,13 +170,17 @@ class _HomeViewState extends State<HomeView> {
           children: [
             Positioned(
               left: left,
-              top: top,
+              top: showBelow ? tap.dy : null,
+              bottom: showBelow ? null : overlaySize.height - tap.dy,
               width: popupWidth,
-              child: CalendarDaySheet(
-                selectedDate: selectedDate,
-                getCuadrante: getCuadrante(),
-                arrowX: arrowX,
-                pointerOnTop: showBelow,
+              child: ConstrainedBox(
+                constraints: BoxConstraints(maxHeight: popupMaxHeight),
+                child: CalendarDaySheet(
+                  selectedDate: selectedDate,
+                  getCuadrante: getCuadrante(),
+                  arrowX: arrowX,
+                  pointerOnTop: showBelow,
+                ),
               ),
             ),
           ],
@@ -192,8 +192,6 @@ class _HomeViewState extends State<HomeView> {
           curve: Curves.easeOutCubic,
           reverseCurve: Curves.easeInCubic,
         );
-        // Solo fundido: escalar desde el centro hace que el popup parezca
-        // desplazarse al abrirse aunque su posición final sea correcta.
         return FadeTransition(
           opacity: curved,
           child: child,
