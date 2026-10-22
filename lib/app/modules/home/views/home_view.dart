@@ -113,34 +113,11 @@ class _HomeViewState extends State<HomeView> {
         ));
   }
 
-  onDaySelectedLongPress(
+  onDayTap(
     DateTime selectedDate,
     DateTime focusedDate,
     Offset tapPosition,
   ) {
-    if (!isSameDay(
-      ProviderScope.containerOf(context, listen: false)
-          .read(selectedDayProvider),
-      selectedDate,
-    )) {
-      setState(() {
-        ProviderScope.containerOf(context, listen: false)
-            .read(selectedDayProvider.notifier)
-            .setSelectedDay(selectedDate);
-        ProviderScope.containerOf(context, listen: false)
-            .read(focusedMonthProvider.notifier)
-            .setFocusedDay(focusedDate);
-      });
-    }
-
-    final container = ProviderScope.containerOf(context, listen: false);
-    container
-        .read(selectedDayTurnosProvider.notifier)
-        .setTurnos(getTurnosOfDayFromMap(
-          selectedDate,
-          container.read(cuadranteMapProvider),
-        ));
-
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -316,7 +293,7 @@ class _HomeViewState extends State<HomeView> {
                       alignment: Alignment.center,
                       child: TableCalendarWidget(
                         onDaySelected: onDaySelected,
-                        onDaySelectedLongPress: onDaySelectedLongPress,
+                        onDayTap: onDayTap,
                       ),
                     ),
                   ],
