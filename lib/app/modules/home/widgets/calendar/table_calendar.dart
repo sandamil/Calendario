@@ -260,31 +260,41 @@ class _TableCalendarWidgetState extends ConsumerState<TableCalendarWidget> {
                   ...events.map((turno) => Padding(
                         padding: EdgeInsets.symmetric(
                             vertical: 1.2.h, horizontal: 3.w),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: HexColor(turno.color!).withAlpha(42),
-                            // border: Border.all(
-                            //     color: HexColor(turno.color!), width: 1.h),
-                            borderRadius: BorderRadius.circular(4.r),
-                          ),
-                          height: 15.h,
-                          child: Container(
-                            alignment: Alignment.center,
-                            height: 15,
-                            width: double.maxFinite,
-                            child: Text(
-                              turno.title!.toUpperCase(),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                height: 1.2.h,
-                                fontSize: 10.sp,
-                                color: HexColor(turno.color!),
-                                fontWeight: FontWeight.w700,
+                        child: Builder(
+                          builder: (context) {
+                            final turnoColor = HexColor(turno.color ?? '607D8B');
+                            final textoColor = turnoColor.computeLuminance() > .52
+                                ? Colors.black87
+                                : Colors.white;
+                            final bordeColor = turnoColor.computeLuminance() > .86
+                                ? Theme.of(context).colorScheme.outline
+                                : turnoColor;
+                            return Container(
+                              height: 15.h,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: turnoColor.withOpacity(.30),
+                                border: Border.all(
+                                  color: bordeColor.withOpacity(.95),
+                                  width: .8,
+                                ),
+                                borderRadius: BorderRadius.circular(4.r),
                               ),
-                            ),
-                          ),
+                              padding: EdgeInsets.symmetric(horizontal: 2.w),
+                              child: Text(
+                                (turno.title ?? '').toUpperCase(),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  height: 1.2.h,
+                                  fontSize: 10.sp,
+                                  color: textoColor,
+                                  fontWeight: FontWeight.w800,
+                                ),
+                              ),
+                            );
+                          },
                         ),
                       )),
                   SizedBox(
