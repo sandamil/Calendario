@@ -1,13 +1,13 @@
-import 'package:flutter/foundation.dart';
 import 'dart:async';
-import 'dart:io';
-import 'package:flutter/foundation.dart' show kIsWeb;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
-const String _androidHomeBannerId = 'ca-app-pub-5849370961147264/1629081245';
+// Unidad de anuncios Android que se utilizaba antes de la migración.
+// Se mantiene para no cambiar innecesariamente la configuración de AdMob.
+const String _androidHomeBannerId = 'ca-app-pub-5849370961147264/6650380002';
 
 Future<InitializationStatus>? _mobileAdsInitialization;
 
@@ -55,8 +55,7 @@ class AdsNotifier extends Notifier<AdsState> {
   /// Garantiza que haya un banner disponible sin solicitarlo
   /// repetidamente si ya está cargando o se encuentra cargado.
   Future<void> ensureHomeBanner() async {
-    // El banner actual solo se muestra en Android.
-    if (kIsWeb || !(!kIsWeb && defaultTargetPlatform == TargetPlatform.android)) return;
+    if (kIsWeb || defaultTargetPlatform != TargetPlatform.android) return;
 
     if (state.isLoading || state.isLoaded) return;
 
@@ -69,11 +68,9 @@ class AdsNotifier extends Notifier<AdsState> {
     );
 
     try {
-      await initializeMobileAds();
-
-      // Otra llamada pudo iniciarse mientras esperábamos al SDK.
-      if (!state.isLoading || state.attempts != nextAttempt) return;
-
+      // Mobile Ads se inicializa en paralelo desde main(). La documentación
+      // oficial permite solicitar el anuncio antes de que termine el Future
+      // de inicialización; el SDK espera internamente si es necesario.
       final ad = BannerAd(
         adUnitId: _androidHomeBannerId,
         size: AdSize.banner,
@@ -114,9 +111,7 @@ class AdsNotifier extends Notifier<AdsState> {
             );
           },
           onAdImpression: (ad) {
-            debugPrint(
-              '[ADS] IMPRESIÓN registrada para ${ad.adUnitId}',
-            );
+            debugPrint('[ADS] IMPRESIÓN registrada para ${ad.adUnitId}');
           },
           onAdClicked: (ad) {
             debugPrint('[ADS] Clic en el banner');
@@ -132,7 +127,6 @@ class AdsNotifier extends Notifier<AdsState> {
         ),
       );
 
-      // El anuncio se conserva en el estado durante la carga.
       state = AdsState(
         homeBanner: ad,
         isLoading: true,
