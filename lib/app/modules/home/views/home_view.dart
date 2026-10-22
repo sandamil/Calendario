@@ -327,26 +327,29 @@ class _HomeViewState extends State<HomeView> {
                 ),
               ],
             ),
-            bottomNavigationBar:
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerDocked,
+            floatingActionButton:
                 (!kIsWeb && defaultTargetPlatform == TargetPlatform.android)
                     ? Consumer(
                         builder: (context, ref, child) {
                           final ads = ref.watch(adsProvider);
                           final banner = ads.homeBanner;
 
-                          if (!ads.isLoaded || banner == null) {
-                            return const SizedBox.shrink();
-                          }
-
-                          return SafeArea(
-                            top: false,
-                            child: Center(
-                              child: SizedBox(
-                                width: banner.size.width.toDouble(),
-                                height: banner.size.height.toDouble(),
-                                child: AdWidget(ad: banner),
-                              ),
-                            ),
+                          return FloatingActionButton.extended(
+                            heroTag: 'homeBannerAd',
+                            backgroundColor: Colors.transparent,
+                            foregroundColor: Colors.transparent,
+                            elevation: 0,
+                            highlightElevation: 0,
+                            onPressed: () {},
+                            label: ads.isLoaded && banner != null
+                                ? SizedBox(
+                                    width: banner.size.width.toDouble(),
+                                    height: banner.size.height.toDouble(),
+                                    child: AdWidget(ad: banner),
+                                  )
+                                : const SizedBox.shrink(),
                           );
                         },
                       )
