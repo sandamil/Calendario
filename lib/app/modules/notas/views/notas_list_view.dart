@@ -133,6 +133,7 @@ class _NotasListViewState extends ConsumerState<NotasListView> {
           ],
         ),
         floatingActionButton: FloatingActionButton.extended(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.r)),
           backgroundColor: PRIMARY_COLOR,
           onPressed: () => context.push('/add-notas'),
           label: Text(
@@ -145,8 +146,8 @@ class _NotasListViewState extends ConsumerState<NotasListView> {
         ),
         body: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
-          margin: EdgeInsets.only(top: 6.h),
-          padding: EdgeInsets.only(left: 15.w, right: 15.w),
+          margin: EdgeInsets.only(top: 4.h),
+          padding: EdgeInsets.symmetric(horizontal: 16.w),
           child: SingleChildScrollView(
             child: Column(
               children: [
@@ -154,7 +155,18 @@ class _NotasListViewState extends ConsumerState<NotasListView> {
                 const ImportantIndicatorTextView(),
                 SizedBox(height: 6.h),
                 if (state.notas.isEmpty)
-                  const SizedBox.shrink()
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 48.h, horizontal: 18.w),
+                    child: Column(
+                      children: [
+                        Container(width: 68.w, height: 68.w, decoration: BoxDecoration(color: PRIMARY_COLOR.withOpacity(.14), borderRadius: BorderRadius.circular(22.r)), child: Icon(Icons.sticky_note_2_outlined, color: PRIMARY_COLOR, size: 34.sp)),
+                        SizedBox(height: 14.h),
+                        Text('Aún no tienes notas', style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w800, color: Theme.of(context).colorScheme.onSurface)),
+                        SizedBox(height: 6.h),
+                        Text('Crea una nota para no olvidar nada importante.', textAlign: TextAlign.center, style: TextStyle(fontSize: 13.sp, color: Theme.of(context).colorScheme.onSurface.withOpacity(.62))),
+                      ],
+                    ),
+                  )
                 else
                   ...state.notasFiltradas.map(
                     (nota) => TaskCard(

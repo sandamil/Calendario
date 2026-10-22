@@ -85,7 +85,7 @@ class CrearCuadranteView extends ConsumerWidget {
           // ],
         ),
         body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -96,12 +96,12 @@ class CrearCuadranteView extends ConsumerWidget {
               Expanded(
                 flex: 10,
                 child: MaterialButton(
-                  elevation: 10,
-                  padding: const EdgeInsets.all(0),
-                  shape: RoundedRectangleBorder(borderRadius: Corners.xmBorder),
+                  elevation: 0,
+                  padding: EdgeInsets.all(16.w),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22.r), side: BorderSide(color: Theme.of(context).colorScheme.outlineVariant.withOpacity(.35)),),
                   height: qaButtonHeight,
                   minWidth: qaButtonWidth,
-                  color: MyColors.cellSelectedColor,
+                  color: Theme.of(context).colorScheme.surface,
                   child: Padding(
                     padding: const EdgeInsets.all(0),
                     child: Text("Crear nuevo Cuadrante",
@@ -196,8 +196,13 @@ class CrearCuadranteView extends ConsumerWidget {
                                   padding:
                                       EdgeInsets.symmetric(horizontal: 8.h),
                                   child: Card(
-                                    color: MyColors.menuCardBackgroundDark,
-                                    elevation: 1,
+                                    color: Theme.of(context).colorScheme.surface,
+                                    elevation: 0,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(18.r),
+                                      side: BorderSide(color: Theme.of(context).colorScheme.outlineVariant.withOpacity(.4)),
+                                    ),
+                                    margin: EdgeInsets.symmetric(vertical: 4.h),
                                     child: Row(
                                       children: [
                                         SizedBox(width: 10.w),

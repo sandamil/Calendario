@@ -22,16 +22,17 @@ class BackupScreen extends ConsumerWidget {
         ),
       ),
       body: SingleChildScrollView(
+        padding: EdgeInsets.fromLTRB(14.w, 10.h, 14.w, 28.h),
         child: Column(
           children: [
             Padding(
-              padding: EdgeInsets.all(12.w),
+              padding: EdgeInsets.all(15.w),
               child: Text(
                 'Antes de restaurar datos, recuerda que la operación '
                 'reemplaza los datos actuales del calendario o de las notas. '
                 'Haz una copia de seguridad antes de continuar.',
                 textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 16.sp),
+                style: TextStyle(fontSize: 13.sp, height: 1.4),
               ),
             ),
             Padding(
@@ -51,7 +52,8 @@ class BackupScreen extends ConsumerWidget {
                 width: double.infinity,
                 child: ElevatedButton.icon(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: MyColors.botonBgColor,
+                    backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest.withOpacity(.65),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
                     padding: EdgeInsets.symmetric(
                       horizontal: 20.w,
                       vertical: 14.h,
@@ -60,7 +62,7 @@ class BackupScreen extends ConsumerWidget {
                   onPressed: () => notifier.backupCompleteJson(context),
                   icon: Icon(
                     Icons.save_alt,
-                    color: MyColors.textColor,
+                    color: Theme.of(context).colorScheme.onSurface,
                   ),
                   label: Text(
                     'Guardar copia completa (JSON)',

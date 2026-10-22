@@ -80,37 +80,60 @@ class _EditNotasViewState extends ConsumerState<EditNotasView> {
     );
   }
 
-  TextFormField _buildGeneralFormField(
+  Widget _buildGeneralFormField(
     TextEditingController controller,
-    String hint,
+    String label,
     int lines,
   ) {
-    final radius = 5.r;
-
-    return TextFormField(
-      controller: controller,
-      maxLines: lines,
-      decoration: InputDecoration(
-        filled: true,
-        contentPadding: EdgeInsets.only(left: 10.w, top: 20.h),
-        fillColor: MyColors.backgroundLowAccent,
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(radius)),
-          borderSide: BorderSide.none,
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(radius)),
-          borderSide: BorderSide(
-            color: MyColors.borderCellColor,
-            width: 2.w,
+    final theme = Theme.of(context);
+    final textColor = theme.colorScheme.onSurface;
+    final lower = label.toLowerCase();
+    final icon = lower.contains('ubic')
+        ? Icons.location_on_outlined
+        : lower.contains('observ')
+            ? Icons.notes_rounded
+            : Icons.title_rounded;
+    final hint = lower.contains('ubic')
+        ? 'Añade una ubicación (opcional)'
+        : lower.contains('observ')
+            ? 'Escribe los detalles que quieras recordar'
+            : 'Escribe un título breve';
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(left: 3.w, bottom: 6.h),
+          child: Text(
+            label.replaceFirst('Titulo', 'Título'),
+            style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w700, color: textColor.withOpacity(.72)),
           ),
         ),
-        hintText: hint,
-        hintStyle: CustomTextStyle.hintText,
-      ),
+        Container(
+          decoration: BoxDecoration(
+            color: theme.colorScheme.surfaceContainerHighest.withOpacity(.48),
+            borderRadius: BorderRadius.circular(16.r),
+            border: Border.all(color: theme.colorScheme.outlineVariant.withOpacity(.38)),
+          ),
+          child: TextFormField(
+            controller: controller,
+            maxLines: lines,
+            minLines: lines > 1 ? 3 : 1,
+            textCapitalization: TextCapitalization.sentences,
+            style: TextStyle(fontSize: 14.sp, color: textColor),
+            decoration: InputDecoration(
+              prefixIcon: Icon(icon, color: PRIMARY_COLOR, size: 20.sp),
+              hintText: hint,
+              hintStyle: TextStyle(fontSize: 13.sp, color: textColor.withOpacity(.42)),
+              border: InputBorder.none,
+              enabledBorder: InputBorder.none,
+              focusedBorder: InputBorder.none,
+              contentPadding: EdgeInsets.symmetric(vertical: lines > 1 ? 14.h : 15.h),
+            ),
+          ),
+        ),
+      ],
     );
   }
-
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(editNotaProvider);
@@ -173,7 +196,7 @@ class _EditNotasViewState extends ConsumerState<EditNotasView> {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 6.w),
+          padding: EdgeInsets.symmetric(horizontal: 16.w),
           child: Form(
             child: Column(
               children: [

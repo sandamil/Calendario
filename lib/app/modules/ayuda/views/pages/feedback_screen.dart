@@ -187,7 +187,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
         hintText:
             "Cuentanos que es lo que te ha gustado, lo que no y si crees que podríamos implementar alguna mejora.",
         hintMaxLines: 4,
-        contentPadding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 10.h),
+        contentPadding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 14.h),
         hintStyle: TextStyle(
           fontSize: 16.sp,
           color: MyColors.textColor.withOpacity(0.26).withOpacity(0.3),
@@ -195,17 +195,17 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
         // fillColor: ACCENT_COLOR,
         filled: true,
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(5.r),
+          borderRadius: BorderRadius.circular(16.r),
           borderSide: BorderSide(
-            color: PRIMARY_COLOR,
-            width: 0.2.w,
+            color: Theme.of(context).colorScheme.outlineVariant.withOpacity(.5),
+            width: 1,
           ),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(4.r),
+          borderRadius: BorderRadius.circular(16.r),
           borderSide: BorderSide(
-            color: MyColors.textColor.withOpacity(0.26),
-            width: 0.2.w,
+            color: PRIMARY_COLOR.withOpacity(.75),
+            width: 1.2,
           ),
         ),
       ),

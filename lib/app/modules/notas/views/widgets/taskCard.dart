@@ -1,8 +1,7 @@
-import 'dart:math';
-
 import 'package:calendario2/app/components/toast.dart';
 import 'package:calendario2/app/data/model/taskModel.dart';
 import 'package:calendario2/app/modules/notas/providers/notas_list_provider.dart';
+import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/config/util/dateUtils.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -12,28 +11,8 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 import 'package:share_plus/share_plus.dart';
 
-List<Color> colorList = [
-  Colors.blue,
-  Colors.green,
-  Colors.indigo,
-  Colors.red,
-  Colors.cyan,
-  Colors.teal,
-  Colors.amber.shade900,
-  Colors.deepOrange
-];
-
 class TaskCard extends ConsumerWidget {
-
-  const TaskCard({
-    required this.noteData,
-    required this.onTapAction,
-    required this.routeToNotas,
-    this.focusedDay,
-    this.selectedDay,
-    Key? key,
-  }) : super(key: key);
-
+  const TaskCard({required this.noteData, required this.onTapAction, required this.routeToNotas, this.focusedDay, this.selectedDay, super.key});
   final Task noteData;
   final Function(Task noteData) onTapAction;
   final bool routeToNotas;
@@ -42,211 +21,91 @@ class TaskCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    var date =
-        DateTime.fromMillisecondsSinceEpoch(noteData.startTimeMilliseconds ?? DateTime.now().millisecondsSinceEpoch);
-    String neatDate = DateFormat('dd-MM-yyyy HH:mm').format(date);
-
-    Color color =
-    colorList.elementAt(Random().nextInt(colorList.length));
-
-    return Container(
-      // padding: EdgeInsets.only(left: 4.w, right: 4.w),
-      decoration: BoxDecoration(
-
-        borderRadius: BorderRadius.circular(5.r),
-        boxShadow: [buildBoxShadow(color, context)],
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(12),
-        child: Slidable(
-          endActionPane: ActionPane(
-              motion: const DrawerMotion(),
-              extentRatio: 0.5,
-              children: [
-                SlidableAction(
-                  label: 'Compartir',
-                  icon: Icons.share,
-                  backgroundColor: Colors.blue,
-                  borderRadius: BorderRadius.all(Radius.circular(5.r)),
-                  onPressed: (context) {
-                    Share.share(''
-                        'Titulo: ${noteData.title}'
-                        '\nNota: ${noteData.notes}'
-                        '\nInicio: ${DateTime.fromMillisecondsSinceEpoch(noteData.startTimeMilliseconds ?? DateTime.now().millisecondsSinceEpoch).formatDateTime24H} h.  ${DateTime.fromMillisecondsSinceEpoch(noteData.startTimeMilliseconds ?? DateTime.now().millisecondsSinceEpoch).formatDateYMMMd}'
-                        '\nFin: ${DateTime.fromMillisecondsSinceEpoch(noteData.endTimeMilliseconds ?? noteData.startTimeMilliseconds ?? DateTime.now().millisecondsSinceEpoch).formatDateTime24H} h.  ${DateTime.fromMillisecondsSinceEpoch(noteData.endTimeMilliseconds ?? noteData.startTimeMilliseconds ?? DateTime.now().millisecondsSinceEpoch).formatDateYMMMd}'
-                    );
-                  },
-                ),
-                SlidableAction(
-                  label: 'Eliminar',
-                  icon: Icons.delete,
-                  backgroundColor: Colors.red,
-                  borderRadius: BorderRadius.all(Radius.circular(5.r)),
-                  onPressed: (slidableContext) {
-                    showDialog<void>(
-                      context: context,
-                      builder: (dialogContext) => AlertDialog(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        title: const Text('Borrar nota'),
-                        content: const Text('Se borrará permanentemente'),
-                        actions: [
-                          TextButton(
-                            child: Text(
-                              'BORRAR',
-                              style: TextStyle(
-                                color: Colors.red.shade300,
-                                fontWeight: FontWeight.w500,
-                                letterSpacing: 1,
-                              ),
-                            ),
-                            onPressed: () async {
-                              final notaId = noteData.id;
-                              Navigator.of(dialogContext).pop();
-
-                              if (notaId == null) {
-                                Toast.toast(
-                                  context,
-                                  msg: 'No se puede eliminar una nota sin ID.',
-                                );
-                                return;
-                              }
-
-                              await ref
-                                  .read(notasListProvider.notifier)
-                                  .eliminarNota(notaId);
-
-                              if (routeToNotas) {
-                                context.go('/notas');
-                              }
-
-                              if (context.mounted) {
-                                Toast.toast(
-                                  context,
-                                  msg: 'Eliminada!',
-                                );
-                              }
-                            },
-                          ),
-                          TextButton(
-                            child: Text(
-                              'CANCELAR',
-                              style: TextStyle(
-                                color: Theme.of(dialogContext).primaryColor,
-                                fontWeight: FontWeight.w500,
-                                letterSpacing: 1,
-                              ),
-                            ),
-                            onPressed: () => Navigator.of(dialogContext).pop(),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
-              ]),
-          child: Container(
-              margin: EdgeInsets.symmetric(vertical: 2.h, horizontal: 2.w),
-              height: 56.h,
+    final theme = Theme.of(context);
+    final text = theme.colorScheme.onSurface;
+    final start = DateTime.fromMillisecondsSinceEpoch(noteData.startTimeMilliseconds ?? DateTime.now().millisecondsSinceEpoch);
+    final end = DateTime.fromMillisecondsSinceEpoch(noteData.endTimeMilliseconds ?? noteData.startTimeMilliseconds ?? DateTime.now().millisecondsSinceEpoch);
+    final accent = noteData.isImportant == true ? Colors.deepOrange : PRIMARY_COLOR;
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 5.h),
+      child: Slidable(
+        key: ValueKey('note-${noteData.id}'),
+        endActionPane: ActionPane(motion: const DrawerMotion(), extentRatio: .42, children: [
+          SlidableAction(label: 'Compartir', icon: Icons.share_rounded, backgroundColor: PRIMARY_COLOR, foregroundColor: Colors.black, borderRadius: BorderRadius.circular(16.r), onPressed: (_) => Share.share('Título: ${noteData.title}\nNota: ${noteData.notes}\nInicio: ${start.formatDateTime24H} h.  ${start.formatDateYMMMd}\nFin: ${end.formatDateTime24H} h.  ${end.formatDateYMMMd}')),
+          SlidableAction(label: 'Eliminar', icon: Icons.delete_outline_rounded, backgroundColor: Colors.redAccent, foregroundColor: Colors.white, borderRadius: BorderRadius.circular(16.r), onPressed: (_) => _confirmDelete(context, ref)),
+        ]),
+        child: Material(
+          color: theme.colorScheme.surface,
+          borderRadius: BorderRadius.circular(20.r),
+          child: InkWell(
+            onTap: () => onTapAction(noteData),
+            borderRadius: BorderRadius.circular(20.r),
+            child: Container(
+              padding: EdgeInsets.all(13.w),
               decoration: BoxDecoration(
-
-                borderRadius: BorderRadius.circular(5.r),
-                boxShadow: [buildBoxShadow(color, context)],
+                borderRadius: BorderRadius.circular(20.r),
+                border: Border.all(color: theme.colorScheme.outlineVariant.withOpacity(.42)),
+                boxShadow: [BoxShadow(color: theme.shadowColor.withOpacity(.035), blurRadius: 12, offset: const Offset(0, 4))],
               ),
-              child: Material(
-                borderRadius: BorderRadius.circular(5.r),
-                clipBehavior: Clip.antiAlias,
-                color: Theme.of(context).cardColor,
-                child: InkWell(
-                  borderRadius: BorderRadius.circular(5.r),
-                  onTap: () {
-                    onTapAction(noteData);
-                  },
-                  splashColor: color.withAlpha(20),
-                  highlightColor: color.withAlpha(10),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8.w),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Row(
-                          children: <Widget>[
-                            Container(
-                              margin: EdgeInsets.only(top: 6.h, left: 6.w),
-                              child: Text(
-                                (noteData.title ?? '').trim().length <= 20
-                                    ? (noteData.title ?? '').trim()
-                                    : '${(noteData.title ?? '').trim().substring(0, 20)}...',
-                                style: TextStyle(
-                                    // fontFamily: 'ZillaSlab',
-                                    fontSize: 18.sp,
-                                    fontWeight: FontWeight.w800),
-                              ),
-                            ),
-                            const Spacer(),
-                            Padding(
-                              padding: EdgeInsets.only(right: 4.w),
-                              child: Icon(
-                                noteData.isImportant == true
-                                    ? Icons.flag
-                                    : Icons.flag_outlined,
-                                color: noteData.isImportant == true
-                                    ? Colors.red
-                                    : Theme.of(context).colorScheme.onSurface.withOpacity(0.65),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const Spacer(),
-                        Container(
-                          alignment: Alignment.centerRight,
-                          child: Row(
-                            children: <Widget>[
-                              Container(
-                                margin: EdgeInsets.only(bottom: 4.h, left: 6.w),
-                                child: Text(
-                                  (noteData.notes ?? '')
-                                              .trim()
-                                              .split('\n')
-                                              .first
-                                              .length <=
-                                          30
-                                      ? (noteData.notes ?? '').trim().split('\n').first
-                                      : '${(noteData.notes ?? '').trim().split('\n').first.substring(0, 30)}...',
-                                  style: TextStyle(
-                                    fontSize: 12.sp,
-                                  ),
-                                ),
-                              ),
-                              const Spacer(),
-                              Container(
-                                margin:
-                                    EdgeInsets.only(bottom: 3.h, right: 4.w),
-                                child: Text(
-                                  neatDate,
-                                  textAlign: TextAlign.right,
-                                  style: TextStyle(
-                                      fontSize: 11.sp,
-                                      // color: Colors.grey.shade300,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                              ),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ),
-              )),
+              child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Container(width: 43.w, height: 43.w, alignment: Alignment.center, decoration: BoxDecoration(color: accent.withOpacity(.14), borderRadius: BorderRadius.circular(14.r)), child: Icon(noteData.isImportant == true ? Icons.star_rounded : Icons.sticky_note_2_outlined, color: accent, size: 22.sp)),
+                SizedBox(width: 11.w),
+                Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  Text((noteData.title ?? '').trim().isEmpty ? 'Nota sin título' : noteData.title!.trim(), maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w800, color: text)),
+                  if ((noteData.notes ?? '').trim().isNotEmpty) ...[
+                    SizedBox(height: 4.h),
+                    Text(noteData.notes!.trim().split('\n').first, maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 12.sp, height: 1.3, color: text.withOpacity(.65))),
+                  ],
+                  SizedBox(height: 8.h),
+                  Wrap(spacing: 10.w, runSpacing: 4.h, children: [
+                    _NoteMeta(icon: Icons.calendar_today_rounded, text: DateFormat('dd/MM/yyyy').format(start)),
+                    _NoteMeta(icon: Icons.schedule_rounded, text: DateFormat('HH:mm').format(start)),
+                    if (noteData.isAlarmaCreated == true) const _NoteMeta(icon: Icons.notifications_active_outlined, text: 'Recordatorio'),
+                  ]),
+                ])),
+                SizedBox(width: 3.w),
+                Icon(Icons.chevron_right_rounded, color: text.withOpacity(.42)),
+              ]),
+            ),
+          ),
         ),
       ),
     );
   }
 
-  BoxShadow buildBoxShadow(Color color, BuildContext context) {
-    return BoxShadow(
-        color: color.withAlpha(8), blurRadius: 8, offset: const Offset(1, 1));
+  Future<void> _confirmDelete(BuildContext context, WidgetRef ref) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22.r)),
+        title: const Text('Eliminar nota'),
+        content: const Text('La nota se eliminará permanentemente.'),
+        actions: [
+          TextButton(onPressed: () => Navigator.of(dialogContext).pop(false), child: const Text('Cancelar')),
+          FilledButton(onPressed: () => Navigator.of(dialogContext).pop(true), child: const Text('Eliminar')),
+        ],
+      ),
+    );
+    if (confirmed != true || !context.mounted) return;
+    final id = noteData.id;
+    if (id == null) {
+      Toast.toast(context, msg: 'No se puede eliminar una nota sin ID.');
+      return;
+    }
+    await ref.read(notasListProvider.notifier).eliminarNota(id);
+    if (!context.mounted) return;
+    if (routeToNotas) context.go('/notas');
+    Toast.toast(context, msg: 'Nota eliminada');
+  }
+}
+
+class _NoteMeta extends StatelessWidget {
+  const _NoteMeta({required this.icon, required this.text});
+  final IconData icon;
+  final String text;
+  @override
+  Widget build(BuildContext context) {
+    final color = Theme.of(context).colorScheme.onSurface.withOpacity(.58);
+    return Row(mainAxisSize: MainAxisSize.min, children: [Icon(icon, size: 13.sp, color: color), SizedBox(width: 4.w), Text(text, style: TextStyle(fontSize: 11.sp, color: color))]);
   }
 }

@@ -2,6 +2,7 @@
 import 'package:calendario2/app/components/toast.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../config/theme/my_fonts.dart';
 import '../../../../../config/util/app_utils.dart';
@@ -125,6 +126,7 @@ class _AboutPageState extends State<AboutPage> {
         ),
       ),
       body: ListView.separated(
+        padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 24.h),
         itemCount: listViewData.length,
         itemBuilder: (context, index) {
           Widget widget;
@@ -136,35 +138,39 @@ class _AboutPageState extends State<AboutPage> {
             },
           );
         },
-        separatorBuilder: (context, index) {
-          // 顯示格線
-          return Container(
-            color: Colors.black12,
-            height: 1,
-          );
-        },
+        separatorBuilder: (context, index) => SizedBox(height: 9.h),
       ),
     );
   }
 
   Container _buildAbout(Map data) {
+    final theme = Theme.of(context);
     return Container(
-      //color: Colors.yellow,
-      padding: const EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0, bottom: 20.0),
+      padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 14.h),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surface,
+        borderRadius: BorderRadius.circular(18.r),
+        border: Border.all(color: theme.colorScheme.outlineVariant.withOpacity(.4)),
+      ),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Icon(
-            data['icon'],
-            color: data['color'],
+          Container(
+            width: 42.w,
+            height: 42.w,
+            decoration: BoxDecoration(
+              color: (data['color'] as Color).withOpacity(.13),
+              borderRadius: BorderRadius.circular(14.r),
+            ),
+            child: Icon(data['icon'] as IconData, color: data['color'] as Color),
           ),
-          const SizedBox(
-            width: 20.0,
+          SizedBox(width: 12.w),
+          Expanded(
+            child: Text(
+              data['title'] as String,
+              style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w700, color: theme.colorScheme.onSurface),
+            ),
           ),
-          Text(
-            data['title'],
-            style: const TextStyle(fontSize: 18),
-          ),
+          Icon(Icons.chevron_right_rounded, color: theme.colorScheme.onSurface.withOpacity(.45)),
         ],
       ),
     );

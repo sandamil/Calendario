@@ -1,261 +1,107 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:calendario2/app/controllers/ads_provider.dart';
-
-import 'package:calendario2/app/modules/home/views/home_view.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
-import 'package:calendario2/config/theme/styles.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import '../../../../config/theme/my_fonts.dart';
+import 'package:go_router/go_router.dart';
 
 class MenuView extends StatelessWidget {
   const MenuView({super.key});
 
+  void _open(BuildContext context, String route) {
+    if (route == '/home') {
+      ProviderScope.containerOf(context, listen: false).read(adsProvider.notifier).ensureHomeBanner();
+    }
+    context.go(route);
+  }
+
   @override
   Widget build(BuildContext context) {
-    double qaButtonHeight = 200.h;
-    double qaButtonWidth = 120.w;
-
+    final theme = Theme.of(context);
+    final text = theme.colorScheme.onSurface;
+    final items = <_MenuItemData>[
+      _MenuItemData('Notas', 'Organiza tus recordatorios', Icons.sticky_note_2_rounded, '/notas'),
+      _MenuItemData('Cuadrantes', 'Gestiona tus calendarios de turnos', Icons.calendar_month_rounded, '/crear-cuadrante'),
+      _MenuItemData('Tipos de turno', 'Configura horarios y colores', Icons.work_history_rounded, '/crear-turno'),
+      _MenuItemData('Ajustes', 'Personaliza la aplicación', Icons.tune_rounded, '/ajustes'),
+      _MenuItemData('Ayuda', 'Tutoriales y contacto', Icons.help_outline_rounded, '/ayuda'),
+    ];
     return Scaffold(
       appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.transparent,
-        centerTitle: false,
-        leading: IconButton(
-          icon: Icon(
-            Icons.home,
-            color: PRIMARY_COLOR,
-            size: 26.sp,
-          ),
-          onPressed: () {
-            ProviderScope.containerOf(context, listen: false)
-                .read(adsProvider.notifier)
-                .ensureHomeBanner();
-            context.go('/home');
-          },
-        ),
-        title: Text(
-          'Menu',
-          style: CustomTextStyle.appBarTitle(context: context),
-        ),
+        leading: IconButton(tooltip: 'Volver al calendario', icon: Icon(Icons.arrow_back_rounded, color: PRIMARY_COLOR, size: 25.sp), onPressed: () => _open(context, '/home')),
+        title: const Text('Menú'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            Expanded(
-              flex: 20,
-              child: MaterialButton(
-                elevation: 10,
-                padding: const EdgeInsets.all(0),
-                shape: RoundedRectangleBorder(borderRadius: Corners.xmBorder),
-                height: qaButtonHeight,
-                minWidth: qaButtonWidth,
-                color: MyColors.menuCardBackground,
-                child: Stack(
-                  children: <Widget>[
-                    Container(
-                      padding: EdgeInsets.only(right: 10.w, bottom: 15.h),
-                      height: 120.h,
-                      alignment: AlignmentDirectional.topStart,
-                      child: Image.asset(
-                        "assets/images/notas.png",
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    Positioned(
-                      right: 25.w,
-                      bottom: 2.h,
-                      child: Padding(
-                        padding: const EdgeInsets.all(0),
-                        child: Text("Notas", style: CustomTextStyle.textMenu),
-                      ),
-                    ),
-                  ],
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          final columns = constraints.maxWidth >= 760 ? 3 : 2;
+          return SingleChildScrollView(
+            padding: EdgeInsets.fromLTRB(16.w, 10.h, 16.w, 28.h),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Todo en un solo lugar', style: TextStyle(fontSize: 23.sp, fontWeight: FontWeight.w800, color: text)),
+                SizedBox(height: 5.h),
+                Text('Accede rápidamente a las herramientas de Calendario.', style: TextStyle(fontSize: 13.sp, color: text.withOpacity(.62))),
+                SizedBox(height: 20.h),
+                GridView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: items.length,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: columns, crossAxisSpacing: 12.w, mainAxisSpacing: 12.h, childAspectRatio: columns == 3 ? 1.15 : 1.04),
+                  itemBuilder: (context, index) {
+                    final item = items[index];
+                    return _MenuCard(item: item, onTap: () => _open(context, item.route));
+                  },
                 ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
 
-                onPressed: () {
-                  // Get.toNamed('/notas', (r) => false);
-                  context.go('/notas');
-                  //   Navigator.push(
-                  //       context,
-                  //       MaterialPageRoute(
-                  //           builder: (context) =>
-                  //               TaskListVIew(widget.time, widget.events)));
-                },
-                // splashColor: AAThemeData.buttonColor,
-              ),
-            ),
-            SizedBox(
-              height: 5.h,
-            ),
-            Expanded(
-              flex: 20,
-              child: MaterialButton(
-                elevation: 10,
-                padding: const EdgeInsets.all(0),
-                shape: RoundedRectangleBorder(borderRadius: Corners.xmBorder),
-                height: qaButtonHeight,
-                minWidth: qaButtonWidth,
-                color: MyColors.menuCardBackground,
-                child: Stack(
-                  children: <Widget>[
-                    Container(
-                      padding: EdgeInsets.only(right: 10.w, bottom: 15.h),
-                      height: 120.h,
-                      alignment: AlignmentDirectional.topStart,
-                      child: Image.asset(
-                        "assets/images/cuadrante.png",
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    Positioned(
-                      right: 25.w,
-                      bottom: 2.h,
-                      child: Padding(
-                          padding: const EdgeInsets.all(0),
-                          child: Text("Cuadrante",
-                              style: CustomTextStyle.textMenu)),
-                    ),
-                  ],
-                ),
-                onPressed: () {
-                  // Get.toNamed('/crear-cuadrante');
-                  context.go('/crear-cuadrante');
-                },
-                //splashColor: AAThemeData.buttonColor,
-              ),
-            ),
-            SizedBox(
-              height: 5.h,
-            ),
-            Expanded(
-              flex: 20,
-              child: MaterialButton(
-                elevation: 10,
-                padding: const EdgeInsets.all(0),
-                shape: RoundedRectangleBorder(borderRadius: Corners.xmBorder),
-                height: qaButtonHeight,
-                minWidth: qaButtonWidth,
-                color: MyColors.menuCardBackground,
-                child: Stack(
-                  children: <Widget>[
-                    Container(
-                      padding: EdgeInsets.only(right: 10.w, bottom: 15.h),
-                      height: 120.h,
-                      alignment: AlignmentDirectional.topStart,
-                      child: Image.asset(
-                        "assets/images/turnos.png",
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    Positioned(
-                      right: 25.w,
-                      bottom: 2.h,
-                      child: Padding(
-                          padding: const EdgeInsets.all(0),
-                          child:
-                              Text("Turnos", style: CustomTextStyle.textMenu)),
-                    ),
-                  ],
-                ),
-                onPressed: () {
-                  // Get.toNamed('/crear-turno');
-                  context.go('/crear-turno');
+class _MenuItemData {
+  const _MenuItemData(this.title, this.subtitle, this.icon, this.route);
+  final String title;
+  final String subtitle;
+  final IconData icon;
+  final String route;
+}
 
-                  // Get.to(() => const TurnoView());
-                },
-                //splashColor: AAThemeData.buttonColor,
-              ),
-            ),
-            SizedBox(
-              height: 5.h,
-            ),
-            Expanded(
-              flex: 20,
-              child: MaterialButton(
-                elevation: 10,
-                padding: const EdgeInsets.all(0),
-                shape: RoundedRectangleBorder(borderRadius: Corners.xmBorder),
-                height: qaButtonHeight,
-                minWidth: qaButtonWidth,
-                color: MyColors.menuCardBackground,
-                child: Stack(
-                  children: <Widget>[
-                    Container(
-                      padding: EdgeInsets.only(right: 10.w, bottom: 15.h),
-                      height: 120.h,
-                      alignment: AlignmentDirectional.topStart,
-                      child: Image.asset(
-                        "assets/images/ajustes.png",
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    Positioned(
-                      right: 25.w,
-                      bottom: 2.h,
-                      child: Padding(
-                          padding: const EdgeInsets.all(0),
-                          child:
-                              Text("Ajustes", style: CustomTextStyle.textMenu)),
-                    ),
-                  ],
-                ),
-                onPressed: () {
-                  // Get.toNamed('/ajustes');
-                  context.go('/ajustes');
-                },
-                //splashColor: AAThemeData.buttonColor,
-              ),
-            ),
-            SizedBox(
-              height: 5.h,
-            ),
-            Expanded(
-              flex: 20,
-              child: MaterialButton(
-                elevation: 10,
-                padding: const EdgeInsets.all(0),
-                shape: RoundedRectangleBorder(borderRadius: Corners.xmBorder),
-                height: qaButtonHeight,
-                minWidth: qaButtonWidth,
-                color: MyColors.menuCardBackground,
-                child: Stack(
-                  children: <Widget>[
-                    Container(
-                      padding: EdgeInsets.only(right: 10.w, bottom: 15.h),
-                      height: 120.h,
-                      alignment: AlignmentDirectional.topStart,
-                      child: Image.asset(
-                        "assets/images/ajustes.png",
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    Positioned(
-                      right: 25,
-                      bottom: 2,
-                      child: Padding(
-                          padding: const EdgeInsets.all(0),
-                          child:
-                              Text("Ayuda", style: CustomTextStyle.textMenu)),
-                    ),
-                  ],
-                ),
-                onPressed: () {
-                  context.go('/ayuda');
-                },
-                //splashColor: AAThemeData.buttonColor,
-              ),
-            ),
-            SizedBox(
-              height: 30.h,
-            ),
-          ],
+class _MenuCard extends StatelessWidget {
+  const _MenuCard({required this.item, required this.onTap});
+  final _MenuItemData item;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final text = theme.colorScheme.onSurface;
+    return Material(
+      color: theme.colorScheme.surface,
+      borderRadius: BorderRadius.circular(22.r),
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(22.r),
+        child: Container(
+          padding: EdgeInsets.all(15.w),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(22.r),
+            border: Border.all(color: theme.colorScheme.outlineVariant.withOpacity(.4)),
+            boxShadow: [BoxShadow(color: theme.shadowColor.withOpacity(.045), blurRadius: 16, offset: const Offset(0, 5))],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(width: 46.w, height: 46.w, decoration: BoxDecoration(color: PRIMARY_COLOR.withOpacity(.15), borderRadius: BorderRadius.circular(15.r)), child: Icon(item.icon, color: PRIMARY_COLOR, size: 25.sp)),
+              const Spacer(),
+              Text(item.title, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w800, color: text)),
+              SizedBox(height: 4.h),
+              Text(item.subtitle, maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 11.5.sp, height: 1.25, color: text.withOpacity(.62))),
+            ],
+          ),
         ),
       ),
     );

@@ -2,6 +2,7 @@ import 'package:calendario2/app/modules/notas/providers/alarmas_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AlarmasView extends ConsumerStatefulWidget {
@@ -58,7 +59,7 @@ class _AlarmasViewState extends ConsumerState<AlarmasView> {
         ],
       ),
       body: ListView(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.fromLTRB(16.w, 14.h, 16.w, 24.h),
         children: [
           SwitchListTile(
             contentPadding: EdgeInsets.zero,
@@ -74,7 +75,7 @@ class _AlarmasViewState extends ConsumerState<AlarmasView> {
             onChanged: notifier.setReminderEnabled,
           ),
           if (state.reminderEnabled) ...[
-            const Divider(),
+            SizedBox(height: 8.h),
             RadioListTile<String>(
               contentPadding: EdgeInsets.zero,
               title: const Text('Al Principio'),
@@ -120,7 +121,7 @@ class _AlarmasViewState extends ConsumerState<AlarmasView> {
                 if (value != null) notifier.selectOption(value);
               },
             ),
-            const Divider(),
+            SizedBox(height: 8.h),
             SwitchListTile(
               contentPadding: EdgeInsets.zero,
               title: const Text('Personalizado'),
@@ -173,9 +174,10 @@ class _AlarmasViewState extends ConsumerState<AlarmasView> {
           ],
           const SizedBox(height: 24),
           Card(
-            color: theme.colorScheme.surfaceContainerHighest,
+            color: theme.colorScheme.surfaceContainerHighest.withOpacity(.55),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.r)),
             child: Padding(
-              padding: const EdgeInsets.all(16),
+              padding: EdgeInsets.all(16.w),
               child: Text(
                 state.reminderEnabled
                     ? 'Aviso previsto: ${state.startTime.subtract(notifier.duration)}'

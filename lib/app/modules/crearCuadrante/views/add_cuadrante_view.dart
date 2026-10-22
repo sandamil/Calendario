@@ -187,7 +187,7 @@ class _AddCuadranteViewState extends ConsumerState<AddCuadranteView> {
                           ],
                         ),
                         Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 12.h),
+                          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
                           child: TextField(
                             // inputFormatters: [
                             //   FilteringTextInputFormatter.deny(
@@ -196,12 +196,12 @@ class _AddCuadranteViewState extends ConsumerState<AddCuadranteView> {
                             // ],
                             controller: _cuadranteNameController,
                             onChanged: notifier.setCuadranteName,
-                            decoration: const InputDecoration(
-                              hintText: 'Nombre del cuadrante creado',
-                              labelText: 'Nombre del Cuadrante',
-                              border: OutlineInputBorder(
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(15))),
+                            decoration: InputDecoration(
+                              hintText: 'Nombre del cuadrante',
+                              labelText: 'Nombre del cuadrante',
+                              filled: true,
+                              fillColor: Theme.of(context).colorScheme.surfaceContainerHighest,
+                              border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(16)), borderSide: BorderSide.none),
                             ),
                             maxLines: 1,
                             maxLength: 20,
@@ -296,17 +296,9 @@ class _AddCuadranteViewState extends ConsumerState<AddCuadranteView> {
                             decoration: BoxDecoration(
                                 color: HexColor(state.list[index].color!),
                                 border: Border.all(width: 0.8),
-                                borderRadius: BorderRadius.circular(5.r),
-                                boxShadow: <BoxShadow>[
-                                  BoxShadow(
-                                    color: Theme.of(context)
-                                        .shadowColor
-                                        .withOpacity(0.25),
-                                    offset: const Offset(0, 1),
-                                    blurRadius: 3,
-                                  ),
-                                ]),
-                            margin: const EdgeInsets.all(2.0),
+                                borderRadius: BorderRadius.circular(13.r),
+                                boxShadow: <BoxShadow>[BoxShadow(color: Theme.of(context).shadowColor.withOpacity(0.08), offset: const Offset(0, 2), blurRadius: 7)]),
+                            margin: EdgeInsets.all(3.w),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.end,
                               crossAxisAlignment: CrossAxisAlignment.center,

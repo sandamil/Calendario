@@ -1,28 +1,39 @@
-import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SettingsGroup extends StatelessWidget {
   final String title;
   final List<Widget> children;
-  const SettingsGroup({Key? key, required this.title, required this.children})
-      : super(key: key);
+  const SettingsGroup({super.key, required this.title, required this.children});
 
   @override
   Widget build(BuildContext context) {
-    return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 6),
-        child: Text(
-          title,
-          style: TextStyle(
-              color: MyColors.textColor.withOpacity(0.3),
-              fontSize: 26,
-              fontWeight: FontWeight.w800),
+    final theme = Theme.of(context);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Padding(
+          padding: EdgeInsets.fromLTRB(5.w, 16.h, 5.w, 8.h),
+          child: Text(
+            title.toUpperCase(),
+            style: TextStyle(
+              color: theme.colorScheme.onSurface.withOpacity(.55),
+              fontSize: 11.sp,
+              letterSpacing: .8,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
         ),
-      ),
-      ...children,
-    ]);
+        Container(
+          padding: EdgeInsets.symmetric(vertical: 4.h),
+          decoration: BoxDecoration(
+            color: theme.colorScheme.surface,
+            borderRadius: BorderRadius.circular(18.r),
+            border: Border.all(color: theme.colorScheme.outlineVariant.withOpacity(.4)),
+          ),
+          child: Column(children: children),
+        ),
+      ],
+    );
   }
 }
-

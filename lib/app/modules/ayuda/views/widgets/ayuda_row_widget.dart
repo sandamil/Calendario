@@ -1,57 +1,42 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../../../config/theme/my_colors.dart';
-
 class AyudaRowWidget extends StatelessWidget {
   final String title;
   final String subtitle;
   final VoidCallback onTap;
-  const AyudaRowWidget(
-      {Key? key,
-      required this.title,
-      required this.subtitle,
-      required this.onTap})
-      : super(key: key);
+  const AyudaRowWidget({super.key, required this.title, required this.subtitle, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final text = theme.colorScheme.onSurface;
     return InkWell(
       onTap: onTap,
-      child: Container(
-        padding: EdgeInsets.only(left: 12.w, right: 12.w, top: 2.h),
-        child: Column(
+      borderRadius: BorderRadius.circular(15.r),
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 13.w, vertical: 11.h),
+        child: Row(
           children: [
-            Row(
-              children: [
-                SizedBox(
-                  width: MediaQuery.sizeOf(context).width - 90.w,
-                  child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                    Text(
-                      title,
-                      style: TextStyle(
-                          color: MyColors.textColor,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600),
-                    ),
-                    SizedBox(height: 2.h),
-                    Text(
-                      subtitle,
-                      style: TextStyle(
-                        color: MyColors.textColor.withOpacity(0.6),
-                      ),
-                    ),
-
-                  ]),
-                ),
-                const Spacer(),
-                Icon(Icons.arrow_right,size: 30.sp,)
-
-              ],
+            Container(
+              width: 38.w,
+              height: 38.w,
+              decoration: BoxDecoration(color: theme.colorScheme.primary.withOpacity(.12), borderRadius: BorderRadius.circular(12.r)),
+              child: Icon(Icons.arrow_outward_rounded, color: theme.colorScheme.primary, size: 19.sp),
             ),
-            SizedBox(height: 6.h),
-            const Divider(height: 0.5, thickness: 0),
-            SizedBox(height: 2.h),
+            SizedBox(width: 11.w),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(title, style: TextStyle(color: text, fontSize: 14.sp, fontWeight: FontWeight.w700)),
+                  SizedBox(height: 3.h),
+                  Text(subtitle, style: TextStyle(color: text.withOpacity(.62), fontSize: 12.sp, height: 1.3)),
+                ],
+              ),
+            ),
+            SizedBox(width: 6.w),
+            Icon(Icons.chevron_right_rounded, size: 21.sp, color: text.withOpacity(.45)),
           ],
         ),
       ),

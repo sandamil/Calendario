@@ -216,16 +216,16 @@ class _NotasViewState extends ConsumerState<NotasView> {
       body: Stack(
         children: [
           SingleChildScrollView(
-            padding: EdgeInsets.only(bottom: 24.h),
+            padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 24.h),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
                   padding: EdgeInsets.only(
-                    left: 24.w,
-                    right: 24.w,
-                    top: 24.h,
-                    bottom: 16.h,
+                    left: 8.w,
+                    right: 8.w,
+                    top: 12.h,
+                    bottom: 14.h,
                   ),
                   child: AnimatedOpacity(
                     opacity: _headerVisible ? 1 : 0,
@@ -235,7 +235,7 @@ class _NotasViewState extends ConsumerState<NotasView> {
                       _note.title ?? '',
                       style: TextStyle(
                         fontWeight: FontWeight.w900,
-                        fontSize: 36.sp,
+                        fontSize: 28.sp,
                       ),
                     ),
                   ),
@@ -244,7 +244,7 @@ class _NotasViewState extends ConsumerState<NotasView> {
                   duration: const Duration(milliseconds: 500),
                   opacity: _headerVisible ? 1 : 0,
                   child: Padding(
-                    padding: EdgeInsets.only(left: 24.w),
+                    padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
                     child: Column(
                       children: [
                         _dateRow('Inicio:', start),
@@ -255,10 +255,10 @@ class _NotasViewState extends ConsumerState<NotasView> {
                 ),
                 Padding(
                   padding: EdgeInsets.only(
-                    left: 24.w,
-                    top: 16.h,
-                    bottom: 14.h,
-                    right: 24.w,
+                    left: 12.w,
+                    top: 12.h,
+                    bottom: 12.h,
+                    right: 12.w,
                   ),
                   child: Row(
                     children: [
@@ -317,10 +317,10 @@ class _NotasViewState extends ConsumerState<NotasView> {
                 ),
                 Padding(
                   padding: EdgeInsets.only(
-                    left: 24.w,
-                    top: 36.h,
-                    bottom: 24.h,
-                    right: 24.w,
+                    left: 14.w,
+                    top: 18.h,
+                    bottom: 18.h,
+                    right: 14.w,
                   ),
                   child: Text(
                     (_note.notes == null || _note.notes!.isEmpty)

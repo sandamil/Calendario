@@ -45,12 +45,15 @@ class VideotutorialesView extends StatelessWidget {
         ),
       ),
       body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 10.w),
+        padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 10.h),
         child: SingleChildScrollView(
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Card(
-              color: MyColors.menuCardBackgroundDark,
+              margin: EdgeInsets.only(bottom: 12.h),
+              elevation: 0,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.r), side: BorderSide(color: Theme.of(context).colorScheme.outlineVariant.withOpacity(.4))),
+              color: Theme.of(context).colorScheme.surface,
               child: VideotutorialesViewGroup(
                 title: "Pantalla principal",
                 children: [

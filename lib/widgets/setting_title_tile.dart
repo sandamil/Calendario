@@ -1,24 +1,21 @@
-import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SettingTitleTile extends StatelessWidget {
   final String text;
+  const SettingTitleTile(this.text, {super.key});
 
-  const SettingTitleTile( this.text,
-      {Key? key,})
-      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.all(15.w),
+      padding: EdgeInsets.fromLTRB(5.w, 19.h, 5.w, 7.h),
       child: Text(
-        text,
+        text.toUpperCase(),
         style: TextStyle(
-          fontWeight: FontWeight.w500,
-          // fontFamily: ConstantData.ralewayFont,
-          fontSize: 20.sp,
-          color: MyColors.textDisable,
+          fontWeight: FontWeight.w800,
+          fontSize: 11.sp,
+          letterSpacing: .8,
+          color: Theme.of(context).colorScheme.onSurface.withOpacity(.55),
         ),
       ),
     );

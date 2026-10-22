@@ -56,7 +56,7 @@ class AjustesView extends ConsumerWidget {
           ),
         ),
         body: Container(
-          padding: EdgeInsets.symmetric(horizontal: 10.w),
+          padding: EdgeInsets.symmetric(horizontal: 15.w),
           child: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -95,7 +95,7 @@ class AjustesView extends ConsumerWidget {
                     context.push('/backup');
                   },
                 ),
-                Divider(indent: 15.w, endIndent: 15.w),
+                SizedBox(height: 10.h),
                 SettingTitleTile(LocalizationService.translate('Sobre Nosotros', Localizations.localeOf(context))),
                 SettingTile(
                   icon: const ImageIcon(AssetImage(MyIcon.notificationIcon)),
