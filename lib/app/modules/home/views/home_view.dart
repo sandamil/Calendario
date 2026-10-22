@@ -277,31 +277,30 @@ class _HomeViewState extends State<HomeView> {
                 ),
               ],
             ),
-            floatingActionButtonLocation:
-                FloatingActionButtonLocation.centerDocked,
-            floatingActionButton: (!kIsWeb && defaultTargetPlatform == TargetPlatform.android)
-                ? Consumer(
-                    builder: (context, ref, child) {
-                      final ads = ref.watch(adsProvider);
-                      final banner = ads.homeBanner;
+            bottomNavigationBar:
+                (!kIsWeb && defaultTargetPlatform == TargetPlatform.android)
+                    ? Consumer(
+                        builder: (context, ref, child) {
+                          final ads = ref.watch(adsProvider);
+                          final banner = ads.homeBanner;
 
-                      if (!ads.isLoaded || banner == null) {
-                        return const SizedBox.shrink();
-                      }
+                          if (!ads.isLoaded || banner == null) {
+                            return const SizedBox.shrink();
+                          }
 
-                      return FloatingActionButton.extended(
-                        backgroundColor: Colors.transparent,
-                        elevation: 0,
-                        onPressed: () {},
-                        label: SizedBox(
-                          width: banner.size.width.toDouble(),
-                          height: banner.size.height.toDouble(),
-                          child: AdWidget(ad: banner),
-                        ),
-                      );
-                    },
-                  )
-                : null,
+                          return SafeArea(
+                            top: false,
+                            child: Center(
+                              child: SizedBox(
+                                width: banner.size.width.toDouble(),
+                                height: banner.size.height.toDouble(),
+                                child: AdWidget(ad: banner),
+                              ),
+                            ),
+                          );
+                        },
+                      )
+                    : null,
             body: Column(
               children: [
                 SizedBox(height: 2.h),
