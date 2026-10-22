@@ -119,20 +119,33 @@ class _HomeViewState extends State<HomeView> {
     DateTime focusedDate,
     Offset tapPosition,
   ) async {
-    final size = MediaQuery.sizeOf(context);
-    final popupWidth = math.min(390.w, size.width - 24.w);
-    const estimatedPopupHeight = 360.0;
+    // El toque viene en coordenadas globales. Convertirlo al sistema de
+    // coordenadas del Overlay evita desplazamientos por AppBar/área segura.
+    final overlay = Navigator.of(context, rootNavigator: true).overlay;
+    final overlayObject = overlay?.context.findRenderObject();
+    final overlayBox = overlayObject is RenderBox ? overlayObject : null;
+    final overlaySize = overlayBox?.size ?? MediaQuery.sizeOf(context);
+    final tap = overlayBox?.globalToLocal(tapPosition) ?? tapPosition;
+
+    final popupWidth = math.min(360.w, overlaySize.width - 24.w);
+    const pointerHeight = 10.0;
+    const estimatedBodyHeight = 340.0;
+    final totalHeight = estimatedBodyHeight + pointerHeight;
     final horizontalMargin = 12.w;
 
-    final left = (tapPosition.dx - popupWidth / 2)
-        .clamp(horizontalMargin, size.width - popupWidth - horizontalMargin)
+    final left = (tap.dx - popupWidth / 2)
+        .clamp(horizontalMargin, overlaySize.width - popupWidth - horizontalMargin)
+        .toDouble();
+    final arrowX = (tap.dx - left)
+        .clamp(20.w, popupWidth - 20.w)
         .toDouble();
 
-    final belowTop = tapPosition.dy + 8.h;
-    final aboveTop = tapPosition.dy - estimatedPopupHeight - 8.h;
-    final top = belowTop + estimatedPopupHeight <= size.height - 12.h
+    final belowTop = tap.dy + 8.h;
+    final aboveTop = tap.dy - totalHeight - 8.h;
+    final showBelow = belowTop + totalHeight <= overlaySize.height - 12.h;
+    final top = showBelow
         ? belowTop
-        : math.max(12.h, aboveTop);
+        : math.max(12.h, aboveTop).toDouble();
 
     await showGeneralDialog<void>(
       context: context,
@@ -150,6 +163,8 @@ class _HomeViewState extends State<HomeView> {
               child: CalendarDaySheet(
                 selectedDate: selectedDate,
                 getCuadrante: getCuadrante(),
+                arrowX: arrowX,
+                pointerOnTop: showBelow,
               ),
             ),
           ],
