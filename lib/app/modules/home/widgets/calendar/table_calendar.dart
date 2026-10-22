@@ -214,8 +214,10 @@ class _TableCalendarWidgetState extends ConsumerState<TableCalendarWidget> {
         // selectedDayPredicate: (day) {
         //   return isSameDay(calendarController.selectedDayRx.value, day);
         // },
-        selectedDayPredicate: (day) =>
-            isSameDay(ref.watch(selectedDayProvider), day),
+        selectedDayPredicate: (day) => isSameDay(
+          ref.watch(selectedDayProvider) ?? ref.watch(focusedMonthProvider),
+          day,
+        ),
 
         onDaySelected: (selectedDay, focusedDay) {
           widget.onDaySelected?.call(selectedDay, focusedDay);
