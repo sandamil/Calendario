@@ -115,11 +115,12 @@ class CalendarDaySheet extends StatelessWidget {
               maxWidth: 390.w,
               maxHeight: MediaQuery.sizeOf(context).height * .68,
             ),
-            child: Padding(
-              padding: EdgeInsets.fromLTRB(14.w, 10.h, 14.w, 14.h),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(14.w, 10.h, 14.w, 14.h),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
                   Row(
                     children: [
                       Container(
@@ -195,10 +196,10 @@ class CalendarDaySheet extends StatelessWidget {
                       ),
                     ],
                   ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
             ),
           ),
         ),
