@@ -86,47 +86,30 @@ class CrearCuadranteView extends ConsumerWidget {
           //   )
           // ],
         ),
+        floatingActionButton: FloatingActionButton.extended(
+          heroTag: 'crearCuadrante',
+          elevation: 2,
+          backgroundColor: PRIMARY_COLOR,
+          foregroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(18.r),
+          ),
+          onPressed: () {
+            ref.read(crearCuadranteProvider.notifier).resetForCreate();
+            context.push('/add-cuadrante');
+          },
+          icon: const Icon(Icons.add_rounded),
+          label: const Text('Crear cuadrante'),
+        ),
         body: Padding(
           padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              SizedBox(height: 10.h),
+              SizedBox(height: 4.h),
               Expanded(
-                flex: 10,
-                child: MaterialButton(
-                  elevation: 0,
-                  padding: EdgeInsets.all(16.w),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(22.r), side: BorderSide(color: Theme.of(context).colorScheme.outlineVariant.withOpacity(.35)),),
-                  height: qaButtonHeight,
-                  minWidth: qaButtonWidth,
-                  color: Theme.of(context).colorScheme.surface,
-                  child: Padding(
-                    padding: const EdgeInsets.all(0),
-                    child: Text("Crear nuevo Cuadrante",
-                        style: CustomTextStyle.textCuadranteMenu),
-                  ),
-
-                  onPressed: () {
-                    ProviderScope.containerOf(context, listen: false)
-                        .read(crearCuadranteProvider.notifier)
-                        .resetForCreate();
-                    // Get.toNamed('/notas', (r) => false);
-                    context.push('/add-cuadrante'); //   Navigator.push(
-                    //       context,
-                    //       MaterialPageRoute(
-                    //           builder: (context) =>
-                    //               TaskListVIew(widget.time, widget.events)));
-                  },
-                  // splashColor: AAThemeData.buttonColor,
-                ),
-              ),
-              SizedBox(
-                height: 25.h,
-              ),
-              Expanded(
-                flex: 80,
+                flex: 1,
                 child: MaterialButton(
                   elevation: 0,
                   padding: EdgeInsets.all(8.w),
@@ -174,10 +157,16 @@ class CrearCuadranteView extends ConsumerWidget {
                                     onTapCancel: () =>
                                         Navigator.of(context).pop());
                               },
+                              style: IconButton.styleFrom(
+                                foregroundColor: Colors.red,
+                                backgroundColor: Colors.red.withOpacity(.10),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(13.r),
+                                ),
+                              ),
                               icon: Icon(
                                 Icons.delete_forever_outlined,
-                                size: 30.sp,
-                                color: Colors.red,
+                                size: 22.sp,
                               ),
                             ),
                             const Spacer(),
@@ -251,9 +240,14 @@ class CrearCuadranteView extends ConsumerWidget {
 
                                                 context.push('/add-cuadrante');
                                               },
-                                              icon: const Icon(
-                                                Icons.edit_calendar,
+                                              style: IconButton.styleFrom(
+                                                foregroundColor: PRIMARY_COLOR,
+                                                backgroundColor: PRIMARY_COLOR.withOpacity(.10),
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius: BorderRadius.circular(12.r),
+                                                ),
                                               ),
+                                              icon: const Icon(Icons.edit_calendar_rounded),
                                             );
                                           },
                                         ),
@@ -262,8 +256,14 @@ class CrearCuadranteView extends ConsumerWidget {
                                               .read(crearCuadranteProvider
                                                   .notifier)
                                               .deleteCuadrante(name),
-                                          icon: const Icon(
-                                              Icons.delete_forever_outlined),
+                                          style: IconButton.styleFrom(
+                                            foregroundColor: Colors.red,
+                                            backgroundColor: Colors.red.withOpacity(.08),
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(12.r),
+                                            ),
+                                          ),
+                                          icon: const Icon(Icons.delete_outline_rounded),
                                         )
                                       ],
                                     ),
