@@ -113,20 +113,20 @@ class _HomeViewState extends State<HomeView> {
         ));
   }
 
-  onDayTap(
+  Future<void> onDayTap(
     DateTime selectedDate,
     DateTime focusedDate,
     Offset tapPosition,
-  ) {
-    showDialog(
+  ) async {
+    await showModalBottomSheet<void>(
       context: context,
-      builder: (BuildContext context) {
-        return OnLongPressDialog(
-          selectedDate: selectedDate,
-          getCuadrante: getCuadrante(),
-          tapPosition: tapPosition,
-        );
-      },
+      isScrollControlled: true,
+      useSafeArea: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => CalendarDaySheet(
+        selectedDate: selectedDate,
+        getCuadrante: getCuadrante(),
+      ),
     );
   }
 
