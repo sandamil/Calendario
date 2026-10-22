@@ -39,7 +39,9 @@ class CrearCuadranteView extends ConsumerWidget {
       child: Scaffold(
         appBar: AppBar(
           elevation: 0,
-          backgroundColor: Colors.transparent,
+          toolbarHeight: 58.h,
+          titleSpacing: 2.w,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           centerTitle: false,
           leading: IconButton(
             icon: Icon(
@@ -90,9 +92,7 @@ class CrearCuadranteView extends ConsumerWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              SizedBox(
-                height: 25.h,
-              ),
+              SizedBox(height: 10.h),
               Expanded(
                 flex: 10,
                 child: MaterialButton(
@@ -128,12 +128,17 @@ class CrearCuadranteView extends ConsumerWidget {
               Expanded(
                 flex: 80,
                 child: MaterialButton(
-                  elevation: 10,
-                  padding: const EdgeInsets.all(0),
-                  shape: RoundedRectangleBorder(borderRadius: Corners.xmBorder),
+                  elevation: 0,
+                  padding: EdgeInsets.all(8.w),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(22.r),
+                    side: BorderSide(
+                      color: Theme.of(context).colorScheme.outlineVariant.withOpacity(.4),
+                    ),
+                  ),
                   height: qaButtonHeight,
                   minWidth: qaButtonWidth,
-                  color: MyColors.cellSelectedColor,
+                  color: Theme.of(context).colorScheme.surfaceContainerHighest.withOpacity(.42),
                   child: Padding(
                     padding: const EdgeInsets.all(0),
                     child: Column(
@@ -144,8 +149,11 @@ class CrearCuadranteView extends ConsumerWidget {
                         Row(
                           children: [
                             const Spacer(),
-                            Text("Mis Cuadrantes",
-                                style: CustomTextStyle.textCuadranteMenu),
+                            Text('Mis cuadrantes',
+                                style: CustomTextStyle.textCuadranteMenu.copyWith(
+                                  color: Theme.of(context).colorScheme.onSurface,
+                                  fontWeight: FontWeight.w800,
+                                )),
                             const Spacer(),
                             const Spacer(),
                             IconButton(
@@ -194,26 +202,30 @@ class CrearCuadranteView extends ConsumerWidget {
 
                                 return Padding(
                                   padding:
-                                      EdgeInsets.symmetric(horizontal: 8.h),
+                                      EdgeInsets.symmetric(horizontal: 8.w),
                                   child: Card(
                                     color: Theme.of(context).colorScheme.surface,
                                     elevation: 0,
                                     shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(18.r),
+                                      borderRadius: BorderRadius.circular(16.r),
                                       side: BorderSide(color: Theme.of(context).colorScheme.outlineVariant.withOpacity(.4)),
                                     ),
                                     margin: EdgeInsets.symmetric(vertical: 4.h),
                                     child: Row(
                                       children: [
                                         SizedBox(width: 10.w),
-                                        Text(
-                                          name,
-                                          style: TextStyle(
-                                            color: MyColors.textColor,
-                                            fontSize: 18.sp,
+                                        Expanded(
+                                          child: Text(
+                                            name,
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                              color: Theme.of(context).colorScheme.onSurface,
+                                              fontSize: 15.sp,
+                                              fontWeight: FontWeight.w600,
+                                            ),
                                           ),
                                         ),
-                                        Spacer(),
                                         Consumer(
                                           builder: (context, ref, child) {
                                             return IconButton(
