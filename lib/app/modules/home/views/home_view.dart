@@ -113,34 +113,11 @@ class _HomeViewState extends State<HomeView> {
         ));
   }
 
-  onDaySelectedLongPress(
+  onDayTap(
     DateTime selectedDate,
     DateTime focusedDate,
     Offset tapPosition,
   ) {
-    if (!isSameDay(
-      ProviderScope.containerOf(context, listen: false)
-          .read(selectedDayProvider),
-      selectedDate,
-    )) {
-      setState(() {
-        ProviderScope.containerOf(context, listen: false)
-            .read(selectedDayProvider.notifier)
-            .setSelectedDay(selectedDate);
-        ProviderScope.containerOf(context, listen: false)
-            .read(focusedMonthProvider.notifier)
-            .setFocusedDay(focusedDate);
-      });
-    }
-
-    final container = ProviderScope.containerOf(context, listen: false);
-    container
-        .read(selectedDayTurnosProvider.notifier)
-        .setTurnos(getTurnosOfDayFromMap(
-          selectedDate,
-          container.read(cuadranteMapProvider),
-        ));
-
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -232,7 +209,9 @@ class _HomeViewState extends State<HomeView> {
             appBar: AppBar(
               centerTitle: false,
               elevation: 0,
-              backgroundColor: Colors.transparent,
+              toolbarHeight: 58.h,
+              titleSpacing: 2.w,
+              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
               leading: Builder(
                 builder: (BuildContext context) {
                   return IconButton(
@@ -240,9 +219,9 @@ class _HomeViewState extends State<HomeView> {
                         ? tutorialController.keyButton6
                         : widget.key,
                     icon: Icon(
-                      Icons.menu,
-                      color: PRIMARY_COLOR,
-                      size: 26.sp,
+                      Icons.menu_rounded,
+                      color: Theme.of(context).colorScheme.onSurface,
+                      size: 24.sp,
                     ),
                     onPressed: () {
                       context.push('/menu');
@@ -259,10 +238,11 @@ class _HomeViewState extends State<HomeView> {
                       ? tutorialController.keyButton7
                       : widget.key,
                   color: PRIMARY_COLOR,
-                  icon: const Icon(
-                    Icons.today,
+                  icon: Icon(
+                    Icons.today_rounded,
+                    size: 22.sp,
                   ),
-                  tooltip: 'today',
+                  tooltip: 'Ir a hoy',
                   onPressed: () {
                     final hoy = DateTime.now();
                     final container =
@@ -303,7 +283,7 @@ class _HomeViewState extends State<HomeView> {
                     : null,
             body: Column(
               children: [
-                SizedBox(height: 2.h),
+                SizedBox(height: 4.h),
                 Column(
                   key: _showHomeTutorial
                       ? tutorialController.keyButton8
@@ -313,14 +293,14 @@ class _HomeViewState extends State<HomeView> {
                       alignment: Alignment.center,
                       child: TableCalendarWidget(
                         onDaySelected: onDaySelected,
-                        onDaySelectedLongPress: onDaySelectedLongPress,
+                        onDayTap: onDayTap,
                       ),
                     ),
                   ],
                 ),
-                SizedBox(height: 5.h),
+                SizedBox(height: 8.h),
                 Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8.w),
+                  padding: EdgeInsets.symmetric(horizontal: 12.w),
                   child: LineWidget(),
                 ),
                 // SizedBox(height: 2.h),

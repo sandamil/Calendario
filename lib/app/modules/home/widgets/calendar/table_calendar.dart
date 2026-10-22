@@ -17,9 +17,9 @@ import 'turnos_notas_onHomeDialog.dart';
 
 class TableCalendarWidget extends ConsumerStatefulWidget {
   TableCalendarWidget(
-      {super.key, this.onDaySelected, this.onDaySelectedLongPress});
+      {super.key, this.onDaySelected, this.onDayTap});
   void Function(DateTime, DateTime)? onDaySelected;
-  void Function(DateTime, DateTime, Offset)? onDaySelectedLongPress;
+  void Function(DateTime, DateTime, Offset)? onDayTap;
 
   @override
   ConsumerState<TableCalendarWidget> createState() =>
@@ -190,10 +190,11 @@ class _TableCalendarWidgetState extends ConsumerState<TableCalendarWidget> {
       child: TableCalendar(
         locale: 'es_ES',
         daysOfWeekHeight: 25.h,
-        rowHeight: 90.h,
-        headerVisible: (kIsWeb || defaultTargetPlatform == TargetPlatform.macOS),
-        calendarStyle: const CalendarStyle(
+        rowHeight: 96.h,
+        headerVisible: false,
+        calendarStyle: CalendarStyle(
           outsideDaysVisible: false,
+          cellMargin: EdgeInsets.symmetric(horizontal: 2.w, vertical: 2.h),
         ),
         holidayPredicate: (day) {
           final fecha = DateTime(day.year, day.month, day.day);
@@ -216,13 +217,9 @@ class _TableCalendarWidgetState extends ConsumerState<TableCalendarWidget> {
         selectedDayPredicate: (day) =>
             isSameDay(ref.watch(selectedDayProvider), day),
 
-        onDaySelected: widget.onDaySelected,
-        onDayLongPressed: (selectedDay, focusedDay) {
-          widget.onDaySelectedLongPress?.call(
-            selectedDay,
-            focusedDay,
-            _lastTapPosition,
-          );
+        onDaySelected: (selectedDay, focusedDay) {
+          widget.onDaySelected?.call(selectedDay, focusedDay);
+          widget.onDayTap?.call(selectedDay, focusedDay, _lastTapPosition);
         },
         // onFormatChanged: (format) {
         //   if (controller.calendarFormat != format) {
@@ -250,32 +247,38 @@ class _TableCalendarWidgetState extends ConsumerState<TableCalendarWidget> {
           final notasDelDia = notasPorDia[fecha] ?? const <Task>[];
           return Container(
             alignment: Alignment.topCenter,
-            margin: EdgeInsets.only(top: 20.h),
+            margin: EdgeInsets.only(top: 25.h),
             child: SingleChildScrollView(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   ...events.map((turno) => Padding(
                         padding: EdgeInsets.symmetric(
-                            vertical: 0.5.h, horizontal: 3.w),
+                            vertical: 1.2.h, horizontal: 3.w),
                         child: Container(
                           decoration: BoxDecoration(
-                            color: HexColor(turno.color!).withAlpha(600),
+                            color: HexColor(turno.color!).withAlpha(42),
                             // border: Border.all(
                             //     color: HexColor(turno.color!), width: 1.h),
-                            borderRadius: BorderRadius.circular(3.r),
+                            borderRadius: BorderRadius.circular(4.r),
                           ),
                           height: 15.h,
                           child: Container(
                             alignment: Alignment.center,
                             height: 15,
                             width: double.maxFinite,
-                            child: Text(turno.title!.toUpperCase(),
-                                style: TextStyle(
-                                    height: 1.2.h,
-                                    fontSize: 12.sp,
-                                    color: HexColor(turno.color!),
-                                    fontWeight: FontWeight.w900)),
+                            child: Text(
+                              turno.title!.toUpperCase(),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                height: 1.2.h,
+                                fontSize: 10.sp,
+                                color: HexColor(turno.color!),
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
                           ),
                         ),
                       )),
@@ -320,8 +323,11 @@ class _TableCalendarWidgetState extends ConsumerState<TableCalendarWidget> {
               width: double.maxFinite,
               height: double.maxFinite,
               decoration: BoxDecoration(
-                border: Border.all(width: 1.w, color: MyColors.borderCellColor),
-                borderRadius: BorderRadius.circular(5.r),
+                border: Border.all(
+                  width: 0.7.w,
+                  color: MyColors.borderCellColor.withAlpha(150),
+                ),
+                borderRadius: BorderRadius.circular(8.r),
               ),
               child: Padding(
                 padding: EdgeInsets.symmetric(vertical: 1.h),
@@ -353,8 +359,11 @@ class _TableCalendarWidgetState extends ConsumerState<TableCalendarWidget> {
               height: double.maxFinite,
               decoration: BoxDecoration(
                 color: MyColors.cellColor,
-                border: Border.all(width: 1.w, color: MyColors.borderCellColor),
-                borderRadius: BorderRadius.circular(5.r),
+                border: Border.all(
+                  width: 0.7.w,
+                  color: MyColors.borderCellColor.withAlpha(150),
+                ),
+                borderRadius: BorderRadius.circular(8.r),
               ),
               child: Padding(
                 padding: EdgeInsets.symmetric(vertical: 1.h),
@@ -384,9 +393,9 @@ class _TableCalendarWidgetState extends ConsumerState<TableCalendarWidget> {
                 // backgroundBlendMode: dayType == 'outside' ? BlendMode.modulate :  BlendMode.darken,
                 border: Border.all(
                   color: PRIMARY_COLOR,
-                  width: 0.05.w,
+                  width: 1.w,
                 ),
-                borderRadius: BorderRadius.circular(5.r),
+                borderRadius: BorderRadius.circular(8.r),
               ),
               child: Align(
                 alignment: Alignment.topCenter,
@@ -409,13 +418,13 @@ class _TableCalendarWidgetState extends ConsumerState<TableCalendarWidget> {
             child: Container(
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                color: MyColors.cellTodayColor,
+                color: PRIMARY_COLOR.withAlpha(28),
                 // backgroundBlendMode: dayType == 'outside' ? BlendMode.modulate :  BlendMode.darken,
                 border: Border.all(
                   color: PRIMARY_COLOR,
                   width: 1.w,
                 ),
-                borderRadius: BorderRadius.circular(5.r),
+                borderRadius: BorderRadius.circular(8.r),
               ),
               child: Align(
                 alignment: Alignment.topCenter,
