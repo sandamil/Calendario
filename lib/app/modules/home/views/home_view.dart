@@ -1,5 +1,6 @@
 import 'package:calendario2/app/controllers/ads_provider.dart';
 import 'dart:collection';
+import 'dart:math' as math;
 import 'package:flutter/foundation.dart' show defaultTargetPlatform, kIsWeb, TargetPlatform;
 
 import 'package:calendario2/app/data/model/taskModel.dart';
@@ -118,15 +119,57 @@ class _HomeViewState extends State<HomeView> {
     DateTime focusedDate,
     Offset tapPosition,
   ) async {
-    await showModalBottomSheet<void>(
+    final size = MediaQuery.sizeOf(context);
+    final popupWidth = math.min(390.w, size.width - 24.w);
+    const estimatedPopupHeight = 360.0;
+    final horizontalMargin = 12.w;
+
+    final left = (tapPosition.dx - popupWidth / 2)
+        .clamp(horizontalMargin, size.width - popupWidth - horizontalMargin)
+        .toDouble();
+
+    final belowTop = tapPosition.dy + 8.h;
+    final aboveTop = tapPosition.dy - estimatedPopupHeight - 8.h;
+    final top = belowTop + estimatedPopupHeight <= size.height - 12.h
+        ? belowTop
+        : math.max(12.h, aboveTop);
+
+    await showGeneralDialog<void>(
       context: context,
-      isScrollControlled: true,
-      useSafeArea: true,
-      backgroundColor: Colors.transparent,
-      builder: (_) => CalendarDaySheet(
-        selectedDate: selectedDate,
-        getCuadrante: getCuadrante(),
-      ),
+      barrierDismissible: true,
+      barrierLabel: 'Cerrar acciones del día',
+      barrierColor: Colors.black.withOpacity(.10),
+      transitionDuration: const Duration(milliseconds: 180),
+      pageBuilder: (dialogContext, animation, secondaryAnimation) {
+        return Stack(
+          children: [
+            Positioned(
+              left: left,
+              top: top,
+              width: popupWidth,
+              child: CalendarDaySheet(
+                selectedDate: selectedDate,
+                getCuadrante: getCuadrante(),
+              ),
+            ),
+          ],
+        );
+      },
+      transitionBuilder: (context, animation, secondaryAnimation, child) {
+        final curved = CurvedAnimation(
+          parent: animation,
+          curve: Curves.easeOutCubic,
+          reverseCurve: Curves.easeInCubic,
+        );
+        return FadeTransition(
+          opacity: curved,
+          child: ScaleTransition(
+            scale: Tween<double>(begin: .94, end: 1).animate(curved),
+            alignment: Alignment.center,
+            child: child,
+          ),
+        );
+      },
     );
   }
 
