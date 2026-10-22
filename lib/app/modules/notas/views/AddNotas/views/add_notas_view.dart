@@ -580,7 +580,7 @@ class _AddNotasViewState extends ConsumerState<AddNotasView> {
           child: TextFormField(
             controller: value,
             maxLines: lines,
-            minLines: lines > 1 ? 3 : 1,
+            minLines: lines > 1 ? (lines < 3 ? lines : 3) : 1,
             textCapitalization: TextCapitalization.sentences,
             style: TextStyle(fontSize: 14.sp, color: textColor),
             decoration: InputDecoration(
