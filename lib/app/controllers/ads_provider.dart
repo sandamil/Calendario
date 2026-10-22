@@ -70,11 +70,8 @@ class AdsNotifier extends Notifier<AdsState> {
     try {
       // No solicitar el banner hasta que la inicialización del SDK haya
       // terminado. Se comparte el Future iniciado desde main().
-      final initializationStatus = await initializeMobileAds();
-      debugPrint(
-        '[ADS] SDK inicializado. Unidad=$_androidHomeBannerId; '
-        'adaptadores=${initializationStatus.adapterStatus.keys.join(', ')}',
-      );
+      await initializeMobileAds();
+      debugPrint('[ADS] SDK inicializado. Unidad=$_androidHomeBannerId');
 
       final ad = BannerAd(
         adUnitId: _androidHomeBannerId,
