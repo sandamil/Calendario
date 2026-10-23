@@ -7,7 +7,6 @@ import '../../../../../config/theme/my_colors.dart';
 import '../../../../../config/util/hexColor.dart';
 import '../../../../components/custom_dialog.dart';
 import '../../../../data/local/calendarDatabase.dart';
-import '../../../../data/model/cuadranteDay.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:calendario2/app/modules/home/providers/calendar_providers.dart';
 
@@ -40,7 +39,6 @@ class _TurnosNotasOnHomeDialogState
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final turnos = ref.watch(selectedDayTurnosProvider);
-    final notas = ref.watch(notasProvider);
     final selectedDate = ref.watch(selectedDayProvider);
     final selectedDayNotas = selectedDate == null
         ? const []
