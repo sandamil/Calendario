@@ -219,104 +219,20 @@ class _AddNotasViewState extends ConsumerState<AddNotasView> {
                     ),
                     TextButton(
                       onPressed: () async {
-                        var selectedDateTime = notaState.startTime;
-                        var selectedMode = notaState.notificationMode;
-                        final result = await showDialog<Map<String, dynamic>>(
+                        final initial = notaState.startTime;
+                        final selected = await showTimePicker(
                           context: context,
-                          builder: (dialogContext) => StatefulBuilder(
-                            builder: (dialogContext, setDialogState) {
-                              return AlertDialog(
-                                title: const Text('Hora y tipo de aviso'),
-                                content: SingleChildScrollView(
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Hora de inicio',
-                                        style: Theme.of(dialogContext).textTheme.titleSmall,
-                                      ),
-                                      SizedBox(height: 8.h),
-                                      SizedBox(
-                                        width: double.maxFinite,
-                                        child: OutlinedButton.icon(
-                                          icon: const Icon(Icons.access_time),
-                                          label: Text(
-                                            TimeOfDay.fromDateTime(selectedDateTime).format(dialogContext),
-                                            style: TextStyle(fontSize: 18.sp),
-                                          ),
-                                          onPressed: () async {
-                                            final picked = await showTimePicker(
-                                              context: dialogContext,
-                                              initialTime: TimeOfDay.fromDateTime(selectedDateTime),
-                                            );
-                                            if (picked == null) return;
-                                            setDialogState(() {
-                                              selectedDateTime = DateTime(
-                                                selectedDateTime.year,
-                                                selectedDateTime.month,
-                                                selectedDateTime.day,
-                                                picked.hour,
-                                                picked.minute,
-                                              );
-                                            });
-                                          },
-                                        ),
-                                      ),
-                                      SizedBox(height: 20.h),
-                                      Text(
-                                        '¿Cómo quieres recibir el aviso?',
-                                        style: Theme.of(dialogContext).textTheme.titleSmall,
-                                      ),
-                                      SizedBox(height: 10.h),
-                                      SegmentedButton<String>(
-                                        showSelectedIcon: false,
-                                        segments: const <ButtonSegment<String>>[
-                                          ButtonSegment<String>(
-                                            value: 'notificacion',
-                                            label: Text('Notificación'),
-                                            icon: Icon(Icons.notifications_outlined),
-                                          ),
-                                          ButtonSegment<String>(
-                                            value: 'alarma',
-                                            label: Text('Alarma'),
-                                            icon: Icon(Icons.alarm_rounded),
-                                          ),
-                                        ],
-                                        selected: <String>{selectedMode},
-                                        onSelectionChanged: (selection) {
-                                          setDialogState(() => selectedMode = selection.first);
-                                        },
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () => Navigator.of(dialogContext).pop(),
-                                    child: const Text('Cancelar'),
-                                  ),
-                                  FilledButton(
-                                    onPressed: () => Navigator.of(dialogContext).pop({
-                                      'startTime': selectedDateTime,
-                                      'notificationMode': selectedMode,
-                                    }),
-                                    child: const Text('Guardar'),
-                                  ),
-                                ],
-                              );
-                            },
-                          ),
+                          initialTime: TimeOfDay.fromDateTime(initial),
                         );
-                        if (!context.mounted || result == null) return;
-                        final updated = result['startTime'] as DateTime;
+                        if (!context.mounted || selected == null) return;
+                        final updated = DateTime(
+                          initial.year,
+                          initial.month,
+                          initial.day,
+                          selected.hour,
+                          selected.minute,
+                        );
                         notaNotifier.setStartTime(updated);
-                        if (notaState.endTime.isBefore(updated)) {
-                          notaNotifier.setEndTime(updated);
-                        }
-                        notaNotifier.setNotificationMode(
-                          result['notificationMode'] as String,
-                        );
                       },
                       child: _dateTimeRow(
                         'Hora de inicio',
@@ -385,56 +301,136 @@ class _AddNotasViewState extends ConsumerState<AddNotasView> {
                   height: 2.h,
                 ),
                 LineWidget(),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10.h),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Tipo de aviso', style: CustomTextStyle.rowButomText),
-                      SizedBox(height: 8.h),
-                      SegmentedButton<String>(
-                        showSelectedIcon: false,
-                        segments: const <ButtonSegment<String>>[
-                          ButtonSegment<String>(
-                            value: 'notificacion',
-                            label: Text('Notificación'),
-                            icon: Icon(Icons.notifications_outlined),
-                          ),
-                          ButtonSegment<String>(
-                            value: 'alarma',
-                            label: Text('Alarma'),
-                            icon: Icon(Icons.alarm_rounded),
-                          ),
-                        ],
-                        selected: <String>{notaState.notificationMode},
-                        onSelectionChanged: (selection) =>
-                            notaNotifier.setNotificationMode(selection.first),
-                      ),
-                      SizedBox(height: 4.h),
-                      Text(
-                        notaState.notificationMode == 'alarma'
-                            ? 'Canal de alarma independiente; puedes elegir su tono en Ajustes de Android.'
-                            : 'Aviso normal con el sonido configurado en el móvil.',
-                        style: TextStyle(fontSize: 12.sp, color: theme.colorScheme.onSurface.withValues(alpha: .65)),
-                      ),
-                    ],
-                  ),
-                ),
                 TextButton(
                     onPressed: () async {
-                      notaState.alarmaCreada
-                          ? buildDialogAlarma(context, theme, notaState, notaNotifier)
-                          : context.push(
-                              '/alarmas',
-                              extra: {
-                                'isEditing': false,
-                                'id': notaState.idGenerated,
-                                'startTime': notaState.startTime,
-                                'notes': notaNotifier.notes.text,
-                                'title': notaNotifier.title.text
-                              },
-                            );
-                      // Get.to(AlarmasPage());
+                      var selectedAlertTime = notaState.alarmaCreada
+                          ? notaState.alarmTime
+                          : notaState.startTime;
+                      var selectedMode = notaState.notificationMode;
+                      var reminderEnabled = notaState.alarmaCreada;
+                      final result = await showDialog<Map<String, dynamic>>(
+                        context: context,
+                        builder: (dialogContext) => StatefulBuilder(
+                          builder: (dialogContext, setDialogState) => AlertDialog(
+                            title: const Text('Recordatorio'),
+                            content: SingleChildScrollView(
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SwitchListTile(
+                                    contentPadding: EdgeInsets.zero,
+                                    title: const Text('Activar recordatorio'),
+                                    value: reminderEnabled,
+                                    onChanged: (value) => setDialogState(
+                                      () => reminderEnabled = value,
+                                    ),
+                                  ),
+                                  if (reminderEnabled) ...[
+                                    const SizedBox(height: 12),
+                                    const Text('Hora del aviso'),
+                                    const SizedBox(height: 8),
+                                    SizedBox(
+                                      width: double.infinity,
+                                      child: OutlinedButton.icon(
+                                        icon: const Icon(Icons.access_time),
+                                        label: Text(
+                                          TimeOfDay(
+                                            hour: selectedAlertTime.hour,
+                                            minute: selectedAlertTime.minute,
+                                          ).format(dialogContext),
+                                        ),
+                                        onPressed: () async {
+                                          final selected = await showTimePicker(
+                                            context: dialogContext,
+                                            initialTime: TimeOfDay.fromDateTime(
+                                              selectedAlertTime,
+                                            ),
+                                          );
+                                          if (selected == null) return;
+                                          setDialogState(() {
+                                            selectedAlertTime = DateTime(
+                                              notaState.startTime.year,
+                                              notaState.startTime.month,
+                                              notaState.startTime.day,
+                                              selected.hour,
+                                              selected.minute,
+                                            );
+                                          });
+                                        },
+                                      ),
+                                    ),
+                                    const SizedBox(height: 16),
+                                    const Text('Tipo de aviso'),
+                                    const SizedBox(height: 8),
+                                    SegmentedButton<String>(
+                                      showSelectedIcon: false,
+                                      segments: const <ButtonSegment<String>>[
+                                        ButtonSegment<String>(
+                                          value: 'notificacion',
+                                          label: Text('Notificación'),
+                                          icon: Icon(Icons.notifications_outlined),
+                                        ),
+                                        ButtonSegment<String>(
+                                          value: 'alarma',
+                                          label: Text('Alarma'),
+                                          icon: Icon(Icons.alarm_rounded),
+                                        ),
+                                      ],
+                                      selected: <String>{selectedMode},
+                                      onSelectionChanged: (selection) {
+                                        setDialogState(
+                                          () => selectedMode = selection.first,
+                                        );
+                                      },
+                                    ),
+                                    const SizedBox(height: 8),
+                                    Text(
+                                      selectedMode == 'alarma'
+                                          ? 'Aviso con canal de alarma independiente.'
+                                          : 'Notificación normal con el sonido del móvil.',
+                                      style: TextStyle(
+                                        fontSize: 12.sp,
+                                        color: Theme.of(dialogContext)
+                                            .colorScheme
+                                            .onSurface
+                                            .withValues(alpha: .65),
+                                      ),
+                                    ),
+                                  ],
+                                ],
+                              ),
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.of(dialogContext).pop(),
+                                child: const Text('Cancelar'),
+                              ),
+                              FilledButton(
+                                onPressed: () => Navigator.of(dialogContext).pop({
+                                  'enabled': reminderEnabled,
+                                  'time': selectedAlertTime,
+                                  'mode': selectedMode,
+                                }),
+                                child: const Text('Guardar'),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                      if (!context.mounted || result == null) return;
+                      final enabled = result['enabled'] as bool;
+                      notaNotifier.setAlarmaCreada(enabled);
+                      notaNotifier.setNotificationMode(result['mode'] as String);
+                      if (enabled) {
+                        final alertTime = result['time'] as DateTime;
+                        notaNotifier.setAlarmaTime(alertTime);
+                        notaNotifier.setAlarmaActivadaString(
+                          'A las ${TimeOfDay(hour: alertTime.hour, minute: alertTime.minute).format(context)}',
+                        );
+                      } else {
+                        notaNotifier.setAlarmaActivadaString('Sin recordatorio');
+                      }
                     },
                     child: Row(
                         key: notaState.firstTime
