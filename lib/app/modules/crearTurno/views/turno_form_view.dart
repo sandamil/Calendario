@@ -31,6 +31,8 @@ class _TurnoFormViewState extends ConsumerState<TurnoFormView> {
   late String _fin;
   late Color _color;
 
+  bool _recordatorioActivado = false;
+  int _minutosAntes = 0;
   bool _guardando = false;
 
   bool get _esEdicion => widget.turno != null;
@@ -49,6 +51,8 @@ class _TurnoFormViewState extends ConsumerState<TurnoFormView> {
 
     _color =
         turno?.color != null ? HexColor(turno!.color!) : Colors.orangeAccent;
+    _recordatorioActivado = turno?.reminderEnabled ?? false;
+    _minutosAntes = turno?.reminderMinutesBefore ?? 0;
   }
 
   @override
@@ -195,6 +199,8 @@ class _TurnoFormViewState extends ConsumerState<TurnoFormView> {
         startHour: _inicio,
         endHour: _fin,
         color: _color.toARGB32().toRadixString(16),
+        reminderEnabled: _recordatorioActivado,
+        reminderMinutesBefore: _minutosAntes,
       );
 
       if (_esEdicion) {
@@ -230,7 +236,9 @@ class _TurnoFormViewState extends ConsumerState<TurnoFormView> {
                   item.description == turno.description &&
                   item.startHour == turno.startHour &&
                   item.endHour == turno.endHour &&
-                  item.color == turno.color,
+                  item.color == turno.color &&
+                  item.reminderEnabled == turno.reminderEnabled &&
+                  item.reminderMinutesBefore == turno.reminderMinutesBefore,
             );
 
       if (!guardadoConfirmado) {
@@ -301,10 +309,12 @@ class _TurnoFormViewState extends ConsumerState<TurnoFormView> {
                   width: double.infinity,
                   padding: EdgeInsets.all(14.w),
                   decoration: BoxDecoration(
-                    color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: .38),
+                    color: theme.colorScheme.surfaceContainerHighest
+                        .withValues(alpha: .38),
                     borderRadius: BorderRadius.circular(20.r),
                     border: Border.all(
-                      color: theme.colorScheme.outlineVariant.withValues(alpha: .35),
+                      color: theme.colorScheme.outlineVariant
+                          .withValues(alpha: .35),
                     ),
                   ),
                   child: Row(
@@ -330,7 +340,9 @@ class _TurnoFormViewState extends ConsumerState<TurnoFormView> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              _esEdicion ? 'Personaliza tu turno' : 'Crea tu turno',
+                              _esEdicion
+                                  ? 'Personaliza tu turno'
+                                  : 'Crea tu turno',
                               style: TextStyle(
                                 fontSize: 18.sp,
                                 fontWeight: FontWeight.w800,
@@ -404,9 +416,7 @@ class _TurnoFormViewState extends ConsumerState<TurnoFormView> {
                                   ),
                                 ),
                                 child: Text(
-                                  _abreviaturaController.text
-                                          .trim()
-                                          .isEmpty
+                                  _abreviaturaController.text.trim().isEmpty
                                       ? '—'
                                       : _abreviaturaController.text
                                           .toUpperCase(),
@@ -505,7 +515,10 @@ class _TurnoFormViewState extends ConsumerState<TurnoFormView> {
                             SizedBox(height: 3.h),
                             Text(
                               'Te ayudará a identificarlo rápidamente.',
-                              style: TextStyle(fontSize: 11.sp, color: mutedColor),
+                              style: TextStyle(
+                                fontSize: 11.sp,
+                                color: mutedColor,
+                              ),
                             ),
                           ],
                         ),
@@ -526,6 +539,8 @@ class _TurnoFormViewState extends ConsumerState<TurnoFormView> {
                     ],
                   ),
                 ),
+                SizedBox(height: 18.h),
+                _buildNotificationCard(theme, textColor, mutedColor),
                 SizedBox(height: 24.h),
                 SizedBox(
                   width: double.infinity,
@@ -558,6 +573,82 @@ class _TurnoFormViewState extends ConsumerState<TurnoFormView> {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildNotificationCard(
+    ThemeData theme,
+    Color textColor,
+    Color mutedColor,
+  ) {
+    const opciones = <int, String>{
+      0: 'Al comenzar el turno',
+      5: '5 minutos antes',
+      15: '15 minutos antes',
+      30: '30 minutos antes',
+      60: '1 hora antes',
+    };
+
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.all(14.w),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: .45),
+        borderRadius: BorderRadius.circular(16.r),
+        border: Border.all(
+          color: theme.colorScheme.outlineVariant.withValues(alpha: .35),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SwitchListTile.adaptive(
+            contentPadding: EdgeInsets.zero,
+            title: const Text('Recordatorio del turno'),
+            subtitle: const Text(
+              'Recibirás una notificación visual, sonora y con vibración.',
+            ),
+            secondary: Icon(
+              Icons.notifications_active_rounded,
+              color: PRIMARY_COLOR,
+              size: 25.sp,
+            ),
+            value: _recordatorioActivado,
+            onChanged: (value) {
+              setState(() {
+                _recordatorioActivado = value;
+              });
+            },
+          ),
+          if (_recordatorioActivado) ...[
+            SizedBox(height: 6.h),
+            DropdownButtonFormField<int>(
+              key: ValueKey(_minutosAntes),
+              initialValue: opciones.containsKey(_minutosAntes)
+                  ? _minutosAntes
+                  : 0,
+              decoration: const InputDecoration(
+                labelText: 'Cuándo avisar',
+                border: OutlineInputBorder(),
+              ),
+              items: opciones.entries
+                  .map(
+                    (entry) => DropdownMenuItem<int>(
+                      value: entry.key,
+                      child: Text(entry.value),
+                    ),
+                  )
+                  .toList(),
+              onChanged: (value) {
+                if (value == null) return;
+                setState(() {
+                  _minutosAntes = value;
+                });
+              },
+            ),
+          ],
+        ],
       ),
     );
   }
@@ -649,11 +740,13 @@ class _TurnoFormViewState extends ConsumerState<TurnoFormView> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(label,
-                        style: TextStyle(
-                          fontSize: 11.sp,
-                          color: textColor.withValues(alpha: .6),
-                        )),
+                    Text(
+                      label,
+                      style: TextStyle(
+                        fontSize: 11.sp,
+                        color: textColor.withValues(alpha: .6),
+                      ),
+                    ),
                     SizedBox(height: 3.h),
                     Text(
                       value,
@@ -666,8 +759,11 @@ class _TurnoFormViewState extends ConsumerState<TurnoFormView> {
                   ],
                 ),
               ),
-              Icon(Icons.edit_outlined,
-                  size: 16.sp, color: textColor.withValues(alpha: .5)),
+              Icon(
+                Icons.edit_outlined,
+                size: 16.sp,
+                color: textColor.withValues(alpha: .5),
+              ),
             ],
           ),
         ),
