@@ -220,16 +220,79 @@ class _AddNotasViewState extends ConsumerState<AddNotasView> {
                     TextButton(
                       onPressed: () async {
                         final initial = notaState.startTime;
-                        final selected = await showTimePicker(
+                        var selectedTime = TimeOfDay.fromDateTime(initial);
+                        var selectedMode = notaState.notificationMode;
+                        final result = await showDialog<Map<String, dynamic>>(
                           context: context,
-                          initialTime: TimeOfDay.fromDateTime(initial),
+                          builder: (dialogContext) => StatefulBuilder(
+                            builder: (dialogContext, setDialogState) =>
+                                AlertDialog(
+                              title: const Text('Hora de inicio y tipo de aviso'),
+                              content: SingleChildScrollView(
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    TimePicker(
+                                      initialTime: selectedTime,
+                                      onTimeChanged: (value) {
+                                        setDialogState(() => selectedTime = value);
+                                      },
+                                    ),
+                                    SizedBox(height: 12.h),
+                                    Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        '¿Cómo quieres recibir el aviso?',
+                                        style: Theme.of(dialogContext).textTheme.titleSmall,
+                                      ),
+                                    ),
+                                    SizedBox(height: 8.h),
+                                    SegmentedButton<String>(
+                                      showSelectedIcon: false,
+                                      segments: const <ButtonSegment<String>>[
+                                        ButtonSegment<String>(
+                                          value: 'notificacion',
+                                          label: Text('Notificación'),
+                                          icon: Icon(Icons.notifications_outlined),
+                                        ),
+                                        ButtonSegment<String>(
+                                          value: 'alarma',
+                                          label: Text('Alarma'),
+                                          icon: Icon(Icons.alarm_rounded),
+                                        ),
+                                      ],
+                                      selected: <String>{selectedMode},
+                                      onSelectionChanged: (selection) {
+                                        setDialogState(() => selectedMode = selection.first);
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () => Navigator.of(dialogContext).pop(),
+                                  child: const Text('Cancelar'),
+                                ),
+                                FilledButton(
+                                  onPressed: () => Navigator.of(dialogContext).pop({
+                                    'time': selectedTime,
+                                    'mode': selectedMode,
+                                  }),
+                                  child: const Text('Guardar'),
+                                ),
+                              ],
+                            ),
+                          ),
                         );
-                        if (!context.mounted || selected == null) return;
+                        if (!context.mounted || result == null) return;
+                        final selected = result['time'] as TimeOfDay;
                         final updated = DateTime(
                           initial.year, initial.month, initial.day,
                           selected.hour, selected.minute,
                         );
                         notaNotifier.setStartTime(updated);
+                        notaNotifier.setNotificationMode(result['mode'] as String);
                         if (notaState.endTime.isBefore(updated)) {
                           notaNotifier.setEndTime(updated);
                         }
