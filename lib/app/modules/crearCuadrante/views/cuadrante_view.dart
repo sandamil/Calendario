@@ -1,22 +1,16 @@
 import 'package:flutter/foundation.dart';
-import 'dart:io';
 
 import 'package:calendario2/app/components/custom_dialog.dart';
 import 'package:calendario2/app/modules/crearCuadrante/widgets/beautifulAlertDialog.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/config/theme/my_fonts.dart';
-import 'package:calendario2/config/theme/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:calendario2/app/controllers/tutorial_provider.dart';
 import 'package:calendario2/app/controllers/ads_provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-import '../../../data/local/my_shared_pref.dart';
-import '../../home/providers/calendar_providers.dart';
 import '../providers/crear_cuadrante_provider.dart';
-import 'add_cuadrante_view.dart';
 
 class CrearCuadranteView extends ConsumerWidget {
   const CrearCuadranteView({Key? key}) : super(key: key);
