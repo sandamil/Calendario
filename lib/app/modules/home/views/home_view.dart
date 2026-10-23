@@ -200,6 +200,11 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
+  DateTime _selectedCalendarDate() {
+    final container = ProviderScope.containerOf(context, listen: false);
+    return container.read(selectedDayProvider) ?? container.read(focusedMonthProvider);
+  }
+
   DateTime _dateOnly(DateTime date) => DateTime(date.year, date.month, date.day);
 
   DateTime _monthStart(DateTime date) => DateTime(date.year, date.month, 1);
@@ -277,7 +282,7 @@ class _HomeViewState extends State<HomeView> {
                     subtitle: 'El día seleccionado',
                     onTap: () async {
                       Navigator.of(sheetContext).pop();
-                      final selected = ProviderScope.containerOf(context, listen: false).read(selectedDayProvider) ?? ProviderScope.containerOf(context, listen: false).read(focusedMonthProvider);
+                      final DateTime selected = _selectedCalendarDate();
                       await _shareCalendarPeriod(_dateOnly(selected), _dateOnly(selected), 'Día ${_periodDate(selected)}');
                     },
                   ),
@@ -376,7 +381,7 @@ class _HomeViewState extends State<HomeView> {
   }
 
   Future<void> _shareCustomRange(String title) async {
-    final selected = ProviderScope.containerOf(context, listen: false).read(selectedDayProvider) ?? ProviderScope.containerOf(context, listen: false).read(focusedMonthProvider);
+    final selected = _selectedCalendarDate();
     final range = await showDateRangePicker(
       context: context,
       firstDate: DateTime(1900),
