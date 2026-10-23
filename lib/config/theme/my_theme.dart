@@ -62,10 +62,6 @@ class MyTheme {
       cardColor:
           isLight ? LightThemeColors.cardColor : DarkThemeColors.cardColor,
 
-      // hint text color
-      hintColor: isLight
-          ? LightThemeColors.hintTextColor
-          : DarkThemeColors.hintTextColor,
       // divider color
       dividerColor: isLight
           ? LightThemeColors.dividerColor
@@ -84,8 +80,7 @@ class MyTheme {
               onSecondary: Colors.black,
               surface: LightThemeColors.cardColor,
               onSurface: LightThemeColors.bodyTextColor,
-              background: LightThemeColors.backgroundColor,
-              onBackground: LightThemeColors.bodyTextColor,
+              surfaceContainerLowest: LightThemeColors.backgroundColor,
               error: Colors.red,
               onError: Colors.white,
             )
@@ -96,8 +91,7 @@ class MyTheme {
               onSecondary: Colors.black,
               surface: DarkThemeColors.cardColor,
               onSurface: DarkThemeColors.bodyTextColor,
-              background: DarkThemeColors.backgroundColor,
-              onBackground: DarkThemeColors.bodyTextColor,
+              surfaceContainerLowest: DarkThemeColors.backgroundColor,
               error: Colors.redAccent,
               onError: Colors.white,
             ),
