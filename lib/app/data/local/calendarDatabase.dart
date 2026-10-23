@@ -243,10 +243,8 @@ class CalendarioDB {
     if (res > 0) {
       try {
         await _syncTurnoNotification(item, res);
-      } catch (error, stackTrace) {
+      } catch (_) {
         // El turno queda guardado aunque el aviso no pueda programarse.
-        debugPrint('[TURNOS] Error programando recordatorio $res: $error');
-        debugPrintStack(stackTrace: stackTrace);
       }
     }
 
