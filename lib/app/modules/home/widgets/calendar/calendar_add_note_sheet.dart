@@ -56,7 +56,7 @@ class _CalendarAddNoteSheetState extends ConsumerState<CalendarAddNoteSheet> {
     return SafeArea(
       top: false,
       child: Padding(
-        padding: EdgeInsets.fromLTRB(18.w, 0, 18.w, 2.h),
+        padding: EdgeInsets.fromLTRB(18.w, 0, 18.w, 10.h),
         child: SingleChildScrollView(
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           child: Column(
@@ -64,10 +64,7 @@ class _CalendarAddNoteSheetState extends ConsumerState<CalendarAddNoteSheet> {
             children: [
               Text(
                 _dateLabel(state.startTime),
-                style: TextStyle(
-                  fontSize: 13.sp,
-                  color: color.withOpacity(.58),
-                ),
+                style: TextStyle(fontSize: 13.sp, color: color.withOpacity(.58)),
               ),
               SizedBox(height: 12.h),
               _field(
@@ -116,17 +113,30 @@ class _CalendarAddNoteSheetState extends ConsumerState<CalendarAddNoteSheet> {
                 ],
               ),
               SizedBox(height: 8.h),
-              _choiceTile(
-                icon: Icons.event_available_rounded,
-                label: 'Fin',
-                value: '${_dateLabel(state.endTime)} · ${_timeLabel(state.endTime)}',
-                onTap: () => _pickEnd(notifier, state.endTime, state.startTime),
+              Row(
+                children: [
+                  Expanded(
+                    child: _choiceTile(
+                      icon: Icons.event_available_rounded,
+                      label: 'Fin',
+                      value: _dateLabel(state.endTime),
+                      onTap: () => _pickEndDate(notifier, state.endTime),
+                    ),
+                  ),
+                  SizedBox(width: 8.w),
+                  Expanded(
+                    child: _choiceTile(
+                      icon: Icons.schedule_rounded,
+                      label: 'Hora fin',
+                      value: _timeLabel(state.endTime),
+                      onTap: () => _pickEndTime(notifier, state.endTime),
+                    ),
+                  ),
+                ],
               ),
               SizedBox(height: 14.h),
               _optionTile(
-                icon: state.isImportant
-                    ? Icons.flag_rounded
-                    : Icons.outlined_flag,
+                icon: state.isImportant ? Icons.flag_rounded : Icons.outlined_flag,
                 title: 'Importante',
                 trailing: Switch.adaptive(
                   value: state.isImportant,
@@ -138,13 +148,8 @@ class _CalendarAddNoteSheetState extends ConsumerState<CalendarAddNoteSheet> {
               _optionTile(
                 icon: Icons.notifications_none_rounded,
                 title: 'Recordatorio',
-                subtitle: state.alarmaCreada
-                    ? state.alarmaHora
-                    : 'Sin recordatorio',
-                trailing: Icon(
-                  Icons.chevron_right_rounded,
-                  color: color.withOpacity(.55),
-                ),
+                subtitle: state.alarmaCreada ? state.alarmaHora : 'Sin recordatorio',
+                trailing: Icon(Icons.chevron_right_rounded, color: color.withOpacity(.55)),
                 onTap: () => _pickReminder(notifier, state.startTime),
               ),
               SizedBox(height: 18.h),
@@ -186,33 +191,21 @@ class _CalendarAddNoteSheetState extends ConsumerState<CalendarAddNoteSheet> {
           padding: EdgeInsets.only(left: 3.w, bottom: 6.h),
           child: Text(
             label,
-            style: TextStyle(
-              fontSize: 12.sp,
-              fontWeight: FontWeight.w700,
-              color: textColor.withOpacity(.72),
-            ),
+            style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w700, color: textColor.withOpacity(.72)),
           ),
         ),
         Container(
           decoration: BoxDecoration(
             color: theme.colorScheme.surfaceContainerHighest.withOpacity(.48),
             borderRadius: BorderRadius.circular(15.r),
-            border: Border.all(
-              color: theme.colorScheme.outlineVariant.withOpacity(.35),
-            ),
+            border: Border.all(color: theme.colorScheme.outlineVariant.withOpacity(.35)),
           ),
           child: Row(
-            crossAxisAlignment:
-                maxLines > 1 ? CrossAxisAlignment.start : CrossAxisAlignment.center,
+            crossAxisAlignment: maxLines > 1 ? CrossAxisAlignment.start : CrossAxisAlignment.center,
             children: [
               Padding(
-                padding: EdgeInsets.fromLTRB(13.w, maxLines > 1 ? 14.h : 0, 0,
-                    maxLines > 1 ? 0 : 0),
-                child: Icon(
-                  icon,
-                  size: 20.sp,
-                  color: PRIMARY_COLOR.withOpacity(.9),
-                ),
+                padding: EdgeInsets.fromLTRB(13.w, maxLines > 1 ? 14.h : 0, 0, 0),
+                child: Icon(icon, size: 20.sp, color: PRIMARY_COLOR.withOpacity(.9)),
               ),
               SizedBox(width: 10.w),
               Expanded(
@@ -224,17 +217,11 @@ class _CalendarAddNoteSheetState extends ConsumerState<CalendarAddNoteSheet> {
                   style: TextStyle(fontSize: 14.sp, color: textColor),
                   decoration: InputDecoration(
                     hintText: hint,
-                    hintStyle: TextStyle(
-                      fontSize: 13.sp,
-                      color: textColor.withOpacity(.42),
-                    ),
+                    hintStyle: TextStyle(fontSize: 13.sp, color: textColor.withOpacity(.42)),
                     border: InputBorder.none,
                     enabledBorder: InputBorder.none,
                     focusedBorder: InputBorder.none,
-                    contentPadding: EdgeInsets.symmetric(
-                      horizontal: 0,
-                      vertical: maxLines > 1 ? 12.h : 14.h,
-                    ),
+                    contentPadding: EdgeInsets.symmetric(horizontal: 0, vertical: maxLines > 1 ? 12.h : 14.h),
                   ),
                 ),
               ),
@@ -249,11 +236,7 @@ class _CalendarAddNoteSheetState extends ConsumerState<CalendarAddNoteSheet> {
   Widget _sectionTitle(String text) {
     return Text(
       text,
-      style: TextStyle(
-        fontSize: 14.sp,
-        fontWeight: FontWeight.w700,
-        color: Theme.of(context).colorScheme.onSurface.withOpacity(.72),
-      ),
+      style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w700, color: Theme.of(context).colorScheme.onSurface.withOpacity(.72)),
     );
   }
 
@@ -281,14 +264,7 @@ class _CalendarAddNoteSheetState extends ConsumerState<CalendarAddNoteSheet> {
                   children: [
                     Text(label, style: TextStyle(fontSize: 11.sp)),
                     SizedBox(height: 2.h),
-                    Text(
-                      value,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
+                    Text(value, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w600)),
                   ],
                 ),
               ),
@@ -325,10 +301,7 @@ class _CalendarAddNoteSheetState extends ConsumerState<CalendarAddNoteSheet> {
                   children: [
                     Text(title, style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w600)),
                     if (subtitle != null)
-                      Text(
-                        subtitle,
-                        style: TextStyle(fontSize: 12.sp, color: color.withOpacity(.55)),
-                      ),
+                      Text(subtitle, style: TextStyle(fontSize: 12.sp, color: color.withOpacity(.55))),
                   ],
                 ),
               ),
@@ -348,13 +321,7 @@ class _CalendarAddNoteSheetState extends ConsumerState<CalendarAddNoteSheet> {
       lastDate: DateTime(2200),
     );
     if (!mounted || selected == null) return;
-    notifier.setStartTime(DateTime(
-      selected.year,
-      selected.month,
-      selected.day,
-      current.hour,
-      current.minute,
-    ));
+    notifier.setStartTime(DateTime(selected.year, selected.month, selected.day, current.hour, current.minute));
   }
 
   Future<void> _pickStartTime(AddNotaNotifier notifier, DateTime current) async {
@@ -363,43 +330,27 @@ class _CalendarAddNoteSheetState extends ConsumerState<CalendarAddNoteSheet> {
       initialTime: TimeOfDay.fromDateTime(current),
     );
     if (!mounted || selected == null) return;
-    notifier.setStartTime(DateTime(
-      current.year,
-      current.month,
-      current.day,
-      selected.hour,
-      selected.minute,
-    ));
+    notifier.setStartTime(DateTime(current.year, current.month, current.day, selected.hour, selected.minute));
   }
 
-  Future<void> _pickEnd(
-    AddNotaNotifier notifier,
-    DateTime current,
-    DateTime start,
-  ) async {
-    final selectedDate = await showDatePicker(
+  Future<void> _pickEndDate(AddNotaNotifier notifier, DateTime current) async {
+    final selected = await showDatePicker(
       context: context,
       initialDate: current,
       firstDate: DateTime(1900),
       lastDate: DateTime(2200),
     );
-    if (!mounted || selectedDate == null) return;
+    if (!mounted || selected == null) return;
+    notifier.setEndDate(selected);
+  }
 
-    final selectedTime = await showTimePicker(
+  Future<void> _pickEndTime(AddNotaNotifier notifier, DateTime current) async {
+    final selected = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.fromDateTime(current),
     );
-    if (!mounted || selectedTime == null) return;
-
-    var updated = DateTime(
-      selectedDate.year,
-      selectedDate.month,
-      selectedDate.day,
-      selectedTime.hour,
-      selectedTime.minute,
-    );
-    if (updated.isBefore(start)) updated = start;
-    notifier.setEndTime(updated);
+    if (!mounted || selected == null) return;
+    notifier.setEndClock(selected);
   }
 
   Future<void> _pickReminder(AddNotaNotifier notifier, DateTime start) async {
@@ -415,21 +366,13 @@ class _CalendarAddNoteSheetState extends ConsumerState<CalendarAddNoteSheet> {
     );
     if (!mounted || selected == null) return;
 
-    final reminder = DateTime(
-      start.year,
-      start.month,
-      start.day,
-      selected.hour,
-      selected.minute,
-    );
+    final reminder = DateTime(start.year, start.month, start.day, selected.hour, selected.minute);
     notifier.setAlarmaTime(reminder);
     notifier.setAlarmaCreada(true);
     notifier.setAlarmaActivadaString(reminder.hour.toString().padLeft(2, '0') + ':' + reminder.minute.toString().padLeft(2, '0'));
   }
 
-  String _dateLabel(DateTime date) =>
-      '${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year}';
+  String _dateLabel(DateTime date) => '${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year}';
 
-  String _timeLabel(DateTime date) =>
-      '${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}';
+  String _timeLabel(DateTime date) => '${date.hour.toString().padLeft(2, '0')}:${date.minute.toString().padLeft(2, '0')}';
 }
