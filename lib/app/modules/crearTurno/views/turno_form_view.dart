@@ -611,7 +611,7 @@ class _TurnoFormViewState extends ConsumerState<TurnoFormView> {
             contentPadding: EdgeInsets.zero,
             title: const Text('Recordatorio del turno'),
             subtitle: const Text(
-              'Elige si este tipo de turno avisará con una notificación o con una alarma.',
+              'Elige si este tipo de turno avisará con una notificación normal o con una alarma configurable.',
             ),
             secondary: Icon(
               Icons.notifications_active_rounded,
