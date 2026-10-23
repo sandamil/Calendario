@@ -60,7 +60,7 @@ class NotasDB {
   //       'idAlarma INTEGER, '
   //       'alarmaActivadaString TEXT, '
   //       'isAlarmaCreated INTEGER, '
-        'notificationMode TEXT NOT NULL DEFAULT \'notificacion\')'
+  //       'isAlarmaCreated INTEGER)'
   //   );
   // }
 
