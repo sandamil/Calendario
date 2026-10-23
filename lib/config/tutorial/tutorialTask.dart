@@ -54,7 +54,7 @@ class ListTargetTask {
                   child: Text(
                     _info,
                     style: TextStyle(
-                      color: Colors.white.withOpacity(0.90),
+                      color: Colors.white.withValues(alpha: 0.90),
                       fontSize: 26.sp,
                       fontWeight: FontWeight.bold,
                     ),
@@ -104,7 +104,7 @@ class ListTargetTask {
                 child: Text(
                   _info3,
                   style: TextStyle(
-                    color: Colors.white.withOpacity(0.90),
+                    color: Colors.white.withValues(alpha: 0.90),
                     fontSize: 26.sp,
                     fontWeight: FontWeight.bold,
                   ),
@@ -148,7 +148,7 @@ class ListTargetTask {
                 Text(
                   _info5,
                   style: TextStyle(
-                    color: Colors.white.withOpacity(0.90),
+                    color: Colors.white.withValues(alpha: 0.90),
                     fontSize: 26.sp,
                     fontWeight: FontWeight.bold,
                   ),
@@ -181,7 +181,7 @@ class ListTargetTask {
               child: Text(
                 _info7,
                 style: TextStyle(
-                  color: Colors.white.withOpacity(0.90),
+                  color: Colors.white.withValues(alpha: 0.90),
                   fontSize: 26.sp,
                   fontWeight: FontWeight.bold,
                 ),

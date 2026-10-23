@@ -53,7 +53,7 @@ class ListTargetCuadrantes {
                   child: Text(
                     " Inicio de Cuadrante",
                     style: TextStyle(
-                      color: Colors.white.withOpacity(0.90),
+                      color: Colors.white.withValues(alpha: 0.90),
                       fontSize: 26.sp,
                       fontWeight: FontWeight.bold,
                     ),
@@ -103,7 +103,7 @@ class ListTargetCuadrantes {
                 child: Text(
                   "Fin de Cuadrante",
                   style: TextStyle(
-                    color: Colors.white.withOpacity(0.90),
+                    color: Colors.white.withValues(alpha: 0.90),
                     fontSize: 26.sp,
                     fontWeight: FontWeight.bold,
                   ),
@@ -154,7 +154,7 @@ class ListTargetCuadrantes {
                 Text(
                   "Turnos de trabajo",
                   style: TextStyle(
-                    color: Colors.white.withOpacity(0.90),
+                    color: Colors.white.withValues(alpha: 0.90),
                     fontSize: 26.sp,
                     fontWeight: FontWeight.bold,
                   ),
@@ -240,7 +240,7 @@ class ListTargetCuadrantes {
                               child: Text(
                                 "Ejemplo",
                                 style: TextStyle(
-                                  color: Colors.white.withOpacity(0.90),
+                                  color: Colors.white.withValues(alpha: 0.90),
                                   fontSize: 20.sp,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -270,7 +270,7 @@ class ListTargetCuadrantes {
                       child: Text(
                         "Como crear cuadrante",
                         style: TextStyle(
-                          color: Colors.white.withOpacity(0.90),
+                          color: Colors.white.withValues(alpha: 0.90),
                           fontSize: 26.sp,
                           fontWeight: FontWeight.bold,
                         ),
@@ -309,7 +309,7 @@ class ListTargetCuadrantes {
                 child: Text(
                   "Publicar Cuadrante",
                   style: TextStyle(
-                    color: Colors.white.withOpacity(0.90),
+                    color: Colors.white.withValues(alpha: 0.90),
                     fontSize: 26.sp,
                     fontWeight: FontWeight.bold,
                   ),
@@ -338,7 +338,7 @@ class ListTargetCuadrantes {
                     Text(
                       "Resultado",
                       style: TextStyle(
-                        color: Colors.white.withOpacity(0.90),
+                        color: Colors.white.withValues(alpha: 0.90),
                         fontSize: 26.sp,
                         fontWeight: FontWeight.bold,
                       ),

@@ -53,7 +53,7 @@ class VideotutorialesRowWidget extends StatelessWidget {
                     Text(
                       subtitle,
                       style: TextStyle(
-                        color: MyColors.textColor.withOpacity(0.6),
+                        color: MyColors.textColor.withValues(alpha: 0.6),
                       ),
                     ),
                     const Spacer(),

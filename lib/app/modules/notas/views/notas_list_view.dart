@@ -163,11 +163,11 @@ class _NotasListViewState extends ConsumerState<NotasListView> {
                     padding: EdgeInsets.symmetric(vertical: 48.h, horizontal: 18.w),
                     child: Column(
                       children: [
-                        Container(width: 68.w, height: 68.w, decoration: BoxDecoration(color: PRIMARY_COLOR.withOpacity(.14), borderRadius: BorderRadius.circular(22.r)), child: Icon(Icons.sticky_note_2_outlined, color: PRIMARY_COLOR, size: 34.sp)),
+                        Container(width: 68.w, height: 68.w, decoration: BoxDecoration(color: PRIMARY_COLOR.withValues(alpha: .14), borderRadius: BorderRadius.circular(22.r)), child: Icon(Icons.sticky_note_2_outlined, color: PRIMARY_COLOR, size: 34.sp)),
                         SizedBox(height: 14.h),
                         Text('Aún no tienes notas', style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w800, color: Theme.of(context).colorScheme.onSurface)),
                         SizedBox(height: 6.h),
-                        Text('Crea una nota para no olvidar nada importante.', textAlign: TextAlign.center, style: TextStyle(fontSize: 13.sp, color: Theme.of(context).colorScheme.onSurface.withOpacity(.62))),
+                        Text('Crea una nota para no olvidar nada importante.', textAlign: TextAlign.center, style: TextStyle(fontSize: 13.sp, color: Theme.of(context).colorScheme.onSurface.withValues(alpha: .62))),
                       ],
                     ),
                   )

@@ -45,7 +45,7 @@ class _TurnosNotasOnHomeDialogState
     final selectedDayNotas = selectedDate == null
         ? const []
         : ref.read(notasProvider.notifier).getNotasOfDay(selectedDate);
-    final surface = theme.colorScheme.surfaceContainerHighest.withOpacity(.48);
+    final surface = theme.colorScheme.surfaceContainerHighest.withValues(alpha: .48);
     final textColor = theme.colorScheme.onSurface;
 
     if (turnos.isEmpty && selectedDayNotas.isEmpty) {
@@ -59,14 +59,14 @@ class _TurnosNotasOnHomeDialogState
         child: Column(
           children: [
             Icon(Icons.event_available_rounded,
-                size: 28.sp, color: PRIMARY_COLOR.withOpacity(.8)),
+                size: 28.sp, color: PRIMARY_COLOR.withValues(alpha: .8)),
             SizedBox(height: 6.h),
             Text(
               'No hay turnos ni notas para este día',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 12.sp,
-                color: textColor.withOpacity(.65),
+                color: textColor.withValues(alpha: .65),
               ),
             ),
           ],
@@ -116,9 +116,9 @@ class _TurnosNotasOnHomeDialogState
                         vertical: 10.h,
                       ),
                       decoration: BoxDecoration(
-                        color: turnoColor.withOpacity(.16),
+                        color: turnoColor.withValues(alpha: .16),
                         borderRadius: BorderRadius.circular(12.r),
-                        border: Border.all(color: turnoColor.withOpacity(.6)),
+                        border: Border.all(color: turnoColor.withValues(alpha: .6)),
                       ),
                       child: Row(
                         children: [
@@ -151,12 +151,12 @@ class _TurnosNotasOnHomeDialogState
                                     children: [
                                       Icon(Icons.schedule_rounded,
                                           size: 13.sp,
-                                          color: textColor.withOpacity(.65)),
+                                          color: textColor.withValues(alpha: .65)),
                                       SizedBox(width: 4.w),
                                       Text(
                                         '${turno.startHour} – ${turno.endHour}',
                                         style: TextStyle(
-                                          color: textColor.withOpacity(.7),
+                                          color: textColor.withValues(alpha: .7),
                                           fontSize: 11.sp,
                                         ),
                                       ),
@@ -167,9 +167,9 @@ class _TurnosNotasOnHomeDialogState
                             ),
                           ),
                           Icon(Icons.drag_indicator_rounded,
-                              size: 18.sp, color: foreground.withOpacity(.65)),
+                              size: 18.sp, color: foreground.withValues(alpha: .65)),
                           Icon(Icons.chevron_left_rounded,
-                              size: 18.sp, color: textColor.withOpacity(.5)),
+                              size: 18.sp, color: textColor.withValues(alpha: .5)),
                         ],
                       ),
                     ),
@@ -209,7 +209,7 @@ class _TurnosNotasOnHomeDialogState
                               width: 34.w,
                               height: 34.w,
                               decoration: BoxDecoration(
-                                color: PRIMARY_COLOR.withOpacity(.12),
+                                color: PRIMARY_COLOR.withValues(alpha: .12),
                                 borderRadius: BorderRadius.circular(10.r),
                               ),
                               alignment: Alignment.center,
@@ -246,7 +246,7 @@ class _TurnosNotasOnHomeDialogState
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
                                         fontSize: 11.sp,
-                                        color: textColor.withOpacity(.66),
+                                        color: textColor.withValues(alpha: .66),
                                       ),
                                     ),
                                   ],
@@ -265,7 +265,7 @@ class _TurnosNotasOnHomeDialogState
                               ),
                             ),
                             Icon(Icons.chevron_right_rounded,
-                                color: textColor.withOpacity(.45)),
+                                color: textColor.withValues(alpha: .45)),
                           ],
                         ),
                       ),
@@ -294,7 +294,7 @@ class _SectionLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = Theme.of(context).colorScheme.onSurface.withOpacity(.65);
+    final color = Theme.of(context).colorScheme.onSurface.withValues(alpha: .65);
     return Row(
       children: [
         Icon(icon, size: 15.sp, color: color),
@@ -312,7 +312,7 @@ class _SectionLabel extends StatelessWidget {
         Container(
           padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 1.h),
           decoration: BoxDecoration(
-            color: PRIMARY_COLOR.withOpacity(.12),
+            color: PRIMARY_COLOR.withValues(alpha: .12),
             borderRadius: BorderRadius.circular(20.r),
           ),
           child: Text(

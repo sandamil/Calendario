@@ -76,50 +76,41 @@ class _AlarmasViewState extends ConsumerState<AlarmasView> {
           ),
           if (state.reminderEnabled) ...[
             SizedBox(height: 8.h),
-            RadioListTile<String>(
-              contentPadding: EdgeInsets.zero,
-              title: const Text('Al Principio'),
-              value: 'Al Principio',
+            RadioGroup<String>(
               groupValue: state.selectedOption,
               onChanged: (value) {
                 if (value != null) notifier.selectOption(value);
               },
-            ),
-            RadioListTile<String>(
-              contentPadding: EdgeInsets.zero,
-              title: const Text('5 minutos de anticipación'),
-              value: '5 minutos de anticipación',
-              groupValue: state.selectedOption,
-              onChanged: (value) {
-                if (value != null) notifier.selectOption(value);
-              },
-            ),
-            RadioListTile<String>(
-              contentPadding: EdgeInsets.zero,
-              title: const Text('30 minutos de anticipación'),
-              value: '30 minutos de anticipación',
-              groupValue: state.selectedOption,
-              onChanged: (value) {
-                if (value != null) notifier.selectOption(value);
-              },
-            ),
-            RadioListTile<String>(
-              contentPadding: EdgeInsets.zero,
-              title: const Text('1 hora de anticipación'),
-              value: '1 hora de anticipación',
-              groupValue: state.selectedOption,
-              onChanged: (value) {
-                if (value != null) notifier.selectOption(value);
-              },
-            ),
-            RadioListTile<String>(
-              contentPadding: EdgeInsets.zero,
-              title: const Text('1 día de antelación'),
-              value: '1 día de antelación',
-              groupValue: state.selectedOption,
-              onChanged: (value) {
-                if (value != null) notifier.selectOption(value);
-              },
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  RadioListTile<String>(
+                    contentPadding: EdgeInsets.zero,
+                    title: const Text('Al Principio'),
+                    value: 'Al Principio',
+                  ),
+                  RadioListTile<String>(
+                    contentPadding: EdgeInsets.zero,
+                    title: const Text('5 minutos de anticipación'),
+                    value: '5 minutos de anticipación',
+                  ),
+                  RadioListTile<String>(
+                    contentPadding: EdgeInsets.zero,
+                    title: const Text('30 minutos de anticipación'),
+                    value: '30 minutos de anticipación',
+                  ),
+                  RadioListTile<String>(
+                    contentPadding: EdgeInsets.zero,
+                    title: const Text('1 hora de anticipación'),
+                    value: '1 hora de anticipación',
+                  ),
+                  RadioListTile<String>(
+                    contentPadding: EdgeInsets.zero,
+                    title: const Text('1 día de antelación'),
+                    value: '1 día de antelación',
+                  ),
+                ],
+              ),
             ),
             SizedBox(height: 8.h),
             SwitchListTile(
@@ -174,7 +165,7 @@ class _AlarmasViewState extends ConsumerState<AlarmasView> {
           ],
           const SizedBox(height: 24),
           Card(
-            color: theme.colorScheme.surfaceContainerHighest.withOpacity(.55),
+            color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: .55),
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18.r)),
             child: Padding(
               padding: EdgeInsets.all(16.w),

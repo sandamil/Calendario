@@ -36,7 +36,7 @@ class TurnoView extends ConsumerWidget {
             child: Padding(
               padding: EdgeInsets.all(24.w),
               child: Column(mainAxisSize: MainAxisSize.min, children: [
-                Icon(Icons.cloud_off_rounded, size: 42.sp, color: text.withOpacity(.45)),
+                Icon(Icons.cloud_off_rounded, size: 42.sp, color: text.withValues(alpha: .45)),
                 SizedBox(height: 10.h),
                 const Text('No se pudieron cargar los tipos de turno.', textAlign: TextAlign.center),
                 SizedBox(height: 8.h),
@@ -50,11 +50,11 @@ class TurnoView extends ConsumerWidget {
                 child: Padding(
                   padding: EdgeInsets.all(28.w),
                   child: Column(mainAxisSize: MainAxisSize.min, children: [
-                    Icon(Icons.work_history_outlined, size: 52.sp, color: PRIMARY_COLOR.withOpacity(.75)),
+                    Icon(Icons.work_history_outlined, size: 52.sp, color: PRIMARY_COLOR.withValues(alpha: .75)),
                     SizedBox(height: 12.h),
                     Text('Todavía no tienes tipos de turno', style: TextStyle(fontSize: 17.sp, fontWeight: FontWeight.w800, color: text)),
                     SizedBox(height: 6.h),
-                    Text('Crea tus horarios habituales para añadirlos después al calendario.', textAlign: TextAlign.center, style: TextStyle(fontSize: 13.sp, color: text.withOpacity(.62))),
+                    Text('Crea tus horarios habituales para añadirlos después al calendario.', textAlign: TextAlign.center, style: TextStyle(fontSize: 13.sp, color: text.withValues(alpha: .62))),
                     SizedBox(height: 16.h),
                     FilledButton.icon(onPressed: () => context.push('/add-turno'), icon: const Icon(Icons.add_rounded), label: const Text('Crear turno')),
                   ]),
@@ -73,8 +73,8 @@ class TurnoView extends ConsumerWidget {
                   decoration: BoxDecoration(
                     color: theme.colorScheme.surface,
                     borderRadius: BorderRadius.circular(20.r),
-                    border: Border.all(color: theme.colorScheme.outlineVariant.withOpacity(.45)),
-                    boxShadow: [BoxShadow(color: theme.shadowColor.withOpacity(.04), blurRadius: 12, offset: const Offset(0, 4))],
+                    border: Border.all(color: theme.colorScheme.outlineVariant.withValues(alpha: .45)),
+                    boxShadow: [BoxShadow(color: theme.shadowColor.withValues(alpha: .04), blurRadius: 12, offset: const Offset(0, 4))],
                   ),
                   child: Padding(
                     padding: EdgeInsets.all(12.w),
@@ -84,7 +84,7 @@ class TurnoView extends ConsumerWidget {
                       Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                         Text(turno.description ?? 'Turno', maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w800, color: text)),
                         SizedBox(height: 5.h),
-                        Row(children: [Icon(Icons.schedule_rounded, size: 15.sp, color: text.withOpacity(.58)), SizedBox(width: 5.w), Text('${turno.startHour ?? '--:--'} – ${turno.endHour ?? '--:--'}', style: TextStyle(fontSize: 12.sp, color: text.withOpacity(.65)))]),
+                        Row(children: [Icon(Icons.schedule_rounded, size: 15.sp, color: text.withValues(alpha: .58)), SizedBox(width: 5.w), Text('${turno.startHour ?? '--:--'} – ${turno.endHour ?? '--:--'}', style: TextStyle(fontSize: 12.sp, color: text.withValues(alpha: .65)))]),
                       ])),
                       IconButton(tooltip: 'Editar turno', onPressed: () => context.push('/edit-turno', extra: turno), icon: const Icon(Icons.edit_outlined), color: PRIMARY_COLOR),
                       IconButton(
@@ -104,7 +104,7 @@ class TurnoView extends ConsumerWidget {
                           }
                         },
                         icon: const Icon(Icons.delete_outline_rounded),
-                        color: text.withOpacity(.55),
+                        color: text.withValues(alpha: .55),
                       ),
                     ]),
                   ),

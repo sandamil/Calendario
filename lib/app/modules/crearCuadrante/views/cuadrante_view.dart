@@ -76,7 +76,7 @@ class CrearCuadranteView extends ConsumerWidget {
           //           )
           //         : Icon(
           //             Icons.done_outline,
-          //             color: PRIMARY_COLOR.withOpacity(0.4),
+          //             color: PRIMARY_COLOR.withValues(alpha: 0.4),
           //             size: 24.sp,
           //           ),
           //     key: controller.firstTime.value
@@ -110,10 +110,10 @@ class CrearCuadranteView extends ConsumerWidget {
                 flex: 1,
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.surfaceContainerHighest.withOpacity(.42),
+                    color: Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: .42),
                     borderRadius: BorderRadius.circular(22.r),
                     border: Border.all(
-                      color: Theme.of(context).colorScheme.outlineVariant.withOpacity(.4),
+                      color: Theme.of(context).colorScheme.outlineVariant.withValues(alpha: .4),
                     ),
                   ),
                   child: Padding(
@@ -153,7 +153,7 @@ class CrearCuadranteView extends ConsumerWidget {
                               },
                               style: IconButton.styleFrom(
                                 foregroundColor: Colors.red,
-                                backgroundColor: Colors.red.withOpacity(.10),
+                                backgroundColor: Colors.red.withValues(alpha: .10),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(13.r),
                                 ),
@@ -191,7 +191,7 @@ class CrearCuadranteView extends ConsumerWidget {
                                     elevation: 0,
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(16.r),
-                                      side: BorderSide(color: Theme.of(context).colorScheme.outlineVariant.withOpacity(.4)),
+                                      side: BorderSide(color: Theme.of(context).colorScheme.outlineVariant.withValues(alpha: .4)),
                                     ),
                                     margin: EdgeInsets.symmetric(vertical: 4.h),
                                     child: Row(
@@ -236,7 +236,7 @@ class CrearCuadranteView extends ConsumerWidget {
                                               },
                                               style: IconButton.styleFrom(
                                                 foregroundColor: PRIMARY_COLOR,
-                                                backgroundColor: PRIMARY_COLOR.withOpacity(.10),
+                                                backgroundColor: PRIMARY_COLOR.withValues(alpha: .10),
                                                 shape: RoundedRectangleBorder(
                                                   borderRadius: BorderRadius.circular(12.r),
                                                 ),
@@ -252,7 +252,7 @@ class CrearCuadranteView extends ConsumerWidget {
                                               .deleteCuadrante(name),
                                           style: IconButton.styleFrom(
                                             foregroundColor: Colors.red,
-                                            backgroundColor: Colors.red.withOpacity(.08),
+                                            backgroundColor: Colors.red.withValues(alpha: .08),
                                             shape: RoundedRectangleBorder(
                                               borderRadius: BorderRadius.circular(12.r),
                                             ),

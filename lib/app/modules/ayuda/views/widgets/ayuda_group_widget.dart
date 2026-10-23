@@ -17,7 +17,7 @@ class SettingsGroup extends StatelessWidget {
           child: Text(
             title.toUpperCase(),
             style: TextStyle(
-              color: theme.colorScheme.onSurface.withOpacity(.55),
+              color: theme.colorScheme.onSurface.withValues(alpha: .55),
               fontSize: 11.sp,
               letterSpacing: .8,
               fontWeight: FontWeight.w800,
@@ -29,7 +29,7 @@ class SettingsGroup extends StatelessWidget {
           decoration: BoxDecoration(
             color: theme.colorScheme.surface,
             borderRadius: BorderRadius.circular(18.r),
-            border: Border.all(color: theme.colorScheme.outlineVariant.withOpacity(.4)),
+            border: Border.all(color: theme.colorScheme.outlineVariant.withValues(alpha: .4)),
           ),
           child: Column(children: children),
         ),

@@ -160,7 +160,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
             },
       child: Container(
         decoration: BoxDecoration(
-            color: isSelected ? PRIMARY_COLOR.withOpacity(0.1) : null,
+            color: isSelected ? PRIMARY_COLOR.withValues(alpha: 0.1) : null,
             borderRadius: BorderRadius.circular(8.r)),
         padding: EdgeInsets.only(
             left: isFirst ? 0 : 4.w, right: 4.w, top: 6.h, bottom: 6.h),
@@ -190,21 +190,21 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
         contentPadding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 14.h),
         hintStyle: TextStyle(
           fontSize: 16.sp,
-          color: MyColors.textColor.withOpacity(0.26).withOpacity(0.3),
+          color: MyColors.textColor.withValues(alpha: 0.26).withValues(alpha: 0.3),
         ),
         // fillColor: ACCENT_COLOR,
         filled: true,
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16.r),
           borderSide: BorderSide(
-            color: Theme.of(context).colorScheme.outlineVariant.withOpacity(.5),
+            color: Theme.of(context).colorScheme.outlineVariant.withValues(alpha: .5),
             width: 1,
           ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16.r),
           borderSide: BorderSide(
-            color: PRIMARY_COLOR.withOpacity(.75),
+            color: PRIMARY_COLOR.withValues(alpha: .75),
             width: 1.2,
           ),
         ),
@@ -239,7 +239,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                   color: isEnable ? PRIMARY_COLOR : MyColors.disableBgColorBtn,
                   boxShadow: [
                     BoxShadow(
-                      color: PRIMARY_COLOR.withOpacity(0.03),
+                      color: PRIMARY_COLOR.withValues(alpha: 0.03),
                       spreadRadius: 5,
                       blurRadius: 7,
                       offset: const Offset(0, 3), // changes position of shadow

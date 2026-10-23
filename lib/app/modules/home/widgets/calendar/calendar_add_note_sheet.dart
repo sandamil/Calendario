@@ -66,7 +66,7 @@ class CalendarAddNoteSheetState extends ConsumerState<CalendarAddNoteSheet> {
             children: [
               Text(
                 _dateLabel(state.startTime),
-                style: TextStyle(fontSize: 13.sp, color: color.withOpacity(.58)),
+                style: TextStyle(fontSize: 13.sp, color: color.withValues(alpha: .58)),
               ),
               SizedBox(height: 12.h),
               _field(
@@ -151,7 +151,7 @@ class CalendarAddNoteSheetState extends ConsumerState<CalendarAddNoteSheet> {
                 icon: Icons.notifications_none_rounded,
                 title: 'Recordatorio',
                 subtitle: state.alarmaCreada ? state.alarmaHora : 'Sin recordatorio',
-                trailing: Icon(Icons.chevron_right_rounded, color: color.withOpacity(.55)),
+                trailing: Icon(Icons.chevron_right_rounded, color: color.withValues(alpha: .55)),
                 onTap: () => _pickReminder(notifier, state.startTime),
               ),
               SizedBox(height: 8.h),
@@ -178,21 +178,21 @@ class CalendarAddNoteSheetState extends ConsumerState<CalendarAddNoteSheet> {
           padding: EdgeInsets.only(left: 3.w, bottom: 6.h),
           child: Text(
             label,
-            style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w700, color: textColor.withOpacity(.72)),
+            style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w700, color: textColor.withValues(alpha: .72)),
           ),
         ),
         Container(
           decoration: BoxDecoration(
-            color: theme.colorScheme.surfaceContainerHighest.withOpacity(.48),
+            color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: .48),
             borderRadius: BorderRadius.circular(15.r),
-            border: Border.all(color: theme.colorScheme.outlineVariant.withOpacity(.35)),
+            border: Border.all(color: theme.colorScheme.outlineVariant.withValues(alpha: .35)),
           ),
           child: Row(
             crossAxisAlignment: maxLines > 1 ? CrossAxisAlignment.start : CrossAxisAlignment.center,
             children: [
               Padding(
                 padding: EdgeInsets.fromLTRB(13.w, maxLines > 1 ? 14.h : 0, 0, 0),
-                child: Icon(icon, size: 20.sp, color: PRIMARY_COLOR.withOpacity(.9)),
+                child: Icon(icon, size: 20.sp, color: PRIMARY_COLOR.withValues(alpha: .9)),
               ),
               SizedBox(width: 10.w),
               Expanded(
@@ -204,7 +204,7 @@ class CalendarAddNoteSheetState extends ConsumerState<CalendarAddNoteSheet> {
                   style: TextStyle(fontSize: 14.sp, color: textColor),
                   decoration: InputDecoration(
                     hintText: hint,
-                    hintStyle: TextStyle(fontSize: 13.sp, color: textColor.withOpacity(.42)),
+                    hintStyle: TextStyle(fontSize: 13.sp, color: textColor.withValues(alpha: .42)),
                     border: InputBorder.none,
                     enabledBorder: InputBorder.none,
                     focusedBorder: InputBorder.none,
@@ -223,7 +223,7 @@ class CalendarAddNoteSheetState extends ConsumerState<CalendarAddNoteSheet> {
   Widget _sectionTitle(String text) {
     return Text(
       text,
-      style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w700, color: Theme.of(context).colorScheme.onSurface.withOpacity(.72)),
+      style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w700, color: Theme.of(context).colorScheme.onSurface.withValues(alpha: .72)),
     );
   }
 
@@ -234,7 +234,7 @@ class CalendarAddNoteSheetState extends ConsumerState<CalendarAddNoteSheet> {
     required VoidCallback onTap,
   }) {
     return Material(
-      color: Theme.of(context).colorScheme.surfaceContainerHighest.withOpacity(.55),
+      color: Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: .55),
       borderRadius: BorderRadius.circular(14.r),
       child: InkWell(
         borderRadius: BorderRadius.circular(14.r),
@@ -271,7 +271,7 @@ class CalendarAddNoteSheetState extends ConsumerState<CalendarAddNoteSheet> {
   }) {
     final color = Theme.of(context).colorScheme.onSurface;
     return Material(
-      color: Theme.of(context).colorScheme.surfaceContainerHighest.withOpacity(.55),
+      color: Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: .55),
       borderRadius: BorderRadius.circular(14.r),
       child: InkWell(
         borderRadius: BorderRadius.circular(14.r),
@@ -288,7 +288,7 @@ class CalendarAddNoteSheetState extends ConsumerState<CalendarAddNoteSheet> {
                   children: [
                     Text(title, style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w600)),
                     if (subtitle != null)
-                      Text(subtitle, style: TextStyle(fontSize: 12.sp, color: color.withOpacity(.55))),
+                      Text(subtitle, style: TextStyle(fontSize: 12.sp, color: color.withValues(alpha: .55))),
                   ],
                 ),
               ),

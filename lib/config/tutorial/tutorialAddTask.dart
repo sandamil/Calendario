@@ -64,7 +64,7 @@ class ListTargetAddTask {
                   child: Text(
                     _info,
                     style: TextStyle(
-                      color: Colors.white.withOpacity(0.90),
+                      color: Colors.white.withValues(alpha: 0.90),
                       fontSize: 25.sp,
                       fontWeight: FontWeight.bold,
                     ),
@@ -124,7 +124,7 @@ class ListTargetAddTask {
                 child: Text(
                   _info3,
                   style: TextStyle(
-                    color: Colors.white.withOpacity(0.90),
+                    color: Colors.white.withValues(alpha: 0.90),
                     fontSize: 26.sp,
                     fontWeight: FontWeight.bold,
                   ),
@@ -175,7 +175,7 @@ class ListTargetAddTask {
                 Text(
                   _info6,
                   style: TextStyle(
-                    color: Colors.white.withOpacity(0.90),
+                    color: Colors.white.withValues(alpha: 0.90),
                     fontSize: 26.sp,
                     fontWeight: FontWeight.bold,
                   ),
@@ -240,7 +240,7 @@ class ListTargetAddTask {
                       child: Text(
                         _info10,
                         style: TextStyle(
-                          color: Colors.white.withOpacity(0.90),
+                          color: Colors.white.withValues(alpha: 0.90),
                           fontSize: 26.sp,
                           fontWeight: FontWeight.bold,
                         ),
@@ -279,7 +279,7 @@ class ListTargetAddTask {
                 child: Text(
                   _info12,
                   style: TextStyle(
-                    color: Colors.white.withOpacity(0.90),
+                    color: Colors.white.withValues(alpha: 0.90),
                     fontSize: 26.sp,
                     fontWeight: FontWeight.bold,
                   ),
@@ -335,7 +335,7 @@ class ListTargetAddTask {
                 child: Text(
                   _info15,
                   style: TextStyle(
-                    color: Colors.white.withOpacity(0.90),
+                    color: Colors.white.withValues(alpha: 0.90),
                     fontSize: 26.sp,
                     fontWeight: FontWeight.bold,
                   ),

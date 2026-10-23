@@ -96,7 +96,7 @@ class CalendarDaySheet extends StatelessWidget {
             child: Material(
               color: theme.scaffoldBackgroundColor,
               elevation: 18,
-              shadowColor: Colors.black.withOpacity(.25),
+              shadowColor: Colors.black.withValues(alpha: .25),
               clipBehavior: Clip.antiAlias,
               borderRadius: BorderRadius.circular(24.r),
               child: ConstrainedBox(
@@ -115,7 +115,7 @@ class CalendarDaySheet extends StatelessWidget {
                             Container(
                               width: 42.w,
                               height: 42.w,
-                              decoration: BoxDecoration(color: PRIMARY_COLOR.withOpacity(.11), borderRadius: BorderRadius.circular(13.r)),
+                              decoration: BoxDecoration(color: PRIMARY_COLOR.withValues(alpha: .11), borderRadius: BorderRadius.circular(13.r)),
                               alignment: Alignment.center,
                               child: Text('${selectedDate.day}', style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w800, color: PRIMARY_COLOR)),
                             ),
@@ -126,7 +126,7 @@ class CalendarDaySheet extends StatelessWidget {
                                 children: [
                                   Text('${selectedDate.day} de ${_month(selectedDate)}', style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700, color: onSurface)),
                                   SizedBox(height: 1.h),
-                                  Text('${_weekday(selectedDate)} · ${selectedDate.year}', style: TextStyle(fontSize: 12.sp, color: onSurface.withOpacity(.58))),
+                                  Text('${_weekday(selectedDate)} · ${selectedDate.year}', style: TextStyle(fontSize: 12.sp, color: onSurface.withValues(alpha: .58))),
                                 ],
                               ),
                             ),
@@ -199,7 +199,7 @@ class _ActionTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Material(
-      color: theme.colorScheme.surfaceContainerHighest.withOpacity(.65),
+      color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: .65),
       borderRadius: BorderRadius.circular(14.r),
       child: InkWell(
         borderRadius: BorderRadius.circular(14.r),
@@ -256,7 +256,7 @@ class _CalendarSheetFrame extends StatelessWidget {
                   Container(
                     width: 38.w,
                     height: 4.h,
-                    decoration: BoxDecoration(color: theme.colorScheme.onSurface.withOpacity(.2), borderRadius: BorderRadius.circular(20.r)),
+                    decoration: BoxDecoration(color: theme.colorScheme.onSurface.withValues(alpha: .2), borderRadius: BorderRadius.circular(20.r)),
                   ),
                   SizedBox(height: 14.h),
                   SizedBox(
@@ -271,7 +271,7 @@ class _CalendarSheetFrame extends StatelessWidget {
                                   ? const SizedBox.shrink()
                                   : CircleAvatar(
                                       radius: 20.r,
-                                      backgroundColor: PRIMARY_COLOR.withOpacity(.12),
+                                      backgroundColor: PRIMARY_COLOR.withValues(alpha: .12),
                                       child: Icon(icon, color: PRIMARY_COLOR, size: 21.sp),
                                     )),
                         ),

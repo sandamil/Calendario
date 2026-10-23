@@ -167,7 +167,7 @@ class _HomeViewState extends State<HomeView> {
       context: context,
       barrierDismissible: true,
       barrierLabel: 'Cerrar acciones del día',
-      barrierColor: Colors.black.withOpacity(.10),
+      barrierColor: Colors.black.withValues(alpha: .10),
       transitionDuration: const Duration(milliseconds: 180),
       pageBuilder: (dialogContext, animation, secondaryAnimation) {
         return Stack(
@@ -258,7 +258,7 @@ class _HomeViewState extends State<HomeView> {
                             width: 38.w,
                             height: 4.h,
                             decoration: BoxDecoration(
-                              color: onSurface.withOpacity(.2),
+                              color: onSurface.withValues(alpha: .2),
                               borderRadius: BorderRadius.circular(20.r),
                             ),
                           ),
@@ -282,7 +282,7 @@ class _HomeViewState extends State<HomeView> {
                           ],
                         ),
                         SizedBox(height: 12.h),
-                        Text('PERIODO', style: TextStyle(fontSize: 11.sp, fontWeight: FontWeight.w800, letterSpacing: .8, color: onSurface.withOpacity(.58))),
+                        Text('PERIODO', style: TextStyle(fontSize: 11.sp, fontWeight: FontWeight.w800, letterSpacing: .8, color: onSurface.withValues(alpha: .58))),
                         SizedBox(height: 6.h),
                         DropdownButtonFormField<String>(
                           value: period,
@@ -304,7 +304,7 @@ class _HomeViewState extends State<HomeView> {
                           },
                         ),
                         SizedBox(height: 16.h),
-                        Text('QUÉ QUIERES COMPARTIR', style: TextStyle(fontSize: 11.sp, fontWeight: FontWeight.w800, letterSpacing: .8, color: onSurface.withOpacity(.58))),
+                        Text('QUÉ QUIERES COMPARTIR', style: TextStyle(fontSize: 11.sp, fontWeight: FontWeight.w800, letterSpacing: .8, color: onSurface.withValues(alpha: .58))),
                         SizedBox(height: 4.h),
                         CheckboxListTile(
                           value: includeTurnos,
@@ -327,7 +327,7 @@ class _HomeViewState extends State<HomeView> {
                           onChanged: (value) => setSheetState(() => includeNotas = value ?? false),
                         ),
                         SizedBox(height: 10.h),
-                        Text('FORMATO', style: TextStyle(fontSize: 11.sp, fontWeight: FontWeight.w800, letterSpacing: .8, color: onSurface.withOpacity(.58))),
+                        Text('FORMATO', style: TextStyle(fontSize: 11.sp, fontWeight: FontWeight.w800, letterSpacing: .8, color: onSurface.withValues(alpha: .58))),
                         SizedBox(height: 8.h),
                         Wrap(
                           spacing: 8.w,
@@ -763,7 +763,7 @@ class _HomeViewState extends State<HomeView> {
                     },
                     style: TextButton.styleFrom(
                       foregroundColor: PRIMARY_COLOR,
-                      backgroundColor: PRIMARY_COLOR.withOpacity(.10),
+                      backgroundColor: PRIMARY_COLOR.withValues(alpha: .10),
                       minimumSize: Size(0, 32.h),
                       padding: EdgeInsets.symmetric(horizontal: 10.w),
                       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -916,11 +916,11 @@ class _ShareFormatChip extends StatelessWidget {
       avatar: Icon(icon, size: 17.sp, color: selected ? Colors.white : PRIMARY_COLOR),
       label: Text(label, style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w600)),
       selectedColor: PRIMARY_COLOR,
-      backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest.withOpacity(.55),
+      backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: .55),
       labelStyle: TextStyle(color: selected ? Colors.white : Theme.of(context).colorScheme.onSurface),
       showCheckmark: false,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
-      side: BorderSide(color: selected ? PRIMARY_COLOR : Theme.of(context).dividerColor.withOpacity(.35)),
+      side: BorderSide(color: selected ? PRIMARY_COLOR : Theme.of(context).dividerColor.withValues(alpha: .35)),
       padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 5.h),
     );
   }
@@ -948,7 +948,7 @@ class _ShareMenuTile extends StatelessWidget {
     return Opacity(
       opacity: enabled ? 1 : .48,
       child: Material(
-        color: theme.colorScheme.surfaceContainerHighest.withOpacity(.55),
+        color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: .55),
         borderRadius: BorderRadius.circular(15.r),
         child: InkWell(
           borderRadius: BorderRadius.circular(15.r),
@@ -965,11 +965,11 @@ class _ShareMenuTile extends StatelessWidget {
                     children: [
                       Text(title, style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w700, color: color)),
                       SizedBox(height: 2.h),
-                      Text(subtitle, style: TextStyle(fontSize: 11.sp, color: color.withOpacity(.58))),
+                      Text(subtitle, style: TextStyle(fontSize: 11.sp, color: color.withValues(alpha: .58))),
                     ],
                   ),
                 ),
-                Icon(Icons.chevron_right_rounded, size: 20.sp, color: color.withOpacity(.35)),
+                Icon(Icons.chevron_right_rounded, size: 20.sp, color: color.withValues(alpha: .35)),
               ],
             ),
           ),

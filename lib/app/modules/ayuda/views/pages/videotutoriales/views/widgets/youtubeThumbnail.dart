@@ -40,7 +40,7 @@ class YouTubeThumbnail extends StatelessWidget {
                         child: Container(
                           padding: const EdgeInsets.all(4),
                           decoration: BoxDecoration(
-                            color: black.withOpacity(0.66),
+                            color: black.withValues(alpha: 0.66),
                             borderRadius: BorderRadius.circular(999),
                           ),
                           child: Icon(

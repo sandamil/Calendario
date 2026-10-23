@@ -21,7 +21,7 @@ class AyudaRowWidget extends StatelessWidget {
             Container(
               width: 38.w,
               height: 38.w,
-              decoration: BoxDecoration(color: theme.colorScheme.primary.withOpacity(.12), borderRadius: BorderRadius.circular(12.r)),
+              decoration: BoxDecoration(color: theme.colorScheme.primary.withValues(alpha: .12), borderRadius: BorderRadius.circular(12.r)),
               child: Icon(Icons.arrow_outward_rounded, color: theme.colorScheme.primary, size: 19.sp),
             ),
             SizedBox(width: 11.w),
@@ -31,12 +31,12 @@ class AyudaRowWidget extends StatelessWidget {
                 children: [
                   Text(title, style: TextStyle(color: text, fontSize: 14.sp, fontWeight: FontWeight.w700)),
                   SizedBox(height: 3.h),
-                  Text(subtitle, style: TextStyle(color: text.withOpacity(.62), fontSize: 12.sp, height: 1.3)),
+                  Text(subtitle, style: TextStyle(color: text.withValues(alpha: .62), fontSize: 12.sp, height: 1.3)),
                 ],
               ),
             ),
             SizedBox(width: 6.w),
-            Icon(Icons.chevron_right_rounded, size: 21.sp, color: text.withOpacity(.45)),
+            Icon(Icons.chevron_right_rounded, size: 21.sp, color: text.withValues(alpha: .45)),
           ],
         ),
       ),

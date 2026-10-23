@@ -81,7 +81,7 @@ class _AppImageState extends State<AppImage> {
           if (size < 16) return const SizedBox();
           return Icon(
             Icons.image_not_supported_outlined,
-            color: white.withOpacity(0.1),
+            color: white.withValues(alpha: 0.1),
             size: min(size, 32.h),
           );
         }),

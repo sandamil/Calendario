@@ -42,7 +42,7 @@ class MenuView extends StatelessWidget {
               children: [
                 Text('Todo en un solo lugar', style: TextStyle(fontSize: 23.sp, fontWeight: FontWeight.w800, color: text)),
                 SizedBox(height: 5.h),
-                Text('Accede rápidamente a las herramientas de Calendario.', style: TextStyle(fontSize: 13.sp, color: text.withOpacity(.62))),
+                Text('Accede rápidamente a las herramientas de Calendario.', style: TextStyle(fontSize: 13.sp, color: text.withValues(alpha: .62))),
                 SizedBox(height: 20.h),
                 GridView.builder(
                   shrinkWrap: true,
@@ -90,17 +90,17 @@ class _MenuCard extends StatelessWidget {
           padding: EdgeInsets.all(15.w),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(22.r),
-            border: Border.all(color: theme.colorScheme.outlineVariant.withOpacity(.4)),
-            boxShadow: [BoxShadow(color: theme.shadowColor.withOpacity(.045), blurRadius: 16, offset: const Offset(0, 5))],
+            border: Border.all(color: theme.colorScheme.outlineVariant.withValues(alpha: .4)),
+            boxShadow: [BoxShadow(color: theme.shadowColor.withValues(alpha: .045), blurRadius: 16, offset: const Offset(0, 5))],
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(width: 46.w, height: 46.w, decoration: BoxDecoration(color: PRIMARY_COLOR.withOpacity(.15), borderRadius: BorderRadius.circular(15.r)), child: Icon(item.icon, color: PRIMARY_COLOR, size: 25.sp)),
+              Container(width: 46.w, height: 46.w, decoration: BoxDecoration(color: PRIMARY_COLOR.withValues(alpha: .15), borderRadius: BorderRadius.circular(15.r)), child: Icon(item.icon, color: PRIMARY_COLOR, size: 25.sp)),
               const Spacer(),
               Text(item.title, maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w800, color: text)),
               SizedBox(height: 4.h),
-              Text(item.subtitle, maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 11.5.sp, height: 1.25, color: text.withOpacity(.62))),
+              Text(item.subtitle, maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 11.5.sp, height: 1.25, color: text.withValues(alpha: .62))),
             ],
           ),
         ),

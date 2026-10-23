@@ -110,11 +110,11 @@ class MyTheme {
         headerForegroundColor: Colors.black,
         surfaceTintColor: Colors.transparent,
         todayForegroundColor:
-            MaterialStateProperty.all(PRIMARY_COLOR),
+            WidgetStateProperty.all(PRIMARY_COLOR),
         todayBorder: const BorderSide(color: PRIMARY_COLOR),
         yearForegroundColor:
-            MaterialStateProperty.resolveWith<Color?>((states) {
-          if (states.contains(MaterialState.selected)) {
+            WidgetStateProperty.resolveWith<Color?>((states) {
+          if (states.contains(WidgetState.selected)) {
             return Colors.black;
           }
           return isLight
@@ -122,18 +122,18 @@ class MyTheme {
               : DarkThemeColors.bodyTextColor;
         }),
         yearBackgroundColor:
-            MaterialStateProperty.resolveWith<Color?>((states) {
-          if (states.contains(MaterialState.selected)) {
+            WidgetStateProperty.resolveWith<Color?>((states) {
+          if (states.contains(WidgetState.selected)) {
             return PRIMARY_COLOR;
           }
           return Colors.transparent;
         }),
         dayForegroundColor:
-            MaterialStateProperty.resolveWith<Color?>((states) {
-          if (states.contains(MaterialState.selected)) {
+            WidgetStateProperty.resolveWith<Color?>((states) {
+          if (states.contains(WidgetState.selected)) {
             return Colors.black;
           }
-          if (states.contains(MaterialState.disabled)) {
+          if (states.contains(WidgetState.disabled)) {
             return isLight ? Colors.black38 : Colors.white30;
           }
           return isLight
@@ -141,8 +141,8 @@ class MyTheme {
               : DarkThemeColors.bodyTextColor;
         }),
         dayBackgroundColor:
-            MaterialStateProperty.resolveWith<Color?>((states) {
-          if (states.contains(MaterialState.selected)) {
+            WidgetStateProperty.resolveWith<Color?>((states) {
+          if (states.contains(WidgetState.selected)) {
             return PRIMARY_COLOR;
           }
           return Colors.transparent;
@@ -195,14 +195,14 @@ class MyTheme {
 
 
       switchTheme: SwitchThemeData(
-        thumbColor: MaterialStateProperty.resolveWith<Color?>((states) {
-          if (states.contains(MaterialState.selected)) {
+        thumbColor: WidgetStateProperty.resolveWith<Color?>((states) {
+          if (states.contains(WidgetState.selected)) {
             return Colors.black;
           }
           return isLight ? Colors.grey.shade500 : Colors.grey.shade400;
         }),
-        trackColor: MaterialStateProperty.resolveWith<Color?>((states) {
-          if (states.contains(MaterialState.selected)) {
+        trackColor: WidgetStateProperty.resolveWith<Color?>((states) {
+          if (states.contains(WidgetState.selected)) {
             return PRIMARY_COLOR;
           }
           return isLight ? Colors.black26 : Colors.white24;
@@ -210,8 +210,8 @@ class MyTheme {
       ),
 
       radioTheme: RadioThemeData(
-        fillColor: MaterialStateProperty.resolveWith<Color?>((states) {
-          if (states.contains(MaterialState.disabled)) {
+        fillColor: WidgetStateProperty.resolveWith<Color?>((states) {
+          if (states.contains(WidgetState.disabled)) {
             return isLight ? Colors.black38 : Colors.white30;
           }
           return PRIMARY_COLOR;
@@ -222,26 +222,26 @@ class MyTheme {
     );
   }
 
-  static Color getSwitchColorThumb(Set<MaterialState> states) {
-    if (states.contains(MaterialState.selected)) {
+  static Color getSwitchColorThumb(Set<WidgetState> states) {
+    if (states.contains(WidgetState.selected)) {
       return const Color(0xFF303030);
     }
 
     return Colors.grey;
   }
 
-  static Color getSwitchTrackColor(Set<MaterialState> states) {
-    const Set<MaterialState> interactiveStates = <MaterialState>{
-      MaterialState.pressed,
-      MaterialState.hovered,
-      MaterialState.focused,
+  static Color getSwitchTrackColor(Set<WidgetState> states) {
+    const Set<WidgetState> interactiveStates = <WidgetState>{
+      WidgetState.pressed,
+      WidgetState.hovered,
+      WidgetState.focused,
     };
 
     if (states.any(interactiveStates.contains)) {
       return const Color(0xFF505050);
     }
 
-    if (states.contains(MaterialState.selected)) {
+    if (states.contains(WidgetState.selected)) {
       return PRIMARY_COLOR;
     }
 

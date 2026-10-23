@@ -89,7 +89,7 @@ class _AddTurnostoCalendarState extends ConsumerState<AddTurnostoCalendar> {
             'Se añadirá al día seleccionado del calendario.',
             style: TextStyle(
               fontSize: 12.sp,
-              color: textColor.withOpacity(.58),
+              color: textColor.withValues(alpha: .58),
             ),
           ),
           SizedBox(height: 12.h),
@@ -106,7 +106,7 @@ class _AddTurnostoCalendarState extends ConsumerState<AddTurnostoCalendar> {
                 width: double.infinity,
                 padding: EdgeInsets.all(14.w),
                 decoration: BoxDecoration(
-                  color: theme.colorScheme.surfaceContainerHighest.withOpacity(.5),
+                  color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: .5),
                   borderRadius: BorderRadius.circular(14.r),
                 ),
                 child: Column(
@@ -125,7 +125,7 @@ class _AddTurnostoCalendarState extends ConsumerState<AddTurnostoCalendar> {
                     width: double.infinity,
                     padding: EdgeInsets.all(16.w),
                     decoration: BoxDecoration(
-                      color: theme.colorScheme.surfaceContainerHighest.withOpacity(.5),
+                      color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: .5),
                       borderRadius: BorderRadius.circular(14.r),
                     ),
                     child: const Text(
@@ -146,7 +146,7 @@ class _AddTurnostoCalendarState extends ConsumerState<AddTurnostoCalendar> {
                         color.computeLuminance() > .52 ? Colors.black87 : Colors.white;
 
                     return Material(
-                      color: color.withOpacity(.14),
+                      color: color.withValues(alpha: .14),
                       borderRadius: BorderRadius.circular(14.r),
                       child: InkWell(
                         borderRadius: BorderRadius.circular(14.r),
@@ -197,13 +197,13 @@ class _AddTurnostoCalendarState extends ConsumerState<AddTurnostoCalendar> {
                                       children: [
                                         Icon(Icons.schedule_rounded,
                                             size: 13.sp,
-                                            color: textColor.withOpacity(.6)),
+                                            color: textColor.withValues(alpha: .6)),
                                         SizedBox(width: 4.w),
                                         Text(
                                           '${turno.startHour ?? '--:--'} – ${turno.endHour ?? '--:--'}',
                                           style: TextStyle(
                                             fontSize: 12.sp,
-                                            color: textColor.withOpacity(.68),
+                                            color: textColor.withValues(alpha: .68),
                                           ),
                                         ),
                                       ],
@@ -233,7 +233,7 @@ class _AddTurnostoCalendarState extends ConsumerState<AddTurnostoCalendar> {
               label: const Text('Crear turno'),
               style: OutlinedButton.styleFrom(
                 foregroundColor: PRIMARY_COLOR,
-                side: BorderSide(color: PRIMARY_COLOR.withOpacity(.55)),
+                side: BorderSide(color: PRIMARY_COLOR.withValues(alpha: .55)),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(14.r),
                 ),

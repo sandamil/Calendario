@@ -52,7 +52,7 @@ class VideotutorialesView extends StatelessWidget {
             Card(
               margin: EdgeInsets.only(bottom: 12.h),
               elevation: 0,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.r), side: BorderSide(color: Theme.of(context).colorScheme.outlineVariant.withOpacity(.4))),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.r), side: BorderSide(color: Theme.of(context).colorScheme.outlineVariant.withValues(alpha: .4))),
               color: Theme.of(context).colorScheme.surface,
               child: VideotutorialesViewGroup(
                 title: "Pantalla principal",

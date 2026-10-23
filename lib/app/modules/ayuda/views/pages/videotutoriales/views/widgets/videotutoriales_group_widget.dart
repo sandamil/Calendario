@@ -17,7 +17,7 @@ class VideotutorialesViewGroup extends StatelessWidget {
         child: Text(
           title,
           style: TextStyle(
-              color: PRIMARY_COLOR.withOpacity(0.4),
+              color: PRIMARY_COLOR.withValues(alpha: 0.4),
               fontSize: 26,
               fontWeight: FontWeight.w800),
         ),

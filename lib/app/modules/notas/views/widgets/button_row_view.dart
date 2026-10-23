@@ -61,12 +61,12 @@ class _ButtonRowViewState extends ConsumerState<ButtonRowView> {
               decoration: BoxDecoration(
                 color: state.soloImportantes
                     ? Colors.red
-                    : Theme.of(context).colorScheme.surfaceContainerHighest.withOpacity(.48),
+                    : Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: .48),
                 border: Border.all(
                   width: state.soloImportantes ? 1.5 : 1,
                   color: state.soloImportantes
                       ? Colors.red.shade700
-                      : Theme.of(context).colorScheme.outlineVariant.withOpacity(.55),
+                      : Theme.of(context).colorScheme.outlineVariant.withValues(alpha: .55),
                 ),
                 borderRadius: BorderRadius.all(Radius.circular(14.r)),
               ),
@@ -91,8 +91,8 @@ class _ButtonRowViewState extends ConsumerState<ButtonRowView> {
               padding: EdgeInsets.only(left: 12.w, right: 4.w),
               height: 48.h,
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surfaceContainerHighest.withOpacity(.48),
-                border: Border.all(color: Theme.of(context).colorScheme.outlineVariant.withOpacity(.55)),
+                color: Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: .48),
+                border: Border.all(color: Theme.of(context).colorScheme.outlineVariant.withValues(alpha: .55)),
                 borderRadius: BorderRadius.all(Radius.circular(16.r)),
               ),
               child: Row(
@@ -111,10 +111,10 @@ class _ButtonRowViewState extends ConsumerState<ButtonRowView> {
                       textInputAction: TextInputAction.search,
                       decoration: InputDecoration(
                         isDense: true,
-                        prefixIcon: Icon(Icons.search_rounded, size: 20.sp, color: Theme.of(context).colorScheme.onSurface.withOpacity(.55)),
+                        prefixIcon: Icon(Icons.search_rounded, size: 20.sp, color: Theme.of(context).colorScheme.onSurface.withValues(alpha: .55)),
                         hintText: 'Buscar notas',
                         hintStyle: TextStyle(
-                          color: Theme.of(context).colorScheme.onSurface.withOpacity(.48),
+                          color: Theme.of(context).colorScheme.onSurface.withValues(alpha: .48),
                           fontSize: 14.sp,
                           fontWeight: FontWeight.w500,
                         ),
@@ -130,7 +130,7 @@ class _ButtonRowViewState extends ConsumerState<ButtonRowView> {
                       state.busqueda.isEmpty
                           ? Icons.search
                           : Icons.cancel,
-                      color: Theme.of(context).colorScheme.onSurface.withOpacity(.65),
+                      color: Theme.of(context).colorScheme.onSurface.withValues(alpha: .65),
                     ),
                     onPressed: () {
                       if (state.busqueda.isEmpty) {

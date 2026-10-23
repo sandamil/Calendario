@@ -44,17 +44,17 @@ class TaskCard extends ConsumerWidget {
               padding: EdgeInsets.all(13.w),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20.r),
-                border: Border.all(color: theme.colorScheme.outlineVariant.withOpacity(.42)),
-                boxShadow: [BoxShadow(color: theme.shadowColor.withOpacity(.035), blurRadius: 12, offset: const Offset(0, 4))],
+                border: Border.all(color: theme.colorScheme.outlineVariant.withValues(alpha: .42)),
+                boxShadow: [BoxShadow(color: theme.shadowColor.withValues(alpha: .035), blurRadius: 12, offset: const Offset(0, 4))],
               ),
               child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Container(width: 43.w, height: 43.w, alignment: Alignment.center, decoration: BoxDecoration(color: accent.withOpacity(.14), borderRadius: BorderRadius.circular(14.r)), child: Icon(noteData.isImportant == true ? Icons.star_rounded : Icons.sticky_note_2_outlined, color: accent, size: 22.sp)),
+                Container(width: 43.w, height: 43.w, alignment: Alignment.center, decoration: BoxDecoration(color: accent.withValues(alpha: .14), borderRadius: BorderRadius.circular(14.r)), child: Icon(noteData.isImportant == true ? Icons.star_rounded : Icons.sticky_note_2_outlined, color: accent, size: 22.sp)),
                 SizedBox(width: 11.w),
                 Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                   Text((noteData.title ?? '').trim().isEmpty ? 'Nota sin título' : noteData.title!.trim(), maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w800, color: text)),
                   if ((noteData.notes ?? '').trim().isNotEmpty) ...[
                     SizedBox(height: 4.h),
-                    Text(noteData.notes!.trim().split('\n').first, maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 12.sp, height: 1.3, color: text.withOpacity(.65))),
+                    Text(noteData.notes!.trim().split('\n').first, maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 12.sp, height: 1.3, color: text.withValues(alpha: .65))),
                   ],
                   SizedBox(height: 8.h),
                   Wrap(spacing: 10.w, runSpacing: 4.h, children: [
@@ -64,7 +64,7 @@ class TaskCard extends ConsumerWidget {
                   ]),
                 ])),
                 SizedBox(width: 3.w),
-                Icon(Icons.chevron_right_rounded, color: text.withOpacity(.42)),
+                Icon(Icons.chevron_right_rounded, color: text.withValues(alpha: .42)),
               ]),
             ),
           ),
@@ -105,7 +105,7 @@ class _NoteMeta extends StatelessWidget {
   final String text;
   @override
   Widget build(BuildContext context) {
-    final color = Theme.of(context).colorScheme.onSurface.withOpacity(.58);
+    final color = Theme.of(context).colorScheme.onSurface.withValues(alpha: .58);
     return Row(mainAxisSize: MainAxisSize.min, children: [Icon(icon, size: 13.sp, color: color), SizedBox(width: 4.w), Text(text, style: TextStyle(fontSize: 11.sp, color: color))]);
   }
 }

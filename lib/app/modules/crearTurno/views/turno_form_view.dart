@@ -265,7 +265,7 @@ class _TurnoFormViewState extends ConsumerState<TurnoFormView> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final textColor = theme.colorScheme.onSurface;
-    final mutedColor = textColor.withOpacity(.58);
+    final mutedColor = textColor.withValues(alpha: .58);
     final previewTextColor =
         _color.computeLuminance() > .52 ? Colors.black87 : Colors.white;
     final previewBorderColor = _color.computeLuminance() > .86
@@ -302,10 +302,10 @@ class _TurnoFormViewState extends ConsumerState<TurnoFormView> {
                   width: double.infinity,
                   padding: EdgeInsets.all(14.w),
                   decoration: BoxDecoration(
-                    color: theme.colorScheme.surfaceContainerHighest.withOpacity(.38),
+                    color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: .38),
                     borderRadius: BorderRadius.circular(20.r),
                     border: Border.all(
-                      color: theme.colorScheme.outlineVariant.withOpacity(.35),
+                      color: theme.colorScheme.outlineVariant.withValues(alpha: .35),
                     ),
                   ),
                   child: Row(
@@ -314,7 +314,7 @@ class _TurnoFormViewState extends ConsumerState<TurnoFormView> {
                         width: 46.w,
                         height: 46.w,
                         decoration: BoxDecoration(
-                          color: PRIMARY_COLOR.withOpacity(.14),
+                          color: PRIMARY_COLOR.withValues(alpha: .14),
                           borderRadius: BorderRadius.circular(15.r),
                         ),
                         child: Icon(
@@ -374,10 +374,10 @@ class _TurnoFormViewState extends ConsumerState<TurnoFormView> {
                           height: 82.h,
                           decoration: BoxDecoration(
                             color: theme.colorScheme.surfaceContainerHighest
-                                .withOpacity(.5),
+                                .withValues(alpha: .5),
                             border: Border.all(
                               color: theme.colorScheme.outlineVariant
-                                  .withOpacity(.5),
+                                  .withValues(alpha: .5),
                             ),
                             borderRadius: BorderRadius.circular(13.r),
                           ),
@@ -397,7 +397,7 @@ class _TurnoFormViewState extends ConsumerState<TurnoFormView> {
                                 width: double.infinity,
                                 padding: EdgeInsets.symmetric(vertical: 4.h),
                                 decoration: BoxDecoration(
-                                  color: _color.withOpacity(.30),
+                                  color: _color.withValues(alpha: .30),
                                   borderRadius: BorderRadius.circular(6.r),
                                   border: Border.all(
                                     color: previewBorderColor,
@@ -448,7 +448,7 @@ class _TurnoFormViewState extends ConsumerState<TurnoFormView> {
                   style: TextStyle(
                     fontSize: 14.sp,
                     fontWeight: FontWeight.w700,
-                    color: textColor.withOpacity(.8),
+                    color: textColor.withValues(alpha: .8),
                   ),
                 ),
                 SizedBox(height: 8.h),
@@ -477,7 +477,7 @@ class _TurnoFormViewState extends ConsumerState<TurnoFormView> {
                   padding: EdgeInsets.all(13.w),
                   decoration: BoxDecoration(
                     color: theme.colorScheme.surfaceContainerHighest
-                        .withOpacity(.45),
+                        .withValues(alpha: .45),
                     borderRadius: BorderRadius.circular(16.r),
                   ),
                   child: Row(
@@ -516,7 +516,7 @@ class _TurnoFormViewState extends ConsumerState<TurnoFormView> {
                         style: OutlinedButton.styleFrom(
                           foregroundColor: PRIMARY_COLOR,
                           side: BorderSide(
-                            color: PRIMARY_COLOR.withOpacity(.5),
+                            color: PRIMARY_COLOR.withValues(alpha: .5),
                           ),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12.r),
@@ -573,7 +573,7 @@ class _TurnoFormViewState extends ConsumerState<TurnoFormView> {
   }) {
     final theme = Theme.of(context);
     final colors = theme.colorScheme;
-    final outline = colors.outlineVariant.withOpacity(.65);
+    final outline = colors.outlineVariant.withValues(alpha: .65);
     final roundedBorder = OutlineInputBorder(
       borderRadius: BorderRadius.circular(17.r),
       borderSide: BorderSide(color: outline, width: 1),
@@ -594,7 +594,7 @@ class _TurnoFormViewState extends ConsumerState<TurnoFormView> {
         prefixIcon: Icon(icon, size: 21.sp, color: PRIMARY_COLOR),
         labelStyle: TextStyle(
           fontSize: 13.sp,
-          color: colors.onSurface.withOpacity(.72),
+          color: colors.onSurface.withValues(alpha: .72),
         ),
         floatingLabelStyle: TextStyle(
           fontSize: 13.sp,
@@ -603,10 +603,10 @@ class _TurnoFormViewState extends ConsumerState<TurnoFormView> {
         ),
         hintStyle: TextStyle(
           fontSize: 13.sp,
-          color: colors.onSurface.withOpacity(.42),
+          color: colors.onSurface.withValues(alpha: .42),
         ),
         filled: true,
-        fillColor: colors.surfaceContainerHighest.withOpacity(.32),
+        fillColor: colors.surfaceContainerHighest.withValues(alpha: .32),
         counterText: '',
         contentPadding: EdgeInsets.symmetric(
           horizontal: 16.w,
@@ -630,11 +630,11 @@ class _TurnoFormViewState extends ConsumerState<TurnoFormView> {
     final theme = Theme.of(context);
     final textColor = theme.colorScheme.onSurface;
     return Material(
-      color: theme.colorScheme.surfaceContainerHighest.withOpacity(.48),
+      color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: .48),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(14.r),
         side: BorderSide(
-          color: theme.colorScheme.outlineVariant.withOpacity(.35),
+          color: theme.colorScheme.outlineVariant.withValues(alpha: .35),
         ),
       ),
       child: InkWell(
@@ -653,7 +653,7 @@ class _TurnoFormViewState extends ConsumerState<TurnoFormView> {
                     Text(label,
                         style: TextStyle(
                           fontSize: 11.sp,
-                          color: textColor.withOpacity(.6),
+                          color: textColor.withValues(alpha: .6),
                         )),
                     SizedBox(height: 3.h),
                     Text(
@@ -668,7 +668,7 @@ class _TurnoFormViewState extends ConsumerState<TurnoFormView> {
                 ),
               ),
               Icon(Icons.edit_outlined,
-                  size: 16.sp, color: textColor.withOpacity(.5)),
+                  size: 16.sp, color: textColor.withValues(alpha: .5)),
             ],
           ),
         ),

@@ -65,21 +65,21 @@ class Corners {
 class Shadows {
   static List<BoxShadow> get universal => [
         BoxShadow(
-          color: const Color(0xff333333).withOpacity(.13),
+          color: const Color(0xff333333).withValues(alpha: .13),
           blurRadius: 5,
           offset: const Offset(0, 5),
         ),
       ];
   static List<BoxShadow> get universal2 => [
         BoxShadow(
-          color: const Color(0xff333333).withOpacity(.05),
+          color: const Color(0xff333333).withValues(alpha: .05),
           blurRadius: 5,
           offset: const Offset(0, 5),
         ),
       ];
   static List<BoxShadow> get small => [
         BoxShadow(
-          color: const Color(0xff333333).withOpacity(.15),
+          color: const Color(0xff333333).withValues(alpha: .15),
           blurRadius: 3,
           offset: const Offset(0, 1),
         ),
@@ -92,7 +92,7 @@ class Shadows {
 
   static List<BoxShadow> get shadowsUp => [
         BoxShadow(
-          color: const Color(0xff333333).withOpacity(.15),
+          color: const Color(0xff333333).withValues(alpha: .15),
           spreadRadius: 1,
           blurRadius: 3,
           offset: const Offset(-1, 0),

@@ -26,7 +26,7 @@ class InformesView extends StatelessWidget {
         children: [
           Text('Informes', style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.w800, color: text)),
           SizedBox(height: 5.h),
-          Text('Consulta y analiza la información de tu calendario.', style: TextStyle(fontSize: 13.sp, color: text.withOpacity(.62))),
+          Text('Consulta y analiza la información de tu calendario.', style: TextStyle(fontSize: 13.sp, color: text.withValues(alpha: .62))),
           SizedBox(height: 20.h),
           _ReportOption(
             icon: Icons.work_history_rounded,
@@ -82,20 +82,20 @@ class _ReportOption extends StatelessWidget {
             padding: EdgeInsets.all(16.w),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(20.r),
-              border: Border.all(color: theme.colorScheme.outlineVariant.withOpacity(.4)),
-              boxShadow: [BoxShadow(color: theme.shadowColor.withOpacity(.04), blurRadius: 14, offset: const Offset(0, 4))],
+              border: Border.all(color: theme.colorScheme.outlineVariant.withValues(alpha: .4)),
+              boxShadow: [BoxShadow(color: theme.shadowColor.withValues(alpha: .04), blurRadius: 14, offset: const Offset(0, 4))],
             ),
             child: Row(
               children: [
-                Container(width: 48.w, height: 48.w, decoration: BoxDecoration(color: PRIMARY_COLOR.withOpacity(.12), borderRadius: BorderRadius.circular(15.r)), child: Icon(icon, color: PRIMARY_COLOR, size: 25.sp)),
+                Container(width: 48.w, height: 48.w, decoration: BoxDecoration(color: PRIMARY_COLOR.withValues(alpha: .12), borderRadius: BorderRadius.circular(15.r)), child: Icon(icon, color: PRIMARY_COLOR, size: 25.sp)),
                 SizedBox(width: 13.w),
                 Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                   Text(title, style: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w800, color: text)),
                   SizedBox(height: 4.h),
-                  Text(subtitle, style: TextStyle(fontSize: 12.sp, height: 1.3, color: text.withOpacity(.62))),
+                  Text(subtitle, style: TextStyle(fontSize: 12.sp, height: 1.3, color: text.withValues(alpha: .62))),
                 ])),
                 SizedBox(width: 8.w),
-                Icon(Icons.chevron_right_rounded, color: text.withOpacity(.45)),
+                Icon(Icons.chevron_right_rounded, color: text.withValues(alpha: .45)),
               ],
             ),
           ),
@@ -191,7 +191,7 @@ class _ResumenTurnosViewState extends State<ResumenTurnosView> {
               children: [
                 Text('Resumen de turnos', style: TextStyle(fontSize: 23.sp, fontWeight: FontWeight.w800, color: text)),
                 SizedBox(height: 5.h),
-                Text('Consulta rápidamente cuántos días y horas tienes asignados.', style: TextStyle(fontSize: 13.sp, color: text.withOpacity(.62))),
+                Text('Consulta rápidamente cuántos días y horas tienes asignados.', style: TextStyle(fontSize: 13.sp, color: text.withValues(alpha: .62))),
                 SizedBox(height: 16.h),
                 _PeriodSelector(
                   period: _period,
@@ -218,11 +218,11 @@ class _ResumenTurnosViewState extends State<ResumenTurnosView> {
                 SizedBox(height: 22.h),
                 Container(
                   padding: EdgeInsets.all(14.w),
-                  decoration: BoxDecoration(color: PRIMARY_COLOR.withOpacity(.08), borderRadius: BorderRadius.circular(18.r)),
+                  decoration: BoxDecoration(color: PRIMARY_COLOR.withValues(alpha: .08), borderRadius: BorderRadius.circular(18.r)),
                   child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
                     Icon(Icons.info_outline_rounded, color: PRIMARY_COLOR, size: 21.sp),
                     SizedBox(width: 10.w),
-                    Expanded(child: Text('Las horas se calculan a partir de la hora de inicio y fin de cada turno. Los días libres no suman horas.', style: TextStyle(fontSize: 12.5.sp, height: 1.35, color: text.withOpacity(.72)))),
+                    Expanded(child: Text('Las horas se calculan a partir de la hora de inicio y fin de cada turno. Los días libres no suman horas.', style: TextStyle(fontSize: 12.5.sp, height: 1.35, color: text.withValues(alpha: .72)))),
                   ]),
                 ),
               ],
@@ -320,7 +320,7 @@ class _PeriodSelector extends StatelessWidget {
       ]) else if (period == _ReportPeriod.year) _YearDrop(value: year, onChanged: onYearChanged) else Container(
         width: double.infinity,
         padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 14.h),
-        decoration: BoxDecoration(color: theme.colorScheme.surfaceContainerHighest.withOpacity(.55), borderRadius: BorderRadius.circular(16.r), border: Border.all(color: theme.colorScheme.outlineVariant.withOpacity(.35))),
+        decoration: BoxDecoration(color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: .55), borderRadius: BorderRadius.circular(16.r), border: Border.all(color: theme.colorScheme.outlineVariant.withValues(alpha: .35))),
         child: Row(children: [Expanded(child: Text(label, style: TextStyle(fontSize: 14.sp))), Icon(Icons.edit_calendar_rounded, color: PRIMARY_COLOR)]),
       ),
     ]);
@@ -336,7 +336,7 @@ class _Drop<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Container(
     padding: EdgeInsets.symmetric(horizontal: 14.w),
-    decoration: BoxDecoration(color: Theme.of(context).colorScheme.surfaceContainerHighest.withOpacity(.55), borderRadius: BorderRadius.circular(16.r), border: Border.all(color: Theme.of(context).colorScheme.outlineVariant.withOpacity(.35))),
+    decoration: BoxDecoration(color: Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: .55), borderRadius: BorderRadius.circular(16.r), border: Border.all(color: Theme.of(context).colorScheme.outlineVariant.withValues(alpha: .35))),
     child: DropdownButtonHideUnderline(child: DropdownButton<T>(value: value, isExpanded: true, items: items.map((entry) => DropdownMenuItem(value: entry.key, child: Text(entry.value))).toList(), onChanged: (value) { if (value != null) onChanged(value); })),
   );
 }
@@ -367,11 +367,11 @@ class _SummaryCard extends StatelessWidget {
     final theme = Theme.of(context);
     return Container(
       padding: EdgeInsets.all(15.w),
-      decoration: BoxDecoration(color: theme.colorScheme.surface, borderRadius: BorderRadius.circular(20.r), border: Border.all(color: theme.colorScheme.outlineVariant.withOpacity(.4)), boxShadow: [BoxShadow(color: theme.shadowColor.withOpacity(.04), blurRadius: 14, offset: const Offset(0, 4))]),
+      decoration: BoxDecoration(color: theme.colorScheme.surface, borderRadius: BorderRadius.circular(20.r), border: Border.all(color: theme.colorScheme.outlineVariant.withValues(alpha: .4)), boxShadow: [BoxShadow(color: theme.shadowColor.withValues(alpha: .04), blurRadius: 14, offset: const Offset(0, 4))]),
       child: Row(children: [
-        Container(width: 42.w, height: 42.w, decoration: BoxDecoration(color: PRIMARY_COLOR.withOpacity(.12), borderRadius: BorderRadius.circular(13.r)), child: Icon(icon, color: PRIMARY_COLOR, size: 22.sp)),
+        Container(width: 42.w, height: 42.w, decoration: BoxDecoration(color: PRIMARY_COLOR.withValues(alpha: .12), borderRadius: BorderRadius.circular(13.r)), child: Icon(icon, color: PRIMARY_COLOR, size: 22.sp)),
         SizedBox(width: 11.w),
-        Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Text(value, style: TextStyle(fontSize: 21.sp, fontWeight: FontWeight.w800, color: text)), SizedBox(height: 2.h), Text(label, style: TextStyle(fontSize: 11.5.sp, color: text.withOpacity(.58)))])),
+        Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Text(value, style: TextStyle(fontSize: 21.sp, fontWeight: FontWeight.w800, color: text)), SizedBox(height: 2.h), Text(label, style: TextStyle(fontSize: 11.5.sp, color: text.withValues(alpha: .58)))])),
       ]),
     );
   }
@@ -387,8 +387,8 @@ class _DistributionRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final fraction = total == 0 ? 0.0 : count / total;
-    return Padding(padding: EdgeInsets.only(bottom: 9.h), child: Container(padding: EdgeInsets.all(13.w), decoration: BoxDecoration(color: Theme.of(context).colorScheme.surfaceContainerHighest.withOpacity(.48), borderRadius: BorderRadius.circular(16.r)), child: Column(children: [
-      Row(children: [Expanded(child: Text(name, style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w700, color: text))), Text('$count días', style: TextStyle(fontSize: 12.sp, color: text.withOpacity(.6)))]),
+    return Padding(padding: EdgeInsets.only(bottom: 9.h), child: Container(padding: EdgeInsets.all(13.w), decoration: BoxDecoration(color: Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: .48), borderRadius: BorderRadius.circular(16.r)), child: Column(children: [
+      Row(children: [Expanded(child: Text(name, style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w700, color: text))), Text('$count días', style: TextStyle(fontSize: 12.sp, color: text.withValues(alpha: .6)))]),
       SizedBox(height: 8.h),
       ClipRRect(borderRadius: BorderRadius.circular(20.r), child: LinearProgressIndicator(value: fraction, minHeight: 7.h)),
     ])));
@@ -399,5 +399,5 @@ class _EmptyCard extends StatelessWidget {
   const _EmptyCard({required this.text});
   final Color text;
   @override
-  Widget build(BuildContext context) => Container(padding: EdgeInsets.all(18.w), decoration: BoxDecoration(color: Theme.of(context).colorScheme.surfaceContainerHighest.withOpacity(.45), borderRadius: BorderRadius.circular(18.r)), child: Text('No hay turnos trabajados en el periodo seleccionado.', textAlign: TextAlign.center, style: TextStyle(fontSize: 13.sp, color: text.withOpacity(.6))));
+  Widget build(BuildContext context) => Container(padding: EdgeInsets.all(18.w), decoration: BoxDecoration(color: Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: .45), borderRadius: BorderRadius.circular(18.r)), child: Text('No hay turnos trabajados en el periodo seleccionado.', textAlign: TextAlign.center, style: TextStyle(fontSize: 13.sp, color: text.withValues(alpha: .6))));
 }

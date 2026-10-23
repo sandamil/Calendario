@@ -34,10 +34,10 @@ class BackupScreen extends ConsumerWidget {
             Container(
               padding: EdgeInsets.all(18.w),
               decoration: BoxDecoration(
-                color: colors.surfaceContainerHighest.withOpacity(.45),
+                color: colors.surfaceContainerHighest.withValues(alpha: .45),
                 borderRadius: BorderRadius.circular(22.r),
                 border: Border.all(
-                  color: colors.outlineVariant.withOpacity(.45),
+                  color: colors.outlineVariant.withValues(alpha: .45),
                 ),
               ),
               child: Column(
@@ -50,7 +50,7 @@ class BackupScreen extends ConsumerWidget {
                         height: 48.w,
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
-                          color: colors.primary.withOpacity(.12),
+                          color: colors.primary.withValues(alpha: .12),
                           borderRadius: BorderRadius.circular(15.r),
                         ),
                         child: Icon(
@@ -78,7 +78,7 @@ class BackupScreen extends ConsumerWidget {
                     'archivo JSON: calendario, cuadrantes, tipos de turno, '
                     'tema y notas.',
                     style: TextStyle(
-                      color: colors.onSurface.withOpacity(.72),
+                      color: colors.onSurface.withValues(alpha: .72),
                       fontSize: 14.sp,
                       height: 1.45,
                     ),
@@ -89,7 +89,7 @@ class BackupScreen extends ConsumerWidget {
                     'sustituirán por los del archivo seleccionado. '
                     'Guarda la copia en un lugar seguro.',
                     style: TextStyle(
-                      color: colors.onSurface.withOpacity(.72),
+                      color: colors.onSurface.withValues(alpha: .72),
                       fontSize: 13.sp,
                       height: 1.45,
                     ),

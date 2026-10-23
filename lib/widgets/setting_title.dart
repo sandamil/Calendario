@@ -25,7 +25,7 @@ class SettingTile extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 13.w, vertical: 9.h),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(17.r),
-              border: Border.all(color: theme.colorScheme.outlineVariant.withOpacity(.35)),
+              border: Border.all(color: theme.colorScheme.outlineVariant.withValues(alpha: .35)),
             ),
             child: Row(
               children: [
@@ -33,7 +33,7 @@ class SettingTile extends StatelessWidget {
                   width: 40.w,
                   height: 40.w,
                   alignment: Alignment.center,
-                  decoration: BoxDecoration(color: PRIMARY_COLOR.withOpacity(.13), borderRadius: BorderRadius.circular(13.r)),
+                  decoration: BoxDecoration(color: PRIMARY_COLOR.withValues(alpha: .13), borderRadius: BorderRadius.circular(13.r)),
                   child: IconTheme(
                     data: IconThemeData(color: PRIMARY_COLOR, size: 21.sp),
                     child: SizedBox(width: 25.w, height: 25.w, child: FittedBox(child: icon ?? const SizedBox.shrink())),
@@ -41,7 +41,7 @@ class SettingTile extends StatelessWidget {
                 ),
                 SizedBox(width: 12.w),
                 Expanded(child: Text(btnText ?? '', maxLines: 2, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w600, color: text))),
-                if (trailing != null) ...[SizedBox(width: 8.w), trailing!] else Icon(Icons.chevron_right_rounded, color: text.withOpacity(.4), size: 21.sp),
+                if (trailing != null) ...[SizedBox(width: 8.w), trailing!] else Icon(Icons.chevron_right_rounded, color: text.withValues(alpha: .4), size: 21.sp),
               ],
             ),
           ),

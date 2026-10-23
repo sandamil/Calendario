@@ -192,7 +192,7 @@ class _NotasViewState extends ConsumerState<NotasView> {
               size: 26.sp,
               color: important
                   ? Colors.red
-                  : Theme.of(context).colorScheme.onSurface.withOpacity(0.65),
+                  : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.65),
             ),
             onPressed: _toggleImportant,
           ),
@@ -276,7 +276,7 @@ class _NotasViewState extends ConsumerState<NotasView> {
                             fontSize: 18.sp,
                             fontWeight: FontWeight.w500,
                             color: (_note.site == null || _note.site!.isEmpty)
-                                ? Theme.of(context).colorScheme.onSurface.withOpacity(0.65)
+                                ? Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.65)
                                 : null,
                           ),
                         ),
@@ -357,7 +357,7 @@ class _NotasViewState extends ConsumerState<NotasView> {
             style: TextStyle(
               fontSize: 14.sp,
               fontWeight: FontWeight.w500,
-              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.65),
+              color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.65),
             ),
           ),
         ),
@@ -366,7 +366,7 @@ class _NotasViewState extends ConsumerState<NotasView> {
           style: TextStyle(
             fontSize: 14.sp,
             fontWeight: FontWeight.w500,
-            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.65),
+            color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.65),
           ),
         ),
         SizedBox(width: 4.w),
@@ -375,7 +375,7 @@ class _NotasViewState extends ConsumerState<NotasView> {
           style: TextStyle(
             fontSize: 14.sp,
             fontWeight: FontWeight.w500,
-            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.65),
+            color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.65),
           ),
         ),
         const Spacer(),

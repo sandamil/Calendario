@@ -273,9 +273,9 @@ class _TableCalendarWidgetState extends ConsumerState<TableCalendarWidget> {
                               height: 15.h,
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
-                                color: turnoColor.withOpacity(.30),
+                                color: turnoColor.withValues(alpha: .30),
                                 border: Border.all(
-                                  color: bordeColor.withOpacity(.95),
+                                  color: bordeColor.withValues(alpha: .95),
                                   width: .8,
                                 ),
                                 borderRadius: BorderRadius.circular(4.r),

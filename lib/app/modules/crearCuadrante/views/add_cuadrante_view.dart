@@ -146,7 +146,7 @@ class _AddCuadranteViewState extends ConsumerState<AddCuadranteView> {
                           )
                         : Icon(
                             Icons.done_outline,
-                            color: PRIMARY_COLOR.withOpacity(0.4),
+                            color: PRIMARY_COLOR.withValues(alpha: 0.4),
                             size: 24.sp,
                           ),
                     key: state.firstTime ? tutorialController.keyButton5 : null,
@@ -206,10 +206,10 @@ class _AddCuadranteViewState extends ConsumerState<AddCuadranteView> {
                               labelText: 'Nombre del cuadrante',
                               prefixIcon: Icon(Icons.edit_note_rounded, color: Theme.of(context).colorScheme.primary),
                               filled: true,
-                              fillColor: Theme.of(context).colorScheme.surfaceContainerHighest.withOpacity(.48),
+                              fillColor: Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: .48),
                               contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 15.h),
                               border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(16.r)), borderSide: BorderSide.none),
-                              enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(16.r)), borderSide: BorderSide(color: Theme.of(context).colorScheme.outlineVariant.withOpacity(.45))),
+                              enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(16.r)), borderSide: BorderSide(color: Theme.of(context).colorScheme.outlineVariant.withValues(alpha: .45))),
                               focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(16.r)), borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 1.4)),
                             ),
                             maxLines: 1,
@@ -306,7 +306,7 @@ class _AddCuadranteViewState extends ConsumerState<AddCuadranteView> {
                                 color: HexColor(state.list[index].color!),
                                 border: Border.all(width: 0.8),
                                 borderRadius: BorderRadius.circular(13.r),
-                                boxShadow: <BoxShadow>[BoxShadow(color: Theme.of(context).shadowColor.withOpacity(0.08), offset: const Offset(0, 2), blurRadius: 7)]),
+                                boxShadow: <BoxShadow>[BoxShadow(color: Theme.of(context).shadowColor.withValues(alpha: 0.08), offset: const Offset(0, 2), blurRadius: 7)]),
                             margin: EdgeInsets.all(3.w),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.end,

@@ -105,14 +105,14 @@ class _EditNotasViewState extends ConsumerState<EditNotasView> {
           padding: EdgeInsets.only(left: 3.w, bottom: 6.h),
           child: Text(
             label.replaceFirst('Titulo', 'Título'),
-            style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w700, color: textColor.withOpacity(.72)),
+            style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w700, color: textColor.withValues(alpha: .72)),
           ),
         ),
         Container(
           decoration: BoxDecoration(
-            color: theme.colorScheme.surfaceContainerHighest.withOpacity(.48),
+            color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: .48),
             borderRadius: BorderRadius.circular(16.r),
-            border: Border.all(color: theme.colorScheme.outlineVariant.withOpacity(.38)),
+            border: Border.all(color: theme.colorScheme.outlineVariant.withValues(alpha: .38)),
           ),
           child: TextFormField(
             controller: controller,
@@ -123,7 +123,7 @@ class _EditNotasViewState extends ConsumerState<EditNotasView> {
             decoration: InputDecoration(
               prefixIcon: Icon(icon, color: PRIMARY_COLOR, size: 20.sp),
               hintText: hint,
-              hintStyle: TextStyle(fontSize: 13.sp, color: textColor.withOpacity(.42)),
+              hintStyle: TextStyle(fontSize: 13.sp, color: textColor.withValues(alpha: .42)),
               border: InputBorder.none,
               enabledBorder: InputBorder.none,
               focusedBorder: InputBorder.none,
@@ -416,7 +416,7 @@ class _EditNotasViewState extends ConsumerState<EditNotasView> {
                       ),
                       Icon(
                         state.isImportant ? Icons.flag : Icons.outlined_flag,
-                        color: state.isImportant ? Colors.red : Theme.of(context).colorScheme.onSurface.withOpacity(0.65),
+                        color: state.isImportant ? Colors.red : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.65),
                       ),
                     ],
                   ),

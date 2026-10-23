@@ -150,7 +150,7 @@ class _AboutPageState extends State<AboutPage> {
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
         borderRadius: BorderRadius.circular(18.r),
-        border: Border.all(color: theme.colorScheme.outlineVariant.withOpacity(.4)),
+        border: Border.all(color: theme.colorScheme.outlineVariant.withValues(alpha: .4)),
       ),
       child: Row(
         children: <Widget>[
@@ -158,7 +158,7 @@ class _AboutPageState extends State<AboutPage> {
             width: 42.w,
             height: 42.w,
             decoration: BoxDecoration(
-              color: (data['color'] as Color).withOpacity(.13),
+              color: (data['color'] as Color).withValues(alpha: .13),
               borderRadius: BorderRadius.circular(14.r),
             ),
             child: Icon(data['icon'] as IconData, color: data['color'] as Color),
@@ -170,7 +170,7 @@ class _AboutPageState extends State<AboutPage> {
               style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w700, color: theme.colorScheme.onSurface),
             ),
           ),
-          Icon(Icons.chevron_right_rounded, color: theme.colorScheme.onSurface.withOpacity(.45)),
+          Icon(Icons.chevron_right_rounded, color: theme.colorScheme.onSurface.withValues(alpha: .45)),
         ],
       ),
     );
