@@ -1,86 +1,139 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
-/// Centraliza la programación y cancelación de recordatorios de notas.
-/// No depende de GetX ni de Riverpod.
+/// Servicio único para todos los recordatorios locales de Calendario.
+///
+/// La instancia del plugin se inicializa una sola vez al arrancar la app.
+/// Las notificaciones programadas sobreviven al cierre de la aplicación y
+/// Android puede restaurarlas después de reiniciar el dispositivo.
 class NotificacionesService {
   NotificacionesService._();
 
   static final NotificacionesService instance = NotificacionesService._();
 
+  static const String _channelId = 'calendario_recordatorios_v2';
+  static const String _channelName = 'Recordatorios de Calendario';
+  static const String _channelDescription =
+      'Avisos de notas y turnos programados en Calendario';
+
   final FlutterLocalNotificationsPlugin _plugin =
       FlutterLocalNotificationsPlugin();
 
+  bool _inicializado = false;
   bool _zonasHorariasInicializadas = false;
-  bool _solicitudPermisoExactoRealizada = false;
+
+  Future<void> inicializar() async {
+    if (_inicializado) return;
+
+    tz.initializeTimeZones();
+    _zonasHorariasInicializadas = true;
+
+    const android = AndroidInitializationSettings('ic_stat_notification');
+    final iOS = DarwinInitializationSettings(
+      requestAlertPermission: false,
+      requestBadgePermission: false,
+      requestSoundPermission: false,
+    );
+
+    await _plugin.initialize(
+      settings: const InitializationSettings(
+        android: android,
+        iOS: iOS,
+      ),
+    );
+
+    final androidPlugin = _plugin.resolvePlatformSpecificImplementation<
+        AndroidFlutterLocalNotificationsPlugin>();
+
+    if (androidPlugin != null) {
+      await androidPlugin.createNotificationChannel(
+        const AndroidNotificationChannel(
+          _channelId,
+          _channelName,
+          description: _channelDescription,
+          importance: Importance.max,
+          playSound: true,
+          enableVibration: true,
+        ),
+      );
+
+      if (await androidPlugin.areNotificationsEnabled() == false) {
+        await androidPlugin.requestNotificationsPermission();
+      }
+    }
+
+    final iOSPlugin = _plugin.resolvePlatformSpecificImplementation<
+        IOSFlutterLocalNotificationsPlugin>();
+    await iOSPlugin?.requestPermissions(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+
+    _inicializado = true;
+  }
 
   Future<void> inicializarZonasHorarias() async {
     if (_zonasHorariasInicializadas) return;
-
     tz.initializeTimeZones();
     _zonasHorariasInicializadas = true;
   }
 
-  /// Comprueba y solicita los permisos Android necesarios.
-  ///
-  /// Si el usuario no concede alarmas exactas, se utilizará una
-  /// programación aproximada que también permite avisos en reposo.
   Future<AndroidScheduleMode> _obtenerModoProgramacionAndroid() async {
     final android = _plugin.resolvePlatformSpecificImplementation<
         AndroidFlutterLocalNotificationsPlugin>();
 
-    // En iOS y otras plataformas, el modo Android no se utiliza.
     if (android == null) {
       return AndroidScheduleMode.exactAllowWhileIdle;
     }
 
-    // Android 13 o posterior puede requerir permiso para notificaciones.
-    var notificacionesPermitidas = await android.areNotificationsEnabled();
-
-    if (notificacionesPermitidas == false) {
+    if (await android.areNotificationsEnabled() == false) {
       await android.requestNotificationsPermission();
-      notificacionesPermitidas = await android.areNotificationsEnabled();
     }
 
-    // No programar silenciosamente si las notificaciones están bloqueadas.
-    if (notificacionesPermitidas == false) {
-      return AndroidScheduleMode.inexactAllowWhileIdle;
+    final notificationsEnabled = await android.areNotificationsEnabled();
+    if (notificationsEnabled == false) {
+      throw StateError('Las notificaciones de Android están desactivadas.');
     }
 
-    var alarmasExactasPermitidas =
-        await android.canScheduleExactNotifications();
-
-    // Solicitar acceso a alarmas exactas como máximo una vez por sesión.
-    if (alarmasExactasPermitidas == false &&
-        !_solicitudPermisoExactoRealizada) {
-      _solicitudPermisoExactoRealizada = true;
-
-      await android.requestExactAlarmsPermission();
-
-      // Volver a consultar el permiso al regresar de Ajustes de Android.
-      alarmasExactasPermitidas =
-          await android.canScheduleExactNotifications();
-    }
-
-    if (alarmasExactasPermitidas == true) {
+    if (await android.canScheduleExactNotifications()) {
       return AndroidScheduleMode.exactAllowWhileIdle;
     }
 
-    // Alternativa si el usuario no concede alarmas exactas.
     return AndroidScheduleMode.inexactAllowWhileIdle;
   }
 
-  /// Programa o sustituye el recordatorio asociado a [id].
-  ///
-  /// Devuelve false si la fecha ya pasó o si Android tiene bloqueadas
-  /// las notificaciones. Devuelve true cuando la programación termina.
+  NotificationDetails _detalles() {
+    return const NotificationDetails(
+      android: AndroidNotificationDetails(
+        _channelId,
+        _channelName,
+        channelDescription: _channelDescription,
+        icon: 'ic_stat_notification',
+        importance: Importance.max,
+        priority: Priority.max,
+        playSound: true,
+        enableVibration: true,
+        autoCancel: true,
+      ),
+      iOS: DarwinNotificationDetails(
+        presentAlert: true,
+        presentBadge: true,
+        presentSound: true,
+        sound: 'default',
+      ),
+    );
+  }
+
   Future<bool> programar({
     required int id,
     required String titulo,
     required String mensaje,
     required DateTime fechaRecordatorio,
   }) async {
+    await inicializar();
     await inicializarZonasHorarias();
 
     if (!fechaRecordatorio.isAfter(DateTime.now())) {
@@ -88,56 +141,60 @@ class NotificacionesService {
       return false;
     }
 
-    final fechaZonaHoraria =
-        tz.TZDateTime.from(fechaRecordatorio, tz.local);
-
-    final android = _plugin.resolvePlatformSpecificImplementation<
-        AndroidFlutterLocalNotificationsPlugin>();
-
-    var modoProgramacion = AndroidScheduleMode.exactAllowWhileIdle;
-
-    if (android != null) {
-      var notificacionesPermitidas = await android.areNotificationsEnabled();
-
-      if (notificacionesPermitidas == false) {
-        await android.requestNotificationsPermission();
-        notificacionesPermitidas = await android.areNotificationsEnabled();
-      }
-
-      if (notificacionesPermitidas == false) {
-        await cancelar(id);
-        return false;
-      }
-
-      modoProgramacion = await _obtenerModoProgramacionAndroid();
-    }
-
-    await _plugin.zonedSchedule(
-      id: id,
-      title: titulo,
-      body: mensaje,
-      scheduledDate: fechaZonaHoraria,
-      notificationDetails: const NotificationDetails(
-        android: AndroidNotificationDetails(
-          'calendario_recordatorios',
-          'Recordatorios de notas',
-          channelDescription: 'Avisos programados para las notas del calendario',
-          icon: 'ic_stat_notification',
-          importance: Importance.high,
-          priority: Priority.high,
-        ),
-      ),
-      androidScheduleMode: modoProgramacion,
+    final fechaZonaHoraria = tz.TZDateTime.from(
+      fechaRecordatorio,
+      tz.local,
     );
 
-    return true;
+    final modo = await _obtenerModoProgramacionAndroid();
+
+    try {
+      await _plugin.zonedSchedule(
+        id: id,
+        title: titulo,
+        body: mensaje.isEmpty ? 'Tienes un recordatorio pendiente.' : mensaje,
+        scheduledDate: fechaZonaHoraria,
+        notificationDetails: _detalles(),
+        androidScheduleMode: modo,
+        payload: 'calendario:$id',
+      );
+      return true;
+    } catch (error, stackTrace) {
+      debugPrint('[NOTIFICACIONES] Error programando $id: $error');
+      debugPrintStack(stackTrace: stackTrace);
+      rethrow;
+    }
+  }
+
+  Future<bool> programarTurno({
+    required int id,
+    required String titulo,
+    required DateTime inicioTurno,
+    required int minutosAntes,
+  }) async {
+    final fecha = inicioTurno.subtract(Duration(minutes: minutosAntes));
+    return programar(
+      id: id,
+      titulo: 'Turno: $titulo',
+      mensaje: minutosAntes == 0
+          ? 'Comienza tu turno.'
+          : 'Tu turno comienza en $minutosAntes minutos.',
+      fechaRecordatorio: fecha,
+    );
   }
 
   Future<void> cancelar(int id) async {
+    await inicializar();
     await _plugin.cancel(id: id);
   }
 
-  Future<List<PendingNotificationRequest>> pendientes() {
+  Future<void> cancelarTodas() async {
+    await inicializar();
+    await _plugin.cancelAll();
+  }
+
+  Future<List<PendingNotificationRequest>> pendientes() async {
+    await inicializar();
     return _plugin.pendingNotificationRequests();
   }
 }
