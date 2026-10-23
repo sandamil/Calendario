@@ -1,6 +1,8 @@
 import 'package:calendario2/app/controllers/ads_provider.dart';
 import 'dart:collection';
 import 'dart:math' as math;
+import 'dart:typed_data';
+import 'dart:ui' as ui;
 import 'package:flutter/foundation.dart' show defaultTargetPlatform, kIsWeb, TargetPlatform;
 
 import 'package:calendario2/app/data/model/taskModel.dart';
@@ -20,6 +22,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:intl/intl.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:cross_file/cross_file.dart';
+import 'package:pdf/widgets.dart' as pw;
 import 'package:table_calendar/table_calendar.dart';
 import '../../../../config/util/constant.dart';
 
@@ -362,13 +366,6 @@ class _HomeViewState extends State<HomeView> {
     );
 
     if (!mounted || confirmed != true) return;
-    if (format != 'Texto') {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('El formato $format aún no está disponible. Selecciona Texto para compartir ahora.')),
-      );
-      return;
-    }
-
     DateTime start;
     DateTime end;
     String label;
@@ -417,7 +414,7 @@ class _HomeViewState extends State<HomeView> {
         end = start;
         label = 'Día ${_periodDate(selected)}';
     }
-    await _shareCalendarPeriod(start, end, label, includeTurnos: includeTurnos, includeNotas: includeNotas);
+    await _shareCalendarPeriod(start, end, label, includeTurnos: includeTurnos, includeNotas: includeNotas, format: format);
   }
 
   Future<void> _shareCustomRange(String title) async {
@@ -453,7 +450,7 @@ class _HomeViewState extends State<HomeView> {
     await _shareCalendarPeriod(start, end, label);
   }
 
-  Future<void> _shareCalendarPeriod(DateTime start, DateTime end, String label, {required bool includeTurnos, required bool includeNotas}) async {
+  Future<void> _shareCalendarPeriod(DateTime start, DateTime end, String label, {required bool includeTurnos, required bool includeNotas, String format = 'Texto'}) async {
     final container = ProviderScope.containerOf(context, listen: false);
     await container.read(cuadranteMapProvider.notifier).reload();
     final calendar = container.read(cuadranteMapProvider);
@@ -533,13 +530,123 @@ class _HomeViewState extends State<HomeView> {
       }
     }
 
-    await SharePlus.instance.share(
-      ShareParams(
-        text: lines.join('\n'),
-        title: 'Compartir calendario',
-        subject: 'Calendario — $label',
-      ),
+    final exportText = lines.join('\\n');
+    switch (format) {
+      case 'PDF':
+        final document = pw.Document();
+        document.addPage(
+          pw.MultiPage(
+            build: (context) => [
+              pw.Header(level: 0, child: pw.Text('Calendario — $label')),
+              pw.SizedBox(height: 8),
+              ...lines.map((line) => pw.Padding(
+                    padding: const pw.EdgeInsets.only(bottom: 4),
+                    child: pw.Text(line.isEmpty ? ' ' : line),
+                  )),
+            ],
+          ),
+        );
+        final bytes = await document.save();
+        await SharePlus.instance.share(
+          ShareParams(
+            files: [XFile.fromData(bytes, mimeType: 'application/pdf', name: 'calendario.pdf')],
+            title: 'Calendario — $label',
+            subject: 'Calendario — $label',
+          ),
+        );
+        return;
+      case 'Imagen bonita':
+      case 'Captura':
+        final bytes = await _renderShareImage(lines, label, pretty: format == 'Imagen bonita');
+        await SharePlus.instance.share(
+          ShareParams(
+            files: [XFile.fromData(bytes, mimeType: 'image/png', name: 'calendario.png')],
+            title: 'Calendario — $label',
+            subject: 'Calendario — $label',
+          ),
+        );
+        return;
+      default:
+        await SharePlus.instance.share(
+          ShareParams(
+            text: exportText,
+            title: 'Compartir calendario',
+            subject: 'Calendario — $label',
+          ),
+        );
+    }
+  }
+
+  Future<Uint8List> _renderShareImage(List<String> lines, String label, {required bool pretty}) async {
+    const double width = 1080;
+    const double margin = 64;
+    const double contentWidth = width - margin * 2;
+    final visibleLines = lines.take(55).toList();
+    final recorder = ui.PictureRecorder();
+    final canvas = ui.Canvas(recorder);
+    final backgroundPaint = ui.Paint()..color = const Color(0xFFF3F6FB);
+    canvas.drawRect(const ui.Rect.fromLTWH(0, 0, width, 4000), backgroundPaint);
+    final headerHeight = pretty ? 220.0 : 150.0;
+    final headerPaint = ui.Paint()..color = pretty ? const Color(0xFF3157A4) : const Color(0xFF374151);
+    canvas.drawRRect(
+      ui.RRect.fromRectAndRadius(const ui.Rect.fromLTWH(32, 32, width - 64, 4000), const ui.Radius.circular(34)),
+      ui.Paint()..color = const Color(0xFFFFFFFF),
     );
+    canvas.drawRRect(
+      ui.RRect.fromRectAndCorners(
+        ui.Rect.fromLTWH(32, 32, width - 64, headerHeight),
+        topLeft: const ui.Radius.circular(34),
+        topRight: const ui.Radius.circular(34),
+      ),
+      headerPaint,
+    );
+
+    double drawText(String text, double x, double y, double maxWidth, double fontSize, ui.Color color, {bool bold = false}) {
+      final builder = ui.ParagraphBuilder(ui.ParagraphStyle(
+        fontSize: fontSize,
+        fontWeight: bold ? ui.FontWeight.bold : ui.FontWeight.normal,
+        maxLines: 3,
+      ))
+        ..pushStyle(ui.TextStyle(color: color))
+        ..addText(text);
+      final paragraph = builder.build()..layout(ui.ParagraphConstraints(width: maxWidth));
+      canvas.drawParagraph(paragraph, ui.Offset(x, y));
+      return paragraph.height;
+    }
+
+    drawText('CALENDARIO', margin, 58, contentWidth, 24, const ui.Color(0xFFDDE7FF), bold: true);
+    drawText(label, margin, 100, contentWidth, pretty ? 38 : 32, const ui.Color(0xFFFFFFFF), bold: true);
+    double y = headerHeight + 60;
+    for (final line in visibleLines) {
+      if (line.isEmpty) {
+        y += 14;
+        continue;
+      }
+      final isSection = line == 'TURNOS' || line == 'NOTAS';
+      if (isSection) {
+        y += 12;
+        canvas.drawRRect(
+          ui.RRect.fromRectAndRadius(ui.Rect.fromLTWH(margin - 12, y - 4, contentWidth + 24, 46), const ui.Radius.circular(12)),
+          ui.Paint()..color = const ui.Color(0xFFE8EEF9),
+        );
+      }
+      final height = drawText(
+        line,
+        margin,
+        y,
+        contentWidth,
+        isSection ? 23 : (pretty ? 21 : 19),
+        isSection ? const ui.Color(0xFF3157A4) : const ui.Color(0xFF263247),
+        bold: isSection || line.startsWith('Calendario') || line.contains('·'),
+      );
+      y += height + (pretty ? 17 : 12);
+    }
+    y += 48;
+    final image = await recorder.endRecording().toImage(width.toInt(), y.ceil().clamp(1, 4000));
+    final data = await image.toByteData(format: ui.ImageByteFormat.png);
+    image.dispose();
+    if (data == null) throw StateError('No se pudo generar la imagen del calendario.');
+    return data.buffer.asUint8List();
   }
 
   @override
