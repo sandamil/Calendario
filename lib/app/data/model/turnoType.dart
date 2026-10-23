@@ -7,6 +7,7 @@ class TurnoType {
   String? color;
   bool reminderEnabled;
   int reminderMinutesBefore;
+  String reminderMode;
 
   TurnoType({
     this.id,
@@ -17,6 +18,7 @@ class TurnoType {
     this.color,
     this.reminderEnabled = false,
     this.reminderMinutesBefore = 0,
+    this.reminderMode = 'notificacion',
   });
 
   Map<String, dynamic> toMap() {
@@ -28,6 +30,7 @@ class TurnoType {
       'color': color,
       'reminderEnabled': reminderEnabled ? 1 : 0,
       'reminderMinutesBefore': reminderMinutesBefore,
+      'reminderMode': reminderMode,
     };
   }
 
@@ -42,6 +45,7 @@ class TurnoType {
       reminderEnabled: (map['reminderEnabled'] as num?)?.toInt() == 1,
       reminderMinutesBefore:
           (map['reminderMinutesBefore'] as num?)?.toInt() ?? 0,
+      reminderMode: map['reminderMode']?.toString() == 'alarma' ? 'alarma' : 'notificacion',
     );
   }
 }
