@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -19,7 +20,27 @@ class CloudMessagingUtils {
     FirebaseMessaging.onMessage.listen((event) => _onMessage(event));
   }
 
-  static Future<String?> getToken() => FirebaseMessaging.instance.getToken();
+  static Future<String?> getInstallationId() async {
+    final messaging = FirebaseMessaging.instance;
+    final installationId = Completer<String?>();
+    final subscription = messaging.onRegistered.listen(
+      (id) {
+        if (!installationId.isCompleted) installationId.complete(id);
+      },
+      onError: (Object error, StackTrace stackTrace) {
+        if (!installationId.isCompleted) installationId.completeError(error, stackTrace);
+      },
+    );
+
+    try {
+      await messaging.register();
+      return await installationId.future.timeout(const Duration(seconds: 15));
+    } catch (_) {
+      return null;
+    } finally {
+      await subscription.cancel();
+    }
+  }
 
   static Future<void> _onBackGroundMessage(RemoteMessage message) {
     ReceivedNotification receivedNotification = ReceivedNotification(
