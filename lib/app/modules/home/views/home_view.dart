@@ -788,6 +788,37 @@ class _HomeViewState extends State<HomeView> {
   }
 }
 
+class _ShareFormatChip extends StatelessWidget {
+  const _ShareFormatChip({
+    required this.icon,
+    required this.label,
+    required this.selected,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String label;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return ChoiceChip(
+      selected: selected,
+      onSelected: (_) => onTap(),
+      avatar: Icon(icon, size: 17.sp, color: selected ? Colors.white : PRIMARY_COLOR),
+      label: Text(label, style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w600)),
+      selectedColor: PRIMARY_COLOR,
+      backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest.withOpacity(.55),
+      labelStyle: TextStyle(color: selected ? Colors.white : Theme.of(context).colorScheme.onSurface),
+      showCheckmark: false,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
+      side: BorderSide(color: selected ? PRIMARY_COLOR : Theme.of(context).dividerColor.withOpacity(.35)),
+      padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 5.h),
+    );
+  }
+}
+
 class _ShareMenuTile extends StatelessWidget {
   const _ShareMenuTile({
     required this.icon,
