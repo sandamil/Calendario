@@ -20,6 +20,9 @@ class NotificacionesService {
   bool _inicializado = false;
   bool _zonasHorariasInicializadas = false;
 
+  /// Espacio de IDs independiente para evitar colisiones con las notas.
+  int idNotificacionTurno(int turnoId) => 1000000000 + turnoId;
+
   Future<void> inicializar() async {
     if (_inicializado) return;
 
@@ -90,9 +93,7 @@ class NotificacionesService {
     final android = _plugin.resolvePlatformSpecificImplementation<
         AndroidFlutterLocalNotificationsPlugin>();
 
-    if (android == null) {
-      return AndroidScheduleMode.exactAllowWhileIdle;
-    }
+    if (android == null) return AndroidScheduleMode.exactAllowWhileIdle;
 
     if (await android.areNotificationsEnabled() == false) {
       await android.requestNotificationsPermission();
@@ -180,7 +181,7 @@ class NotificacionesService {
   }) async {
     final fecha = inicioTurno.subtract(Duration(minutes: minutosAntes));
     return programar(
-      id: id,
+      id: idNotificacionTurno(id),
       titulo: 'Turno: $titulo',
       mensaje: minutosAntes == 0
           ? 'Comienza tu turno.'
@@ -193,6 +194,10 @@ class NotificacionesService {
     if (kIsWeb) return;
     await inicializar();
     await _plugin.cancel(id: id);
+  }
+
+  Future<void> cancelarTurno(int id) async {
+    await cancelar(idNotificacionTurno(id));
   }
 
   Future<void> cancelarTodas() async {
