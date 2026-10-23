@@ -96,7 +96,7 @@ class NotificacionesService {
       throw StateError('Las notificaciones de Android están desactivadas.');
     }
 
-    if (await android.canScheduleExactNotifications()) {
+    if (await android.canScheduleExactNotifications() == true) {
       return AndroidScheduleMode.exactAllowWhileIdle;
     }
 
@@ -105,7 +105,7 @@ class NotificacionesService {
     // perder el recordatorio.
     await android.requestExactAlarmsPermission();
 
-    if (await android.canScheduleExactNotifications()) {
+    if (await android.canScheduleExactNotifications() == true) {
       return AndroidScheduleMode.exactAllowWhileIdle;
     }
 
