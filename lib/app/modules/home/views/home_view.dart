@@ -32,7 +32,6 @@ import '../../../components/custom_dialog.dart';
 import '../../../controllers/tutorial_provider.dart';
 import '../../../controllers/tutorialController.dart';
 import '../../../data/model/cuadranteDay.dart';
-import '../../menu/views/menu_view.dart';
 import '../widgets/calendar/dialog_onLongPress_calendar.dart';
 
 typedef HomeCallback = void Function(int id, DateTime selectedDate);
@@ -285,7 +284,7 @@ class _HomeViewState extends State<HomeView> {
                         Text('PERIODO', style: TextStyle(fontSize: 11.sp, fontWeight: FontWeight.w800, letterSpacing: .8, color: onSurface.withValues(alpha: .58))),
                         SizedBox(height: 6.h),
                         DropdownButtonFormField<String>(
-                          value: period,
+                          initialValue: period,
                           isExpanded: true,
                           decoration: InputDecoration(
                             prefixIcon: Icon(Icons.date_range_rounded, color: PRIMARY_COLOR),
