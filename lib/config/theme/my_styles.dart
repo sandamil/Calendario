@@ -379,11 +379,14 @@ class MyStyles {
   static InputDecorationTheme getInputDecorationTheme(
           {required bool isLightTheme}) =>
        InputDecorationTheme(
-          fillColor:  isLightTheme
+          fillColor: isLightTheme
               ? LightThemeColors.backgroundColor
-              : DarkThemeColors
-              .backgroundColor,
-
+              : DarkThemeColors.backgroundColor,
+          hintStyle: TextStyle(
+            color: isLightTheme
+                ? LightThemeColors.hintTextColor
+                : DarkThemeColors.hintTextColor,
+          ),
           labelStyle: const TextStyle(color: Colors.orange),
         // focusedErrorBorder: UnderlineInputBorder(
         //     borderSide: BorderSide(width: 0.7, color: errorColor)),
