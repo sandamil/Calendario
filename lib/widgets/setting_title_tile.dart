@@ -15,7 +15,7 @@ class SettingTitleTile extends StatelessWidget {
           fontWeight: FontWeight.w800,
           fontSize: 11.sp,
           letterSpacing: .8,
-          color: Theme.of(context).colorScheme.onSurface.withOpacity(.55),
+          color: Theme.of(context).colorScheme.onSurface.withValues(alpha: .55),
         ),
       ),
     );
