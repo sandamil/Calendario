@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'dart:io';
 
 class AppLink {
   static const String androidAppPackageName = "ajat.calendario.turnos";
