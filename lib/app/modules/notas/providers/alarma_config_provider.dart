@@ -1,48 +1,118 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 
-import '../models/alarma_config_state.dart';
-import '../services/alarm_service.dart';
+class AlarmaConfigState {
+  final DateTime startTime;
+  final DateTime alarmTime;
+  final bool enabled;
+  final String label;
+  final Duration? duration;
+  final bool custom;
+  final String customAmount;
+  final String? customUnit;
 
-class AlarmaConfigNotifier extends StateNotifier<AlarmaConfigState> {
-  AlarmaConfigNotifier() : super(AlarmaConfigState.initial());
+  const AlarmaConfigState({
+    required this.startTime,
+    required this.alarmTime,
+    required this.enabled,
+    required this.label,
+    required this.duration,
+    required this.custom,
+    required this.customAmount,
+    required this.customUnit,
+  });
 
-  final customAmountController = TextEditingController();
+  AlarmaConfigState copyWith({
+    DateTime? startTime,
+    DateTime? alarmTime,
+    bool? enabled,
+    String? label,
+    Duration? duration,
+    bool clearDuration = false,
+    bool? custom,
+    String? customAmount,
+    String? customUnit,
+    bool clearCustomUnit = false,
+  }) {
+    return AlarmaConfigState(
+      startTime: startTime ?? this.startTime,
+      alarmTime: alarmTime ?? this.alarmTime,
+      enabled: enabled ?? this.enabled,
+      label: label ?? this.label,
+      duration: clearDuration ? null : (duration ?? this.duration),
+      custom: custom ?? this.custom,
+      customAmount: customAmount ?? this.customAmount,
+      customUnit: clearCustomUnit ? null : (customUnit ?? this.customUnit),
+    );
+  }
+}
 
-  Future<void> load() async {
-    final savedAlarm = await AlarmService.getAlarm();
+class AlarmaConfigNotifier extends Notifier<AlarmaConfigState> {
+  late final TextEditingController customAmountController;
+
+  @override
+  AlarmaConfigState build() {
+    customAmountController = TextEditingController();
+    ref.onDispose(customAmountController.dispose);
+
     final now = DateTime.now();
-    final startTime = DateTime(now.year, now.month, now.day);
+    return AlarmaConfigState(
+      startTime: now,
+      alarmTime: now,
+      enabled: false,
+      label: 'Sin recordatorio',
+      duration: null,
+      custom: false,
+      customAmount: '',
+      customUnit: null,
+    );
+  }
 
-    String? label;
+  void initialize({
+    required DateTime startTime,
+    DateTime? alarmTime,
+    bool enabled = false,
+    String? label,
+  }) {
+    final savedAlarm = alarmTime ?? startTime;
+    final difference = startTime.difference(savedAlarm);
+
     Duration? duration;
-    bool enabled = false;
     bool custom = false;
+    String? unit;
     String amount = '';
-    String unit = 'minutos';
 
-    if (savedAlarm != null) {
-      enabled = true;
-      final difference = savedAlarm.difference(startTime);
-
-      if (difference.inMinutes == 15) {
-        label = '15 minutos antes';
+    if (enabled && difference.inSeconds >= 0) {
+      if (difference == Duration.zero) {
+        duration = Duration.zero;
+        label = 'Al Principio';
+      } else if (difference == const Duration(minutes: 5)) {
         duration = difference;
-      } else if (difference.inMinutes == 30) {
-        label = '30 minutos antes';
+        label = '5 minutos de anticipación';
+      } else if (difference == const Duration(minutes: 30)) {
         duration = difference;
-      } else if (difference.inHours == 1) {
-        label = '1 hora antes';
+        label = '30 minutos de anticipación';
+      } else if (difference == const Duration(hours: 1)) {
         duration = difference;
-      } else if (difference.inHours == 2) {
-        label = '2 horas antes';
+        label = '1 hora de anticipación';
+      } else if (difference == const Duration(days: 1)) {
         duration = difference;
+        label = '1 día de antelación';
       } else {
         custom = true;
+        if (difference.inDays > 0 &&
+            difference == Duration(days: difference.inDays)) {
+          unit = 'Dias';
+          amount = difference.inDays.toString();
+        } else if (difference.inHours > 0 &&
+            difference == Duration(hours: difference.inHours)) {
+          unit = 'Horas';
+          amount = difference.inHours.toString();
+        } else {
+          unit = 'Minutos';
+          amount = difference.inMinutes.toString();
+        }
         duration = difference;
-        amount = difference.inMinutes.toString();
-        unit = 'minutos';
         label = 'Personalizado';
       }
     } else {
@@ -63,52 +133,76 @@ class AlarmaConfigNotifier extends StateNotifier<AlarmaConfigState> {
     );
   }
 
-  Future<void> setEnabled(bool value) async {
-    state = state.copyWith(enabled: value);
-    if (!value) {
-      await AlarmService.cancelAlarm();
-    }
+  void setEnabled(bool value) {
+    state = state.copyWith(
+      enabled: value,
+      label: value ? state.label : 'Sin recordatorio',
+      clearDuration: !value,
+      custom: value ? state.custom : false,
+      customUnit: value ? state.customUnit : null,
+      clearCustomUnit: !value,
+    );
   }
 
-  Future<void> setDuration(Duration duration, String newLabel) async {
+  void selectPreset(Duration duration, String label) {
     state = state.copyWith(
+      enabled: true,
       duration: duration,
-      label: newLabel,
+      label: label,
       custom: false,
+      customAmount: '',
+      clearCustomUnit: true,
     );
+    customAmountController.clear();
   }
 
-  Future<void> setCustom(String amount, String unit) async {
-    final parsedAmount = int.tryParse(amount) ?? 0;
-    final duration = switch (unit) {
-      'horas' => Duration(hours: parsedAmount),
-      'días' => Duration(days: parsedAmount),
-      _ => Duration(minutes: parsedAmount),
-    };
-
+  void setCustom(bool value) {
     state = state.copyWith(
-      duration: duration,
-      label: 'Personalizado',
-      custom: true,
-      customAmount: amount,
-      customUnit: unit,
+      enabled: true,
+      custom: value,
+      label: value ? 'Personalizado' : state.label,
+      clearDuration: value,
+      clearCustomUnit: !value,
     );
   }
 
-  Future<void> save() async {
-    if (!state.enabled || state.duration == null) {
-      await AlarmService.cancelAlarm();
-      return;
+  void setCustomAmount(String value) {
+    state = state.copyWith(customAmount: value);
+  }
+
+  void setCustomUnit(String? value) {
+    state = state.copyWith(customUnit: value);
+  }
+
+  Duration? get selectedDuration {
+    if (!state.enabled) return null;
+    if (!state.custom) return state.duration;
+
+    final amount = int.tryParse(state.customAmount);
+    if (amount == null || amount <= 0 || state.customUnit == null) {
+      return null;
     }
 
-    final alarmTime = state.startTime.add(state.duration!);
-    await AlarmService.scheduleAlarm(alarmTime);
-    state = state.copyWith(alarmTime: alarmTime);
+    switch (state.customUnit) {
+      case 'Minutos':
+        return Duration(minutes: amount);
+      case 'Horas':
+        return Duration(hours: amount);
+      case 'Dias':
+        return Duration(days: amount);
+      default:
+        return null;
+    }
   }
 
-  @override
-  void dispose() {
-    customAmountController.dispose();
-    super.dispose();
+  DateTime? get calculatedAlarmTime {
+    final duration = selectedDuration;
+    if (!state.enabled || duration == null) return null;
+    return state.startTime.subtract(duration);
   }
 }
+
+final alarmaConfigProvider =
+    NotifierProvider<AlarmaConfigNotifier, AlarmaConfigState>(
+  AlarmaConfigNotifier.new,
+);
