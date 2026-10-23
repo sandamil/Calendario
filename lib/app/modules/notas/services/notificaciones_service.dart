@@ -67,7 +67,7 @@ class NotificacionesService {
       );
 
       await androidPlugin.createNotificationChannel(
-        const AndroidNotificationChannel(
+        AndroidNotificationChannel(
           _alarmChannelId,
           _alarmChannelName,
           description: _alarmChannelDescription,
