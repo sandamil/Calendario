@@ -11,10 +11,10 @@ class CalendarAddNoteSheet extends ConsumerStatefulWidget {
 
   @override
   ConsumerState<CalendarAddNoteSheet> createState() =>
-      _CalendarAddNoteSheetState();
+      CalendarAddNoteSheetState();
 }
 
-class _CalendarAddNoteSheetState extends ConsumerState<CalendarAddNoteSheet> {
+class CalendarAddNoteSheetState extends ConsumerState<CalendarAddNoteSheet> {
   bool _saving = false;
 
   @override
@@ -27,6 +27,8 @@ class _CalendarAddNoteSheetState extends ConsumerState<CalendarAddNoteSheet> {
       notifier.setInitialDate(widget.selectedDate);
     });
   }
+
+  Future<void> save() => _save();
 
   Future<void> _save() async {
     if (_saving) return;
