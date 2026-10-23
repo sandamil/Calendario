@@ -78,6 +78,7 @@ class NotificacionesService {
             const <int>[0, 700, 300, 700, 300, 1000],
           ),
           enableLights: true,
+          audioAttributesUsage: AudioAttributesUsage.alarm,
         ),
       );
 
@@ -148,6 +149,9 @@ class NotificacionesService {
         priority: Priority.max,
         playSound: true,
         enableVibration: true,
+        audioAttributesUsage: esAlarma
+            ? AudioAttributesUsage.alarm
+            : AudioAttributesUsage.notification,
         vibrationPattern: esAlarma
             ? Int64List.fromList(const <int>[0, 700, 300, 700, 300, 1000])
             : null,
