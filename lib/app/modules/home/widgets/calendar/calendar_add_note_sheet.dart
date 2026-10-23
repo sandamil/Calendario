@@ -152,22 +152,7 @@ class _CalendarAddNoteSheetState extends ConsumerState<CalendarAddNoteSheet> {
                 trailing: Icon(Icons.chevron_right_rounded, color: color.withOpacity(.55)),
                 onTap: () => _pickReminder(notifier, state.startTime),
               ),
-              SizedBox(height: 18.h),
-              SizedBox(
-                width: double.infinity,
-                height: 50.h,
-                child: FilledButton.icon(
-                  onPressed: _saving ? null : _save,
-                  icon: _saving
-                      ? SizedBox(
-                          width: 18.sp,
-                          height: 18.sp,
-                          child: const CircularProgressIndicator(strokeWidth: 2),
-                        )
-                      : const Icon(Icons.check_rounded),
-                  label: Text(_saving ? 'Guardando…' : 'Añadir nota'),
-                ),
-              ),
+              SizedBox(height: 8.h),
             ],
           ),
         ),
