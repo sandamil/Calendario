@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'dart:io';
 
 import 'package:calendario2/app/components/custom_dialog.dart';
 import 'package:calendario2/app/controllers/tutorial_provider.dart';
@@ -19,7 +18,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../data/local/my_shared_pref.dart';
 import '../../../../config/util/app_icons.dart';
 import '../providers/crear_cuadrante_provider.dart';
-import '../../home/providers/calendar_providers.dart';
 
 class AddCuadranteView extends ConsumerStatefulWidget {
   const AddCuadranteView({Key? key}) : super(key: key);
