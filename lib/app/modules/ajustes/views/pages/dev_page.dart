@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import '../../../../../config/util/list_view_animator.dart';
 import '../../../../../debug/log/log.dart';
 import '../../../../components/toast.dart';
-import 'package:go_router/go_router.dart';
 
 enum OnListViewPress {
   cloudMessageToken,
@@ -41,9 +40,6 @@ class DevPage extends StatelessWidget {
         break;
       case OnListViewPress.appLog:
         context.push('/log-console');
-        break;
-      default:
-        Toast.toast(context, msg: 'No function');
         break;
     }
   }
