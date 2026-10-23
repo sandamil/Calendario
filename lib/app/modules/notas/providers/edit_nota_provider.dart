@@ -12,6 +12,7 @@ class EditNotaState {
   final DateTime startTime;
   final DateTime endTime;
   final bool isImportant;
+  final String notificationMode;
   final bool alarmaCreada;
   final DateTime alarmTime;
   final String alarmaHora;
@@ -23,6 +24,7 @@ class EditNotaState {
     required this.startTime,
     required this.endTime,
     required this.isImportant,
+    required this.notificationMode,
     required this.alarmaCreada,
     required this.alarmTime,
     required this.alarmaHora,
@@ -35,6 +37,7 @@ class EditNotaState {
     DateTime? startTime,
     DateTime? endTime,
     bool? isImportant,
+    String? notificationMode,
     bool? alarmaCreada,
     DateTime? alarmTime,
     String? alarmaHora,
@@ -46,6 +49,7 @@ class EditNotaState {
       startTime: startTime ?? this.startTime,
       endTime: endTime ?? this.endTime,
       isImportant: isImportant ?? this.isImportant,
+      notificationMode: notificationMode ?? this.notificationMode,
       alarmaCreada: alarmaCreada ?? this.alarmaCreada,
       alarmTime: alarmTime ?? this.alarmTime,
       alarmaHora: alarmaHora ?? this.alarmaHora,
@@ -77,6 +81,7 @@ class EditNotaNotifier extends Notifier<EditNotaState> {
       startTime: DateTime.now(),
       endTime: DateTime.now(),
       isImportant: false,
+      notificationMode: 'notificacion',
       alarmaCreada: false,
       alarmTime: DateTime.now(),
       alarmaHora: '',
@@ -166,6 +171,7 @@ class EditNotaNotifier extends Notifier<EditNotaState> {
       startTime: start,
       endTime: end,
       isImportant: note.isImportant ?? false,
+      notificationMode: note.notificationMode,
       alarmaCreada: alarmaCreada,
       alarmTime: horaAlarma,
       alarmaHora: note.alarmaHora ?? '',
@@ -204,6 +210,12 @@ class EditNotaNotifier extends Notifier<EditNotaState> {
     state = state.copyWith(isImportant: value);
   }
 
+  void setNotificationMode(String value) {
+    state = state.copyWith(
+      notificationMode: value == 'alarma' ? 'alarma' : 'notificacion',
+    );
+  }
+
   void setAlarmaCreada(bool value) {
     state = state.copyWith(alarmaCreada: value);
   }
@@ -234,6 +246,7 @@ class EditNotaNotifier extends Notifier<EditNotaState> {
     final titulo = title.text;
     final textoNotas = notes.text;
     final importante = state.isImportant;
+    final notificationMode = state.notificationMode;
     final inicio = state.startTime;
     final fin = state.endTime;
     final alarmaCreada = state.alarmaCreada;
@@ -248,6 +261,7 @@ class EditNotaNotifier extends Notifier<EditNotaState> {
         site: site.text,
         notes: textoNotas,
         isImportant: importante,
+        notificationMode: notificationMode,
         startTimeMilliseconds: inicio.millisecondsSinceEpoch,
         endTimeMilliseconds: fin.millisecondsSinceEpoch,
         idAlarma: alarmaId,
@@ -269,6 +283,7 @@ class EditNotaNotifier extends Notifier<EditNotaState> {
           titulo: 'Nota: $titulo',
           mensaje: textoNotas,
           fechaRecordatorio: horaAlarma,
+          modo: notificationMode,
         );
       } else {
         await NotificacionesService.instance.cancelar(alarmaId);
