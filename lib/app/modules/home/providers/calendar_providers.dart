@@ -28,13 +28,8 @@ class FocusedMonthNotifier extends Notifier<DateTime> {
   @override
   DateTime build() => DateTime.now();
 
-  void setMonth(DateTime month) {
-    state = month;
-  }
-
-  void setFocusedDay(DateTime day) {
-    state = day;
-  }
+  void setMonth(DateTime month) => state = month;
+  void setFocusedDay(DateTime day) => state = day;
 }
 
 final focusedMonthProvider = NotifierProvider<FocusedMonthNotifier, DateTime>(
@@ -45,13 +40,8 @@ class SelectedDayNotifier extends Notifier<DateTime?> {
   @override
   DateTime? build() => null;
 
-  void setSelectedDay(DateTime? day) {
-    state = day;
-  }
-
-  void clear() {
-    state = null;
-  }
+  void setSelectedDay(DateTime? day) => state = day;
+  void clear() => state = null;
 }
 
 final selectedDayProvider = NotifierProvider<SelectedDayNotifier, DateTime?>(
@@ -62,17 +52,13 @@ class CuadranteMapNotifier extends Notifier<Map<DateTime, List<CuadranteDay>>> {
   @override
   Map<DateTime, List<CuadranteDay>> build() => <DateTime, List<CuadranteDay>>{};
 
-  Map<DateTime, List<CuadranteDay>> _agrupar(
-    List<CuadranteDay> turnos,
-  ) {
+  Map<DateTime, List<CuadranteDay>> _agrupar(List<CuadranteDay> turnos) {
     final nuevoMapa = <DateTime, List<CuadranteDay>>{};
-
     for (final turno in turnos) {
       final fecha = turno.dateTime!;
       nuevoMapa.putIfAbsent(fecha, () => <CuadranteDay>[]);
       nuevoMapa[fecha]!.add(turno);
     }
-
     return nuevoMapa;
   }
 
@@ -84,10 +70,7 @@ class CuadranteMapNotifier extends Notifier<Map<DateTime, List<CuadranteDay>>> {
 
   Future<void> reload() async {
     final turnos = await CalendarioDB.db.getCuadranteList();
-    final nuevoMapa = _agrupar(turnos);
-
-    // Riverpod publica el mapa como estado principal.
-    state = nuevoMapa;
+    state = _agrupar(turnos);
   }
 }
 
@@ -108,9 +91,7 @@ class NotasNotifier extends Notifier<List<Task>> {
     return state.where((nota) {
       final timestamp = nota.startTimeMilliseconds;
       if (timestamp == null) return false;
-
       final fecha = DateTime.fromMillisecondsSinceEpoch(timestamp);
-
       return fecha.year == day.year &&
           fecha.month == day.month &&
           fecha.day == day.day;
@@ -124,7 +105,6 @@ final notasProvider = NotifierProvider<NotasNotifier, List<Task>>(
   NotasNotifier.new,
 );
 
-// Turnos del día seleccionado en el calendario.
 class SelectedDayTurnosNotifier extends Notifier<List<CuadranteDay>> {
   @override
   List<CuadranteDay> build() => <CuadranteDay>[];
@@ -133,9 +113,7 @@ class SelectedDayTurnosNotifier extends Notifier<List<CuadranteDay>> {
     state = List<CuadranteDay>.of(turnos);
   }
 
-  void clear() {
-    state = <CuadranteDay>[];
-  }
+  void clear() => state = <CuadranteDay>[];
 }
 
 final selectedDayTurnosProvider =
@@ -153,7 +131,6 @@ class TurnoTypesNotifier extends AsyncNotifier<List<TurnoType>> {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
       final id = await CalendarioDB.db.addTypeModel(turno);
-
       if (id < 0) {
         throw StateError(
           'La base de datos ha rechazado la inserción del tipo de turno.',
@@ -161,13 +138,11 @@ class TurnoTypesNotifier extends AsyncNotifier<List<TurnoType>> {
       }
 
       final turnos = await CalendarioDB.db.getTypeModels();
-
       if (!turnos.any((item) => item.id == id)) {
         throw StateError(
           'No se ha podido confirmar la inserción del tipo de turno.',
         );
       }
-
       return turnos;
     });
   }
@@ -177,13 +152,11 @@ class TurnoTypesNotifier extends AsyncNotifier<List<TurnoType>> {
     state = await AsyncValue.guard(() async {
       await CalendarioDB.db.deleteTypeId(id);
       final turnos = await CalendarioDB.db.getTypeModels();
-
       if (turnos.any((item) => item.id == id)) {
         throw StateError(
           'No se ha podido confirmar la eliminación del tipo de turno.',
         );
       }
-
       return turnos;
     });
   }
@@ -192,7 +165,6 @@ class TurnoTypesNotifier extends AsyncNotifier<List<TurnoType>> {
     state = const AsyncLoading();
     state = await AsyncValue.guard(() async {
       final id = turno.id;
-
       if (id == null) {
         throw ArgumentError(
           'No se puede editar un tipo de turno sin identificador.',
@@ -200,7 +172,6 @@ class TurnoTypesNotifier extends AsyncNotifier<List<TurnoType>> {
       }
 
       final anterior = await CalendarioDB.db.fetchTurnoType(id);
-
       if (anterior == null) {
         throw StateError(
           'El tipo de turno que se intenta editar ya no existe.',
@@ -208,7 +179,6 @@ class TurnoTypesNotifier extends AsyncNotifier<List<TurnoType>> {
       }
 
       await CalendarioDB.db.updateTurno(turno);
-
       final actualizado = await CalendarioDB.db.fetchTurnoType(id);
 
       if (actualizado == null ||
@@ -216,7 +186,9 @@ class TurnoTypesNotifier extends AsyncNotifier<List<TurnoType>> {
           actualizado.description != turno.description ||
           actualizado.startHour != turno.startHour ||
           actualizado.endHour != turno.endHour ||
-          actualizado.color != turno.color) {
+          actualizado.color != turno.color ||
+          actualizado.reminderEnabled != turno.reminderEnabled ||
+          actualizado.reminderMinutesBefore != turno.reminderMinutesBefore) {
         throw StateError(
           'No se ha podido confirmar la actualización del tipo de turno.',
         );
@@ -239,7 +211,6 @@ final turnoTypesProvider =
   TurnoTypesNotifier.new,
 );
 
-// Nombres únicos de cuadrantes. La base de datos es la fuente principal.
 final cuadranteNamesProvider = FutureProvider<List<String>>((ref) async {
   final cuadrantes = await CalendarioDB.db.getCuadranteList();
   final nombres = <String>[];
