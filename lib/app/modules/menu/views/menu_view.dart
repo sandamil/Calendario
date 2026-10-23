@@ -25,6 +25,7 @@ class MenuView extends StatelessWidget {
       _MenuItemData('Tipos de turno', 'Configura horarios y colores', Icons.work_history_rounded, '/crear-turno'),
       _MenuItemData('Ajustes', 'Personaliza la aplicación', Icons.tune_rounded, '/ajustes'),
       _MenuItemData('Ayuda', 'Tutoriales y contacto', Icons.help_outline_rounded, '/ayuda'),
+      _MenuItemData('Informes', 'Resumen de días, turnos y horas', Icons.analytics_rounded, '/informes'),
     ];
     return Scaffold(
       appBar: AppBar(
