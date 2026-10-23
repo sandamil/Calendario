@@ -3,6 +3,7 @@ import 'package:calendario2/app/data/model/cuadranteDay.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 
 class InformesView extends StatelessWidget {
   const InformesView({super.key});
@@ -14,9 +15,9 @@ class InformesView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          tooltip: 'Volver',
+          tooltip: 'Volver al menú',
           icon: const Icon(Icons.arrow_back_rounded),
-          onPressed: () => Navigator.of(context).maybePop(),
+          onPressed: () => context.go('/menu'),
         ),
         title: const Text('Informes'),
       ),
@@ -165,7 +166,7 @@ class _ResumenTurnosViewState extends State<ResumenTurnosView> {
     final text = theme.colorScheme.onSurface;
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(tooltip: 'Volver', icon: const Icon(Icons.arrow_back_rounded), onPressed: () => Navigator.of(context).maybePop()),
+        leading: IconButton(tooltip: 'Volver a Informes', icon: const Icon(Icons.arrow_back_rounded), onPressed: () => Navigator.of(context).maybePop()),
         title: const Text('Resumen de turnos'),
         actions: [IconButton(tooltip: 'Actualizar', onPressed: _reload, icon: const Icon(Icons.refresh_rounded))],
       ),
