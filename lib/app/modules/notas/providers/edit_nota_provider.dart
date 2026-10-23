@@ -283,7 +283,7 @@ class EditNotaNotifier extends Notifier<EditNotaState> {
           titulo: 'Nota: $titulo',
           mensaje: textoNotas,
           fechaRecordatorio: horaAlarma,
-          modo: notificationMode,
+          modoAviso: notificationMode,
         );
       } else {
         await NotificacionesService.instance.cancelar(alarmaId);
