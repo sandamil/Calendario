@@ -18,7 +18,7 @@ class CalendarioDB {
   final String databaseName = 'CalendarioAjatsoft.db';
   static const String _cuadrantesTable = 'Cuadrante';
   static const String _turnosTable = 'Turnos';
-  static const int _version = 2;
+  static const int _version = 3;
 
   Future<Database?> get database async {
     if (_database != null) return _database;
@@ -67,7 +67,8 @@ class CalendarioDB {
         color TEXT,
         status TEXT,
         reminderEnabled INTEGER NOT NULL DEFAULT 0,
-        reminderMinutesBefore INTEGER NOT NULL DEFAULT 0
+        reminderMinutesBefore INTEGER NOT NULL DEFAULT 0,
+        reminderMode TEXT NOT NULL DEFAULT 'notificacion'
       )
     ''');
 
@@ -82,6 +83,11 @@ class CalendarioDB {
       );
       await db.execute(
         'ALTER TABLE $_turnosTable ADD COLUMN reminderMinutesBefore INTEGER NOT NULL DEFAULT 0',
+      );
+    }
+    if (oldVersion < 3) {
+      await db.execute(
+        "ALTER TABLE $_turnosTable ADD COLUMN reminderMode TEXT NOT NULL DEFAULT 'notificacion'",
       );
     }
   }
@@ -229,6 +235,7 @@ class CalendarioDB {
           : (item.title ?? 'Turno'),
       inicioTurno: inicio,
       minutosAntes: tipo.reminderMinutesBefore,
+      modoAviso: tipo.reminderMode,
     );
   }
 

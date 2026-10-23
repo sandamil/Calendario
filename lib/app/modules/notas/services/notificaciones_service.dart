@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest.dart' as tz;
@@ -13,6 +15,10 @@ class NotificacionesService {
   static const String _channelName = 'Recordatorios de Calendario';
   static const String _channelDescription =
       'Avisos de notas y turnos programados en Calendario';
+  static const String _alarmChannelId = 'calendario_alarmas_v1';
+  static const String _alarmChannelName = 'Alarmas de Calendario';
+  static const String _alarmChannelDescription =
+      'Avisos importantes con sonido y vibración intensos';
 
   final FlutterLocalNotificationsPlugin _plugin =
       FlutterLocalNotificationsPlugin();
@@ -57,6 +63,22 @@ class NotificacionesService {
           importance: Importance.max,
           playSound: true,
           enableVibration: true,
+        ),
+      );
+
+      await androidPlugin.createNotificationChannel(
+        AndroidNotificationChannel(
+          _alarmChannelId,
+          _alarmChannelName,
+          description: _alarmChannelDescription,
+          importance: Importance.max,
+          playSound: true,
+          enableVibration: true,
+          vibrationPattern: Int64List.fromList(
+            const <int>[0, 700, 300, 700, 300, 1000],
+          ),
+          enableLights: true,
+          audioAttributesUsage: AudioAttributesUsage.alarm,
         ),
       );
 
@@ -112,20 +134,30 @@ class NotificacionesService {
     return AndroidScheduleMode.inexactAllowWhileIdle;
   }
 
-  NotificationDetails _detalles() {
-    return const NotificationDetails(
+  NotificationDetails _detalles({required bool esAlarma}) {
+    final channelId = esAlarma ? _alarmChannelId : _channelId;
+    final channelName = esAlarma ? _alarmChannelName : _channelName;
+    final channelDescription =
+        esAlarma ? _alarmChannelDescription : _channelDescription;
+    return NotificationDetails(
       android: AndroidNotificationDetails(
-        _channelId,
-        _channelName,
-        channelDescription: _channelDescription,
+        channelId,
+        channelName,
+        channelDescription: channelDescription,
         icon: 'ic_stat_notification',
         importance: Importance.max,
         priority: Priority.max,
         playSound: true,
         enableVibration: true,
+        audioAttributesUsage: esAlarma
+            ? AudioAttributesUsage.alarm
+            : AudioAttributesUsage.notification,
+        vibrationPattern: esAlarma
+            ? Int64List.fromList(const <int>[0, 700, 300, 700, 300, 1000])
+            : null,
         autoCancel: true,
       ),
-      iOS: DarwinNotificationDetails(
+      iOS: const DarwinNotificationDetails(
         presentAlert: true,
         presentBadge: true,
         presentSound: true,
@@ -139,6 +171,7 @@ class NotificacionesService {
     required String titulo,
     required String mensaje,
     required DateTime fechaRecordatorio,
+    String modoAviso = 'notificacion',
   }) async {
     if (kIsWeb) return false;
 
@@ -163,7 +196,7 @@ class NotificacionesService {
         title: titulo,
         body: mensaje.isEmpty ? 'Tienes un recordatorio pendiente.' : mensaje,
         scheduledDate: fechaZonaHoraria,
-        notificationDetails: _detalles(),
+        notificationDetails: _detalles(esAlarma: modoAviso == 'alarma'),
         androidScheduleMode: modo,
         payload: 'calendario:$id',
       );
@@ -180,6 +213,7 @@ class NotificacionesService {
     required String titulo,
     required DateTime inicioTurno,
     required int minutosAntes,
+    String modoAviso = 'notificacion',
   }) async {
     final fecha = inicioTurno.subtract(Duration(minutes: minutosAntes));
     return programar(
@@ -189,6 +223,7 @@ class NotificacionesService {
           ? 'Comienza tu turno.'
           : 'Tu turno comienza en $minutosAntes minutos.',
       fechaRecordatorio: fecha,
+      modoAviso: modoAviso,
     );
   }
 

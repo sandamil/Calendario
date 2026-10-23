@@ -33,6 +33,7 @@ class _TurnoFormViewState extends ConsumerState<TurnoFormView> {
 
   bool _recordatorioActivado = false;
   int _minutosAntes = 0;
+  String _modoAviso = 'notificacion';
   bool _guardando = false;
 
   bool get _esEdicion => widget.turno != null;
@@ -53,6 +54,7 @@ class _TurnoFormViewState extends ConsumerState<TurnoFormView> {
         turno?.color != null ? HexColor(turno!.color!) : Colors.orangeAccent;
     _recordatorioActivado = turno?.reminderEnabled ?? false;
     _minutosAntes = turno?.reminderMinutesBefore ?? 0;
+    _modoAviso = turno?.reminderMode ?? 'notificacion';
   }
 
   @override
@@ -201,6 +203,7 @@ class _TurnoFormViewState extends ConsumerState<TurnoFormView> {
         color: _color.toARGB32().toRadixString(16),
         reminderEnabled: _recordatorioActivado,
         reminderMinutesBefore: _minutosAntes,
+        reminderMode: _modoAviso,
       );
 
       if (_esEdicion) {
@@ -238,7 +241,8 @@ class _TurnoFormViewState extends ConsumerState<TurnoFormView> {
                   item.endHour == turno.endHour &&
                   item.color == turno.color &&
                   item.reminderEnabled == turno.reminderEnabled &&
-                  item.reminderMinutesBefore == turno.reminderMinutesBefore,
+                  item.reminderMinutesBefore == turno.reminderMinutesBefore &&
+                  item.reminderMode == turno.reminderMode,
             );
 
       if (!guardadoConfirmado) {
@@ -607,7 +611,7 @@ class _TurnoFormViewState extends ConsumerState<TurnoFormView> {
             contentPadding: EdgeInsets.zero,
             title: const Text('Recordatorio del turno'),
             subtitle: const Text(
-              'Recibirás una notificación visual, sonora y con vibración.',
+              'Elige si este tipo de turno avisará con una notificación normal o con una alarma configurable.',
             ),
             secondary: Icon(
               Icons.notifications_active_rounded,
@@ -622,6 +626,28 @@ class _TurnoFormViewState extends ConsumerState<TurnoFormView> {
             },
           ),
           if (_recordatorioActivado) ...[
+            SizedBox(height: 8.h),
+            const Text('Tipo de aviso'),
+            SizedBox(height: 6.h),
+            SegmentedButton<String>(
+              showSelectedIcon: false,
+              segments: const <ButtonSegment<String>>[
+                ButtonSegment<String>(
+                  value: 'notificacion',
+                  label: Text('Notificación'),
+                  icon: Icon(Icons.notifications_outlined),
+                ),
+                ButtonSegment<String>(
+                  value: 'alarma',
+                  label: Text('Alarma'),
+                  icon: Icon(Icons.alarm_rounded),
+                ),
+              ],
+              selected: <String>{_modoAviso},
+              onSelectionChanged: (selection) {
+                setState(() => _modoAviso = selection.first);
+              },
+            ),
             SizedBox(height: 6.h),
             DropdownButtonFormField<int>(
               key: ValueKey(_minutosAntes),

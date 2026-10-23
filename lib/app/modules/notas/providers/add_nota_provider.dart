@@ -12,6 +12,7 @@ class AddNotaState {
   final DateTime startTime;
   final DateTime endTime;
   final bool isImportant;
+  final String notificationMode;
   final bool alarmaCreada;
   final DateTime alarmTime;
   final String alarmaHora;
@@ -23,6 +24,7 @@ class AddNotaState {
     required this.startTime,
     required this.endTime,
     required this.isImportant,
+    required this.notificationMode,
     required this.alarmaCreada,
     required this.alarmTime,
     required this.alarmaHora,
@@ -35,6 +37,7 @@ class AddNotaState {
     DateTime? startTime,
     DateTime? endTime,
     bool? isImportant,
+    String? notificationMode,
     bool? alarmaCreada,
     DateTime? alarmTime,
     String? alarmaHora,
@@ -46,6 +49,7 @@ class AddNotaState {
       startTime: startTime ?? this.startTime,
       endTime: endTime ?? this.endTime,
       isImportant: isImportant ?? this.isImportant,
+      notificationMode: notificationMode ?? this.notificationMode,
       alarmaCreada: alarmaCreada ?? this.alarmaCreada,
       alarmTime: alarmTime ?? this.alarmTime,
       alarmaHora: alarmaHora ?? this.alarmaHora,
@@ -79,6 +83,7 @@ class AddNotaNotifier extends Notifier<AddNotaState> {
       startTime: now,
       endTime: now,
       isImportant: false,
+      notificationMode: 'notificacion',
       alarmaCreada: false,
       alarmTime: now,
       alarmaHora: '',
@@ -148,6 +153,12 @@ class AddNotaNotifier extends Notifier<AddNotaState> {
     state = state.copyWith(isImportant: value);
   }
 
+  void setNotificationMode(String value) {
+    state = state.copyWith(
+      notificationMode: value == 'alarma' ? 'alarma' : 'notificacion',
+    );
+  }
+
   void setAlarmaCreada(bool value) {
     state = state.copyWith(alarmaCreada: value);
   }
@@ -177,6 +188,7 @@ class AddNotaNotifier extends Notifier<AddNotaState> {
       startTime: now,
       endTime: now,
       isImportant: false,
+      notificationMode: 'notificacion',
       alarmaCreada: false,
       alarmTime: now,
       alarmaHora: '',
@@ -205,6 +217,7 @@ class AddNotaNotifier extends Notifier<AddNotaState> {
         site: siteText,
         notes: notesText,
         isImportant: currentState.isImportant,
+        notificationMode: currentState.notificationMode,
         startTimeMilliseconds:
             currentState.startTime.millisecondsSinceEpoch,
         endTimeMilliseconds:
@@ -239,6 +252,7 @@ class AddNotaNotifier extends Notifier<AddNotaState> {
             titulo: 'Nota: $titleText',
             mensaje: notesText,
             fechaRecordatorio: currentState.alarmTime,
+            modoAviso: currentState.notificationMode,
           );
         } else {
           await NotificacionesService.instance.cancelar(nota.id!);

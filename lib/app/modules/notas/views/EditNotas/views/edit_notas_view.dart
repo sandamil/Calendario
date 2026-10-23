@@ -321,6 +321,41 @@ class _EditNotasViewState extends ConsumerState<EditNotasView> {
                 ),
                 SizedBox(height: 2.h),
                 LineWidget(),
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10.h, horizontal: 8.w),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Tipo de aviso', style: CustomTextStyle.rowButomText),
+                      SizedBox(height: 8.h),
+                      SegmentedButton<String>(
+                        showSelectedIcon: false,
+                        segments: const <ButtonSegment<String>>[
+                          ButtonSegment<String>(
+                            value: 'notificacion',
+                            label: Text('Notificación'),
+                            icon: Icon(Icons.notifications_outlined),
+                          ),
+                          ButtonSegment<String>(
+                            value: 'alarma',
+                            label: Text('Alarma'),
+                            icon: Icon(Icons.alarm_rounded),
+                          ),
+                        ],
+                        selected: <String>{state.notificationMode},
+                        onSelectionChanged: (selection) =>
+                            notifier.setNotificationMode(selection.first),
+                      ),
+                      SizedBox(height: 4.h),
+                      Text(
+                        state.notificationMode == 'alarma'
+                            ? 'Canal de alarma independiente; puedes elegir su tono en Ajustes de Android.'
+                            : 'Aviso normal con el sonido configurado en el móvil.',
+                        style: TextStyle(fontSize: 12.sp, color: theme.colorScheme.onSurface.withValues(alpha: .65)),
+                      ),
+                    ],
+                  ),
+                ),
                 TextButton(
                   onPressed: () {
                     if (state.alarmaCreada) {
