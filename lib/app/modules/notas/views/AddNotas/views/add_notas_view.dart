@@ -329,7 +329,7 @@ class _AddNotasViewState extends ConsumerState<AddNotasView> {
                       SizedBox(height: 4.h),
                       Text(
                         notaState.notificationMode == 'alarma'
-                            ? 'Aviso más insistente con vibración reforzada en Android.'
+                            ? 'Canal de alarma independiente; puedes elegir su tono en Ajustes de Android.'
                             : 'Aviso normal con el sonido configurado en el móvil.',
                         style: TextStyle(fontSize: 12.sp, color: theme.colorScheme.onSurface.withValues(alpha: .65)),
                       ),
