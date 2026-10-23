@@ -188,7 +188,8 @@ class TurnoTypesNotifier extends AsyncNotifier<List<TurnoType>> {
           actualizado.endHour != turno.endHour ||
           actualizado.color != turno.color ||
           actualizado.reminderEnabled != turno.reminderEnabled ||
-          actualizado.reminderMinutesBefore != turno.reminderMinutesBefore) {
+          actualizado.reminderMinutesBefore != turno.reminderMinutesBefore ||
+          actualizado.reminderMode != turno.reminderMode) {
         throw StateError(
           'No se ha podido confirmar la actualización del tipo de turno.',
         );
