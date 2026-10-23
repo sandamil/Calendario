@@ -18,7 +18,7 @@ class DevPage extends StatelessWidget {
   final List<Map> listViewData = const [
     {
       "icon": Icons.vpn_key_outlined,
-      "title": "Cloud Messaging Token",
+      "title": "Firebase Installation ID",
       "color": Colors.green,
       "onPress": OnListViewPress.cloudMessageToken
     },
@@ -33,10 +33,10 @@ class DevPage extends StatelessWidget {
   void _onListViewPress(context, OnListViewPress value) async {
     switch (value) {
       case OnListViewPress.cloudMessageToken:
-        final token = await CloudMessagingUtils.getToken();
-        Log.e("file size = $token");
+        final token = await CloudMessagingUtils.getInstallationId();
+        Log.e("Firebase Installation ID = $token");
 
-        Toast.toast(context, msg: "$token copy");
+        Toast.toast(context, msg: token == null ? "No se pudo obtener el identificador" : "Identificador copiado");
         FlutterClipboard.copy(token ?? '');
         break;
       case OnListViewPress.appLog:
