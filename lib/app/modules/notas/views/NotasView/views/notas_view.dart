@@ -92,11 +92,13 @@ class _NotasViewState extends ConsumerState<NotasView> {
     final start = _start;
     final end = _end;
 
-    await Share.share(
-      'Titulo: ${_note.title ?? ''}'
-      '\nNota: ${_note.notes ?? ''}'
-      '\nInicio: ${_dateTime(start)} h. ${_date(start)}'
-      '\nFin: ${_dateTime(end)} h. ${_date(end)}',
+    await SharePlus.instance.share(
+      ShareParams(
+        text: 'Titulo: ${_note.title ?? ''}'
+            '\nNota: ${_note.notes ?? ''}'
+            '\nInicio: ${_dateTime(start)} h. ${_date(start)}'
+            '\nFin: ${_dateTime(end)} h. ${_date(end)}',
+      ),
     );
   }
 
