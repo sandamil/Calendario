@@ -4,10 +4,6 @@ import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
 /// Servicio único para todos los recordatorios locales de Calendario.
-///
-/// La instancia del plugin se inicializa una sola vez al arrancar la app.
-/// Las notificaciones programadas sobreviven al cierre de la aplicación y
-/// Android puede restaurarlas después de reiniciar el dispositivo.
 class NotificacionesService {
   NotificacionesService._();
 
@@ -30,6 +26,11 @@ class NotificacionesService {
     tz.initializeTimeZones();
     _zonasHorariasInicializadas = true;
 
+    if (kIsWeb) {
+      _inicializado = true;
+      return;
+    }
+
     const android = AndroidInitializationSettings('ic_stat_notification');
     final iOS = DarwinInitializationSettings(
       requestAlertPermission: false,
@@ -38,7 +39,7 @@ class NotificacionesService {
     );
 
     await _plugin.initialize(
-      settings: const InitializationSettings(
+      settings: InitializationSettings(
         android: android,
         iOS: iOS,
       ),
@@ -61,6 +62,10 @@ class NotificacionesService {
 
       if (await androidPlugin.areNotificationsEnabled() == false) {
         await androidPlugin.requestNotificationsPermission();
+      }
+
+      if (await androidPlugin.canScheduleExactNotifications() == false) {
+        await androidPlugin.requestExactAlarmsPermission();
       }
     }
 
@@ -93,8 +98,7 @@ class NotificacionesService {
       await android.requestNotificationsPermission();
     }
 
-    final notificationsEnabled = await android.areNotificationsEnabled();
-    if (notificationsEnabled == false) {
+    if (await android.areNotificationsEnabled() == false) {
       throw StateError('Las notificaciones de Android están desactivadas.');
     }
 
@@ -133,6 +137,8 @@ class NotificacionesService {
     required String mensaje,
     required DateTime fechaRecordatorio,
   }) async {
+    if (kIsWeb) return false;
+
     await inicializar();
     await inicializarZonasHorarias();
 
@@ -184,16 +190,19 @@ class NotificacionesService {
   }
 
   Future<void> cancelar(int id) async {
+    if (kIsWeb) return;
     await inicializar();
     await _plugin.cancel(id: id);
   }
 
   Future<void> cancelarTodas() async {
+    if (kIsWeb) return;
     await inicializar();
     await _plugin.cancelAll();
   }
 
   Future<List<PendingNotificationRequest>> pendientes() async {
+    if (kIsWeb) return const <PendingNotificationRequest>[];
     await inicializar();
     return _plugin.pendingNotificationRequests();
   }
