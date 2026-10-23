@@ -138,7 +138,8 @@ class _AlarmasViewState extends ConsumerState<AlarmasView> {
               ),
               const SizedBox(height: 12),
               DropdownButtonFormField<String>(
-                value: state.selectedUnit,
+                key: ValueKey(state.selectedUnit),
+                initialValue: state.selectedUnit,
                 decoration: const InputDecoration(
                   labelText: 'Unidad',
                   border: OutlineInputBorder(),
