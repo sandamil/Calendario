@@ -9,7 +9,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:introduction_screen/introduction_screen.dart';
 
-import '../../../../config/theme/my_fonts.dart';
 import '../../../../config/theme/styles.dart';
 import '../../../../config/util/constant.dart';
 import '../../../data/local/app_storage.dart';
@@ -181,19 +180,6 @@ class _BoardingViewState extends ConsumerState<BoardingView> {
 
   @override
   Widget build(BuildContext context) {
-    TextStyle bodyStyle = TextStyle(fontSize: 19.0, color: Colors.black);
-    PageDecoration pageDecoration = const PageDecoration(
-      titleTextStyle: TextStyle(
-        fontSize: 28.0,
-        fontWeight: FontWeight.w700,
-        color: Colors.black,
-      ),
-      // bodyTextStyle: bodyStyle,
-      bodyPadding: EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 16.0),
-      pageColor: Colors.white,
-      // imagePadding: EdgeInsets.zero,
-    );
-
     return IntroductionScreen(
       dotsDecorator: const DotsDecorator(
         size: Size(10, 10),
