@@ -150,8 +150,8 @@ class TypewriterAnimatedTextKit extends AnimatedTextKit {
     Curve curve,
   ) =>
       text
-          .map((_) => TypewriterAnimatedText(
-                _,
+          .map((textItem) => TypewriterAnimatedText(
+                textItem,
                 textAlign: textAlign,
                 textStyle: textStyle,
                 speed: speed,
