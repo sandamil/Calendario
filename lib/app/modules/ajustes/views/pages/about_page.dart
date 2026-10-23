@@ -109,9 +109,6 @@ class _AboutPageState extends State<AboutPage> {
       case OnListViewPress.dev:
         context.push('/dev');
         break;
-      default:
-      Toast.toast(context, msg: 'No function');
-       break;
     }
   }
 
