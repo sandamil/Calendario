@@ -31,7 +31,7 @@ class TaskCard extends ConsumerWidget {
       child: Slidable(
         key: ValueKey('note-${noteData.id}'),
         endActionPane: ActionPane(motion: const DrawerMotion(), extentRatio: .42, children: [
-          SlidableAction(label: 'Compartir', icon: Icons.share_rounded, backgroundColor: PRIMARY_COLOR, foregroundColor: Colors.black, borderRadius: BorderRadius.circular(16.r), onPressed: (_) => Share.share('Título: ${noteData.title}\nNota: ${noteData.notes}\nInicio: ${start.formatDateTime24H} h.  ${start.formatDateYMMMd}\nFin: ${end.formatDateTime24H} h.  ${end.formatDateYMMMd}')),
+          SlidableAction(label: 'Compartir', icon: Icons.share_rounded, backgroundColor: PRIMARY_COLOR, foregroundColor: Colors.black, borderRadius: BorderRadius.circular(16.r), onPressed: (_) => SharePlus.instance.share(ShareParams(text: 'Título: ${noteData.title}\nNota: ${noteData.notes}\nInicio: ${start.formatDateTime24H} h.  ${start.formatDateYMMMd}\nFin: ${end.formatDateTime24H} h.  ${end.formatDateYMMMd}'))),
           SlidableAction(label: 'Eliminar', icon: Icons.delete_outline_rounded, backgroundColor: Colors.redAccent, foregroundColor: Colors.white, borderRadius: BorderRadius.circular(16.r), onPressed: (_) => _confirmDelete(context, ref)),
         ]),
         child: Material(
