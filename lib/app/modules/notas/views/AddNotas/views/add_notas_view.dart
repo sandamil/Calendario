@@ -301,6 +301,41 @@ class _AddNotasViewState extends ConsumerState<AddNotasView> {
                   height: 2.h,
                 ),
                 LineWidget(),
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10.h),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Tipo de aviso', style: CustomTextStyle.rowButomText),
+                      SizedBox(height: 8.h),
+                      SegmentedButton<String>(
+                        showSelectedIcon: false,
+                        segments: const <ButtonSegment<String>>[
+                          ButtonSegment<String>(
+                            value: 'notificacion',
+                            label: Text('Notificación'),
+                            icon: Icon(Icons.notifications_outlined),
+                          ),
+                          ButtonSegment<String>(
+                            value: 'alarma',
+                            label: Text('Alarma'),
+                            icon: Icon(Icons.alarm_rounded),
+                          ),
+                        ],
+                        selected: <String>{notaState.notificationMode},
+                        onSelectionChanged: (selection) =>
+                            notaNotifier.setNotificationMode(selection.first),
+                      ),
+                      SizedBox(height: 4.h),
+                      Text(
+                        notaState.notificationMode == 'alarma'
+                            ? 'Aviso más insistente con vibración reforzada en Android.'
+                            : 'Aviso normal con el sonido configurado en el móvil.',
+                        style: TextStyle(fontSize: 12.sp, color: theme.colorScheme.onSurface.withValues(alpha: .65)),
+                      ),
+                    ],
+                  ),
+                ),
                 TextButton(
                     onPressed: () async {
                       notaState.alarmaCreada
