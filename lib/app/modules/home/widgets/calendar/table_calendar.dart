@@ -1,6 +1,4 @@
-import 'package:flutter/foundation.dart' show defaultTargetPlatform, kIsWeb, TargetPlatform;
 import 'package:intl/intl.dart';
-import 'package:calendario2/app/modules/home/widgets/calendar/widget/customAlertDialogDaySelected.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:calendario2/app/modules/home/providers/calendar_providers.dart';
@@ -10,10 +8,8 @@ import 'package:table_calendar/table_calendar.dart';
 import '../../../../../config/theme/my_colors.dart';
 import '../../../../../config/theme/my_fonts.dart';
 import '../../../../../config/util/hexColor.dart';
-import '../../../../data/local/calendarDatabase.dart';
 import '../../../../data/model/cuadranteDay.dart';
 import '../../../../data/model/taskModel.dart';
-import 'turnos_notas_onHomeDialog.dart';
 
 class TableCalendarWidget extends ConsumerStatefulWidget {
   TableCalendarWidget(
