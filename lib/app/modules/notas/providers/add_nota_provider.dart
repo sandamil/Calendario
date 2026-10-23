@@ -75,14 +75,9 @@ class AddNotaNotifier extends Notifier<AddNotaState> {
     });
 
     final now = DateTime.now();
-    var start = now;
-    var end = now;
-
-    // El formulario puede abrirse desde un día concreto del calendario.
-    // La vista debe llamar setInitialDate si recibe ese argumento.
     return AddNotaState(
-      startTime: start,
-      endTime: end,
+      startTime: now,
+      endTime: now,
       isImportant: false,
       alarmaCreada: false,
       alarmTime: now,
@@ -119,6 +114,32 @@ class AddNotaNotifier extends Notifier<AddNotaState> {
     state = state.copyWith(endTime: value);
   }
 
+  void setEndDate(DateTime value) {
+    final current = state.endTime;
+    var updated = DateTime(
+      value.year,
+      value.month,
+      value.day,
+      current.hour,
+      current.minute,
+    );
+    if (updated.isBefore(state.startTime)) updated = state.startTime;
+    state = state.copyWith(endTime: updated);
+  }
+
+  void setEndClock(TimeOfDay value) {
+    final current = state.endTime;
+    var updated = DateTime(
+      current.year,
+      current.month,
+      current.day,
+      value.hour,
+      value.minute,
+    );
+    if (updated.isBefore(state.startTime)) updated = state.startTime;
+    state = state.copyWith(endTime: updated);
+  }
+
   void toggleImportant() {
     state = state.copyWith(isImportant: !state.isImportant);
   }
@@ -146,7 +167,6 @@ class AddNotaNotifier extends Notifier<AddNotaState> {
     state = state.copyWith(firstTime: value);
   }
 
-  /// Reinicia el formulario tras guardar correctamente una nota.
   void resetForm() {
     title.clear();
     site.clear();
@@ -169,7 +189,6 @@ class AddNotaNotifier extends Notifier<AddNotaState> {
   bool _saving = false;
 
   Future<bool> saveNota({int? id}) async {
-    // Impide dos inserciones simultáneas desde el mismo formulario.
     if (_saving) return false;
     _saving = true;
 
@@ -199,7 +218,6 @@ class AddNotaNotifier extends Notifier<AddNotaState> {
         isAlarmaCreated: currentState.alarmaCreada,
       );
 
-      // Reintentar con otro ID si SQLite rechaza una colisión.
       var insertedId = await NotasDB.instance.insertNotas(nota);
       var attempts = 0;
 
@@ -212,10 +230,8 @@ class AddNotaNotifier extends Notifier<AddNotaState> {
         attempts++;
       }
 
-      // Si no se insertó, no limpiar el formulario.
       if (insertedId <= 0) return false;
 
-      // Una vez insertada, un error posterior no debe provocar otro alta.
       try {
         if (currentState.alarmaCreada) {
           await NotificacionesService.instance.programar(
