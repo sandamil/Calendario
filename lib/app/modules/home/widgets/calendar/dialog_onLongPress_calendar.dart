@@ -48,7 +48,7 @@ class CalendarDaySheet extends StatelessWidget {
 
   Future<void> _openAddNote(BuildContext context) async {
     Navigator.of(context).pop();
-    final noteKey = GlobalKey<_CalendarAddNoteSheetState>();
+    final noteKey = GlobalKey<CalendarAddNoteSheetState>();
     await showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
@@ -58,7 +58,7 @@ class CalendarDaySheet extends StatelessWidget {
         title: 'Nueva nota',
         centerTitle: true,
         leading: TextButton(
-          onPressed: () => noteKey.currentState?._save(),
+          onPressed: () => noteKey.currentState?.save(),
           child: const Text('Añadir'),
         ),
         child: CalendarAddNoteSheet(
