@@ -220,81 +220,68 @@ class _AddNotasViewState extends ConsumerState<AddNotasView> {
                     TextButton(
                       onPressed: () async {
                         final initial = notaState.startTime;
-                        var selectedTime = TimeOfDay.fromDateTime(initial);
+                        final selected = await showTimePicker(
+                          context: context,
+                          initialTime: TimeOfDay.fromDateTime(initial),
+                        );
+                        if (!context.mounted || selected == null) return;
+                        final updated = DateTime(
+                          initial.year, initial.month, initial.day,
+                          selected.hour, selected.minute,
+                        );
+                        notaNotifier.setStartTime(updated);
+                        if (notaState.endTime.isBefore(updated)) {
+                          notaNotifier.setEndTime(updated);
+                        }
                         var selectedMode = notaState.notificationMode;
-                        final result = await showDialog<Map<String, dynamic>>(
+                        final confirmedMode = await showDialog<String>(
                           context: context,
                           builder: (dialogContext) => StatefulBuilder(
-                            builder: (dialogContext, setDialogState) =>
-                                AlertDialog(
-                              title: const Text('Hora de inicio y tipo de aviso'),
-                              content: SingleChildScrollView(
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    TimePicker(
-                                      initialTime: selectedTime,
-                                      onTimeChanged: (value) {
-                                        setDialogState(() => selectedTime = value);
-                                      },
-                                    ),
-                                    SizedBox(height: 12.h),
-                                    Align(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(
-                                        '¿Cómo quieres recibir el aviso?',
-                                        style: Theme.of(dialogContext).textTheme.titleSmall,
+                            builder: (dialogContext, setDialogState) => AlertDialog(
+                              title: const Text('Tipo de aviso'),
+                              content: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Text('¿Cómo quieres recibir el aviso de esta nota?'),
+                                  SizedBox(height: 12.h),
+                                  SegmentedButton<String>(
+                                    showSelectedIcon: false,
+                                    segments: const <ButtonSegment<String>>[
+                                      ButtonSegment<String>(
+                                        value: 'notificacion',
+                                        label: Text('Notificación'),
+                                        icon: Icon(Icons.notifications_outlined),
                                       ),
-                                    ),
-                                    SizedBox(height: 8.h),
-                                    SegmentedButton<String>(
-                                      showSelectedIcon: false,
-                                      segments: const <ButtonSegment<String>>[
-                                        ButtonSegment<String>(
-                                          value: 'notificacion',
-                                          label: Text('Notificación'),
-                                          icon: Icon(Icons.notifications_outlined),
-                                        ),
-                                        ButtonSegment<String>(
-                                          value: 'alarma',
-                                          label: Text('Alarma'),
-                                          icon: Icon(Icons.alarm_rounded),
-                                        ),
-                                      ],
-                                      selected: <String>{selectedMode},
-                                      onSelectionChanged: (selection) {
-                                        setDialogState(() => selectedMode = selection.first);
-                                      },
-                                    ),
-                                  ],
-                                ),
+                                      ButtonSegment<String>(
+                                        value: 'alarma',
+                                        label: Text('Alarma'),
+                                        icon: Icon(Icons.alarm_rounded),
+                                      ),
+                                    ],
+                                    selected: <String>{selectedMode},
+                                    onSelectionChanged: (selection) {
+                                      setDialogState(() => selectedMode = selection.first);
+                                    },
+                                  ),
+                                ],
                               ),
                               actions: [
                                 TextButton(
                                   onPressed: () => Navigator.of(dialogContext).pop(),
-                                  child: const Text('Cancelar'),
+                                  child: const Text('Ahora no'),
                                 ),
                                 FilledButton(
-                                  onPressed: () => Navigator.of(dialogContext).pop({
-                                    'time': selectedTime,
-                                    'mode': selectedMode,
-                                  }),
+                                  onPressed: () => Navigator.of(dialogContext).pop(selectedMode),
                                   child: const Text('Guardar'),
                                 ),
                               ],
                             ),
                           ),
                         );
-                        if (!context.mounted || result == null) return;
-                        final selected = result['time'] as TimeOfDay;
-                        final updated = DateTime(
-                          initial.year, initial.month, initial.day,
-                          selected.hour, selected.minute,
-                        );
-                        notaNotifier.setStartTime(updated);
-                        notaNotifier.setNotificationMode(result['mode'] as String);
-                        if (notaState.endTime.isBefore(updated)) {
-                          notaNotifier.setEndTime(updated);
+                        if (!context.mounted) return;
+                        if (confirmedMode != null) {
+                          notaNotifier.setNotificationMode(confirmedMode);
                         }
                       },
                       child: _dateTimeRow(
