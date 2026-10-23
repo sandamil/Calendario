@@ -63,10 +63,6 @@ class NotificacionesService {
       if (await androidPlugin.areNotificationsEnabled() == false) {
         await androidPlugin.requestNotificationsPermission();
       }
-
-      if (await androidPlugin.canScheduleExactNotifications() == false) {
-        await androidPlugin.requestExactAlarmsPermission();
-      }
     }
 
     final iOSPlugin = _plugin.resolvePlatformSpecificImplementation<
@@ -99,6 +95,15 @@ class NotificacionesService {
     if (await android.areNotificationsEnabled() == false) {
       throw StateError('Las notificaciones de Android están desactivadas.');
     }
+
+    if (await android.canScheduleExactNotifications()) {
+      return AndroidScheduleMode.exactAllowWhileIdle;
+    }
+
+    // Android puede abrir Ajustes para conceder alarmas exactas. Si el
+    // usuario no las concede, seguimos con una alarma inexacta para no
+    // perder el recordatorio.
+    await android.requestExactAlarmsPermission();
 
     if (await android.canScheduleExactNotifications()) {
       return AndroidScheduleMode.exactAllowWhileIdle;
