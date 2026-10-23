@@ -450,7 +450,7 @@ class _HomeViewState extends State<HomeView> {
     await _shareCalendarPeriod(start, end, label);
   }
 
-  Future<void> _shareCalendarPeriod(DateTime start, DateTime end, String label, {required bool includeTurnos, required bool includeNotas, String format = 'Texto'}) async {
+  Future<void> _shareCalendarPeriod(DateTime start, DateTime end, String label, {bool includeTurnos = true, bool includeNotas = true, String format = 'Texto'}) async {
     final container = ProviderScope.containerOf(context, listen: false);
     await container.read(cuadranteMapProvider.notifier).reload();
     final calendar = container.read(cuadranteMapProvider);
@@ -642,7 +642,7 @@ class _HomeViewState extends State<HomeView> {
       y += height + (pretty ? 17 : 12);
     }
     y += 48;
-    final image = await recorder.endRecording().toImage(width.toInt(), y.ceil().clamp(1, 4000));
+    final image = await recorder.endRecording().toImage(width.toInt(), y.ceil().clamp(1, 4000).toInt());
     final data = await image.toByteData(format: ui.ImageByteFormat.png);
     image.dispose();
     if (data == null) throw StateError('No se pudo generar la imagen del calendario.');
