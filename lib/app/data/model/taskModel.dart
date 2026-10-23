@@ -53,7 +53,10 @@ class Task {
     };
   }
 
-  Task.fromMap(Map<dynamic, dynamic> map) {
+  Task.fromMap(Map<dynamic, dynamic> map)
+      : notificationMode = map['notificationMode']?.toString() == 'alarma'
+            ? 'alarma'
+            : 'notificacion' {
     id = map['id'];
     title = map['title'];
     site = map['site'];
@@ -69,7 +72,6 @@ class Task {
     alarmaTimestamp = map['alarmaTimestamp'] as int?;
     alarmaActivadaString = map['alarmaActivadaString'];
     isAlarmaCreated = map['isAlarmaCreated'] == 1 ? true : false;
-    notificationMode = map['notificationMode']?.toString() == 'alarma' ? 'alarma' : 'notificacion';
   }
 
   Task.fromJson(Map<String, dynamic> json)
