@@ -74,6 +74,9 @@ class NotificacionesService {
           importance: Importance.max,
           playSound: true,
           enableVibration: true,
+          vibrationPattern: Int64List.fromList(
+            const <int>[0, 700, 300, 700, 300, 1000],
+          ),
           enableLights: true,
         ),
       );
