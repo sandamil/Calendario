@@ -530,7 +530,7 @@ class _HomeViewState extends State<HomeView> {
       }
     }
 
-    final exportText = lines.join('\\n');
+    final exportText = lines.join('\n');
     switch (format) {
       case 'PDF':
         final document = pw.Document();
