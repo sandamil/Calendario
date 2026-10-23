@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logger/logger.dart';
 
-import '../../../../../debug/log/log.dart';
 
 
 final ListQueue<OutputEvent> _outputEventBuffer = ListQueue();
@@ -84,7 +83,7 @@ class _LogConsoleState extends State<LogConsole> {
   final _scrollController = ScrollController();
   final _filterController = TextEditingController();
 
-  Level _filterLevel = Level.verbose;
+  Level _filterLevel = Level.trace;
   double _logFontSize = 14;
 
   int _currentId = 0;
@@ -243,8 +242,8 @@ class _LogConsoleState extends State<LogConsole> {
               value: _filterLevel,
               items: const [
                 DropdownMenuItem(
-                  value: Level.verbose,
-                  child: Text("Verbose"),
+                  value: Level.trace,
+                  child: Text("Trace"),
                 ),
                 DropdownMenuItem(
                   value: Level.debug,
@@ -263,12 +262,12 @@ class _LogConsoleState extends State<LogConsole> {
                   child: Text("Error"),
                 ),
                 DropdownMenuItem(
-                  value: Level.wtf,
-                  child: Text("WTF"),
+                  value: Level.fatal,
+                  child: Text("Fatal"),
                 ),
                 DropdownMenuItem(
-                  value: Level.nothing,
-                  child: Text("Nothing"),
+                  value: Level.off,
+                  child: Text("Off"),
                 )
               ],
               onChanged: (value) {
