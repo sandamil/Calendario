@@ -15,7 +15,7 @@ class NotasDB {
   static Database? _db;
   final String databaseName = 'notas_database.db';
   final String taskTable = 'Notas';
-  static const int _version = 3;
+  static const int _version = 4;
 
   get db async {
     if (_db != null) {
@@ -59,7 +59,8 @@ class NotasDB {
   //       'isImportant INTEGER, '
   //       'idAlarma INTEGER, '
   //       'alarmaActivadaString TEXT, '
-  //       'isAlarmaCreated INTEGER)'
+  //       'isAlarmaCreated INTEGER, '
+        'notificationMode TEXT NOT NULL DEFAULT \'notificacion\')'
   //   );
   // }
 
@@ -99,6 +100,12 @@ class NotasDB {
     if (!columns.contains('alarmaHora')) {
       await db.execute(
         'ALTER TABLE $taskTable ADD COLUMN alarmaHora TEXT',
+      );
+    }
+
+    if (!columns.contains('notificationMode')) {
+      await db.execute(
+        "ALTER TABLE $taskTable ADD COLUMN notificationMode TEXT NOT NULL DEFAULT 'notificacion'",
       );
     }
 
@@ -147,6 +154,7 @@ class NotasDB {
         alarmaTimestamp: maps[0]['alarmaTimestamp'] as int?,
         alarmaActivadaString: maps[0]['alarmaActivadaString'],
         isAlarmaCreated: maps[0]['isAlarmaCreated'] == 1 ? true : false,
+        notificationMode: maps[0]['notificationMode']?.toString() == 'alarma' ? 'alarma' : 'notificacion',
       );
     } else {
       throw FormatException(
