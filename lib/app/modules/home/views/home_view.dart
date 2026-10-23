@@ -18,6 +18,8 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:intl/intl.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:table_calendar/table_calendar.dart';
 import '../../../../config/util/constant.dart';
 
@@ -145,8 +147,6 @@ class _HomeViewState extends State<HomeView> {
         .clamp(arrowInset, popupWidth - arrowInset)
         .toDouble();
 
-    // Elegir el lado con más espacio y limitar el alto al espacio real.
-    // El borde del globo queda anclado al toque, sin estimar su altura.
     final spaceBelow = math.max(
       0.0,
       overlaySize.height - tap.dy - verticalMargin,
@@ -200,6 +200,273 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
+  DateTime _dateOnly(DateTime date) => DateTime(date.year, date.month, date.day);
+
+  DateTime _monthStart(DateTime date) => DateTime(date.year, date.month, 1);
+
+  DateTime _monthEnd(DateTime date) => DateTime(date.year, date.month + 1, 0);
+
+  DateTime _yearStart(DateTime date) => DateTime(date.year, 1, 1);
+
+  DateTime _yearEnd(DateTime date) => DateTime(date.year, 12, 31);
+
+  String _periodDate(DateTime date) => DateFormat('dd/MM/yyyy').format(date);
+
+  Future<void> _openShareMenu() async {
+    await showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      useSafeArea: true,
+      backgroundColor: Colors.transparent,
+      builder: (sheetContext) {
+        final theme = Theme.of(sheetContext);
+        final onSurface = theme.colorScheme.onSurface;
+        return Material(
+          color: theme.scaffoldBackgroundColor,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(28.r)),
+          clipBehavior: Clip.antiAlias,
+          child: SafeArea(
+            top: false,
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(18.w, 10.h, 18.w, 18.h),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: 38.w,
+                    height: 4.h,
+                    decoration: BoxDecoration(
+                      color: onSurface.withOpacity(.18),
+                      borderRadius: BorderRadius.circular(20.r),
+                    ),
+                  ),
+                  SizedBox(height: 14.h),
+                  Row(
+                    children: [
+                      CircleAvatar(
+                        radius: 20.r,
+                        backgroundColor: PRIMARY_COLOR.withOpacity(.12),
+                        child: Icon(Icons.share_rounded, color: PRIMARY_COLOR, size: 21.sp),
+                      ),
+                      SizedBox(width: 12.w),
+                      Expanded(
+                        child: Text(
+                          'Compartir calendario',
+                          style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700),
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () => Navigator.of(sheetContext).pop(),
+                        icon: const Icon(Icons.close_rounded),
+                        tooltip: 'Cerrar',
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 10.h),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Periodo',
+                      style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w700, color: onSurface.withOpacity(.58)),
+                    ),
+                  ),
+                  SizedBox(height: 6.h),
+                  _ShareMenuTile(
+                    icon: Icons.today_rounded,
+                    title: 'Compartir día',
+                    subtitle: 'El día seleccionado',
+                    onTap: () async {
+                      Navigator.of(sheetContext).pop();
+                      final selected = ProviderScope.containerOf(context, listen: false).read(selectedDayProvider) ?? ProviderScope.containerOf(context, listen: false).read(focusedMonthProvider);
+                      await _shareCalendarPeriod(_dateOnly(selected), _dateOnly(selected), 'Día ${_periodDate(selected)}');
+                    },
+                  ),
+                  _ShareMenuTile(
+                    icon: Icons.date_range_rounded,
+                    title: 'Compartir días',
+                    subtitle: 'Seleccionar un periodo de días',
+                    onTap: () async {
+                      Navigator.of(sheetContext).pop();
+                      await _shareCustomRange('Días');
+                    },
+                  ),
+                  _ShareMenuTile(
+                    icon: Icons.calendar_month_rounded,
+                    title: 'Compartir mes',
+                    subtitle: 'El mes que estás viendo',
+                    onTap: () async {
+                      Navigator.of(sheetContext).pop();
+                      final selected = ProviderScope.containerOf(context, listen: false).read(focusedMonthProvider);
+                      await _shareCalendarPeriod(_monthStart(selected), _monthEnd(selected), DateFormat('MMMM yyyy', 'es_ES').format(selected));
+                    },
+                  ),
+                  _ShareMenuTile(
+                    icon: Icons.calendar_view_month_rounded,
+                    title: 'Compartir meses',
+                    subtitle: 'Seleccionar varios meses',
+                    onTap: () async {
+                      Navigator.of(sheetContext).pop();
+                      await _shareCustomMonths();
+                    },
+                  ),
+                  _ShareMenuTile(
+                    icon: Icons.event_note_rounded,
+                    title: 'Compartir año',
+                    subtitle: 'Todo el año seleccionado',
+                    onTap: () async {
+                      Navigator.of(sheetContext).pop();
+                      final selected = ProviderScope.containerOf(context, listen: false).read(focusedMonthProvider);
+                      await _shareCalendarPeriod(_yearStart(selected), _yearEnd(selected), 'Año ${selected.year}');
+                    },
+                  ),
+                  _ShareMenuTile(
+                    icon: Icons.tune_rounded,
+                    title: 'Rango personalizado',
+                    subtitle: 'Elegir cualquier fecha de inicio y fin',
+                    onTap: () async {
+                      Navigator.of(sheetContext).pop();
+                      await _shareCustomRange('Rango personalizado');
+                    },
+                  ),
+                  SizedBox(height: 8.h),
+                  Divider(color: onSurface.withOpacity(.10)),
+                  SizedBox(height: 6.h),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      'Formatos',
+                      style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w700, color: onSurface.withOpacity(.58)),
+                    ),
+                  ),
+                  SizedBox(height: 6.h),
+                  _ShareMenuTile(
+                    icon: Icons.text_snippet_outlined,
+                    title: 'Texto',
+                    subtitle: 'Disponible ahora',
+                    onTap: () => Navigator.of(sheetContext).pop(),
+                  ),
+                  _ShareMenuTile(
+                    icon: Icons.picture_as_pdf_outlined,
+                    title: 'PDF',
+                    subtitle: 'Lo añadiremos con plantillas de día, mes y año',
+                    enabled: false,
+                    onTap: () {},
+                  ),
+                  _ShareMenuTile(
+                    icon: Icons.image_outlined,
+                    title: 'Imagen / captura',
+                    subtitle: 'Calendario listo para enviar o guardar',
+                    enabled: false,
+                    onTap: () {},
+                  ),
+                  _ShareMenuTile(
+                    icon: Icons.event_available_outlined,
+                    title: 'Archivo de calendario',
+                    subtitle: 'Exportación compatible tipo ICS',
+                    enabled: false,
+                    onTap: () {},
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _shareCustomRange(String title) async {
+    final selected = ProviderScope.containerOf(context, listen: false).read(selectedDayProvider) ?? ProviderScope.containerOf(context, listen: false).read(focusedMonthProvider);
+    final range = await showDateRangePicker(
+      context: context,
+      firstDate: DateTime(1900),
+      lastDate: DateTime(2200),
+      initialDateRange: DateTimeRange(start: _dateOnly(selected), end: _dateOnly(selected)),
+      helpText: title,
+      saveText: 'Compartir',
+    );
+    if (!mounted || range == null) return;
+    await _shareCalendarPeriod(_dateOnly(range.start), _dateOnly(range.end), '${_periodDate(range.start)} - ${_periodDate(range.end)}');
+  }
+
+  Future<void> _shareCustomMonths() async {
+    final selected = ProviderScope.containerOf(context, listen: false).read(focusedMonthProvider);
+    final range = await showDateRangePicker(
+      context: context,
+      firstDate: DateTime(1900),
+      lastDate: DateTime(2200),
+      initialDateRange: DateTimeRange(start: _monthStart(selected), end: _monthEnd(selected)),
+      helpText: 'Selecciona los meses',
+      saveText: 'Compartir',
+    );
+    if (!mounted || range == null) return;
+    final start = _monthStart(range.start);
+    final end = _monthEnd(range.end);
+    final label = start.year == end.year
+        ? 'Meses ${DateFormat('MMMM', 'es_ES').format(start)} - ${DateFormat('MMMM yyyy', 'es_ES').format(end)}'
+        : 'Meses ${DateFormat('MMMM yyyy', 'es_ES').format(start)} - ${DateFormat('MMMM yyyy', 'es_ES').format(end)}';
+    await _shareCalendarPeriod(start, end, label);
+  }
+
+  Future<void> _shareCalendarPeriod(DateTime start, DateTime end, String label) async {
+    final container = ProviderScope.containerOf(context, listen: false);
+    await container.read(cuadranteMapProvider.notifier).reload();
+    final calendar = container.read(cuadranteMapProvider);
+    final startDay = _dateOnly(start);
+    final endDay = _dateOnly(end);
+    final lines = <String>[];
+    final entries = <CuadranteDay>[];
+
+    for (final values in calendar.values) {
+      for (final day in values) {
+        final date = day.dateTime;
+        if (date == null) continue;
+        final normalized = _dateOnly(date);
+        if (!normalized.isBefore(startDay) && !normalized.isAfter(endDay)) {
+          entries.add(day);
+        }
+      }
+    }
+
+    entries.sort((a, b) {
+      final dateCompare = (a.dateTime ?? DateTime(1900)).compareTo(b.dateTime ?? DateTime(1900));
+      if (dateCompare != 0) return dateCompare;
+      return (a.startHour ?? '').compareTo(b.startHour ?? '');
+    });
+
+    lines.add('Calendario — $label');
+    lines.add('');
+
+    if (entries.isEmpty) {
+      lines.add('No hay turnos registrados en este periodo.');
+    } else {
+      DateTime? lastDate;
+      for (final day in entries) {
+        final date = _dateOnly(day.dateTime!);
+        if (lastDate == null || !isSameDay(lastDate, date)) {
+          if (lastDate != null) lines.add('');
+          lines.add(DateFormat('EEEE dd/MM/yyyy', 'es_ES').format(date));
+          lastDate = date;
+        }
+        final title = (day.description ?? '').trim().isNotEmpty
+            ? day.description!.trim()
+            : ((day.title ?? '').trim().isNotEmpty ? day.title!.trim() : 'Turno');
+        final startHour = (day.startHour ?? '').trim();
+        final endHour = (day.endHour ?? '').trim();
+        final hours = startHour.isNotEmpty && endHour.isNotEmpty ? ' · $startHour - $endHour' : '';
+        lines.add('• $title$hours');
+      }
+    }
+
+    await SharePlus.instance.share(
+      ShareParams(
+        text: lines.join('\n'),
+        title: 'Compartir calendario',
+        subject: 'Calendario — $label',
+      ),
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -221,7 +488,6 @@ class _HomeViewState extends State<HomeView> {
         _showHomeTutorial = true;
       });
 
-      // Esperar al siguiente frame: las claves ya estarán en el árbol.
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (!mounted || !_showHomeTutorial) return;
 
@@ -241,7 +507,6 @@ class _HomeViewState extends State<HomeView> {
     _selectedDays.add(ProviderScope.containerOf(context, listen: false)
         .read(focusedMonthProvider));
 
-    // Cargar el cuadrante antes de consultar los turnos del día inicial.
     getCuadrante().then((mapa) {
       if (!mounted) return;
       ProviderScope.containerOf(context, listen: false)
@@ -267,7 +532,6 @@ class _HomeViewState extends State<HomeView> {
         onPopInvokedWithResult: (bool didPop, Object? result) {
           if (didPop) return;
           if ((!kIsWeb && defaultTargetPlatform == TargetPlatform.android)) {
-            //? to close quick order floating if its open when click back btn
             if (isDialOpen.value) {
               isDialOpen.value = false;
             } else {
@@ -309,10 +573,10 @@ class _HomeViewState extends State<HomeView> {
                       : widget.key,
                   color: PRIMARY_COLOR,
                   icon: Icon(
-                    Icons.today_rounded,
+                    Icons.my_location_rounded,
                     size: 22.sp,
                   ),
-                  tooltip: 'Ir a hoy',
+                  tooltip: 'Volver a hoy',
                   onPressed: () {
                     final hoy = DateTime.now();
                     final container =
@@ -324,6 +588,15 @@ class _HomeViewState extends State<HomeView> {
                         .read(selectedDayProvider.notifier)
                         .setSelectedDay(hoy);
                   },
+                ),
+                IconButton(
+                  color: PRIMARY_COLOR,
+                  icon: Icon(
+                    Icons.share_rounded,
+                    size: 22.sp,
+                  ),
+                  tooltip: 'Compartir calendario',
+                  onPressed: _openShareMenu,
                 ),
               ],
             ),
@@ -376,8 +649,6 @@ class _HomeViewState extends State<HomeView> {
                   padding: EdgeInsets.symmetric(horizontal: 12.w),
                   child: LineWidget(),
                 ),
-                // SizedBox(height: 2.h),
-                // Obx(() => _buildSelectedDay()),
                 SizedBox(height: 2.h),
 
                 Expanded(
@@ -412,7 +683,6 @@ class _HomeViewState extends State<HomeView> {
                   .map(
                     (event) => Column(
                       children: [
-                        // CardEvent(event: event),
                         TaskCard(
                           noteData: event,
                           onTapAction: (Task noteData) {
@@ -436,6 +706,59 @@ class _HomeViewState extends State<HomeView> {
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _ShareMenuTile extends StatelessWidget {
+  const _ShareMenuTile({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    required this.onTap,
+    this.enabled = true,
+  });
+
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final VoidCallback onTap;
+  final bool enabled;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final color = theme.colorScheme.onSurface;
+    return Opacity(
+      opacity: enabled ? 1 : .48,
+      child: Material(
+        color: theme.colorScheme.surfaceContainerHighest.withOpacity(.55),
+        borderRadius: BorderRadius.circular(15.r),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(15.r),
+          onTap: enabled ? onTap : null,
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 9.h),
+            child: Row(
+              children: [
+                Icon(icon, color: PRIMARY_COLOR, size: 22.sp),
+                SizedBox(width: 11.w),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(title, style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w700, color: color)),
+                      SizedBox(height: 2.h),
+                      Text(subtitle, style: TextStyle(fontSize: 11.sp, color: color.withOpacity(.58))),
+                    ],
+                  ),
+                ),
+                Icon(Icons.chevron_right_rounded, size: 20.sp, color: color.withOpacity(.35)),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
