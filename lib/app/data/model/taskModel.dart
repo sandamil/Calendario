@@ -12,6 +12,7 @@ class Task {
   int? alarmaTimestamp;
   String? alarmaActivadaString;
   bool? isAlarmaCreated;
+  String notificationMode;
 
   Task(
       {this.id,
@@ -26,7 +27,8 @@ class Task {
       this.alarmaHora,
     this.alarmaTimestamp,
       this.alarmaActivadaString,
-      this.isAlarmaCreated
+      this.isAlarmaCreated,
+      this.notificationMode = 'notificacion'
       });
 
 
@@ -47,6 +49,7 @@ class Task {
       'alarmaTimestamp': alarmaTimestamp,
       'alarmaActivadaString': alarmaActivadaString,
       'isAlarmaCreated': isAlarmaCreated == true ? 1 : 0,
+      'notificationMode': notificationMode,
     };
   }
 
@@ -66,6 +69,7 @@ class Task {
     alarmaTimestamp = map['alarmaTimestamp'] as int?;
     alarmaActivadaString = map['alarmaActivadaString'];
     isAlarmaCreated = map['isAlarmaCreated'] == 1 ? true : false;
+    notificationMode = map['notificationMode']?.toString() == 'alarma' ? 'alarma' : 'notificacion';
   }
 
   Task.fromJson(Map<String, dynamic> json)
@@ -83,7 +87,8 @@ class Task {
   alarmaHora = json['alarmaHora'],
   alarmaTimestamp = json['alarmaTimestamp'] as int?,
   alarmaActivadaString = json['alarmaActivadaString'],
-  isAlarmaCreated = json['isAlarmaCreated'] == 1 ? true : false;
+  isAlarmaCreated = json['isAlarmaCreated'] == 1 ? true : false,
+  notificationMode = json['notificationMode']?.toString() == 'alarma' ? 'alarma' : 'notificacion';
 
   Map<String, dynamic> toJson() {
     return {
@@ -100,6 +105,7 @@ class Task {
       'alarmaTimestamp' : alarmaTimestamp,
       'alarmaActivadaString' : alarmaActivadaString,
       'isAlarmaCreated' : isAlarmaCreated,
+      'notificationMode' : notificationMode,
 
     };
   }
@@ -118,7 +124,8 @@ class Task {
         'alarmaHora: $alarmaHora, '
         'alarmaTimestamp: $alarmaTimestamp, '
         'alarmaActivadaString: $alarmaActivadaString, '
-        'isAlarmaCreated: $isAlarmaCreated}, '
+        'isAlarmaCreated: $isAlarmaCreated, '
+        'notificationMode: $notificationMode}, '
         '';
   }
 }
