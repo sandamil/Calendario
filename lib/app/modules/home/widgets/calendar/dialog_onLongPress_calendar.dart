@@ -48,6 +48,7 @@ class CalendarDaySheet extends StatelessWidget {
 
   Future<void> _openAddNote(BuildContext context) async {
     Navigator.of(context).pop();
+    final noteKey = GlobalKey<_CalendarAddNoteSheetState>();
     await showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
@@ -55,8 +56,15 @@ class CalendarDaySheet extends StatelessWidget {
       backgroundColor: Colors.transparent,
       builder: (_) => _CalendarSheetFrame(
         title: 'Nueva nota',
-        icon: Icons.note_add_outlined,
-        child: CalendarAddNoteSheet(selectedDate: selectedDate),
+        centerTitle: true,
+        leading: TextButton(
+          onPressed: () => noteKey.currentState?._save(),
+          child: const Text('Añadir'),
+        ),
+        child: CalendarAddNoteSheet(
+          key: noteKey,
+          selectedDate: selectedDate,
+        ),
       ),
     );
   }
@@ -203,10 +211,18 @@ class _ActionTile extends StatelessWidget {
 }
 
 class _CalendarSheetFrame extends StatelessWidget {
-  const _CalendarSheetFrame({required this.title, required this.icon, required this.child});
+  const _CalendarSheetFrame({
+    required this.title,
+    required this.child,
+    this.icon,
+    this.leading,
+    this.centerTitle = false,
+  });
 
   final String title;
-  final IconData icon;
+  final IconData? icon;
+  final Widget? leading;
+  final bool centerTitle;
   final Widget child;
 
   @override
@@ -234,17 +250,39 @@ class _CalendarSheetFrame extends StatelessWidget {
                     decoration: BoxDecoration(color: theme.colorScheme.onSurface.withOpacity(.2), borderRadius: BorderRadius.circular(20.r)),
                   ),
                   SizedBox(height: 14.h),
-                  Row(
-                    children: [
-                      CircleAvatar(
-                        radius: 20.r,
-                        backgroundColor: PRIMARY_COLOR.withOpacity(.12),
-                        child: Icon(icon, color: PRIMARY_COLOR, size: 21.sp),
-                      ),
-                      SizedBox(width: 12.w),
-                      Expanded(child: Text(title, style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700))),
-                      IconButton(onPressed: () => Navigator.of(context).pop(), icon: const Icon(Icons.close_rounded)),
-                    ],
+                  SizedBox(
+                    height: 42.h,
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: leading ??
+                              (icon == null
+                                  ? const SizedBox.shrink()
+                                  : CircleAvatar(
+                                      radius: 20.r,
+                                      backgroundColor: PRIMARY_COLOR.withOpacity(.12),
+                                      child: Icon(icon, color: PRIMARY_COLOR, size: 21.sp),
+                                    )),
+                        ),
+                        Center(
+                          child: Text(
+                            title,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700),
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: IconButton(
+                            onPressed: () => Navigator.of(context).pop(),
+                            icon: const Icon(Icons.close_rounded),
+                            tooltip: 'Cerrar',
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                   SizedBox(height: 8.h),
                   child,
