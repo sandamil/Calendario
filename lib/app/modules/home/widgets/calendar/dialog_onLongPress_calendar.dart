@@ -59,6 +59,15 @@ class CalendarDaySheet extends StatelessWidget {
         centerTitle: true,
         leading: TextButton(
           onPressed: () => noteKey.currentState?.save(),
+          style: TextButton.styleFrom(
+            foregroundColor: PRIMARY_COLOR,
+            textStyle: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w800),
+            padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
+            minimumSize: Size(0, 34.h),
+            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            visualDensity: VisualDensity.compact,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.r)),
+          ),
           child: const Text('Añadir'),
         ),
         child: CalendarAddNoteSheet(
