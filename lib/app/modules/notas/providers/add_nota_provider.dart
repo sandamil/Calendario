@@ -252,7 +252,7 @@ class AddNotaNotifier extends Notifier<AddNotaState> {
             titulo: 'Nota: $titleText',
             mensaje: notesText,
             fechaRecordatorio: currentState.alarmTime,
-            modo: currentState.notificationMode,
+            modoAviso: currentState.notificationMode,
           );
         } else {
           await NotificacionesService.instance.cancelar(nota.id!);
