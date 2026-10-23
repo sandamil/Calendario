@@ -190,8 +190,6 @@ class AlarmaConfigNotifier extends Notifier<AlarmaConfigState> {
         return Duration(hours: amount);
       case 'Dias':
         return Duration(days: amount);
-      default:
-        return null;
     }
   }
 
