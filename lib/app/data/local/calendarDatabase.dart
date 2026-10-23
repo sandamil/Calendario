@@ -235,7 +235,7 @@ class CalendarioDB {
           : (item.title ?? 'Turno'),
       inicioTurno: inicio,
       minutosAntes: tipo.reminderMinutesBefore,
-      modo: tipo.reminderMode,
+      modoAviso: tipo.reminderMode,
     );
   }
 
