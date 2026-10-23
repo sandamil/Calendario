@@ -78,7 +78,8 @@ class NotasDB {
         'alarmaHora TEXT, '
         'alarmaTimestamp INTEGER, '
         'alarmaActivadaString TEXT, '
-        'isAlarmaCreated INTEGER)');
+        'isAlarmaCreated INTEGER, '
+        'notificationMode TEXT NOT NULL DEFAULT \'notificacion\')');
   }
 
   // Asegura las columnas necesarias tanto en actualizaciones como al abrir.
@@ -178,7 +179,8 @@ class NotasDB {
       'alarmaHora',
       'alarmaTimestamp',
       'alarmaActivadaString',
-      'isAlarmaCreated'
+      'isAlarmaCreated',
+      'notificationMode'
     ]);
     if (maps.isNotEmpty) {
       for (var map in maps) {
