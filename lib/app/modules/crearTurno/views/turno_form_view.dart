@@ -13,7 +13,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../home/providers/calendar_providers.dart';
-import 'widgets/input_field.dart';
 
 class TurnoFormView extends ConsumerStatefulWidget {
   const TurnoFormView({super.key, this.turno});
@@ -195,7 +194,7 @@ class _TurnoFormViewState extends ConsumerState<TurnoFormView> {
         description: _tituloController.text.trim(),
         startHour: _inicio,
         endHour: _fin,
-        color: _color.value.toRadixString(16),
+        color: _color.toARGB32().toRadixString(16),
       );
 
       if (_esEdicion) {
