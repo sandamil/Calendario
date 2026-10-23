@@ -1,11 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:calendario2/app/controllers/ads_provider.dart';
-import 'dart:io';
 
 import 'package:calendario2/app/components/custom_dialog.dart';
 import 'package:calendario2/app/modules/ajustes/providers/ajustes_provider.dart';
-import 'package:calendario2/app/modules/ajustes/views/pages/backup_screen.dart';
-import 'package:calendario2/app/modules/ajustes/views/pages/language_screen.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/config/theme/theme_provider.dart';
 import 'package:calendario2/config/theme/my_fonts.dart';
