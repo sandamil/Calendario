@@ -76,10 +76,6 @@ class _HomeViewState extends State<HomeView> {
 
   bool _showHomeTutorial = false;
 
-  DateTime? _focusedDay;
-  DateTime? _rangeStart;
-  DateTime? _rangeEnd;
-  RangeSelectionMode _rangeSelectionMode = RangeSelectionMode.toggledOff;
 
   final Set<DateTime> _selectedDays = LinkedHashSet<DateTime>(
     equals: isSameDay,
@@ -414,39 +410,6 @@ class _HomeViewState extends State<HomeView> {
         label = 'Día ${_periodDate(selected)}';
     }
     await _shareCalendarPeriod(start, end, label, includeTurnos: includeTurnos, includeNotas: includeNotas, format: format);
-  }
-
-  Future<void> _shareCustomRange(String title) async {
-    final selected = _selectedCalendarDate();
-    final range = await showDateRangePicker(
-      context: context,
-      firstDate: DateTime(1900),
-      lastDate: DateTime(2200),
-      initialDateRange: DateTimeRange(start: _dateOnly(selected), end: _dateOnly(selected)),
-      helpText: title,
-      saveText: 'Compartir',
-    );
-    if (!mounted || range == null) return;
-    await _shareCalendarPeriod(_dateOnly(range.start), _dateOnly(range.end), '${_periodDate(range.start)} - ${_periodDate(range.end)}');
-  }
-
-  Future<void> _shareCustomMonths() async {
-    final selected = ProviderScope.containerOf(context, listen: false).read(focusedMonthProvider);
-    final range = await showDateRangePicker(
-      context: context,
-      firstDate: DateTime(1900),
-      lastDate: DateTime(2200),
-      initialDateRange: DateTimeRange(start: _monthStart(selected), end: _monthEnd(selected)),
-      helpText: 'Selecciona los meses',
-      saveText: 'Compartir',
-    );
-    if (!mounted || range == null) return;
-    final start = _monthStart(range.start);
-    final end = _monthEnd(range.end);
-    final label = start.year == end.year
-        ? 'Meses ${DateFormat('MMMM', 'es_ES').format(start)} - ${DateFormat('MMMM yyyy', 'es_ES').format(end)}'
-        : 'Meses ${DateFormat('MMMM yyyy', 'es_ES').format(start)} - ${DateFormat('MMMM yyyy', 'es_ES').format(end)}';
-    await _shareCalendarPeriod(start, end, label);
   }
 
   Future<void> _shareCalendarPeriod(DateTime start, DateTime end, String label, {bool includeTurnos = true, bool includeNotas = true, String format = 'Texto'}) async {
@@ -921,59 +884,6 @@ class _ShareFormatChip extends StatelessWidget {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
       side: BorderSide(color: selected ? PRIMARY_COLOR : Theme.of(context).dividerColor.withValues(alpha: .35)),
       padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 5.h),
-    );
-  }
-}
-
-class _ShareMenuTile extends StatelessWidget {
-  const _ShareMenuTile({
-    required this.icon,
-    required this.title,
-    required this.subtitle,
-    required this.onTap,
-    this.enabled = true,
-  });
-
-  final IconData icon;
-  final String title;
-  final String subtitle;
-  final VoidCallback onTap;
-  final bool enabled;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final color = theme.colorScheme.onSurface;
-    return Opacity(
-      opacity: enabled ? 1 : .48,
-      child: Material(
-        color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: .55),
-        borderRadius: BorderRadius.circular(15.r),
-        child: InkWell(
-          borderRadius: BorderRadius.circular(15.r),
-          onTap: enabled ? onTap : null,
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 9.h),
-            child: Row(
-              children: [
-                Icon(icon, color: PRIMARY_COLOR, size: 22.sp),
-                SizedBox(width: 11.w),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(title, style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w700, color: color)),
-                      SizedBox(height: 2.h),
-                      Text(subtitle, style: TextStyle(fontSize: 11.sp, color: color.withValues(alpha: .58))),
-                    ],
-                  ),
-                ),
-                Icon(Icons.chevron_right_rounded, size: 20.sp, color: color.withValues(alpha: .35)),
-              ],
-            ),
-          ),
-        ),
-      ),
     );
   }
 }
