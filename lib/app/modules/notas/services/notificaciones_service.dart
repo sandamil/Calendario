@@ -164,7 +164,7 @@ class NotificacionesService {
     required String titulo,
     required String mensaje,
     required DateTime fechaRecordatorio,
-    String modo = 'notificacion',
+    String modoAviso = 'notificacion',
   }) async {
     if (kIsWeb) return false;
 
@@ -189,7 +189,7 @@ class NotificacionesService {
         title: titulo,
         body: mensaje.isEmpty ? 'Tienes un recordatorio pendiente.' : mensaje,
         scheduledDate: fechaZonaHoraria,
-        notificationDetails: _detalles(esAlarma: modo == 'alarma'),
+        notificationDetails: _detalles(esAlarma: modoAviso == 'alarma'),
         androidScheduleMode: modo,
         payload: 'calendario:$id',
       );
@@ -206,7 +206,7 @@ class NotificacionesService {
     required String titulo,
     required DateTime inicioTurno,
     required int minutosAntes,
-    String modo = 'notificacion',
+    String modoAviso = 'notificacion',
   }) async {
     final fecha = inicioTurno.subtract(Duration(minutes: minutosAntes));
     return programar(
@@ -216,7 +216,7 @@ class NotificacionesService {
           ? 'Comienza tu turno.'
           : 'Tu turno comienza en $minutosAntes minutos.',
       fechaRecordatorio: fecha,
-      modo: modo,
+      modoAviso: modoAviso,
     );
   }
 
