@@ -9,6 +9,7 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class NotasView extends ConsumerStatefulWidget {
   const NotasView({Key? key, this.routeArguments}) : super(key: key);
@@ -84,6 +85,31 @@ class _NotasViewState extends ConsumerState<NotasView> {
     if (!mounted) return;
 
     setState(() => _note = updated);
+  }
+
+  Future<void> _openLocation() async {
+    final location = _note.site?.trim();
+    if (location == null || location.isEmpty) return;
+
+    final url = Uri.https(
+      'www.google.com',
+      '/maps/search/',
+      {'api': '1', 'query': location},
+    );
+
+    try {
+      final opened = await launchUrl(
+        url,
+        mode: LaunchMode.externalApplication,
+      );
+      if (!opened && mounted) {
+        Toast.toast(context, msg: 'No se ha podido abrir Google Maps.');
+      }
+    } catch (_) {
+      if (mounted) {
+        Toast.toast(context, msg: 'No se ha podido abrir Google Maps.');
+      }
+    }
   }
 
   Future<void> _shareNote() async {
@@ -364,24 +390,44 @@ class _NotasViewState extends ConsumerState<NotasView> {
                 _dateCard(start, end),
                 SizedBox(height: 16.h),
                 _sectionLabel('UBICACIÓN'),
-                _infoCard(
-                  child: Row(
-                    children: [
-                      Icon(Icons.location_on_outlined, color: PRIMARY_COLOR, size: 21.sp),
-                      SizedBox(width: 10.w),
-                      Expanded(
-                        child: Text(
-                          site,
-                          style: TextStyle(
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.w600,
-                            color: (_note.site == null || _note.site!.trim().isEmpty)
-                                ? muted
-                                : theme.colorScheme.onSurface,
+                InkWell(
+                  onTap: (_note.site == null || _note.site!.trim().isEmpty)
+                      ? null
+                      : _openLocation,
+                  borderRadius: BorderRadius.circular(16.r),
+                  child: _infoCard(
+                    child: Row(
+                      children: [
+                        Icon(Icons.location_on_outlined, color: PRIMARY_COLOR, size: 21.sp),
+                        SizedBox(width: 10.w),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                site,
+                                style: TextStyle(
+                                  fontSize: 14.sp,
+                                  fontWeight: FontWeight.w600,
+                                  color: (_note.site == null || _note.site!.trim().isEmpty)
+                                      ? muted
+                                      : theme.colorScheme.onSurface,
+                                ),
+                              ),
+                              if (_note.site != null && _note.site!.trim().isNotEmpty) ...[
+                                SizedBox(height: 4.h),
+                                Text(
+                                  'Tocar para abrir en Google Maps',
+                                  style: TextStyle(fontSize: 11.sp, color: muted),
+                                ),
+                              ],
+                            ],
                           ),
                         ),
-                      ),
-                    ],
+                        if (_note.site != null && _note.site!.trim().isNotEmpty)
+                          Icon(Icons.open_in_new_rounded, color: PRIMARY_COLOR, size: 19.sp),
+                      ],
+                    ),
                   ),
                 ),
                 SizedBox(height: 16.h),
