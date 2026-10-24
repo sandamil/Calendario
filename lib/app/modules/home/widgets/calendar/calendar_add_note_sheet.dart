@@ -147,14 +147,119 @@ class CalendarAddNoteSheetState extends ConsumerState<CalendarAddNoteSheet> {
                 onTap: notifier.toggleImportant,
               ),
               SizedBox(height: 8.h),
-              _optionTile(
-                icon: Icons.notifications_none_rounded,
-                title: 'Recordatorio',
-                subtitle: state.alarmaCreada ? state.alarmaHora : 'Sin recordatorio',
-                trailing: Icon(Icons.chevron_right_rounded, color: color.withValues(alpha: .55)),
-                onTap: () => _pickReminder(notifier, state.startTime),
-              ),
+              _reminderTile(state, notifier),
               SizedBox(height: 8.h),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _reminderTile(AddNotaState state, AddNotaNotifier notifier) {
+    final color = Theme.of(context).colorScheme.onSurface;
+    final reminderTime = state.alarmaCreada
+        ? TimeOfDay(hour: state.alarmTime.hour, minute: state.alarmTime.minute)
+            .format(context)
+        : 'Sin recordatorio';
+
+    Future<void> editTime() async {
+      final initial = state.alarmaCreada ? state.alarmTime : state.startTime;
+      final selected = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.fromDateTime(initial),
+      );
+      if (!mounted || selected == null) return;
+
+      final updated = DateTime(
+        state.startTime.year,
+        state.startTime.month,
+        state.startTime.day,
+        selected.hour,
+        selected.minute,
+      );
+      notifier.setAlarmaTime(updated);
+      notifier.setAlarmaCreada(true);
+      notifier.setAlarmaActivadaString('A las ${selected.format(context)}');
+    }
+
+    void toggleMode() {
+      notifier.setNotificationMode(
+        state.notificationMode == 'alarma' ? 'notificacion' : 'alarma',
+      );
+    }
+
+    return Material(
+      color: Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: .55),
+      borderRadius: BorderRadius.circular(14.r),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(14.r),
+        onTap: editTime,
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+          child: Row(
+            children: [
+              Icon(
+                state.notificationMode == 'alarma'
+                    ? Icons.alarm_rounded
+                    : Icons.notifications_outlined,
+                color: PRIMARY_COLOR,
+              ),
+              SizedBox(width: 10.w),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Recordatorio',
+                      style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w600),
+                    ),
+                    Text(
+                      reminderTime,
+                      style: TextStyle(fontSize: 12.sp, color: color.withValues(alpha: .55)),
+                    ),
+                  ],
+                ),
+              ),
+              InkWell(
+                onTap: toggleMode,
+                borderRadius: BorderRadius.circular(10.r),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 7.h),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        state.notificationMode == 'alarma'
+                            ? Icons.alarm_rounded
+                            : Icons.notifications_outlined,
+                        size: 18.sp,
+                      ),
+                      SizedBox(width: 4.w),
+                      Text(
+                        state.notificationMode == 'alarma'
+                            ? 'Alarma'
+                            : 'Notificación',
+                        style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w600),
+                      ),
+                      SizedBox(width: 2.w),
+                      Icon(Icons.swap_horiz, size: 17.sp),
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(width: 2.w),
+              Switch(
+                value: state.alarmaCreada,
+                onChanged: (enabled) {
+                  if (enabled) {
+                    editTime();
+                  } else {
+                    notifier.setAlarmaCreada(false);
+                    notifier.setAlarmaActivadaString('Sin recordatorio');
+                  }
+                },
+              ),
             ],
           ),
         ),
@@ -338,25 +443,6 @@ class CalendarAddNoteSheetState extends ConsumerState<CalendarAddNoteSheet> {
     );
     if (!mounted || selected == null) return;
     notifier.setEndClock(selected);
-  }
-
-  Future<void> _pickReminder(AddNotaNotifier notifier, DateTime start) async {
-    if (ref.read(addNotaProvider).alarmaCreada) {
-      notifier.setAlarmaCreada(false);
-      notifier.setAlarmaActivadaString('Sin recordatorio');
-      return;
-    }
-
-    final selected = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.fromDateTime(start),
-    );
-    if (!mounted || selected == null) return;
-
-    final reminder = DateTime(start.year, start.month, start.day, selected.hour, selected.minute);
-    notifier.setAlarmaTime(reminder);
-    notifier.setAlarmaCreada(true);
-    notifier.setAlarmaActivadaString(reminder.hour.toString().padLeft(2, '0') + ':' + reminder.minute.toString().padLeft(2, '0'));
   }
 
   String _dateLabel(DateTime date) => '${date.day.toString().padLeft(2, '0')}/${date.month.toString().padLeft(2, '0')}/${date.year}';
