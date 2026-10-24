@@ -363,28 +363,32 @@ class _AddNotasViewState extends ConsumerState<AddNotasView> {
                                   const SizedBox(height: 16),
                                   const Text('Tipo de aviso'),
                                   const SizedBox(height: 8),
-                                  SegmentedButton<String>(
-                                    showSelectedIcon: false,
-                                    segments: const <ButtonSegment<String>>[
-                                      ButtonSegment<String>(
-                                        value: 'notificacion',
-                                        label: Text('Notificación'),
-                                        icon: Icon(
-                                          Icons.notifications_outlined,
+                                  FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    alignment: Alignment.centerLeft,
+                                    child: SegmentedButton<String>(
+                                      showSelectedIcon: false,
+                                      segments: const <ButtonSegment<String>>[
+                                        ButtonSegment<String>(
+                                          value: 'notificacion',
+                                          label: Text('Notificación'),
+                                          icon: Icon(
+                                            Icons.notifications_outlined,
+                                          ),
                                         ),
-                                      ),
-                                      ButtonSegment<String>(
-                                        value: 'alarma',
-                                        label: Text('Alarma'),
-                                        icon: Icon(Icons.alarm_rounded),
-                                      ),
-                                    ],
-                                    selected: <String>{selectedMode},
-                                    onSelectionChanged: (selection) {
-                                      setDialogState(
-                                        () => selectedMode = selection.first,
-                                      );
-                                    },
+                                        ButtonSegment<String>(
+                                          value: 'alarma',
+                                          label: Text('Alarma'),
+                                          icon: Icon(Icons.alarm_rounded),
+                                        ),
+                                      ],
+                                      selected: <String>{selectedMode},
+                                      onSelectionChanged: (selection) {
+                                        setDialogState(
+                                          () => selectedMode = selection.first,
+                                        );
+                                      },
+                                    ),
                                   ),
                                   const SizedBox(height: 8),
                                   Text(
