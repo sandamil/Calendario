@@ -41,6 +41,15 @@ class _AddNotasViewState extends ConsumerState<AddNotasView> {
     );
   }
 
+  void _toggleNotificationMode(
+    AddNotaState notaState,
+    AddNotaNotifier notaNotifier,
+  ) {
+    notaNotifier.setNotificationMode(
+      notaState.notificationMode == 'alarma' ? 'notificacion' : 'alarma',
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final notaState = ref.watch(addNotaProvider);
@@ -183,32 +192,34 @@ class _AddNotasViewState extends ConsumerState<AddNotasView> {
                       ],
                     ),
                   ),
-                  SegmentedButton<String>(
-                    showSelectedIcon: false,
-                    style: ButtonStyle(
-                      visualDensity: VisualDensity.compact,
-                      padding: WidgetStateProperty.all(
-                        EdgeInsets.symmetric(horizontal: 6.w),
+                  InkWell(
+                    onTap: () => _toggleNotificationMode(notaState, notaNotifier),
+                    borderRadius: BorderRadius.circular(8.r),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 6.h),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            notaState.notificationMode == 'alarma'
+                                ? Icons.alarm_rounded
+                                : Icons.notifications_outlined,
+                            size: 20.sp,
+                          ),
+                          SizedBox(width: 4.w),
+                          Text(
+                            notaState.notificationMode == 'alarma'
+                                ? 'Alarma'
+                                : 'Notificación',
+                            style: theme.textTheme.bodyMedium,
+                          ),
+                          SizedBox(width: 2.w),
+                          Icon(Icons.swap_horiz, size: 18.sp),
+                        ],
                       ),
                     ),
-                    segments: const [
-                      ButtonSegment<String>(
-                        value: 'notificacion',
-                        label: Text('Notif.'),
-                        icon: Icon(Icons.notifications_outlined),
-                      ),
-                      ButtonSegment<String>(
-                        value: 'alarma',
-                        label: Text('Alarma'),
-                        icon: Icon(Icons.alarm_rounded),
-                      ),
-                    ],
-                    selected: {notaState.notificationMode},
-                    onSelectionChanged: (selection) {
-                      notaNotifier.setNotificationMode(selection.first);
-                    },
                   ),
-                  SizedBox(width: 4.w),
+                  SizedBox(width: 2.w),
                   Switch(
                     value: notaState.alarmaCreada,
                     onChanged: (enabled) {
