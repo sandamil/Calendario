@@ -83,9 +83,7 @@ class _NotasViewState extends ConsumerState<NotasView> {
     await ref.read(notasListProvider.notifier).actualizarNota(updated);
     if (!mounted) return;
 
-    setState(() {
-      _note = updated;
-    });
+    setState(() => _note = updated);
   }
 
   Future<void> _shareNote() async {
@@ -119,9 +117,7 @@ class _NotasViewState extends ConsumerState<NotasView> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
         title: const Text('Borrar nota'),
         content: const Text('Se borrará permanentemente'),
         actions: [
@@ -138,7 +134,7 @@ class _NotasViewState extends ConsumerState<NotasView> {
               'BORRAR',
               style: TextStyle(
                 color: Colors.red.shade300,
-                fontWeight: FontWeight.w500,
+                fontWeight: FontWeight.w600,
                 letterSpacing: 1,
               ),
             ),
@@ -152,7 +148,6 @@ class _NotasViewState extends ConsumerState<NotasView> {
     setState(() => _deleting = true);
     try {
       await ref.read(notasListProvider.notifier).eliminarNota(id);
-
       if (!mounted) return;
       Toast.toast(context, msg: 'Eliminado exitosamente!');
       context.go('/notas');
@@ -161,12 +156,146 @@ class _NotasViewState extends ConsumerState<NotasView> {
     }
   }
 
+  Widget _sectionLabel(String text) {
+    return Padding(
+      padding: EdgeInsets.only(left: 4.w, bottom: 7.h),
+      child: Text(
+        text,
+        style: TextStyle(
+          fontSize: 12.sp,
+          fontWeight: FontWeight.w700,
+          color: Theme.of(context).colorScheme.onSurface.withValues(alpha: .62),
+        ),
+      ),
+    );
+  }
+
+  Widget _infoCard({
+    required Widget child,
+    EdgeInsetsGeometry? padding,
+  }) {
+    final theme = Theme.of(context);
+    return Container(
+      width: double.infinity,
+      padding: padding ?? EdgeInsets.symmetric(horizontal: 14.w, vertical: 13.h),
+      decoration: BoxDecoration(
+        color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: .48),
+        borderRadius: BorderRadius.circular(16.r),
+        border: Border.all(
+          color: theme.colorScheme.outlineVariant.withValues(alpha: .35),
+        ),
+      ),
+      child: child,
+    );
+  }
+
+  Widget _dateCard(DateTime? start, DateTime? end) {
+    final muted = Theme.of(context).colorScheme.onSurface.withValues(alpha: .62);
+    return _infoCard(
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Icon(Icons.schedule_rounded, color: PRIMARY_COLOR, size: 21.sp),
+              SizedBox(width: 10.w),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Inicio', style: TextStyle(fontSize: 12.sp, color: muted)),
+                    SizedBox(height: 2.h),
+                    Text(
+                      '${_dateTime(start)} · ${_date(start)}',
+                      style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w600),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(vertical: 10.h),
+            child: Divider(height: 1, color: Theme.of(context).colorScheme.outlineVariant.withValues(alpha: .3)),
+          ),
+          Row(
+            children: [
+              Icon(Icons.event_available_rounded, color: PRIMARY_COLOR, size: 21.sp),
+              SizedBox(width: 10.w),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Fin', style: TextStyle(fontSize: 12.sp, color: muted)),
+                    SizedBox(height: 2.h),
+                    Text(
+                      '${_dateTime(end)} · ${_date(end)}',
+                      style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w600),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _statusTile({required bool important, required bool hasAlarm}) {
+    final theme = Theme.of(context);
+    final muted = theme.colorScheme.onSurface.withValues(alpha: .58);
+    return _infoCard(
+      padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 7.h),
+      child: Row(
+        children: [
+          Icon(
+            important ? Icons.flag_rounded : Icons.outlined_flag,
+            color: important ? Colors.red : PRIMARY_COLOR,
+            size: 21.sp,
+          ),
+          SizedBox(width: 10.w),
+          Expanded(
+            child: Text(
+              important ? 'Nota importante' : 'Nota normal',
+              style: TextStyle(fontSize: 13.sp, fontWeight: FontWeight.w600),
+            ),
+          ),
+          if (hasAlarm) ...[
+            Container(
+              width: 1,
+              height: 22.h,
+              color: theme.colorScheme.outlineVariant.withValues(alpha: .4),
+            ),
+            SizedBox(width: 10.w),
+            Icon(Icons.notifications_active_outlined, color: PRIMARY_COLOR, size: 20.sp),
+            SizedBox(width: 7.w),
+            Text(
+              _note.alarmaActivadaString ?? 'Recordatorio',
+              style: TextStyle(fontSize: 12.sp, color: muted, fontWeight: FontWeight.w600),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final start = _start;
     final end = _end;
     final important = _note.isImportant ?? false;
     final hasAlarm = _note.isAlarmaCreated ?? false;
+    final theme = Theme.of(context);
+    final muted = theme.colorScheme.onSurface.withValues(alpha: .62);
+    final title = (_note.title == null || _note.title!.trim().isEmpty)
+        ? 'Sin título'
+        : _note.title!;
+    final site = (_note.site == null || _note.site!.trim().isEmpty)
+        ? 'No hay ubicación'
+        : _note.site!;
+    final notes = (_note.notes == null || _note.notes!.trim().isEmpty)
+        ? 'No has añadido descripción'
+        : _note.notes!;
 
     return Scaffold(
       appBar: AppBar(
@@ -179,38 +308,32 @@ class _NotasViewState extends ConsumerState<NotasView> {
           overflow: TextOverflow.visible,
         ),
         leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back_ios,
-            color: PRIMARY_COLOR,
-            size: 26.sp,
-          ),
+          icon: Icon(Icons.arrow_back_ios, color: PRIMARY_COLOR, size: 24.sp),
           onPressed: () => Navigator.of(context).pop(),
         ),
         actions: [
           IconButton(
             tooltip: important ? 'Quitar importancia' : 'Marcar importante',
             icon: Icon(
-              important ? Icons.flag : Icons.outlined_flag,
-              size: 26.sp,
-              color: important
-                  ? Colors.red
-                  : Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.65),
+              important ? Icons.flag_rounded : Icons.outlined_flag,
+              size: 24.sp,
+              color: important ? Colors.red : PRIMARY_COLOR,
             ),
             onPressed: _toggleImportant,
           ),
           IconButton(
             tooltip: 'Eliminar nota',
-            icon: Icon(Icons.delete_outline, color: PRIMARY_COLOR, size: 26.sp),
+            icon: Icon(Icons.delete_outline_rounded, color: PRIMARY_COLOR, size: 24.sp),
             onPressed: _deleteNote,
           ),
           IconButton(
             tooltip: 'Compartir nota',
-            icon: Icon(Icons.share, color: PRIMARY_COLOR, size: 26.sp),
+            icon: Icon(Icons.share_outlined, color: PRIMARY_COLOR, size: 24.sp),
             onPressed: _shareNote,
           ),
           IconButton(
             tooltip: 'Editar nota',
-            icon: Icon(Icons.edit, color: PRIMARY_COLOR, size: 26.sp),
+            icon: Icon(Icons.edit_outlined, color: PRIMARY_COLOR, size: 24.sp),
             onPressed: _editNote,
           ),
         ],
@@ -218,119 +341,64 @@ class _NotasViewState extends ConsumerState<NotasView> {
       body: Stack(
         children: [
           SingleChildScrollView(
-            padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 24.h),
+            padding: EdgeInsets.fromLTRB(16.w, 8.h, 16.w, 28.h),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Padding(
-                  padding: EdgeInsets.only(
-                    left: 8.w,
-                    right: 8.w,
-                    top: 12.h,
-                    bottom: 14.h,
-                  ),
-                  child: AnimatedOpacity(
-                    opacity: _headerVisible ? 1 : 0,
-                    duration: const Duration(milliseconds: 200),
-                    curve: Curves.easeIn,
+                AnimatedOpacity(
+                  opacity: _headerVisible ? 1 : 0,
+                  duration: const Duration(milliseconds: 250),
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(4.w, 8.h, 4.w, 18.h),
                     child: Text(
-                      _note.title ?? '',
+                      title,
                       style: TextStyle(
-                        fontWeight: FontWeight.w900,
-                        fontSize: 28.sp,
+                        fontWeight: FontWeight.w800,
+                        fontSize: 27.sp,
+                        height: 1.12,
                       ),
                     ),
                   ),
                 ),
-                AnimatedOpacity(
-                  duration: const Duration(milliseconds: 500),
-                  opacity: _headerVisible ? 1 : 0,
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
-                    child: Column(
-                      children: [
-                        _dateRow('Inicio:', start),
-                        _dateRow('Fin:    ', end),
-                      ],
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                    left: 12.w,
-                    top: 12.h,
-                    bottom: 12.h,
-                    right: 12.w,
-                  ),
+                _sectionLabel('FECHA Y HORA'),
+                _dateCard(start, end),
+                SizedBox(height: 16.h),
+                _sectionLabel('UBICACIÓN'),
+                _infoCard(
                   child: Row(
                     children: [
-                      const Icon(
-                        Icons.location_on_outlined,
-                        color: PRIMARY_COLOR,
-                      ),
+                      Icon(Icons.location_on_outlined, color: PRIMARY_COLOR, size: 21.sp),
                       SizedBox(width: 10.w),
                       Expanded(
                         child: Text(
-                          (_note.site == null || _note.site!.isEmpty)
-                              ? 'No hay ubicación'
-                              : _note.site!,
+                          site,
                           style: TextStyle(
-                            fontSize: 18.sp,
-                            fontWeight: FontWeight.w500,
-                            color: (_note.site == null || _note.site!.isEmpty)
-                                ? Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.65)
-                                : null,
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w600,
+                            color: (_note.site == null || _note.site!.trim().isEmpty)
+                                ? muted
+                                : theme.colorScheme.onSurface,
                           ),
                         ),
                       ),
                     ],
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsets.only(
-                    left: 24.w,
-                    top: 16.h,
-                    bottom: 14.h,
-                    right: 24.w,
-                  ),
-                  child: !hasAlarm
-                      ? const Text(
-                          'No has añadido alarma',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        )
-                      : Row(
-                          children: [
-                            const Icon(Icons.alarm, color: Colors.redAccent),
-                            SizedBox(width: 10.w),
-                            Expanded(
-                              child: Text(
-                                _note.alarmaActivadaString ?? 'Alarma activada',
-                                style: const TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                    left: 14.w,
-                    top: 18.h,
-                    bottom: 18.h,
-                    right: 14.w,
-                  ),
+                SizedBox(height: 16.h),
+                _sectionLabel('ESTADO'),
+                _statusTile(important: important, hasAlarm: hasAlarm),
+                SizedBox(height: 16.h),
+                _sectionLabel('DESCRIPCIÓN'),
+                _infoCard(
                   child: Text(
-                    (_note.notes == null || _note.notes!.isEmpty)
-                        ? 'No has añadido descripción'
-                        : _note.notes!,
-                    style: const TextStyle(
-                      fontSize: 18,
+                    notes,
+                    style: TextStyle(
+                      fontSize: 14.sp,
+                      height: 1.45,
                       fontWeight: FontWeight.w500,
+                      color: (_note.notes == null || _note.notes!.trim().isEmpty)
+                          ? muted
+                          : theme.colorScheme.onSurface,
                     ),
                   ),
                 ),
@@ -346,42 +414,6 @@ class _NotasViewState extends ConsumerState<NotasView> {
             ),
         ],
       ),
-    );
-  }
-
-  Widget _dateRow(String label, DateTime? value) {
-    return Row(
-      children: [
-        Padding(
-          padding: EdgeInsets.only(right: 10.w),
-          child: Text(
-            label,
-            style: TextStyle(
-              fontSize: 14.sp,
-              fontWeight: FontWeight.w500,
-              color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.65),
-            ),
-          ),
-        ),
-        Text(
-          _dateTime(value),
-          style: TextStyle(
-            fontSize: 14.sp,
-            fontWeight: FontWeight.w500,
-            color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.65),
-          ),
-        ),
-        SizedBox(width: 4.w),
-        Text(
-          _date(value),
-          style: TextStyle(
-            fontSize: 14.sp,
-            fontWeight: FontWeight.w500,
-            color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.65),
-          ),
-        ),
-        const Spacer(),
-      ],
     );
   }
 }
