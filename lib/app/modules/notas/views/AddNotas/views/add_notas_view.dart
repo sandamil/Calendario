@@ -1,6 +1,7 @@
 import 'package:calendario2/app/modules/home/widgets/calendar/widget/line.dart';
 import 'package:calendario2/app/controllers/tutorial_provider.dart';
 import 'package:calendario2/app/modules/notas/providers/add_nota_provider.dart';
+import 'package:calendario2/app/modules/notas/widgets/recordatorio_dialog.dart';
 import 'package:calendario2/app/data/local/my_shared_pref.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:calendario2/app/modules/notas/views/alarmas/views/widget/alarmTile.dart';
@@ -303,137 +304,22 @@ class _AddNotasViewState extends ConsumerState<AddNotasView> {
                 LineWidget(),
                 TextButton(
                   onPressed: () async {
-                    var selectedAlertTime = notaState.alarmaCreada
-                        ? notaState.alarmTime
-                        : notaState.startTime;
-                    var selectedMode = notaState.notificationMode;
-                    var reminderEnabled = notaState.alarmaCreada;
-                    final result = await showDialog<Map<String, dynamic>>(
+                    final result = await showRecordatorioDialog(
                       context: context,
-                      builder: (dialogContext) => StatefulBuilder(
-                        builder: (dialogContext, setDialogState) => AlertDialog(
-                          title: const Text('Recordatorio'),
-                          content: SingleChildScrollView(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                SwitchListTile(
-                                  contentPadding: EdgeInsets.zero,
-                                  title: const Text('Activar recordatorio'),
-                                  value: reminderEnabled,
-                                  onChanged: (value) => setDialogState(
-                                    () => reminderEnabled = value,
-                                  ),
-                                ),
-                                if (reminderEnabled) ...[
-                                  const SizedBox(height: 12),
-                                  const Text('Hora del aviso'),
-                                  const SizedBox(height: 8),
-                                  SizedBox(
-                                    width: double.infinity,
-                                    child: OutlinedButton.icon(
-                                      icon: const Icon(Icons.access_time),
-                                      label: Text(
-                                        TimeOfDay(
-                                          hour: selectedAlertTime.hour,
-                                          minute: selectedAlertTime.minute,
-                                        ).format(dialogContext),
-                                      ),
-                                      onPressed: () async {
-                                        final selected = await showTimePicker(
-                                          context: dialogContext,
-                                          initialTime: TimeOfDay.fromDateTime(
-                                            selectedAlertTime,
-                                          ),
-                                        );
-                                        if (selected == null) return;
-                                        setDialogState(() {
-                                          selectedAlertTime = DateTime(
-                                            notaState.startTime.year,
-                                            notaState.startTime.month,
-                                            notaState.startTime.day,
-                                            selected.hour,
-                                            selected.minute,
-                                          );
-                                        });
-                                      },
-                                    ),
-                                  ),
-                                  const SizedBox(height: 16),
-                                  const Text('Tipo de aviso'),
-                                  const SizedBox(height: 8),
-                                  FittedBox(
-                                    fit: BoxFit.scaleDown,
-                                    alignment: Alignment.centerLeft,
-                                    child: SegmentedButton<String>(
-                                      showSelectedIcon: false,
-                                      segments: const <ButtonSegment<String>>[
-                                        ButtonSegment<String>(
-                                          value: 'notificacion',
-                                          label: Text('Notificación'),
-                                          icon: Icon(
-                                            Icons.notifications_outlined,
-                                          ),
-                                        ),
-                                        ButtonSegment<String>(
-                                          value: 'alarma',
-                                          label: Text('Alarma'),
-                                          icon: Icon(Icons.alarm_rounded),
-                                        ),
-                                      ],
-                                      selected: <String>{selectedMode},
-                                      onSelectionChanged: (selection) {
-                                        setDialogState(
-                                          () => selectedMode = selection.first,
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                  const SizedBox(height: 8),
-                                  Text(
-                                    selectedMode == 'alarma'
-                                        ? 'Aviso con canal de alarma independiente.'
-                                        : 'Notificación normal con el sonido del móvil.',
-                                    style: TextStyle(
-                                      fontSize: 12.sp,
-                                      color: Theme.of(dialogContext)
-                                          .colorScheme
-                                          .onSurface
-                                          .withValues(alpha: .65),
-                                    ),
-                                  ),
-                                ],
-                              ],
-                            ),
-                          ),
-                          actions: [
-                            TextButton(
-                              onPressed: () =>
-                                  Navigator.of(dialogContext).pop(),
-                              child: const Text('Cancelar'),
-                            ),
-                            FilledButton(
-                              onPressed: () => Navigator.of(dialogContext).pop({
-                                'enabled': reminderEnabled,
-                                'time': selectedAlertTime,
-                                'mode': selectedMode,
-                              }),
-                              child: const Text('Guardar'),
-                            ),
-                          ],
-                        ),
-                      ),
+                      enabled: notaState.alarmaCreada,
+                      initialTime: notaState.alarmaCreada
+                          ? notaState.alarmTime
+                          : notaState.startTime,
+                      initialMode: notaState.notificationMode,
+                      eventDate: notaState.startTime,
                     );
                     if (!context.mounted || result == null) return;
-                    final enabled = result['enabled'] as bool;
-                    notaNotifier.setAlarmaCreada(enabled);
-                    notaNotifier.setNotificationMode(result['mode'] as String);
-                    if (enabled) {
-                      final alertTime = result['time'] as DateTime;
-                      notaNotifier.setAlarmaTime(alertTime);
+                    notaNotifier.setAlarmaCreada(result.enabled);
+                    notaNotifier.setNotificationMode(result.mode);
+                    if (result.enabled) {
+                      notaNotifier.setAlarmaTime(result.time);
                       notaNotifier.setAlarmaActivadaString(
-                        'A las ${TimeOfDay(hour: alertTime.hour, minute: alertTime.minute).format(context)}',
+                        'A las ${TimeOfDay(hour: result.time.hour, minute: result.time.minute).format(context)}',
                       );
                     } else {
                       notaNotifier.setAlarmaActivadaString('Sin recordatorio');
