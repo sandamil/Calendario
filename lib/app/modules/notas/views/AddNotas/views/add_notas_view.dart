@@ -1,32 +1,47 @@
 import 'package:calendario2/app/modules/notas/providers/add_nota_provider.dart';
-import 'package:calendario2/app/modules/notas/views/widgets/example_alarm_tile.dart';
+import 'package:calendario2/config/util/dateUtils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
 class AddNotasView extends ConsumerStatefulWidget {
-  const AddNotasView({super.key});
+  const AddNotasView({super.key, this.routeArguments});
+
+  final Object? routeArguments;
 
   @override
   ConsumerState<AddNotasView> createState() => _AddNotasViewState();
 }
 
 class _AddNotasViewState extends ConsumerState<AddNotasView> {
+  @override
+  void initState() {
+    super.initState();
+    final arguments = widget.routeArguments;
+    if (arguments is DateTime) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) ref.read(addNotaProvider.notifier).setInitialDate(arguments);
+      });
+    } else if (arguments is int) {
+      final date = DateTime.fromMillisecondsSinceEpoch(arguments);
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) ref.read(addNotaProvider.notifier).setInitialDate(date);
+      });
+    }
+  }
+
   Future<void> _editReminderTime(
     BuildContext context,
     AddNotaState notaState,
     AddNotaNotifier notaNotifier,
   ) async {
-    final initial = notaState.alarmaCreada
-        ? notaState.alarmTime
-        : notaState.startTime;
+    final initial = notaState.alarmaCreada ? notaState.alarmTime : notaState.startTime;
     final selected = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.fromDateTime(initial),
     );
     if (!context.mounted || selected == null) return;
-
     final updated = DateTime(
       notaState.startTime.year,
       notaState.startTime.month,
@@ -41,10 +56,7 @@ class _AddNotasViewState extends ConsumerState<AddNotasView> {
     );
   }
 
-  void _toggleNotificationMode(
-    AddNotaState notaState,
-    AddNotaNotifier notaNotifier,
-  ) {
+  void _toggleNotificationMode(AddNotaState notaState, AddNotaNotifier notaNotifier) {
     notaNotifier.setNotificationMode(
       notaState.notificationMode == 'alarma' ? 'notificacion' : 'alarma',
     );
@@ -96,7 +108,7 @@ class _AddNotasViewState extends ConsumerState<AddNotasView> {
                 initial.minute,
               ));
             },
-            child: _dateTimeRow('Fecha de inicio', notaState.startTime.toString()),
+            child: _dateTimeRow('Fecha de inicio', notaState.startTime.formatDateYMD),
           ),
           TextButton(
             onPressed: () async {
@@ -114,10 +126,7 @@ class _AddNotasViewState extends ConsumerState<AddNotasView> {
                 selected.minute,
               ));
             },
-            child: _dateTimeRow(
-              'Hora de inicio',
-              notaState.startTime.formatDateTime24H,
-            ),
+            child: _dateTimeRow('Hora de inicio', notaState.startTime.formatDateTime24H),
           ),
           TextButton(
             onPressed: () async {
@@ -136,9 +145,7 @@ class _AddNotasViewState extends ConsumerState<AddNotasView> {
                 initial.hour,
                 initial.minute,
               );
-              if (updated.isBefore(notaState.startTime)) {
-                updated = notaState.startTime;
-              }
+              if (updated.isBefore(notaState.startTime)) updated = notaState.startTime;
               notaNotifier.setEndTime(updated);
             },
             child: _dateTimeRow('Fecha de fin', notaState.endTime.formatDateYMD),
@@ -158,15 +165,10 @@ class _AddNotasViewState extends ConsumerState<AddNotasView> {
                 selected.hour,
                 selected.minute,
               );
-              if (updated.isBefore(notaState.startTime)) {
-                updated = notaState.startTime;
-              }
+              if (updated.isBefore(notaState.startTime)) updated = notaState.startTime;
               notaNotifier.setEndTime(updated);
             },
-            child: _dateTimeRow(
-              'Hora de fin',
-              notaState.endTime.formatDateTime24H,
-            ),
+            child: _dateTimeRow('Hora de fin', notaState.endTime.formatDateTime24H),
           ),
           SizedBox(height: 8.h),
           const Divider(),
@@ -208,9 +210,7 @@ class _AddNotasViewState extends ConsumerState<AddNotasView> {
                           ),
                           SizedBox(width: 4.w),
                           Text(
-                            notaState.notificationMode == 'alarma'
-                                ? 'Alarma'
-                                : 'Notificación',
+                            notaState.notificationMode == 'alarma' ? 'Alarma' : 'Notificación',
                             style: theme.textTheme.bodyMedium,
                           ),
                           SizedBox(width: 2.w),
@@ -253,7 +253,7 @@ class _AddNotasViewState extends ConsumerState<AddNotasView> {
           SizedBox(height: 24.h),
           FilledButton(
             onPressed: () async {
-              final ok = await notaNotifier.saveNota();
+              final ok = await notaNotifier.saveNota(id: notaState.idGenerated);
               if (ok && context.mounted) context.pop();
             },
             child: const Text('Guardar nota'),
