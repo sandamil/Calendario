@@ -1,5 +1,6 @@
 import 'package:calendario2/app/modules/home/widgets/calendar/widget/line.dart';
 import 'package:calendario2/app/modules/notas/providers/edit_nota_provider.dart';
+import 'package:calendario2/app/modules/notas/widgets/recordatorio_dialog.dart';
 import 'package:calendario2/config/theme/my_colors.dart';
 import 'package:calendario2/config/theme/my_fonts.dart';
 import 'package:calendario2/config/util/dateUtils.dart';
@@ -106,49 +107,57 @@ class _EditNotasViewState extends ConsumerState<EditNotasView> {
     );
   }
 
-  Future<void> _editReminderTime(EditNotaNotifier notifier, EditNotaState state) async {
-    final initial = state.alarmaCreada ? state.alarmTime : state.startTime;
-    final selected = await showTimePicker(
+  Future<void> _openReminderDialog(
+    EditNotaNotifier notifier,
+    EditNotaState state,
+  ) async {
+    final result = await showRecordatorioDialog(
       context: context,
-      initialTime: TimeOfDay.fromDateTime(initial),
+      enabled: state.alarmaCreada,
+      initialTime: state.alarmaCreada ? state.alarmTime : state.startTime,
+      initialMode: state.notificationMode,
+      eventDate: state.startTime,
     );
-    if (!mounted || selected == null) return;
-    final updated = DateTime(
-      state.startTime.year,
-      state.startTime.month,
-      state.startTime.day,
-      selected.hour,
-      selected.minute,
-    );
-    notifier.setAlarmaTime(updated);
-    notifier.setAlarmaCreada(true);
-    notifier.setAlarmaActivadaString('A las ${selected.format(context)}');
+    if (!mounted || result == null) return;
+
+    notifier.setAlarmaCreada(result.enabled);
+    notifier.setNotificationMode(result.mode);
+    if (result.enabled) {
+      notifier.setAlarmaTime(result.time);
+      notifier.setAlarmaActivadaString(
+        'A las ${TimeOfDay(hour: result.time.hour, minute: result.time.minute).format(context)}',
+      );
+    } else {
+      notifier.setAlarmaActivadaString('Sin recordatorio');
+    }
   }
 
   Widget _reminderTile(EditNotaState state, EditNotaNotifier notifier) {
     final color = Theme.of(context).colorScheme.onSurface;
     final reminderTime = state.alarmaCreada
-        ? TimeOfDay(hour: state.alarmTime.hour, minute: state.alarmTime.minute).format(context)
+        ? TimeOfDay(
+            hour: state.alarmTime.hour,
+            minute: state.alarmTime.minute,
+          ).format(context)
         : 'Sin recordatorio';
 
-    void toggleMode() {
-      notifier.setNotificationMode(
-        state.notificationMode == 'alarma' ? 'notificacion' : 'alarma',
-      );
-    }
-
     return Material(
-      color: Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: .55),
+      color: Theme.of(context)
+          .colorScheme
+          .surfaceContainerHighest
+          .withValues(alpha: .55),
       borderRadius: BorderRadius.circular(14.r),
       child: InkWell(
         borderRadius: BorderRadius.circular(14.r),
-        onTap: () => _editReminderTime(notifier, state),
+        onTap: () => _openReminderDialog(notifier, state),
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 6.h),
+          padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
           child: Row(
             children: [
               Icon(
-                state.notificationMode == 'alarma' ? Icons.alarm_rounded : Icons.notifications_outlined,
+                state.notificationMode == 'alarma'
+                    ? Icons.alarm_rounded
+                    : Icons.notifications_outlined,
                 color: PRIMARY_COLOR,
               ),
               SizedBox(width: 10.w),
@@ -156,46 +165,24 @@ class _EditNotasViewState extends ConsumerState<EditNotasView> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Recordatorio', style: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w600)),
-                    Text(reminderTime, style: TextStyle(fontSize: 12.sp, color: color.withValues(alpha: .55))),
+                    Text(
+                      'Recordatorio',
+                      style: TextStyle(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    Text(
+                      reminderTime,
+                      style: TextStyle(
+                        fontSize: 12.sp,
+                        color: color.withValues(alpha: .55),
+                      ),
+                    ),
                   ],
                 ),
               ),
-              InkWell(
-                onTap: toggleMode,
-                borderRadius: BorderRadius.circular(10.r),
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 6.w, vertical: 7.h),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        state.notificationMode == 'alarma' ? Icons.alarm_rounded : Icons.notifications_outlined,
-                        size: 18.sp,
-                      ),
-                      SizedBox(width: 4.w),
-                      Text(
-                        state.notificationMode == 'alarma' ? 'Alarma' : 'Notificación',
-                        style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w600),
-                      ),
-                      SizedBox(width: 2.w),
-                      Icon(Icons.swap_horiz, size: 17.sp),
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(width: 2.w),
-              Switch(
-                value: state.alarmaCreada,
-                onChanged: (enabled) {
-                  if (enabled) {
-                    _editReminderTime(notifier, state);
-                  } else {
-                    notifier.setAlarmaCreada(false);
-                    notifier.setAlarmaActivadaString('Sin recordatorio');
-                  }
-                },
-              ),
+              Icon(Icons.chevron_right, color: color.withValues(alpha: .55)),
             ],
           ),
         ),
