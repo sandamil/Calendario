@@ -1,13 +1,17 @@
 import 'package:calendario2/app/controllers/ads_provider.dart';
+import 'package:calendario2/app/controllers/ads_service.dart';
+import 'package:calendario2/app/components/ad_banner_slot.dart';
+import 'package:calendario2/app/data/model/taskModel.dart';
+
 import 'dart:collection';
 import 'dart:math' as math;
 import 'dart:typed_data';
 import 'dart:ui' as ui;
-import 'package:flutter/foundation.dart' show defaultTargetPlatform, kIsWeb, TargetPlatform;
 
-import 'package:calendario2/app/data/model/taskModel.dart';
+import 'package:flutter/foundation.dart'
+    show defaultTargetPlatform, kIsWeb, TargetPlatform;
+
 import 'package:calendario2/app/data/local/my_shared_pref.dart';
-import 'package:calendario2/app/modules/notas/views/widgets/taskCard.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:calendario2/app/modules/notas/providers/notas_list_provider.dart';
 import 'package:calendario2/app/modules/home/providers/calendar_providers.dart';
@@ -25,6 +29,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:cross_file/cross_file.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:table_calendar/table_calendar.dart';
+
 import '../../../../config/util/constant.dart';
 
 import '../../../components/toast.dart';
@@ -33,18 +38,25 @@ import '../../../controllers/tutorial_provider.dart';
 import '../../../controllers/tutorialController.dart';
 import '../../../data/model/cuadranteDay.dart';
 import '../widgets/calendar/dialog_onLongPress_calendar.dart';
+import '../widgets/calendar/calendar_view_mode_selector.dart';
+import '../widgets/calendar/calendar_agenda_view.dart';
 
 typedef HomeCallback = void Function(int id, DateTime selectedDate);
 typedef HomeCallback2 = void Function();
 typedef HomeCallbackSetState = void Function(DateTime selectedDate);
 
 class HomeView extends StatefulWidget {
-  HomeView({Key? key}) : super(key: key);
+  const HomeView({super.key});
 
+  @override
   State<HomeView> createState() => _HomeViewState();
 
   static notaHomeDelete(
-      BuildContext context, id, selectedDay, focusedDay) async {
+    BuildContext context,
+    id,
+    selectedDay,
+    focusedDay,
+  ) async {
     final container = ProviderScope.containerOf(context, listen: false);
     await container.read(notasListProvider.notifier).eliminarNota(id);
 
@@ -57,7 +69,8 @@ class _HomeViewState extends State<HomeView> {
     MyCustomDialog.myConfirmDialogBody(
       context: context,
       title: '¿ Salir de la aplicacion ?',
-      desc: 'Quieres cerrar la aplicación?'
+      desc:
+          'Quieres cerrar la aplicación?'
           '\\nPuedes dejarla en segundo plano'
           '\\nsi pulsas el botón: o en vez de: <',
       btnCancelText: 'Salir',
@@ -72,10 +85,11 @@ class _HomeViewState extends State<HomeView> {
   }
 
   final isDialOpen = ValueNotifier(false);
+  final DraggableScrollableController _monthSheetController =
+      DraggableScrollableController();
   late final TutorialController tutorialController;
 
   bool _showHomeTutorial = false;
-
 
   final Set<DateTime> _selectedDays = LinkedHashSet<DateTime>(
     equals: isSameDay,
@@ -91,28 +105,17 @@ class _HomeViewState extends State<HomeView> {
   }
 
   onDaySelected(DateTime selectedDate, DateTime focusedDate) {
-    if (!isSameDay(
-      ProviderScope.containerOf(context, listen: false)
-          .read(selectedDayProvider),
-      selectedDate,
-    )) {
-      setState(() {
-        ProviderScope.containerOf(context, listen: false)
-            .read(selectedDayProvider.notifier)
-            .setSelectedDay(selectedDate);
-        ProviderScope.containerOf(context, listen: false)
-            .read(focusedMonthProvider.notifier)
-            .setFocusedDay(focusedDate);
-      });
-    }
-
     final container = ProviderScope.containerOf(context, listen: false);
+    container.read(selectedDayProvider.notifier).setSelectedDay(selectedDate);
+    container.read(focusedMonthProvider.notifier).setFocusedDay(focusedDate);
     container
         .read(selectedDayTurnosProvider.notifier)
-        .setTurnos(getTurnosOfDayFromMap(
-          selectedDate,
-          container.read(cuadranteMapProvider),
-        ));
+        .setTurnos(
+          getTurnosOfDayFromMap(
+            selectedDate,
+            container.read(cuadranteMapProvider),
+          ),
+        );
   }
 
   Future<void> onDayTap(
@@ -191,20 +194,19 @@ class _HomeViewState extends State<HomeView> {
           curve: Curves.easeOutCubic,
           reverseCurve: Curves.easeInCubic,
         );
-        return FadeTransition(
-          opacity: curved,
-          child: child,
-        );
+        return FadeTransition(opacity: curved, child: child);
       },
     );
   }
 
   DateTime _selectedCalendarDate() {
     final container = ProviderScope.containerOf(context, listen: false);
-    return container.read(selectedDayProvider) ?? container.read(focusedMonthProvider);
+    return container.read(selectedDayProvider) ??
+        container.read(focusedMonthProvider);
   }
 
-  DateTime _dateOnly(DateTime date) => DateTime(date.year, date.month, date.day);
+  DateTime _dateOnly(DateTime date) =>
+      DateTime(date.year, date.month, date.day);
 
   DateTime _monthStart(DateTime date) => DateTime(date.year, date.month, 1);
 
@@ -261,45 +263,93 @@ class _HomeViewState extends State<HomeView> {
                         SizedBox(height: 12.h),
                         Row(
                           children: [
-                            Icon(Icons.share_rounded, color: PRIMARY_COLOR, size: 23.sp),
+                            Icon(
+                              Icons.share_rounded,
+                              color: PRIMARY_COLOR,
+                              size: 23.sp,
+                            ),
                             SizedBox(width: 10.w),
                             Expanded(
                               child: Text(
                                 'Compartir calendario',
-                                style: TextStyle(fontSize: 19.sp, fontWeight: FontWeight.w700),
+                                style: TextStyle(
+                                  fontSize: 19.sp,
+                                  fontWeight: FontWeight.w700,
+                                ),
                               ),
                             ),
                             IconButton(
-                              onPressed: () => Navigator.of(sheetContext).pop(false),
+                              onPressed: () =>
+                                  Navigator.of(sheetContext).pop(false),
                               icon: const Icon(Icons.close_rounded),
                               tooltip: 'Cerrar',
                             ),
                           ],
                         ),
                         SizedBox(height: 12.h),
-                        Text('PERIODO', style: TextStyle(fontSize: 11.sp, fontWeight: FontWeight.w800, letterSpacing: .8, color: onSurface.withValues(alpha: .58))),
+                        Text(
+                          'PERIODO',
+                          style: TextStyle(
+                            fontSize: 11.sp,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: .8,
+                            color: onSurface.withValues(alpha: .58),
+                          ),
+                        ),
                         SizedBox(height: 6.h),
                         DropdownButtonFormField<String>(
                           initialValue: period,
                           isExpanded: true,
                           decoration: InputDecoration(
-                            prefixIcon: Icon(Icons.date_range_rounded, color: PRIMARY_COLOR),
-                            contentPadding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
-                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(13.r)),
+                            prefixIcon: Icon(
+                              Icons.date_range_rounded,
+                              color: PRIMARY_COLOR,
+                            ),
+                            contentPadding: EdgeInsets.symmetric(
+                              horizontal: 12.w,
+                              vertical: 10.h,
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(13.r),
+                            ),
                           ),
                           items: const [
-                            DropdownMenuItem(value: 'Día seleccionado', child: Text('Día seleccionado')),
-                            DropdownMenuItem(value: 'Mes visible', child: Text('Mes visible')),
-                            DropdownMenuItem(value: 'Año visible', child: Text('Año visible')),
-                            DropdownMenuItem(value: 'Rango de días', child: Text('Rango de días…')),
-                            DropdownMenuItem(value: 'Varios meses', child: Text('Varios meses…')),
+                            DropdownMenuItem(
+                              value: 'Día seleccionado',
+                              child: Text('Día seleccionado'),
+                            ),
+                            DropdownMenuItem(
+                              value: 'Mes visible',
+                              child: Text('Mes visible'),
+                            ),
+                            DropdownMenuItem(
+                              value: 'Año visible',
+                              child: Text('Año visible'),
+                            ),
+                            DropdownMenuItem(
+                              value: 'Rango de días',
+                              child: Text('Rango de días…'),
+                            ),
+                            DropdownMenuItem(
+                              value: 'Varios meses',
+                              child: Text('Varios meses…'),
+                            ),
                           ],
                           onChanged: (value) {
-                            if (value != null) setSheetState(() => period = value);
+                            if (value != null)
+                              setSheetState(() => period = value);
                           },
                         ),
                         SizedBox(height: 16.h),
-                        Text('QUÉ QUIERES COMPARTIR', style: TextStyle(fontSize: 11.sp, fontWeight: FontWeight.w800, letterSpacing: .8, color: onSurface.withValues(alpha: .58))),
+                        Text(
+                          'QUÉ QUIERES COMPARTIR',
+                          style: TextStyle(
+                            fontSize: 11.sp,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: .8,
+                            color: onSurface.withValues(alpha: .58),
+                          ),
+                        ),
                         SizedBox(height: 4.h),
                         CheckboxListTile(
                           value: includeTurnos,
@@ -308,8 +358,13 @@ class _HomeViewState extends State<HomeView> {
                           controlAffinity: ListTileControlAffinity.leading,
                           activeColor: PRIMARY_COLOR,
                           title: const Text('Turnos'),
-                          secondary: Icon(Icons.work_history_outlined, color: PRIMARY_COLOR),
-                          onChanged: (value) => setSheetState(() => includeTurnos = value ?? false),
+                          secondary: Icon(
+                            Icons.work_history_outlined,
+                            color: PRIMARY_COLOR,
+                          ),
+                          onChanged: (value) => setSheetState(
+                            () => includeTurnos = value ?? false,
+                          ),
                         ),
                         CheckboxListTile(
                           value: includeNotas,
@@ -318,20 +373,56 @@ class _HomeViewState extends State<HomeView> {
                           controlAffinity: ListTileControlAffinity.leading,
                           activeColor: PRIMARY_COLOR,
                           title: const Text('Notas'),
-                          secondary: Icon(Icons.sticky_note_2_outlined, color: PRIMARY_COLOR),
-                          onChanged: (value) => setSheetState(() => includeNotas = value ?? false),
+                          secondary: Icon(
+                            Icons.sticky_note_2_outlined,
+                            color: PRIMARY_COLOR,
+                          ),
+                          onChanged: (value) => setSheetState(
+                            () => includeNotas = value ?? false,
+                          ),
                         ),
                         SizedBox(height: 10.h),
-                        Text('FORMATO', style: TextStyle(fontSize: 11.sp, fontWeight: FontWeight.w800, letterSpacing: .8, color: onSurface.withValues(alpha: .58))),
+                        Text(
+                          'FORMATO',
+                          style: TextStyle(
+                            fontSize: 11.sp,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: .8,
+                            color: onSurface.withValues(alpha: .58),
+                          ),
+                        ),
                         SizedBox(height: 8.h),
                         Wrap(
                           spacing: 8.w,
                           runSpacing: 8.h,
                           children: [
-                            _ShareFormatChip(icon: Icons.text_snippet_outlined, label: 'Texto', selected: format == 'Texto', onTap: () => setSheetState(() => format = 'Texto')),
-                            _ShareFormatChip(icon: Icons.picture_as_pdf_outlined, label: 'PDF', selected: format == 'PDF', onTap: () => setSheetState(() => format = 'PDF')),
-                            _ShareFormatChip(icon: Icons.image_outlined, label: 'Imagen bonita', selected: format == 'Imagen bonita', onTap: () => setSheetState(() => format = 'Imagen bonita')),
-                            _ShareFormatChip(icon: Icons.photo_camera_outlined, label: 'Captura', selected: format == 'Captura', onTap: () => setSheetState(() => format = 'Captura')),
+                            _ShareFormatChip(
+                              icon: Icons.text_snippet_outlined,
+                              label: 'Texto',
+                              selected: format == 'Texto',
+                              onTap: () =>
+                                  setSheetState(() => format = 'Texto'),
+                            ),
+                            _ShareFormatChip(
+                              icon: Icons.picture_as_pdf_outlined,
+                              label: 'PDF',
+                              selected: format == 'PDF',
+                              onTap: () => setSheetState(() => format = 'PDF'),
+                            ),
+                            _ShareFormatChip(
+                              icon: Icons.image_outlined,
+                              label: 'Imagen bonita',
+                              selected: format == 'Imagen bonita',
+                              onTap: () =>
+                                  setSheetState(() => format = 'Imagen bonita'),
+                            ),
+                            _ShareFormatChip(
+                              icon: Icons.photo_camera_outlined,
+                              label: 'Captura',
+                              selected: format == 'Captura',
+                              onTap: () =>
+                                  setSheetState(() => format = 'Captura'),
+                            ),
                           ],
                         ),
                         SizedBox(height: 18.h),
@@ -349,6 +440,7 @@ class _HomeViewState extends State<HomeView> {
                             ),
                           ),
                         ),
+                        const AdBannerSlot(),
                       ],
                     ),
                   ),
@@ -367,13 +459,33 @@ class _HomeViewState extends State<HomeView> {
     final selected = _selectedCalendarDate();
     switch (period) {
       case 'Mes visible':
-        start = _monthStart(ProviderScope.containerOf(context, listen: false).read(focusedMonthProvider));
-        end = _monthEnd(ProviderScope.containerOf(context, listen: false).read(focusedMonthProvider));
+        start = _monthStart(
+          ProviderScope.containerOf(
+            context,
+            listen: false,
+          ).read(focusedMonthProvider),
+        );
+        end = _monthEnd(
+          ProviderScope.containerOf(
+            context,
+            listen: false,
+          ).read(focusedMonthProvider),
+        );
         label = DateFormat('MMMM yyyy', 'es_ES').format(start);
         break;
       case 'Año visible':
-        start = _yearStart(ProviderScope.containerOf(context, listen: false).read(focusedMonthProvider));
-        end = _yearEnd(ProviderScope.containerOf(context, listen: false).read(focusedMonthProvider));
+        start = _yearStart(
+          ProviderScope.containerOf(
+            context,
+            listen: false,
+          ).read(focusedMonthProvider),
+        );
+        end = _yearEnd(
+          ProviderScope.containerOf(
+            context,
+            listen: false,
+          ).read(focusedMonthProvider),
+        );
         label = 'Año ${start.year}';
         break;
       case 'Rango de días':
@@ -381,7 +493,10 @@ class _HomeViewState extends State<HomeView> {
           context: context,
           firstDate: DateTime(1900),
           lastDate: DateTime(2200),
-          initialDateRange: DateTimeRange(start: _dateOnly(selected), end: _dateOnly(selected)),
+          initialDateRange: DateTimeRange(
+            start: _dateOnly(selected),
+            end: _dateOnly(selected),
+          ),
           helpText: 'Selecciona los días',
           saveText: 'Continuar',
         );
@@ -395,24 +510,42 @@ class _HomeViewState extends State<HomeView> {
           context: context,
           firstDate: DateTime(1900),
           lastDate: DateTime(2200),
-          initialDateRange: DateTimeRange(start: _monthStart(selected), end: _monthEnd(selected)),
+          initialDateRange: DateTimeRange(
+            start: _monthStart(selected),
+            end: _monthEnd(selected),
+          ),
           helpText: 'Selecciona los meses',
           saveText: 'Continuar',
         );
         if (!mounted || range == null) return;
         start = _monthStart(range.start);
         end = _monthEnd(range.end);
-        label = '${DateFormat('MMMM yyyy', 'es_ES').format(start)} - ${DateFormat('MMMM yyyy', 'es_ES').format(end)}';
+        label =
+            '${DateFormat('MMMM yyyy', 'es_ES').format(start)} - ${DateFormat('MMMM yyyy', 'es_ES').format(end)}';
         break;
       default:
         start = _dateOnly(selected);
         end = start;
         label = 'Día ${_periodDate(selected)}';
     }
-    await _shareCalendarPeriod(start, end, label, includeTurnos: includeTurnos, includeNotas: includeNotas, format: format);
+    await _shareCalendarPeriod(
+      start,
+      end,
+      label,
+      includeTurnos: includeTurnos,
+      includeNotas: includeNotas,
+      format: format,
+    );
   }
 
-  Future<void> _shareCalendarPeriod(DateTime start, DateTime end, String label, {bool includeTurnos = true, bool includeNotas = true, String format = 'Texto'}) async {
+  Future<void> _shareCalendarPeriod(
+    DateTime start,
+    DateTime end,
+    String label, {
+    bool includeTurnos = true,
+    bool includeNotas = true,
+    String format = 'Texto',
+  }) async {
     final container = ProviderScope.containerOf(context, listen: false);
     await container.read(cuadranteMapProvider.notifier).reload();
     final calendar = container.read(cuadranteMapProvider);
@@ -423,19 +556,22 @@ class _HomeViewState extends State<HomeView> {
     final lines = <String>[];
     final entries = <CuadranteDay>[];
 
-    if (includeTurnos) for (final values in calendar.values) {
-      for (final day in values) {
-        final date = day.dateTime;
-        if (date == null) continue;
-        final normalized = _dateOnly(date);
-        if (!normalized.isBefore(startDay) && !normalized.isAfter(endDay)) {
-          entries.add(day);
+    if (includeTurnos)
+      for (final values in calendar.values) {
+        for (final day in values) {
+          final date = day.dateTime;
+          if (date == null) continue;
+          final normalized = _dateOnly(date);
+          if (!normalized.isBefore(startDay) && !normalized.isAfter(endDay)) {
+            entries.add(day);
+          }
         }
       }
-    }
 
     entries.sort((a, b) {
-      final dateCompare = (a.dateTime ?? DateTime(1900)).compareTo(b.dateTime ?? DateTime(1900));
+      final dateCompare = (a.dateTime ?? DateTime(1900)).compareTo(
+        b.dateTime ?? DateTime(1900),
+      );
       if (dateCompare != 0) return dateCompare;
       return (a.startHour ?? '').compareTo(b.startHour ?? '');
     });
@@ -449,7 +585,11 @@ class _HomeViewState extends State<HomeView> {
             return !day.isBefore(startDay) && !day.isAfter(endDay);
           }).toList()
         : <Task>[];
-    selectedNotes.sort((a, b) => (a.startTimeMilliseconds ?? 0).compareTo(b.startTimeMilliseconds ?? 0));
+    selectedNotes.sort(
+      (a, b) => (a.startTimeMilliseconds ?? 0).compareTo(
+        b.startTimeMilliseconds ?? 0,
+      ),
+    );
 
     lines.add('Calendario — $label');
     lines.add('');
@@ -469,10 +609,14 @@ class _HomeViewState extends State<HomeView> {
           }
           final title = (day.description ?? '').trim().isNotEmpty
               ? day.description!.trim()
-              : ((day.title ?? '').trim().isNotEmpty ? day.title!.trim() : 'Turno');
+              : ((day.title ?? '').trim().isNotEmpty
+                    ? day.title!.trim()
+                    : 'Turno');
           final startHour = (day.startHour ?? '').trim();
           final endHour = (day.endHour ?? '').trim();
-          final hours = startHour.isNotEmpty && endHour.isNotEmpty ? ' · $startHour - $endHour' : '';
+          final hours = startHour.isNotEmpty && endHour.isNotEmpty
+              ? ' · $startHour - $endHour'
+              : '';
           lines.add('• $title$hours');
         }
       }
@@ -484,10 +628,16 @@ class _HomeViewState extends State<HomeView> {
         lines.add('No hay notas registradas en este periodo.');
       } else {
         for (final note in selectedNotes) {
-          final date = DateTime.fromMillisecondsSinceEpoch(note.startTimeMilliseconds!);
-          lines.add('${DateFormat('EEEE dd/MM/yyyy', 'es_ES').format(date)} · ${(note.title ?? 'Nota').trim()}');
-          if ((note.site ?? '').trim().isNotEmpty) lines.add('  Lugar: ${note.site!.trim()}');
-          if ((note.notes ?? '').trim().isNotEmpty) lines.add('  ${note.notes!.trim()}');
+          final date = DateTime.fromMillisecondsSinceEpoch(
+            note.startTimeMilliseconds!,
+          );
+          lines.add(
+            '${DateFormat('EEEE dd/MM/yyyy', 'es_ES').format(date)} · ${(note.title ?? 'Nota').trim()}',
+          );
+          if ((note.site ?? '').trim().isNotEmpty)
+            lines.add('  Lugar: ${note.site!.trim()}');
+          if ((note.notes ?? '').trim().isNotEmpty)
+            lines.add('  ${note.notes!.trim()}');
         }
       }
     }
@@ -501,17 +651,25 @@ class _HomeViewState extends State<HomeView> {
             build: (context) => [
               pw.Header(level: 0, child: pw.Text('Calendario — $label')),
               pw.SizedBox(height: 8),
-              ...lines.map((line) => pw.Padding(
-                    padding: const pw.EdgeInsets.only(bottom: 4),
-                    child: pw.Text(line.isEmpty ? ' ' : line),
-                  )),
+              ...lines.map(
+                (line) => pw.Padding(
+                  padding: const pw.EdgeInsets.only(bottom: 4),
+                  child: pw.Text(line.isEmpty ? ' ' : line),
+                ),
+              ),
             ],
           ),
         );
         final bytes = await document.save();
         await SharePlus.instance.share(
           ShareParams(
-            files: [XFile.fromData(bytes, mimeType: 'application/pdf', name: 'calendario.pdf')],
+            files: [
+              XFile.fromData(
+                bytes,
+                mimeType: 'application/pdf',
+                name: 'calendario.pdf',
+              ),
+            ],
             title: 'Calendario — $label',
             subject: 'Calendario — $label',
           ),
@@ -519,10 +677,20 @@ class _HomeViewState extends State<HomeView> {
         return;
       case 'Imagen bonita':
       case 'Captura':
-        final bytes = await _renderShareImage(lines, label, pretty: format == 'Imagen bonita');
+        final bytes = await _renderShareImage(
+          lines,
+          label,
+          pretty: format == 'Imagen bonita',
+        );
         await SharePlus.instance.share(
           ShareParams(
-            files: [XFile.fromData(bytes, mimeType: 'image/png', name: 'calendario.png')],
+            files: [
+              XFile.fromData(
+                bytes,
+                mimeType: 'image/png',
+                name: 'calendario.png',
+              ),
+            ],
             title: 'Calendario — $label',
             subject: 'Calendario — $label',
           ),
@@ -539,7 +707,11 @@ class _HomeViewState extends State<HomeView> {
     }
   }
 
-  Future<Uint8List> _renderShareImage(List<String> lines, String label, {required bool pretty}) async {
+  Future<Uint8List> _renderShareImage(
+    List<String> lines,
+    String label, {
+    required bool pretty,
+  }) async {
     const double width = 1080;
     const double margin = 64;
     const double contentWidth = width - margin * 2;
@@ -549,9 +721,13 @@ class _HomeViewState extends State<HomeView> {
     final backgroundPaint = ui.Paint()..color = const Color(0xFFF3F6FB);
     canvas.drawRect(const ui.Rect.fromLTWH(0, 0, width, 4000), backgroundPaint);
     final headerHeight = pretty ? 220.0 : 150.0;
-    final headerPaint = ui.Paint()..color = pretty ? const Color(0xFF3157A4) : const Color(0xFF374151);
+    final headerPaint = ui.Paint()
+      ..color = pretty ? const Color(0xFF3157A4) : const Color(0xFF374151);
     canvas.drawRRect(
-      ui.RRect.fromRectAndRadius(const ui.Rect.fromLTWH(32, 32, width - 64, 4000), const ui.Radius.circular(34)),
+      ui.RRect.fromRectAndRadius(
+        const ui.Rect.fromLTWH(32, 32, width - 64, 4000),
+        const ui.Radius.circular(34),
+      ),
       ui.Paint()..color = const Color(0xFFFFFFFF),
     );
     canvas.drawRRect(
@@ -563,21 +739,49 @@ class _HomeViewState extends State<HomeView> {
       headerPaint,
     );
 
-    double drawText(String text, double x, double y, double maxWidth, double fontSize, ui.Color color, {bool bold = false}) {
-      final builder = ui.ParagraphBuilder(ui.ParagraphStyle(
-        fontSize: fontSize,
-        fontWeight: bold ? ui.FontWeight.bold : ui.FontWeight.normal,
-        maxLines: 3,
-      ))
-        ..pushStyle(ui.TextStyle(color: color))
-        ..addText(text);
-      final paragraph = builder.build()..layout(ui.ParagraphConstraints(width: maxWidth));
+    double drawText(
+      String text,
+      double x,
+      double y,
+      double maxWidth,
+      double fontSize,
+      ui.Color color, {
+      bool bold = false,
+    }) {
+      final builder =
+          ui.ParagraphBuilder(
+              ui.ParagraphStyle(
+                fontSize: fontSize,
+                fontWeight: bold ? ui.FontWeight.bold : ui.FontWeight.normal,
+                maxLines: 3,
+              ),
+            )
+            ..pushStyle(ui.TextStyle(color: color))
+            ..addText(text);
+      final paragraph = builder.build()
+        ..layout(ui.ParagraphConstraints(width: maxWidth));
       canvas.drawParagraph(paragraph, ui.Offset(x, y));
       return paragraph.height;
     }
 
-    drawText('CALENDARIO', margin, 58, contentWidth, 24, const ui.Color(0xFFDDE7FF), bold: true);
-    drawText(label, margin, 100, contentWidth, pretty ? 38 : 32, const ui.Color(0xFFFFFFFF), bold: true);
+    drawText(
+      'CALENDARIO',
+      margin,
+      58,
+      contentWidth,
+      24,
+      const ui.Color(0xFFDDE7FF),
+      bold: true,
+    );
+    drawText(
+      label,
+      margin,
+      100,
+      contentWidth,
+      pretty ? 38 : 32,
+      const ui.Color(0xFFFFFFFF),
+      bold: true,
+    );
     double y = headerHeight + 60;
     for (final line in visibleLines) {
       if (line.isEmpty) {
@@ -588,7 +792,10 @@ class _HomeViewState extends State<HomeView> {
       if (isSection) {
         y += 12;
         canvas.drawRRect(
-          ui.RRect.fromRectAndRadius(ui.Rect.fromLTWH(margin - 12, y - 4, contentWidth + 24, 46), const ui.Radius.circular(12)),
+          ui.RRect.fromRectAndRadius(
+            ui.Rect.fromLTWH(margin - 12, y - 4, contentWidth + 24, 46),
+            const ui.Radius.circular(12),
+          ),
           ui.Paint()..color = const ui.Color(0xFFE8EEF9),
         );
       }
@@ -604,10 +811,14 @@ class _HomeViewState extends State<HomeView> {
       y += height + (pretty ? 17 : 12);
     }
     y += 48;
-    final image = await recorder.endRecording().toImage(width.toInt(), y.ceil().clamp(1, 4000).toInt());
+    final image = await recorder.endRecording().toImage(
+      width.toInt(),
+      y.ceil().clamp(1, 4000).toInt(),
+    );
     final data = await image.toByteData(format: ui.ImageByteFormat.png);
     image.dispose();
-    if (data == null) throw StateError('No se pudo generar la imagen del calendario.');
+    if (data == null)
+      throw StateError('No se pudo generar la imagen del calendario.');
     return data.buffer.asUint8List();
   }
 
@@ -616,9 +827,10 @@ class _HomeViewState extends State<HomeView> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
-      ProviderScope.containerOf(context, listen: false)
-          .read(adsProvider.notifier)
-          .ensureHomeBanner();
+      ProviderScope.containerOf(
+        context,
+        listen: false,
+      ).read(adsProvider.notifier).ensureHomeBanner();
     });
     tutorialController = ProviderScope.containerOf(
       context,
@@ -648,18 +860,26 @@ class _HomeViewState extends State<HomeView> {
       });
     });
 
-    _selectedDays.add(ProviderScope.containerOf(context, listen: false)
-        .read(focusedMonthProvider));
+    _selectedDays.add(
+      ProviderScope.containerOf(
+        context,
+        listen: false,
+      ).read(focusedMonthProvider),
+    );
 
     getCuadrante().then((mapa) {
       if (!mounted) return;
       ProviderScope.containerOf(context, listen: false)
           .read(selectedDayTurnosProvider.notifier)
-          .setTurnos(getTurnosOfDayFromMap(
-            ProviderScope.containerOf(context, listen: false)
-                .read(focusedMonthProvider),
-            mapa,
-          ));
+          .setTurnos(
+            getTurnosOfDayFromMap(
+              ProviderScope.containerOf(
+                context,
+                listen: false,
+              ).read(focusedMonthProvider),
+              mapa,
+            ),
+          );
       setState(() {});
     });
 
@@ -670,188 +890,273 @@ class _HomeViewState extends State<HomeView> {
   }
 
   @override
+  void dispose() {
+    _monthSheetController.dispose();
+    isDialOpen.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return PopScope(
-        canPop: !(!kIsWeb && defaultTargetPlatform == TargetPlatform.android),
-        onPopInvokedWithResult: (bool didPop, Object? result) {
-          if (didPop) return;
-          if ((!kIsWeb && defaultTargetPlatform == TargetPlatform.android)) {
-            if (isDialOpen.value) {
-              isDialOpen.value = false;
-            } else {
-              _appCloseConfirm(context);
-            }
+      canPop: !(!kIsWeb && defaultTargetPlatform == TargetPlatform.android),
+      onPopInvokedWithResult: (bool didPop, Object? result) {
+        if (didPop) return;
+        if ((!kIsWeb && defaultTargetPlatform == TargetPlatform.android)) {
+          if (isDialOpen.value) {
+            isDialOpen.value = false;
+          } else {
+            _appCloseConfirm(context);
           }
-        },
-        child: Scaffold(
-            appBar: AppBar(
-              centerTitle: false,
-              elevation: 0,
-              toolbarHeight: 58.h,
-              titleSpacing: 2.w,
-              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-              leading: Builder(
-                builder: (BuildContext context) {
-                  return IconButton(
-                    key: _showHomeTutorial
-                        ? tutorialController.keyButton6
-                        : widget.key,
-                    icon: Icon(
-                      Icons.menu_rounded,
-                      color: Theme.of(context).colorScheme.onSurface,
-                      size: 24.sp,
-                    ),
-                    onPressed: () {
-                      context.push('/menu');
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          centerTitle: false,
+          elevation: 0,
+          toolbarHeight: 58.h,
+          titleSpacing: 2.w,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+          leading: Builder(
+            builder: (BuildContext context) {
+              return IconButton(
+                key: _showHomeTutorial
+                    ? tutorialController.keyButton6
+                    : widget.key,
+                icon: Icon(
+                  Icons.menu_rounded,
+                  color: Theme.of(context).colorScheme.onSurface,
+                  size: 24.sp,
+                ),
+                onPressed: () {
+                  CalendarioAds.showMenuInterstitial(
+                    onComplete: () {
+                      if (context.mounted) context.push('/menu');
                     },
-                    tooltip:
-                        MaterialLocalizations.of(context).openAppDrawerTooltip,
                   );
                 },
+                tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+              );
+            },
+          ),
+          title: SelectedDayWidget(),
+          actions: [
+            Padding(
+              padding: EdgeInsets.only(right: 2.w),
+              child: TextButton(
+                key: _showHomeTutorial
+                    ? tutorialController.keyButton7
+                    : widget.key,
+                onPressed: () {
+                  final hoy = DateTime.now();
+                  final container = ProviderScope.containerOf(
+                    context,
+                    listen: false,
+                  );
+                  container
+                      .read(focusedMonthProvider.notifier)
+                      .setFocusedDay(hoy);
+                  container
+                      .read(selectedDayProvider.notifier)
+                      .setSelectedDay(hoy);
+                  container
+                      .read(selectedDayTurnosProvider.notifier)
+                      .setTurnos(
+                        getTurnosOfDayFromMap(
+                          hoy,
+                          container.read(cuadranteMapProvider),
+                        ),
+                      );
+                },
+                style: TextButton.styleFrom(
+                  foregroundColor: PRIMARY_COLOR,
+                  backgroundColor: PRIMARY_COLOR.withValues(alpha: .10),
+                  minimumSize: Size(0, 32.h),
+                  padding: EdgeInsets.symmetric(horizontal: 10.w),
+                  tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  visualDensity: VisualDensity.compact,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.r),
+                  ),
+                ),
+                child: Text(
+                  'HOY',
+                  style: TextStyle(
+                    fontSize: 11.sp,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: .35,
+                  ),
+                ),
               ),
-              title: SelectedDayWidget(),
-              actions: [
-                Padding(
-                  padding: EdgeInsets.only(right: 2.w),
-                  child: TextButton(
-                    key: _showHomeTutorial
-                        ? tutorialController.keyButton7
-                        : widget.key,
-                    onPressed: () {
-                      final hoy = DateTime.now();
-                      final container = ProviderScope.containerOf(context, listen: false);
-                      container.read(focusedMonthProvider.notifier).setFocusedDay(hoy);
-                      container.read(selectedDayProvider.notifier).setSelectedDay(hoy);
-                    },
-                    style: TextButton.styleFrom(
-                      foregroundColor: PRIMARY_COLOR,
-                      backgroundColor: PRIMARY_COLOR.withValues(alpha: .10),
-                      minimumSize: Size(0, 32.h),
-                      padding: EdgeInsets.symmetric(horizontal: 10.w),
-                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      visualDensity: VisualDensity.compact,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.r)),
-                    ),
-                    child: Text('HOY', style: TextStyle(fontSize: 11.sp, fontWeight: FontWeight.w800, letterSpacing: .35)),
-                  ),
-                ),
-                IconButton(
-                  color: PRIMARY_COLOR,
-                  icon: Icon(
-                    Icons.share_rounded,
-                    size: 22.sp,
-                  ),
-                  tooltip: 'Compartir calendario',
-                  onPressed: _openShareMenu,
-                ),
-              ],
             ),
-            floatingActionButtonLocation:
-                FloatingActionButtonLocation.centerDocked,
-            floatingActionButton:
-                (!kIsWeb && defaultTargetPlatform == TargetPlatform.android)
-                    ? Consumer(
-                        builder: (context, ref, child) {
-                          final ads = ref.watch(adsProvider);
-                          final banner = ads.homeBanner;
+            const CalendarViewModeSelector(),
+            IconButton(
+              color: PRIMARY_COLOR,
+              icon: Icon(Icons.share_rounded, size: 22.sp),
+              tooltip: 'Compartir calendario',
+              onPressed: _openShareMenu,
+            ),
+          ],
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        floatingActionButton:
+            (!kIsWeb &&
+                (defaultTargetPlatform == TargetPlatform.android ||
+                    defaultTargetPlatform == TargetPlatform.iOS))
+            ? Consumer(
+                builder: (context, ref, child) {
+                  final ads = ref.watch(adsProvider);
+                  final banner = ads.homeBanner;
 
-                          return FloatingActionButton.extended(
-                            heroTag: 'homeBannerAd',
-                            backgroundColor: Colors.transparent,
-                            foregroundColor: Colors.transparent,
-                            elevation: 0,
-                            highlightElevation: 0,
-                            onPressed: () {},
-                            label: ads.isLoaded && banner != null
-                                ? SizedBox(
-                                    width: banner.size.width.toDouble(),
-                                    height: banner.size.height.toDouble(),
-                                    child: AdWidget(ad: banner),
-                                  )
-                                : const SizedBox.shrink(),
-                          );
-                        },
-                      )
-                    : null,
-            body: Column(
-              children: [
-                SizedBox(height: 4.h),
-                Column(
-                  key: _showHomeTutorial
-                      ? tutorialController.keyButton8
-                      : widget.key,
-                  children: [
-                    Container(
-                      alignment: Alignment.center,
-                      child: TableCalendarWidget(
-                        onDaySelected: onDaySelected,
-                        onDayTap: onDayTap,
+                  return FloatingActionButton.extended(
+                    heroTag: 'homeBannerAd',
+                    backgroundColor: Colors.transparent,
+                    foregroundColor: Colors.transparent,
+                    elevation: 0,
+                    highlightElevation: 0,
+                    onPressed: () {},
+                    label: ads.isLoaded && banner != null
+                        ? SizedBox(
+                            width: banner.size.width.toDouble(),
+                            height: banner.size.height.toDouble(),
+                            child: AdWidget(ad: banner),
+                          )
+                        : const SizedBox.shrink(),
+                  );
+                },
+              )
+            : null,
+        body: Consumer(
+          builder: (context, ref, child) {
+            final viewMode = ref.watch(calendarViewModeProvider);
+            if (viewMode == CalendarViewMode.month) {
+              return Stack(
+                children: [
+                  Positioned.fill(
+                    child: SingleChildScrollView(
+                      child: Column(
+                        key: _showHomeTutorial
+                            ? tutorialController.keyButton8
+                            : widget.key,
+                        children: [
+                          Container(
+                            alignment: Alignment.center,
+                            child: TableCalendarWidget(
+                              onDaySelected: onDaySelected,
+                              onDayTap: onDayTap,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
-                SizedBox(height: 8.h),
+                  ),
+                  DraggableScrollableSheet(
+                    controller: _monthSheetController,
+                    initialChildSize: .23,
+                    minChildSize: .18,
+                    maxChildSize: .82,
+                    snap: true,
+                    snapSizes: const [.23, .82],
+                    builder: (context, scrollController) {
+                      return Material(
+                        color: Theme.of(context).scaffoldBackgroundColor,
+                        elevation: 14,
+                        shadowColor: Colors.black.withValues(alpha: .20),
+                        clipBehavior: Clip.antiAlias,
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(22.r),
+                        ),
+                        child: Column(
+                          children: [
+                            GestureDetector(
+                              behavior: HitTestBehavior.opaque,
+                              onVerticalDragUpdate: (details) {
+                                if (!_monthSheetController.isAttached) return;
+                                final screenHeight = MediaQuery.sizeOf(context)
+                                    .height;
+                                final nextSize =
+                                    (_monthSheetController.size -
+                                            details.delta.dy / screenHeight)
+                                        .clamp(.18, .82)
+                                        .toDouble();
+                                _monthSheetController.jumpTo(nextSize);
+                              },
+                              onVerticalDragEnd: (_) {
+                                if (!_monthSheetController.isAttached) return;
+                                final target = _monthSheetController.size >= .52
+                                    ? .82
+                                    : .23;
+                                _monthSheetController.animateTo(
+                                  target,
+                                  duration: const Duration(milliseconds: 180),
+                                  curve: Curves.easeOutCubic,
+                                );
+                              },
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(vertical: 9.h),
+                                child: Container(
+                                  width: 38.w,
+                                  height: 4.h,
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onSurface
+                                        .withValues(alpha: .25),
+                                    borderRadius: BorderRadius.circular(20.r),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: CalendarAgendaView(
+                                scrollController: scrollController,
+                                showAddActions: false,
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              );
+            }
+
+            return Column(
+              children: [
+                if (viewMode == CalendarViewMode.week)
+                  Column(
+                    key: _showHomeTutorial
+                        ? tutorialController.keyButton8
+                        : widget.key,
+                    children: [
+                      Container(
+                        alignment: Alignment.center,
+                        child: TableCalendarWidget(
+                          onDaySelected: onDaySelected,
+                          onDayTap: onDayTap,
+                        ),
+                      ),
+                    ],
+                  )
+                else
+                  const SizedBox(height: 4),
+                SizedBox(height: 5.h),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 12.w),
                   child: LineWidget(),
                 ),
-                SizedBox(height: 2.h),
-
+                SizedBox(height: 3.h),
                 Expanded(
                   key: _showHomeTutorial
                       ? tutorialController.keyButton9
                       : widget.key,
-                  child: Consumer(
-                    builder: (context, ref, child) {
-                      ref.watch(notasProvider);
-                      final DateTime selectedDate =
-                          ref.watch(selectedDayProvider) ??
-                              ref.watch(focusedMonthProvider);
-                      final selectedDayNotas = ref
-                          .read(notasProvider.notifier)
-                          .getNotasOfDay(selectedDate);
-
-                      return _buildListEvent(context, selectedDayNotas);
-                    },
-                  ),
-                )
+                  child: const CalendarAgendaView(),
+                ),
               ],
-            )));
-  }
-
-  Widget _buildListEvent(BuildContext context, List<Task> events) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          SingleChildScrollView(
-            child: Column(
-              children: events
-                  .map(
-                    (event) => Column(
-                      children: [
-                        TaskCard(
-                          noteData: event,
-                          onTapAction: (Task noteData) {
-                            context.push('/notas-view', extra: {
-                              'id': noteData.id!,
-                              'noteData': noteData,
-                            });
-                          },
-                          routeToNotas: false,
-                          selectedDay:
-                              ProviderScope.containerOf(context, listen: false)
-                                  .read(selectedDayProvider),
-                          focusedDay:
-                              ProviderScope.containerOf(context, listen: false)
-                                  .read(focusedMonthProvider),
-                        )
-                      ],
-                    ),
-                  )
-                  .toList(),
-            ),
-          ),
-        ],
+            );
+          },
+        ),
       ),
     );
   }
@@ -875,14 +1180,30 @@ class _ShareFormatChip extends StatelessWidget {
     return ChoiceChip(
       selected: selected,
       onSelected: (_) => onTap(),
-      avatar: Icon(icon, size: 17.sp, color: selected ? Colors.white : PRIMARY_COLOR),
-      label: Text(label, style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w600)),
+      avatar: Icon(
+        icon,
+        size: 17.sp,
+        color: selected ? Colors.white : PRIMARY_COLOR,
+      ),
+      label: Text(
+        label,
+        style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w600),
+      ),
       selectedColor: PRIMARY_COLOR,
-      backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: .55),
-      labelStyle: TextStyle(color: selected ? Colors.white : Theme.of(context).colorScheme.onSurface),
+      backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest
+          .withValues(alpha: .55),
+      labelStyle: TextStyle(
+        color: selected
+            ? Colors.white
+            : Theme.of(context).colorScheme.onSurface,
+      ),
       showCheckmark: false,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
-      side: BorderSide(color: selected ? PRIMARY_COLOR : Theme.of(context).dividerColor.withValues(alpha: .35)),
+      side: BorderSide(
+        color: selected
+            ? PRIMARY_COLOR
+            : Theme.of(context).dividerColor.withValues(alpha: .35),
+      ),
       padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 5.h),
     );
   }

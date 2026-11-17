@@ -55,7 +55,6 @@ class _AddNotasViewState extends ConsumerState<AddNotasView> {
     final notaState = ref.watch(addNotaProvider);
     final notaNotifier = ref.read(addNotaProvider.notifier);
 
-    var theme = Theme.of(context);
     final tutorialController = ProviderScope.containerOf(
       context,
       listen: false,

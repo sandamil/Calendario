@@ -7,7 +7,10 @@ import 'package:go_router/go_router.dart';
 import '../../../../../config/theme/my_colors.dart';
 import '../../../../../config/util/hexColor.dart';
 import '../../../../data/model/cuadranteDay.dart';
+
 import 'package:calendario2/app/modules/home/providers/calendar_providers.dart';
+
+import '../../utils/shift_conflict_dialog.dart';
 
 class AddTurnostoCalendar extends ConsumerStatefulWidget {
   const AddTurnostoCalendar({
@@ -31,27 +34,48 @@ class _AddTurnostoCalendarState extends ConsumerState<AddTurnostoCalendar> {
     if (_adding) return;
     setState(() => _adding = true);
     try {
-      await CalendarioDB.db.addCuadranteItem(
-        CuadranteDay(
-          cuadranteName: 'Turnos sueltos',
-          dateTime: DateTime(
-            widget.selectedDate.year,
-            widget.selectedDate.month,
-            widget.selectedDate.day,
-          ),
-          color: turno.color,
-          description: turno.description,
-          endHour: turno.endHour,
-          startHour: turno.startHour,
-          title: turno.title,
+      await widget.getCuadrante;
+      final candidate = CuadranteDay(
+        cuadranteName: 'Turnos sueltos',
+        dateTime: DateTime(
+          widget.selectedDate.year,
+          widget.selectedDate.month,
+          widget.selectedDate.day,
         ),
+        color: turno.color,
+        description: turno.description,
+        endHour: turno.endHour,
+        startHour: turno.startHour,
+        title: turno.title,
       );
-
       final container = ProviderScope.containerOf(context, listen: false);
+      final existing = container
+          .read(cuadranteMapProvider)
+          .values
+          .expand((items) => items);
+      final allowed = await confirmShiftConflicts(
+        context,
+        candidate: candidate,
+        existing: existing,
+      );
+      if (!allowed || !mounted) return;
+      await CalendarioDB.db.addCuadranteItem(candidate);
+
       await container.read(cuadranteMapProvider.notifier).reload();
       container
           .read(focusedMonthProvider.notifier)
           .setFocusedDay(widget.selectedDate);
+      container
+          .read(selectedDayProvider.notifier)
+          .setSelectedDay(widget.selectedDate);
+      container
+          .read(selectedDayTurnosProvider.notifier)
+          .setTurnos(
+            getTurnosOfDayFromMap(
+              widget.selectedDate,
+              container.read(cuadranteMapProvider),
+            ),
+          );
 
       if (mounted) Navigator.of(context).pop();
     } catch (error) {
@@ -106,7 +130,9 @@ class _AddTurnostoCalendarState extends ConsumerState<AddTurnostoCalendar> {
                 width: double.infinity,
                 padding: EdgeInsets.all(14.w),
                 decoration: BoxDecoration(
-                  color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: .5),
+                  color: theme.colorScheme.surfaceContainerHighest.withValues(
+                    alpha: .5,
+                  ),
                   borderRadius: BorderRadius.circular(14.r),
                 ),
                 child: Column(
@@ -125,7 +151,8 @@ class _AddTurnostoCalendarState extends ConsumerState<AddTurnostoCalendar> {
                     width: double.infinity,
                     padding: EdgeInsets.all(16.w),
                     decoration: BoxDecoration(
-                      color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: .5),
+                      color: theme.colorScheme.surfaceContainerHighest
+                          .withValues(alpha: .5),
                       borderRadius: BorderRadius.circular(14.r),
                     ),
                     child: const Text(
@@ -142,8 +169,9 @@ class _AddTurnostoCalendarState extends ConsumerState<AddTurnostoCalendar> {
                   itemBuilder: (context, index) {
                     final turno = turnos[index];
                     final color = HexColor(turno.color ?? '#607D8B');
-                    final foreground =
-                        color.computeLuminance() > .52 ? Colors.black87 : Colors.white;
+                    final foreground = color.computeLuminance() > .52
+                        ? Colors.black87
+                        : Colors.white;
 
                     return Material(
                       color: color.withValues(alpha: .14),
@@ -195,15 +223,21 @@ class _AddTurnostoCalendarState extends ConsumerState<AddTurnostoCalendar> {
                                     SizedBox(height: 4.h),
                                     Row(
                                       children: [
-                                        Icon(Icons.schedule_rounded,
-                                            size: 13.sp,
-                                            color: textColor.withValues(alpha: .6)),
+                                        Icon(
+                                          Icons.schedule_rounded,
+                                          size: 13.sp,
+                                          color: textColor.withValues(
+                                            alpha: .6,
+                                          ),
+                                        ),
                                         SizedBox(width: 4.w),
                                         Text(
                                           '${turno.startHour ?? '--:--'} – ${turno.endHour ?? '--:--'}',
                                           style: TextStyle(
                                             fontSize: 12.sp,
-                                            color: textColor.withValues(alpha: .68),
+                                            color: textColor.withValues(
+                                              alpha: .68,
+                                            ),
                                           ),
                                         ),
                                       ],
@@ -211,8 +245,11 @@ class _AddTurnostoCalendarState extends ConsumerState<AddTurnostoCalendar> {
                                   ],
                                 ),
                               ),
-                              Icon(Icons.add_circle_rounded,
-                                  color: PRIMARY_COLOR, size: 23.sp),
+                              Icon(
+                                Icons.add_circle_rounded,
+                                color: PRIMARY_COLOR,
+                                size: 23.sp,
+                              ),
                             ],
                           ),
                         ),

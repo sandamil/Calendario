@@ -13,26 +13,27 @@ class Task {
   String? alarmaActivadaString;
   bool? isAlarmaCreated;
   String notificationMode;
+  String? syncKey;
+  int? syncRevision;
 
-  Task(
-      {this.id,
-      this.title,
-      this.site,
-      this.notes,
-      this.startTimeMilliseconds,
-      this.endTimeMilliseconds,
-      // this.time,
-      this.isImportant,
-      this.idAlarma,
-      this.alarmaHora,
+  Task({
+    this.id,
+    this.title,
+    this.site,
+    this.notes,
+    this.startTimeMilliseconds,
+    this.endTimeMilliseconds,
+    // this.time,
+    this.isImportant,
+    this.idAlarma,
+    this.alarmaHora,
     this.alarmaTimestamp,
-      this.alarmaActivadaString,
-      this.isAlarmaCreated,
-      this.notificationMode = 'notificacion'
-      });
-
-
-
+    this.alarmaActivadaString,
+    this.isAlarmaCreated,
+    this.notificationMode = 'notificacion',
+    this.syncKey,
+    this.syncRevision,
+  });
 
   Map<String, Object?> toMap() {
     return {
@@ -50,13 +51,17 @@ class Task {
       'alarmaActivadaString': alarmaActivadaString,
       'isAlarmaCreated': isAlarmaCreated == true ? 1 : 0,
       'notificationMode': notificationMode,
+      'syncKey': syncKey,
+      'syncRevision': syncRevision ?? 0,
     };
   }
 
   Task.fromMap(Map<dynamic, dynamic> map)
-      : notificationMode = map['notificationMode']?.toString() == 'alarma'
-            ? 'alarma'
-            : 'notificacion' {
+    : notificationMode = map['notificationMode']?.toString() == 'alarma'
+          ? 'alarma'
+          : 'notificacion',
+      syncKey = map['syncKey']?.toString(),
+      syncRevision = (map['syncRevision'] as num?)?.toInt() {
     id = map['id'];
     title = map['title'];
     site = map['site'];
@@ -75,40 +80,44 @@ class Task {
   }
 
   Task.fromJson(Map<String, dynamic> json)
-      :id = json['id'],
-  title = json['title'],
-  site = json['site'],
-  notes = json['notes'],
-  startTimeMilliseconds = json['startTimeMilliseconds'],
-  endTimeMilliseconds = json['endTimeMilliseconds'],
-  // this.time = map['time'];
-  isImportant = json['isImportant'] == 1 ? true : false,
-  idAlarma = json['idAlarma'] is int
-      ? json['idAlarma'] as int
-      : int.tryParse(json['idAlarma']?.toString() ?? ''),
-  alarmaHora = json['alarmaHora'],
-  alarmaTimestamp = json['alarmaTimestamp'] as int?,
-  alarmaActivadaString = json['alarmaActivadaString'],
-  isAlarmaCreated = json['isAlarmaCreated'] == 1 ? true : false,
-  notificationMode = json['notificationMode']?.toString() == 'alarma' ? 'alarma' : 'notificacion';
+    : id = json['id'],
+      title = json['title'],
+      site = json['site'],
+      notes = json['notes'],
+      startTimeMilliseconds = json['startTimeMilliseconds'],
+      endTimeMilliseconds = json['endTimeMilliseconds'],
+      // this.time = map['time'];
+      isImportant = json['isImportant'] == 1 ? true : false,
+      idAlarma = json['idAlarma'] is int
+          ? json['idAlarma'] as int
+          : int.tryParse(json['idAlarma']?.toString() ?? ''),
+      alarmaHora = json['alarmaHora'],
+      alarmaTimestamp = json['alarmaTimestamp'] as int?,
+      alarmaActivadaString = json['alarmaActivadaString'],
+      isAlarmaCreated = json['isAlarmaCreated'] == 1 ? true : false,
+      notificationMode = json['notificationMode']?.toString() == 'alarma'
+          ? 'alarma'
+          : 'notificacion',
+      syncKey = json['syncKey']?.toString(),
+      syncRevision = (json['syncRevision'] as num?)?.toInt();
 
   Map<String, dynamic> toJson() {
     return {
-
-      'id' : id,
-      'title' : title,
-      'notes' : notes,
-      'site' : site,
-      'startTimeMilliseconds' : startTimeMilliseconds,
-      'endTimeMilliseconds' : endTimeMilliseconds,
-      'isImportant' : isImportant,
-      'idAlarma' : idAlarma,
-      'alarmaHora' : alarmaHora,
-      'alarmaTimestamp' : alarmaTimestamp,
-      'alarmaActivadaString' : alarmaActivadaString,
-      'isAlarmaCreated' : isAlarmaCreated,
-      'notificationMode' : notificationMode,
-
+      'id': id,
+      'title': title,
+      'notes': notes,
+      'site': site,
+      'startTimeMilliseconds': startTimeMilliseconds,
+      'endTimeMilliseconds': endTimeMilliseconds,
+      'isImportant': isImportant,
+      'idAlarma': idAlarma,
+      'alarmaHora': alarmaHora,
+      'alarmaTimestamp': alarmaTimestamp,
+      'alarmaActivadaString': alarmaActivadaString,
+      'isAlarmaCreated': isAlarmaCreated,
+      'notificationMode': notificationMode,
+      'syncKey': syncKey,
+      'syncRevision': syncRevision ?? 0,
     };
   }
 

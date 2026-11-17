@@ -1,21 +1,14 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
-// Unidad de anuncios Android que se utilizaba antes de la migración.
-// Se mantiene para no cambiar innecesariamente la configuración de AdMob.
-const String _androidHomeBannerId = 'ca-app-pub-5849370961147264/6650380002';
+import 'ads_service.dart';
 
-Future<InitializationStatus>? _mobileAdsInitialization;
-
-/// Inicializa el SDK una sola vez y comparte el mismo Future
-/// entre el arranque de la app y las solicitudes de anuncios.
-Future<InitializationStatus> initializeMobileAds() {
-  return _mobileAdsInitialization ??= MobileAds.instance.initialize();
-}
+// Unidades oficiales de prueba de Google. No generan ingresos reales.
+const String _androidHomeBannerId = 'ca-app-pub-3940256099942544/6300978111';
+const String _iosHomeBannerId = 'ca-app-pub-3940256099942544/2934735716';
 
 class AdsState {
   const AdsState({
@@ -35,9 +28,7 @@ class AdsState {
   final Duration? lastLoadDuration;
 }
 
-final adsProvider = NotifierProvider<AdsNotifier, AdsState>(
-  AdsNotifier.new,
-);
+final adsProvider = NotifierProvider<AdsNotifier, AdsState>(AdsNotifier.new);
 
 class AdsNotifier extends Notifier<AdsState> {
   @override
@@ -55,35 +46,39 @@ class AdsNotifier extends Notifier<AdsState> {
   /// Garantiza que haya un banner disponible sin solicitarlo
   /// repetidamente si ya está cargando o se encuentra cargado.
   Future<void> ensureHomeBanner() async {
-    if (kIsWeb || defaultTargetPlatform != TargetPlatform.android) return;
+    if (kIsWeb ||
+        (defaultTargetPlatform != TargetPlatform.android &&
+            defaultTargetPlatform != TargetPlatform.iOS)) {
+      return;
+    }
 
     if (state.isLoading || state.isLoaded) return;
 
     final nextAttempt = state.attempts + 1;
     final startedAt = DateTime.now();
 
-    state = AdsState(
-      isLoading: true,
-      attempts: nextAttempt,
-    );
+    state = AdsState(isLoading: true, attempts: nextAttempt);
 
     try {
-      // No solicitar el banner hasta que la inicialización del SDK haya
-      // terminado. Se comparte el Future iniciado desde main().
-      await initializeMobileAds();
-      debugPrint('[ADS] SDK inicializado. Unidad=$_androidHomeBannerId');
+      // El servicio completa el consentimiento UMP antes de solicitar anuncios.
+      if (!await CalendarioAds.prepare()) {
+        state = AdsState(attempts: nextAttempt);
+        return;
+      }
+      final bannerUnitId = defaultTargetPlatform == TargetPlatform.iOS
+          ? _iosHomeBannerId
+          : _androidHomeBannerId;
+      debugPrint('[ADS] SDK inicializado. Unidad=$bannerUnitId');
 
       final ad = BannerAd(
-        adUnitId: _androidHomeBannerId,
+        adUnitId: bannerUnitId,
         size: AdSize.banner,
         request: const AdRequest(),
         listener: BannerAdListener(
           onAdLoaded: (loadedAd) {
             final elapsed = DateTime.now().difference(startedAt);
 
-            debugPrint(
-              '[ADS] Banner cargado en ${elapsed.inMilliseconds} ms',
-            );
+            debugPrint('[ADS] Banner cargado en ${elapsed.inMilliseconds} ms');
 
             state = AdsState(
               homeBanner: loadedAd as BannerAd,
@@ -145,11 +140,7 @@ class AdsNotifier extends Notifier<AdsState> {
         ),
       );
 
-      state = AdsState(
-        homeBanner: ad,
-        isLoading: true,
-        attempts: nextAttempt,
-      );
+      state = AdsState(homeBanner: ad, isLoading: true, attempts: nextAttempt);
 
       await ad.load();
     } catch (error, stackTrace) {

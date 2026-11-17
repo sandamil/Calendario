@@ -11,16 +11,15 @@ import 'package:calendario2/config/util/hexColor.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 
 import '../../../data/local/my_shared_pref.dart';
 import '../../../../config/util/app_icons.dart';
 import '../providers/crear_cuadrante_provider.dart';
+import '../services/rotation_engine.dart';
 
 class AddCuadranteView extends ConsumerStatefulWidget {
-  const AddCuadranteView({Key? key}) : super(key: key);
+  const AddCuadranteView({super.key});
 
   @override
   ConsumerState<AddCuadranteView> createState() => _AddCuadranteViewState();
@@ -55,9 +54,10 @@ class _AddCuadranteViewState extends ConsumerState<AddCuadranteView> {
       onPopInvokedWithResult: (bool didPop, Object? result) {
         if (didPop) return;
         if ((!kIsWeb && defaultTargetPlatform == TargetPlatform.android)) {
-          ProviderScope.containerOf(context, listen: false)
-              .read(adsProvider.notifier)
-              .ensureHomeBanner();
+          ProviderScope.containerOf(
+            context,
+            listen: false,
+          ).read(adsProvider.notifier).ensureHomeBanner();
           context.go('/home');
         }
       },
@@ -70,6 +70,25 @@ class _AddCuadranteViewState extends ConsumerState<AddCuadranteView> {
           builder: (context, ref, child) {
             final state = ref.watch(crearCuadranteProvider);
             final notifier = ref.read(crearCuadranteProvider.notifier);
+            final previewEnd = state.inicialDate.add(const Duration(days: 6));
+            final previewRows =
+                state.list.isEmpty || state.endDate.isBefore(state.inicialDate)
+                ? const <dynamic>[]
+                : RotationEngine.generate(
+                    pattern: RotationPattern(
+                      name: state.cuadranteName.trim().isEmpty
+                          ? 'Vista previa'
+                          : state.cuadranteName,
+                      offsetDays: 0,
+                      steps: state.list
+                          .map((turno) => RotationStep(shift: turno, days: 1))
+                          .toList(growable: false),
+                    ),
+                    start: state.inicialDate,
+                    end: state.endDate.isBefore(previewEnd)
+                        ? state.endDate
+                        : previewEnd,
+                  );
 
             // Iniciar el tutorial cuando la pantalla y sus botones ya estén montados.
             if (!state.firstTime && MySharedPref.getTutoCuadranteFirst()) {
@@ -103,15 +122,12 @@ class _AddCuadranteViewState extends ConsumerState<AddCuadranteView> {
                 backgroundColor: Theme.of(context).scaffoldBackgroundColor,
                 centerTitle: false,
                 leading: IconButton(
-                  icon: Icon(
-                    Icons.home,
-                    color: PRIMARY_COLOR,
-                    size: 26.sp,
-                  ),
+                  icon: Icon(Icons.home, color: PRIMARY_COLOR, size: 26.sp),
                   onPressed: () {
-                    ProviderScope.containerOf(context, listen: false)
-                        .read(adsProvider.notifier)
-                        .ensureHomeBanner();
+                    ProviderScope.containerOf(
+                      context,
+                      listen: false,
+                    ).read(adsProvider.notifier).ensureHomeBanner();
 
                     context.go('/home');
                   },
@@ -126,8 +142,8 @@ class _AddCuadranteViewState extends ConsumerState<AddCuadranteView> {
                         ? () async {
                             if (state.cuadranteName.isEmpty) {
                               MyCustomDialog.alertaError(
-                                  'Es necesario añadir nombre al cuadrante',
-                                  context: context,
+                                'Es necesario añadir nombre al cuadrante',
+                                context: context,
                               );
                               return;
                             }
@@ -137,60 +153,59 @@ class _AddCuadranteViewState extends ConsumerState<AddCuadranteView> {
                           }
                         : () => alertDialog(context),
                     icon: state.canSubmit
-                        ? Icon(
-                            Icons.done,
-                            color: Colors.green,
-                            size: 24.sp,
-                          )
+                        ? Icon(Icons.done, color: Colors.green, size: 24.sp)
                         : Icon(
                             Icons.done_outline,
                             color: PRIMARY_COLOR.withValues(alpha: 0.4),
                             size: 24.sp,
                           ),
                     key: state.firstTime ? tutorialController.keyButton5 : null,
-                  )
+                  ),
                 ],
               ),
               body: SingleChildScrollView(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    SizedBox(
-                      height: 1.h,
-                    ),
+                    SizedBox(height: 1.h),
                     Column(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
                         Padding(
                           padding: EdgeInsets.fromLTRB(16.w, 8.h, 8.w, 0),
                           child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: <Widget>[
-                            Text(
-                              "Pulsa aqui para ver como crear cuadrante.",
-                              style: TextStyle(
-                                fontSize: 12.sp,
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: <Widget>[
+                              Text(
+                                "Pulsa aqui para ver como crear cuadrante.",
+                                style: TextStyle(fontSize: 12.sp),
                               ),
-                            ),
-                            IconButton(
-                              icon: const AppIcon(AppIcons.informacion,
-                                  color: Colors.green),
-                              tooltip: '',
-                              onPressed: () {
-                                notifier.setFirstTime(true);
+                              IconButton(
+                                icon: const AppIcon(
+                                  AppIcons.informacion,
+                                  color: Colors.green,
+                                ),
+                                tooltip: '',
+                                onPressed: () {
+                                  notifier.setFirstTime(true);
 
-                                tutorialController
-                                    .showTutorial(context, 'cuadrante',
-                                        onCuadranteTutorialFinished: () {
-                                  notifier.setFirstTime(false);
-                                });
-                              },
-                            ),
-                          ],
-                        ),
+                                  tutorialController.showTutorial(
+                                    context,
+                                    'cuadrante',
+                                    onCuadranteTutorialFinished: () {
+                                      notifier.setFirstTime(false);
+                                    },
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
                         ),
                         Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 16.w,
+                            vertical: 8.h,
+                          ),
                           child: TextField(
                             // inputFormatters: [
                             //   FilteringTextInputFormatter.deny(
@@ -202,13 +217,45 @@ class _AddCuadranteViewState extends ConsumerState<AddCuadranteView> {
                             decoration: InputDecoration(
                               hintText: 'Nombre del cuadrante',
                               labelText: 'Nombre del cuadrante',
-                              prefixIcon: Icon(Icons.edit_note_rounded, color: Theme.of(context).colorScheme.primary),
+                              prefixIcon: Icon(
+                                Icons.edit_note_rounded,
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
                               filled: true,
-                              fillColor: Theme.of(context).colorScheme.surfaceContainerHighest.withValues(alpha: .48),
-                              contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 15.h),
-                              border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(16.r)), borderSide: BorderSide.none),
-                              enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(16.r)), borderSide: BorderSide(color: Theme.of(context).colorScheme.outlineVariant.withValues(alpha: .45))),
-                              focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(16.r)), borderSide: BorderSide(color: Theme.of(context).colorScheme.primary, width: 1.4)),
+                              fillColor: Theme.of(context)
+                                  .colorScheme
+                                  .surfaceContainerHighest
+                                  .withValues(alpha: .48),
+                              contentPadding: EdgeInsets.symmetric(
+                                horizontal: 16.w,
+                                vertical: 15.h,
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(16.r),
+                                ),
+                                borderSide: BorderSide.none,
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(16.r),
+                                ),
+                                borderSide: BorderSide(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .outlineVariant
+                                      .withValues(alpha: .45),
+                                ),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(16.r),
+                                ),
+                                borderSide: BorderSide(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  width: 1.4,
+                                ),
+                              ),
                             ),
                             maxLines: 1,
                             maxLength: 20,
@@ -248,9 +295,7 @@ class _AddCuadranteViewState extends ConsumerState<AddCuadranteView> {
                                 ),
                               ),
                             ),
-                            const SizedBox(
-                              width: 15,
-                            ),
+                            const SizedBox(width: 15),
                             SizedBox(
                               width: (MediaQuery.of(context).size.width) / 2.2,
                               child: InputField(
@@ -275,8 +320,9 @@ class _AddCuadranteViewState extends ConsumerState<AddCuadranteView> {
                                       notifier.setEndDate(date);
                                     }
                                   },
-                                  icon:
-                                      const Icon(Icons.calendar_today_outlined),
+                                  icon: const Icon(
+                                    Icons.calendar_today_outlined,
+                                  ),
                                 ),
                               ),
                             ),
@@ -284,9 +330,107 @@ class _AddCuadranteViewState extends ConsumerState<AddCuadranteView> {
                         ),
                       ],
                     ),
-                    SizedBox(
-                      height: 1.h,
+                    Container(
+                      margin: EdgeInsets.fromLTRB(16.w, 10.h, 16.w, 4.h),
+                      padding: EdgeInsets.all(14.w),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context)
+                            .colorScheme
+                            .surfaceContainerHighest
+                            .withValues(alpha: .42),
+                        borderRadius: BorderRadius.circular(16.r),
+                        border: Border.all(
+                          color: Theme.of(context).colorScheme.outlineVariant
+                              .withValues(alpha: .45),
+                        ),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.repeat_rounded,
+                                color: Theme.of(context).colorScheme.primary,
+                                size: 20.sp,
+                              ),
+                              SizedBox(width: 8.w),
+                              Expanded(
+                                child: Text(
+                                  'Secuencia que se repite',
+                                  style: TextStyle(
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.w800,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 6.h),
+                          Text(
+                            'Añade los días en el orden real de tu turno: un botón por cada día (trabajo o descanso). Al llegar al último, el calendario vuelve automáticamente al primero y repite la secuencia.',
+                            style: TextStyle(
+                              fontSize: 11.5.sp,
+                              color: Theme.of(context).colorScheme.onSurface
+                                  .withValues(alpha: .72),
+                            ),
+                          ),
+                          if (state.list.isNotEmpty) ...[
+                            SizedBox(height: 10.h),
+                            Text(
+                              'Patrón completo: ${state.list.map((turno) => turno.title).join('  →  ')}  →  vuelve al primero',
+                              style: TextStyle(
+                                fontSize: 12.sp,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            SizedBox(height: 4.h),
+                            Text(
+                              'Duración del ciclo: ${state.list.length} ${state.list.length == 1 ? 'día' : 'días'}',
+                              style: TextStyle(
+                                fontSize: 11.sp,
+                                color: Theme.of(context).colorScheme.onSurface
+                                    .withValues(alpha: .62),
+                              ),
+                            ),
+                            SizedBox(height: 7.h),
+                            Text(
+                              'Vista previa de los primeros días',
+                              style: TextStyle(
+                                fontSize: 11.sp,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            Wrap(
+                              spacing: 5.w,
+                              runSpacing: 3.h,
+                              children: previewRows
+                                  .map(
+                                    (row) => Chip(
+                                      visualDensity: VisualDensity.compact,
+                                      label: Text(
+                                        '${row.dateTime!.day}/${row.dateTime!.month} · ${row.title}',
+                                        style: TextStyle(fontSize: 10.sp),
+                                      ),
+                                    ),
+                                  )
+                                  .toList(),
+                            ),
+                          ] else ...[
+                            SizedBox(height: 7.h),
+                            Text(
+                              'Todavía no has añadido ningún día.',
+                              style: TextStyle(
+                                fontSize: 11.sp,
+                                color: Theme.of(context).colorScheme.onSurface
+                                    .withValues(alpha: .62),
+                              ),
+                            ),
+                          ],
+                        ],
+                      ),
                     ),
+                    SizedBox(height: 1.h),
                     Container(
                       key: state.firstTime
                           ? tutorialController.keyButton3
@@ -296,15 +440,24 @@ class _AddCuadranteViewState extends ConsumerState<AddCuadranteView> {
                         shrinkWrap: true,
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 5),
+                              crossAxisCount: 5,
+                            ),
                         itemCount: state.list.length,
                         itemBuilder: (context, index) {
                           return Container(
                             decoration: BoxDecoration(
-                                color: HexColor(state.list[index].color!),
-                                border: Border.all(width: 0.8),
-                                borderRadius: BorderRadius.circular(13.r),
-                                boxShadow: <BoxShadow>[BoxShadow(color: Theme.of(context).shadowColor.withValues(alpha: 0.08), offset: const Offset(0, 2), blurRadius: 7)]),
+                              color: HexColor(state.list[index].color!),
+                              border: Border.all(width: 0.8),
+                              borderRadius: BorderRadius.circular(13.r),
+                              boxShadow: <BoxShadow>[
+                                BoxShadow(
+                                  color: Theme.of(context).shadowColor
+                                      .withValues(alpha: 0.08),
+                                  offset: const Offset(0, 2),
+                                  blurRadius: 7,
+                                ),
+                              ],
+                            ),
                             margin: EdgeInsets.all(3.w),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.end,
@@ -317,7 +470,8 @@ class _AddCuadranteViewState extends ConsumerState<AddCuadranteView> {
                                     style: TextStyle(
                                       fontSize: 22,
                                       fontWeight: FontWeight.bold,
-                                      color: HexColor(state.list[index].color!)
+                                      color:
+                                          HexColor(state.list[index].color!)
                                                   .computeLuminance() >
                                               0.5
                                           ? Colors.black
@@ -471,9 +625,10 @@ class _AddCuadranteViewState extends ConsumerState<AddCuadranteView> {
                   onPressed: loading
                       ? null
                       : () async {
-                          ProviderScope.containerOf(context, listen: false)
-                              .read(adsProvider.notifier)
-                              .ensureHomeBanner();
+                          ProviderScope.containerOf(
+                            context,
+                            listen: false,
+                          ).read(adsProvider.notifier).ensureHomeBanner();
                           context.go('/home');
                         },
                   child: loading

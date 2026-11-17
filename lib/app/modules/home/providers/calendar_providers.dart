@@ -1,4 +1,8 @@
 import 'dart:collection';
+import 'dart:async';
+
+import '../../sync/services/sync_events.dart';
+
 import 'package:table_calendar/table_calendar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:calendario2/app/data/local/calendarDatabase.dart';
@@ -23,6 +27,20 @@ List<CuadranteDay> getTurnosOfDayFromMap(
 
   return events[day] ?? <CuadranteDay>[];
 }
+
+enum CalendarViewMode { month, week, agenda }
+
+class CalendarViewModeNotifier extends Notifier<CalendarViewMode> {
+  @override
+  CalendarViewMode build() => CalendarViewMode.month;
+
+  void setMode(CalendarViewMode mode) => state = mode;
+}
+
+final calendarViewModeProvider =
+    NotifierProvider<CalendarViewModeNotifier, CalendarViewMode>(
+      CalendarViewModeNotifier.new,
+    );
 
 class FocusedMonthNotifier extends Notifier<DateTime> {
   @override
@@ -50,7 +68,13 @@ final selectedDayProvider = NotifierProvider<SelectedDayNotifier, DateTime?>(
 
 class CuadranteMapNotifier extends Notifier<Map<DateTime, List<CuadranteDay>>> {
   @override
-  Map<DateTime, List<CuadranteDay>> build() => <DateTime, List<CuadranteDay>>{};
+  Map<DateTime, List<CuadranteDay>> build() {
+    final subscription = SyncEvents.instance.changes.listen((_) {
+      unawaited(reload());
+    });
+    ref.onDispose(() => unawaited(subscription.cancel()));
+    return <DateTime, List<CuadranteDay>>{};
+  }
 
   Map<DateTime, List<CuadranteDay>> _agrupar(List<CuadranteDay> turnos) {
     final nuevoMapa = <DateTime, List<CuadranteDay>>{};
@@ -76,12 +100,18 @@ class CuadranteMapNotifier extends Notifier<Map<DateTime, List<CuadranteDay>>> {
 
 final cuadranteMapProvider =
     NotifierProvider<CuadranteMapNotifier, Map<DateTime, List<CuadranteDay>>>(
-  CuadranteMapNotifier.new,
-);
+      CuadranteMapNotifier.new,
+    );
 
 class NotasNotifier extends Notifier<List<Task>> {
   @override
-  List<Task> build() => <Task>[];
+  List<Task> build() {
+    final subscription = SyncEvents.instance.changes.listen((_) {
+      unawaited(reload());
+    });
+    ref.onDispose(() => unawaited(subscription.cancel()));
+    return <Task>[];
+  }
 
   Future<void> reload() async {
     state = await NotasDB.instance.getNotesFromDB();
@@ -118,8 +148,8 @@ class SelectedDayTurnosNotifier extends Notifier<List<CuadranteDay>> {
 
 final selectedDayTurnosProvider =
     NotifierProvider<SelectedDayTurnosNotifier, List<CuadranteDay>>(
-  SelectedDayTurnosNotifier.new,
-);
+      SelectedDayTurnosNotifier.new,
+    );
 
 class TurnoTypesNotifier extends AsyncNotifier<List<TurnoType>> {
   @override
@@ -201,16 +231,14 @@ class TurnoTypesNotifier extends AsyncNotifier<List<TurnoType>> {
 
   Future<void> reload() async {
     state = const AsyncLoading();
-    state = await AsyncValue.guard(
-      () => CalendarioDB.db.getTypeModels(),
-    );
+    state = await AsyncValue.guard(() => CalendarioDB.db.getTypeModels());
   }
 }
 
 final turnoTypesProvider =
     AsyncNotifierProvider<TurnoTypesNotifier, List<TurnoType>>(
-  TurnoTypesNotifier.new,
-);
+      TurnoTypesNotifier.new,
+    );
 
 final cuadranteNamesProvider = FutureProvider<List<String>>((ref) async {
   final cuadrantes = await CalendarioDB.db.getCuadranteList();

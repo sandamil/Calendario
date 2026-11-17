@@ -1,5 +1,8 @@
 import 'package:calendario2/app/modules/home/widgets/calendar/calendar_add_note_sheet.dart';
 import 'package:flutter/material.dart';
+
+import '../../../../components/ad_banner_slot.dart';
+
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../../config/theme/my_colors.dart';
@@ -22,12 +25,33 @@ class CalendarDaySheet extends StatelessWidget {
   final bool pointerOnTop;
 
   String _weekday(DateTime date) {
-    const days = <String>['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+    const days = <String>[
+      'Lunes',
+      'Martes',
+      'Miércoles',
+      'Jueves',
+      'Viernes',
+      'Sábado',
+      'Domingo',
+    ];
     return days[date.weekday - 1];
   }
 
   String _month(DateTime date) {
-    const months = <String>['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+    const months = <String>[
+      'enero',
+      'febrero',
+      'marzo',
+      'abril',
+      'mayo',
+      'junio',
+      'julio',
+      'agosto',
+      'septiembre',
+      'octubre',
+      'noviembre',
+      'diciembre',
+    ];
     return months[date.month - 1];
   }
 
@@ -41,7 +65,10 @@ class CalendarDaySheet extends StatelessWidget {
       builder: (_) => _CalendarSheetFrame(
         title: 'Añadir turno',
         icon: Icons.work_history_rounded,
-        child: AddTurnostoCalendar(selectedDate: selectedDate, getCuadrante: getCuadrante),
+        child: AddTurnostoCalendar(
+          selectedDate: selectedDate,
+          getCuadrante: getCuadrante,
+        ),
       ),
     );
   }
@@ -66,14 +93,13 @@ class CalendarDaySheet extends StatelessWidget {
             minimumSize: Size(0, 34.h),
             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
             visualDensity: VisualDensity.compact,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.r)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10.r),
+            ),
           ),
           child: const Text('Añadir'),
         ),
-        child: CalendarAddNoteSheet(
-          key: noteKey,
-          selectedDate: selectedDate,
-        ),
+        child: CalendarAddNoteSheet(key: noteKey, selectedDate: selectedDate),
       ),
     );
   }
@@ -115,34 +141,77 @@ class CalendarDaySheet extends StatelessWidget {
                             Container(
                               width: 42.w,
                               height: 42.w,
-                              decoration: BoxDecoration(color: PRIMARY_COLOR.withValues(alpha: .11), borderRadius: BorderRadius.circular(13.r)),
+                              decoration: BoxDecoration(
+                                color: PRIMARY_COLOR.withValues(alpha: .11),
+                                borderRadius: BorderRadius.circular(13.r),
+                              ),
                               alignment: Alignment.center,
-                              child: Text('${selectedDate.day}', style: TextStyle(fontSize: 18.sp, fontWeight: FontWeight.w800, color: PRIMARY_COLOR)),
+                              child: Text(
+                                '${selectedDate.day}',
+                                style: TextStyle(
+                                  fontSize: 18.sp,
+                                  fontWeight: FontWeight.w800,
+                                  color: PRIMARY_COLOR,
+                                ),
+                              ),
                             ),
                             SizedBox(width: 11.w),
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text('${selectedDate.day} de ${_month(selectedDate)}', style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700, color: onSurface)),
+                                  Text(
+                                    '${selectedDate.day} de ${_month(selectedDate)}',
+                                    style: TextStyle(
+                                      fontSize: 20.sp,
+                                      fontWeight: FontWeight.w700,
+                                      color: onSurface,
+                                    ),
+                                  ),
                                   SizedBox(height: 1.h),
-                                  Text('${_weekday(selectedDate)} · ${selectedDate.year}', style: TextStyle(fontSize: 12.sp, color: onSurface.withValues(alpha: .58))),
+                                  Text(
+                                    '${_weekday(selectedDate)} · ${selectedDate.year}',
+                                    style: TextStyle(
+                                      fontSize: 12.sp,
+                                      color: onSurface.withValues(alpha: .58),
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),
-                            IconButton(onPressed: () => Navigator.of(context).pop(), icon: const Icon(Icons.close_rounded), tooltip: 'Cerrar'),
+                            IconButton(
+                              onPressed: () => Navigator.of(context).pop(),
+                              icon: const Icon(Icons.close_rounded),
+                              tooltip: 'Cerrar',
+                            ),
                           ],
                         ),
                         SizedBox(height: 9.h),
-                        ClipRRect(borderRadius: BorderRadius.circular(14.r), child: const TurnosNotasOnHomeDialog()),
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(14.r),
+                          child: const TurnosNotasOnHomeDialog(),
+                        ),
                         SizedBox(height: 10.h),
                         Row(
                           children: [
-                            Expanded(child: _ActionTile(icon: Icons.add_rounded, title: 'Añadir turno', onTap: () => _openAddShift(context))),
+                            Expanded(
+                              child: _ActionTile(
+                                icon: Icons.add_rounded,
+                                title: 'Añadir turno',
+                                onTap: () => _openAddShift(context),
+                              ),
+                            ),
                             SizedBox(width: 8.w),
-                            Expanded(child: _ActionTile(icon: Icons.note_add_outlined, title: 'Añadir nota', onTap: () => _openAddNote(context))),
+                            Expanded(
+                              child: _ActionTile(
+                                icon: Icons.note_add_outlined,
+                                title: 'Añadir nota',
+                                onTap: () => _openAddNote(context),
+                              ),
+                            ),
                           ],
                         ),
+                        const AdBannerSlot(),
                       ],
                     ),
                   ),
@@ -157,7 +226,10 @@ class CalendarDaySheet extends StatelessWidget {
           bottom: pointerOnTop ? null : 0,
           child: CustomPaint(
             size: Size(22.w, pointerHeight.h),
-            painter: _BubblePointerPainter(color: theme.scaffoldBackgroundColor, pointDown: !pointerOnTop),
+            painter: _BubblePointerPainter(
+              color: theme.scaffoldBackgroundColor,
+              pointDown: !pointerOnTop,
+            ),
           ),
         ),
       ],
@@ -177,19 +249,32 @@ class _BubblePointerPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     final path = Path();
     if (pointDown) {
-      path..moveTo(0, 0)..lineTo(size.width, 0)..lineTo(size.width / 2, size.height)..close();
+      path
+        ..moveTo(0, 0)
+        ..lineTo(size.width, 0)
+        ..lineTo(size.width / 2, size.height)
+        ..close();
     } else {
-      path..moveTo(0, size.height)..lineTo(size.width, size.height)..lineTo(size.width / 2, 0)..close();
+      path
+        ..moveTo(0, size.height)
+        ..lineTo(size.width, size.height)
+        ..lineTo(size.width / 2, 0)
+        ..close();
     }
     canvas.drawPath(path, Paint()..color = color);
   }
 
   @override
-  bool shouldRepaint(covariant _BubblePointerPainter oldDelegate) => oldDelegate.color != color || oldDelegate.pointDown != pointDown;
+  bool shouldRepaint(covariant _BubblePointerPainter oldDelegate) =>
+      oldDelegate.color != color || oldDelegate.pointDown != pointDown;
 }
 
 class _ActionTile extends StatelessWidget {
-  const _ActionTile({required this.icon, required this.title, required this.onTap});
+  const _ActionTile({
+    required this.icon,
+    required this.title,
+    required this.onTap,
+  });
 
   final IconData icon;
   final String title;
@@ -210,7 +295,11 @@ class _ActionTile extends StatelessWidget {
             children: [
               Icon(icon, color: PRIMARY_COLOR, size: 24.sp),
               SizedBox(height: 5.h),
-              Text(title, textAlign: TextAlign.center, style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w600)),
+              Text(
+                title,
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 12.sp, fontWeight: FontWeight.w600),
+              ),
             ],
           ),
         ),
@@ -256,7 +345,10 @@ class _CalendarSheetFrame extends StatelessWidget {
                   Container(
                     width: 38.w,
                     height: 4.h,
-                    decoration: BoxDecoration(color: theme.colorScheme.onSurface.withValues(alpha: .2), borderRadius: BorderRadius.circular(20.r)),
+                    decoration: BoxDecoration(
+                      color: theme.colorScheme.onSurface.withValues(alpha: .2),
+                      borderRadius: BorderRadius.circular(20.r),
+                    ),
                   ),
                   SizedBox(height: 14.h),
                   SizedBox(
@@ -266,20 +358,30 @@ class _CalendarSheetFrame extends StatelessWidget {
                       children: [
                         Align(
                           alignment: Alignment.centerLeft,
-                          child: leading ??
+                          child:
+                              leading ??
                               (icon == null
                                   ? const SizedBox.shrink()
                                   : CircleAvatar(
                                       radius: 20.r,
-                                      backgroundColor: PRIMARY_COLOR.withValues(alpha: .12),
-                                      child: Icon(icon, color: PRIMARY_COLOR, size: 21.sp),
+                                      backgroundColor: PRIMARY_COLOR.withValues(
+                                        alpha: .12,
+                                      ),
+                                      child: Icon(
+                                        icon,
+                                        color: PRIMARY_COLOR,
+                                        size: 21.sp,
+                                      ),
                                     )),
                         ),
                         Center(
                           child: Text(
                             title,
                             textAlign: TextAlign.center,
-                            style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w700),
+                            style: TextStyle(
+                              fontSize: 20.sp,
+                              fontWeight: FontWeight.w700,
+                            ),
                           ),
                         ),
                         Align(
@@ -295,6 +397,7 @@ class _CalendarSheetFrame extends StatelessWidget {
                   ),
                   SizedBox(height: 8.h),
                   child,
+                  const AdBannerSlot(),
                 ],
               ),
             ),

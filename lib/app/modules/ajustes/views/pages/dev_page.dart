@@ -1,16 +1,12 @@
 import 'package:calendario2/app/modules/ajustes/views/pages/util/cloud_messaging_utils.dart';
 import 'package:clipboard/clipboard.dart';
-import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../config/util/list_view_animator.dart';
 import '../../../../../debug/log/log.dart';
 import '../../../../components/toast.dart';
 
-enum OnListViewPress {
-  cloudMessageToken,
-  appLog,
-}
+enum OnListViewPress { cloudMessageToken, appLog }
 
 class DevPage extends StatelessWidget {
   const DevPage({super.key});
@@ -20,13 +16,13 @@ class DevPage extends StatelessWidget {
       "icon": Icons.vpn_key_outlined,
       "title": "Firebase Installation ID",
       "color": Colors.green,
-      "onPress": OnListViewPress.cloudMessageToken
+      "onPress": OnListViewPress.cloudMessageToken,
     },
     {
       "icon": Icons.info_outline,
       "title": "App Log",
       "color": Colors.yellow,
-      "onPress": OnListViewPress.appLog
+      "onPress": OnListViewPress.appLog,
     },
   ];
 
@@ -36,7 +32,12 @@ class DevPage extends StatelessWidget {
         final token = await CloudMessagingUtils.getInstallationId();
         Log.e("Firebase Installation ID = $token");
 
-        Toast.toast(context, msg: token == null ? "No se pudo obtener el identificador" : "Identificador copiado");
+        Toast.toast(
+          context,
+          msg: token == null
+              ? "No se pudo obtener el identificador"
+              : "Identificador copiado",
+        );
         FlutterClipboard.copy(token ?? '');
         break;
       case OnListViewPress.appLog:
@@ -47,44 +48,34 @@ class DevPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(
-          title: const Text('Developer Mode'),
-        ),
-        body: ListView.separated(
-          itemCount: listViewData.length,
-          itemBuilder: (context, index) => InkWell(
-            child: WidgetAnimator(_buildAbout(listViewData[index])),
-            onTap: () =>
-                _onListViewPress(context, listViewData[index]['onPress']),
-          ),
-          separatorBuilder: (context, index) {
-            return Container(
-              color: Colors.black12,
-              height: 1,
-            );
-          },
-        ),
-      );
+    appBar: AppBar(title: const Text('Developer Mode')),
+    body: ListView.separated(
+      itemCount: listViewData.length,
+      itemBuilder: (context, index) => InkWell(
+        child: WidgetAnimator(_buildAbout(listViewData[index])),
+        onTap: () => _onListViewPress(context, listViewData[index]['onPress']),
+      ),
+      separatorBuilder: (context, index) {
+        return Container(color: Colors.black12, height: 1);
+      },
+    ),
+  );
 
   Widget _buildAbout(Map data) => Container(
-        //color: Colors.yellow,
-        padding: const EdgeInsets.only(
-            top: 20.0, left: 20.0, right: 20.0, bottom: 20.0),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Icon(
-              data['icon'],
-              color: data['color'],
-            ),
-            const SizedBox(
-              width: 20.0,
-            ),
-            Text(
-              data['title'],
-              style: const TextStyle(fontSize: 18),
-            ),
-          ],
-        ),
-      );
+    //color: Colors.yellow,
+    padding: const EdgeInsets.only(
+      top: 20.0,
+      left: 20.0,
+      right: 20.0,
+      bottom: 20.0,
+    ),
+    child: Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Icon(data['icon'], color: data['color']),
+        const SizedBox(width: 20.0),
+        Text(data['title'], style: const TextStyle(fontSize: 18)),
+      ],
+    ),
+  );
 }

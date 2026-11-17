@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import 'ad_banner_slot.dart';
 
 import '../../widgets/big_text.dart';
 
@@ -32,7 +33,6 @@ Future<T?> showAnimatedDialog<T>({
 }
 
 class MyCustomDialog {
-
   static void myConfirmDialogBody({
     required BuildContext context,
     required String title,
@@ -50,121 +50,130 @@ class MyCustomDialog {
 
       builder: (BuildContext dialogContext) {
         return AlertDialog(
-            insetPadding: EdgeInsets.all(0.sp),
-            titlePadding: EdgeInsets.all(0.sp),
-            actionsAlignment: MainAxisAlignment.center,
-            contentPadding: EdgeInsets.symmetric(vertical: 0.sp, horizontal: 3.sp),
-            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
-            backgroundColor: Colors.transparent,
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Center(
-                  child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 5.sp),
-                    color: Colors.transparent,
-                    width: horizontal ? 0.3.sw : 0.8.sw,
-                    height: 250.h,
-                    child: Stack(
-                      alignment: AlignmentDirectional.topCenter,
-                      children: [
-                        Positioned(
-                          top: 25.h,
+          insetPadding: EdgeInsets.all(0.sp),
+          titlePadding: EdgeInsets.all(0.sp),
+          actionsAlignment: MainAxisAlignment.center,
+          contentPadding: EdgeInsets.symmetric(
+            vertical: 0.sp,
+            horizontal: 3.sp,
+          ),
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(20.0)),
+          ),
+          backgroundColor: Colors.transparent,
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Center(
+                child: Container(
+                  padding: EdgeInsets.symmetric(vertical: 5.sp),
+                  color: Colors.transparent,
+                  width: horizontal ? 0.3.sw : 0.8.sw,
+                  height: 250.h,
+                  child: Stack(
+                    alignment: AlignmentDirectional.topCenter,
+                    children: [
+                      Positioned(
+                        top: 25.h,
+                        child: Container(
+                          padding: EdgeInsets.symmetric(vertical: 5.sp),
+                          width: horizontal ? 0.26.sw : 0.7.sw,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20.r),
+                            color: MyColors.backgroundLowAccent,
+                          ),
                           child: Container(
-                            padding: EdgeInsets.symmetric(vertical: 5.sp),
                             width: horizontal ? 0.26.sw : 0.7.sw,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20.r),
-                              color: MyColors.backgroundLowAccent,
-                            ),
-                            child: Container(
-                              width: horizontal ? 0.26.sw : 0.7.sw,
-                              padding: EdgeInsets.symmetric(horizontal: 10.sp),
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  55.verticalSpace,
-                                  FittedBox(
-                                      child: BigText(
-                                        text: title,
-                                        color: MyColors.textColor,
-                                      )),
-                                  5.verticalSpace,
-                                  FittedBox(
-                                      child: Center(
-                                        child: Text(
-                                          textAlign: TextAlign.center,
-
-                                          desc,
-                                          style:  TextStyle(
-
-                                            color: MyColors.cellTextColor,
-                                          ),
-                                        ),
-                                      )),
-                                  10.verticalSpace,
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      Flexible(
-                                        child: AppRoundMiniBtn(
-                                          text: btnOkText,
-                                          color: Colors.green,
-                                          onTap: () {
-                                            onTapOK();
-                                          },
-                                        ),
-                                      ),
-                                      10.horizontalSpace,
-                                      Flexible(
-                                        child: AppRoundMiniBtn(
-                                            text: btnCancelText,
-                                            color: Colors.redAccent,
-                                            onTap: () {
-                                              onTapCancel();
-                                            }),
-                                      )
-                                    ],
+                            padding: EdgeInsets.symmetric(horizontal: 10.sp),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                55.verticalSpace,
+                                FittedBox(
+                                  child: BigText(
+                                    text: title,
+                                    color: MyColors.textColor,
                                   ),
-                                  10.verticalSpace,
-                                ],
-                              ),
+                                ),
+                                5.verticalSpace,
+                                FittedBox(
+                                  child: Center(
+                                    child: Text(
+                                      textAlign: TextAlign.center,
+
+                                      desc,
+                                      style: TextStyle(
+                                        color: MyColors.cellTextColor,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                10.verticalSpace,
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Flexible(
+                                      child: AppRoundMiniBtn(
+                                        text: btnOkText,
+                                        color: Colors.green,
+                                        onTap: () {
+                                          onTapOK();
+                                        },
+                                      ),
+                                    ),
+                                    10.horizontalSpace,
+                                    Flexible(
+                                      child: AppRoundMiniBtn(
+                                        text: btnCancelText,
+                                        color: Colors.redAccent,
+                                        onTap: () {
+                                          onTapCancel();
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                10.verticalSpace,
+                              ],
                             ),
                           ),
                         ),
-                        Positioned(
-                          top: 0,
-                          child: CircleAvatar(
-                            minRadius: 26.r,
-                            maxRadius: 38.r,
-                            backgroundColor: MyColors.backgroundLowAccent,
-                            child: Icon(
-                              Icons.question_mark_sharp,
-                              size: 38.sp,
-                              color: Colors.white,
-                            ),
+                      ),
+                      Positioned(
+                        top: 0,
+                        child: CircleAvatar(
+                          minRadius: 26.r,
+                          maxRadius: 38.r,
+                          backgroundColor: MyColors.backgroundLowAccent,
+                          child: Icon(
+                            Icons.question_mark_sharp,
+                            size: 38.sp,
+                            color: Colors.white,
                           ),
                         ),
-                        Positioned(
-                          top: 3,
-                          child: CircleAvatar(
-                            minRadius: 19.r,
-                            maxRadius: 31.r,
-                            backgroundColor: circularColor ?? Colors.green,
-                            child: Icon(
-                              Icons.question_mark_sharp,
-                              size: 38.sp,
-                              color: Colors.white,
-                            ),
+                      ),
+                      Positioned(
+                        top: 3,
+                        child: CircleAvatar(
+                          minRadius: 19.r,
+                          maxRadius: 31.r,
+                          backgroundColor: circularColor ?? Colors.green,
+                          child: Icon(
+                            Icons.question_mark_sharp,
+                            size: 38.sp,
+                            color: Colors.white,
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
-
-              ],
-            ));
+              ),
+              const AdBannerSlot(),
+            ],
+          ),
+        );
       },
 
       animationType: DialogTransitionType.scale,
@@ -229,14 +238,14 @@ class MyCustomDialog {
         return AlertDialog(
           title: const Text('Error'),
           titlePadding: const EdgeInsets.all(10),
-          titleTextStyle:  TextStyle(
+          titleTextStyle: TextStyle(
             color: Theme.of(context).colorScheme.error,
             fontSize: 20.sp,
             fontWeight: FontWeight.bold,
           ),
-          content: Text(msj,textAlign: TextAlign.center,),
+          content: Text(msj, textAlign: TextAlign.center),
           contentPadding: const EdgeInsets.all(10),
-          contentTextStyle:  TextStyle(
+          contentTextStyle: TextStyle(
             color: Theme.of(context).colorScheme.onSurface,
             fontSize: 15.sp,
             fontWeight: FontWeight.normal,
@@ -267,8 +276,6 @@ class MyCustomDialog {
     });
   }
 
-
-
   static showPopUpInfo({
     required BuildContext context,
     String? title,
@@ -277,115 +284,110 @@ class MyCustomDialog {
     Function()? onPress,
   }) {
     showAnimatedDialog(
-        context: context,
-        animationType: DialogTransitionType.fadeScale,
-        curve: Curves.fastOutSlowIn,
-        duration: const Duration(milliseconds: 900),
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return Dialog(
-            backgroundColor: Colors.transparent,
-            insetPadding: EdgeInsets.symmetric(horizontal: 24.w),
-            child: Container(
-              padding: EdgeInsets.fromLTRB(20.w.w, 20.w, 20.w, 4.w),
-              decoration:
-              BoxDecoration(
-                  borderRadius: Corners.smBorder, color: MyColors.backgroundLowAccent),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    title ?? '',
-                    style: CustomTextStyle.title.copyWith(fontSize: 16.w),
-                    textAlign: TextAlign.center,
-                  ),
-                  verticalSpace(Insets.med),
-                  Text(
-                    description ?? '',
-                    style: CustomTextStyle.text,
-                    textAlign: TextAlign.center,
-                  ),
-                  verticalSpace(Insets.xl),
-                  ButtonPrimary(
-                    onTap: onPress ?? () => Navigator.of(context).pop(),
-                    label: labelButton ?? 'OK',
-                  ),
-                  SizedBox(height: 20.h),
-                ],
-              ),
+      context: context,
+      animationType: DialogTransitionType.fadeScale,
+      curve: Curves.fastOutSlowIn,
+      duration: const Duration(milliseconds: 900),
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          insetPadding: EdgeInsets.symmetric(horizontal: 24.w),
+          child: Container(
+            padding: EdgeInsets.fromLTRB(20.w.w, 20.w, 20.w, 4.w),
+            decoration: BoxDecoration(
+              borderRadius: Corners.smBorder,
+              color: MyColors.backgroundLowAccent,
             ),
-          );
-        }
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  title ?? '',
+                  style: CustomTextStyle.title.copyWith(fontSize: 16.w),
+                  textAlign: TextAlign.center,
+                ),
+                verticalSpace(Insets.med),
+                Text(
+                  description ?? '',
+                  style: CustomTextStyle.text,
+                  textAlign: TextAlign.center,
+                ),
+                verticalSpace(Insets.xl),
+                ButtonPrimary(
+                  onTap: onPress ?? () => Navigator.of(context).pop(),
+                  label: labelButton ?? 'OK',
+                ),
+                const AdBannerSlot(),
+                SizedBox(height: 20.h),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 
-
-
   static mostrarTask(Task nota, context) {
     showAnimatedDialog(
-        context: context,
-        barrierDismissible: true,
+      context: context,
+      barrierDismissible: true,
 
-        builder: (BuildContext context) {
-          return AlertDialog(
-            backgroundColor: MyColors.menuCardBackground,
-            shape: RoundedRectangleBorder(borderRadius: Corners.smBorder),
-            elevation: 5,
-            title: Text.rich(
-              TextSpan(
-                text:
-                    '${DateTime.fromMillisecondsSinceEpoch(nota.startTimeMilliseconds!).formatDateYMMMd} : ',
-                children: <TextSpan>[
-                  TextSpan(
-                    text:
-                        '  ${DateTime.fromMillisecondsSinceEpoch(nota.startTimeMilliseconds!).formatDateTime24H} h.',
-                    style: GoogleFonts.titilliumWeb(
-                      fontWeight: FontWeight.bold,
-                      color: PRIMARY_COLOR,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            content: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text.rich(
-                  textAlign: TextAlign
-                      .start,
-
-                  TextSpan(
-                    text: nota.title,
-                    style: GoogleFonts.titilliumWeb(
-                      fontSize: 18.sp,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 5.h,
-                ),
-                Text.rich(
-                  TextSpan(
-                    text: nota.notes,
-                    style: GoogleFonts.titilliumWeb(
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.normal,
-                    ),
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: MyColors.menuCardBackground,
+          shape: RoundedRectangleBorder(borderRadius: Corners.smBorder),
+          elevation: 5,
+          title: Text.rich(
+            TextSpan(
+              text:
+                  '${DateTime.fromMillisecondsSinceEpoch(nota.startTimeMilliseconds!).formatDateYMMMd} : ',
+              children: <TextSpan>[
+                TextSpan(
+                  text:
+                      '  ${DateTime.fromMillisecondsSinceEpoch(nota.startTimeMilliseconds!).formatDateTime24H} h.',
+                  style: GoogleFonts.titilliumWeb(
+                    fontWeight: FontWeight.bold,
+                    color: PRIMARY_COLOR,
                   ),
                 ),
               ],
             ),
-          );
-        },
+          ),
+          content: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text.rich(
+                textAlign: TextAlign.start,
+
+                TextSpan(
+                  text: nota.title,
+                  style: GoogleFonts.titilliumWeb(
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              SizedBox(height: 5.h),
+              Text.rich(
+                TextSpan(
+                  text: nota.notes,
+                  style: GoogleFonts.titilliumWeb(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.normal,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
 
       animationType: DialogTransitionType.scale,
       curve: Curves.easeIn,
       duration: const Duration(milliseconds: 600),
-
-
     );
     final navigator = Navigator.of(context);
     Future.delayed(const Duration(seconds: 2), () {

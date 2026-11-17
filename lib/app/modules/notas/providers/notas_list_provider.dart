@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/foundation.dart';
 import 'package:calendario2/app/modules/notas/services/notificaciones_service.dart';
 import 'package:calendario2/app/data/local/taskDatabase.dart';
 import 'package:calendario2/app/data/model/taskModel.dart';
 import 'package:calendario2/app/modules/home/providers/calendar_providers.dart';
+import 'package:calendario2/app/modules/sync/services/sync_events.dart';
 
 class NotasListState {
   final List<Task> notas;
@@ -35,8 +38,9 @@ class NotasListState {
     }).toList();
 
     resultado.sort((a, b) {
-      return (b.startTimeMilliseconds ?? 0)
-          .compareTo(a.startTimeMilliseconds ?? 0);
+      return (b.startTimeMilliseconds ?? 0).compareTo(
+        a.startTimeMilliseconds ?? 0,
+      );
     });
 
     return resultado;
@@ -59,7 +63,13 @@ class NotasListState {
 
 class NotasListNotifier extends Notifier<NotasListState> {
   @override
-  NotasListState build() => const NotasListState();
+  NotasListState build() {
+    final subscription = SyncEvents.instance.changes.listen((_) {
+      unawaited(reload());
+    });
+    ref.onDispose(() => unawaited(subscription.cancel()));
+    return const NotasListState();
+  }
 
   Future<void> reload() async {
     final notas = await NotasDB.instance.getNotesFromDB();
@@ -107,9 +117,7 @@ class NotasListNotifier extends Notifier<NotasListState> {
     try {
       await NotificacionesService.instance.cancelar(alarmaId);
     } catch (error, stackTrace) {
-      debugPrint(
-        'No se pudo cancelar el recordatorio de la nota $id: $error',
-      );
+      debugPrint('No se pudo cancelar el recordatorio de la nota $id: $error');
       debugPrintStack(stackTrace: stackTrace);
     }
 
@@ -136,6 +144,7 @@ class NotasListNotifier extends Notifier<NotasListState> {
       debugPrintStack(stackTrace: stackTrace);
     }
   }
+
   void setBusqueda(String value) {
     state = state.copyWith(busqueda: value);
   }
@@ -145,9 +154,7 @@ class NotasListNotifier extends Notifier<NotasListState> {
   }
 
   void toggleSoloImportantes() {
-    state = state.copyWith(
-      soloImportantes: !state.soloImportantes,
-    );
+    state = state.copyWith(soloImportantes: !state.soloImportantes);
   }
 
   void setTutorialVisible(bool visible) {
@@ -155,7 +162,6 @@ class NotasListNotifier extends Notifier<NotasListState> {
   }
 }
 
-final notasListProvider =
-    NotifierProvider<NotasListNotifier, NotasListState>(
+final notasListProvider = NotifierProvider<NotasListNotifier, NotasListState>(
   NotasListNotifier.new,
 );

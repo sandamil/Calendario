@@ -27,18 +27,14 @@ import '../modules/ayuda/views/ayuda_view.dart';
 import '../modules/ayuda/views/pages/videotutoriales/views/videotutoriales_view.dart';
 import '../modules/ayuda/views/pages/videotutoriales/views/widgets/video_view.dart';
 import '../modules/informes/views/informes_view.dart';
+import '../modules/sync/views/sync_view.dart';
+import '../modules/rewards/views/rewards_view.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: '/inicio',
   routes: [
-    GoRoute(
-      path: '/inicio',
-      builder: (context, state) => const InicioView(),
-    ),
-    GoRoute(
-      path: '/boarding',
-      builder: (context, state) => BoardingView(),
-    ),
+    GoRoute(path: '/inicio', builder: (context, state) => const InicioView()),
+    GoRoute(path: '/boarding', builder: (context, state) => BoardingView()),
     GoRoute(
       path: '/home',
       pageBuilder: (context, state) => CustomTransitionPage<void>(
@@ -61,21 +57,23 @@ final GoRouter appRouter = GoRouter(
         },
       ),
     ),
-    GoRoute(
-      path: '/backup',
-      builder: (context, state) => const BackupScreen(),
-    ),
+    GoRoute(path: '/backup', builder: (context, state) => const BackupScreen()),
     GoRoute(
       path: '/idioma',
       builder: (context, state) => const LanguageScreen(),
     ),
-    GoRoute(
-      path: '/menu',
-      builder: (context, state) => const MenuView(),
-    ),
+    GoRoute(path: '/menu', builder: (context, state) => const MenuView()),
     GoRoute(
       path: '/informes',
       builder: (context, state) => const InformesView(),
+    ),
+    GoRoute(
+      path: '/sincronizacion',
+      builder: (context, state) => const SyncView(),
+    ),
+    GoRoute(
+      path: '/recompensas',
+      builder: (context, state) => const RewardsView(),
     ),
     GoRoute(
       path: '/crear-turno',
@@ -97,10 +95,7 @@ final GoRouter appRouter = GoRouter(
       path: '/add-cuadrante',
       builder: (context, state) => const AddCuadranteView(),
     ),
-    GoRoute(
-      path: '/notas',
-      builder: (context, state) => NotasListView(),
-    ),
+    GoRoute(path: '/notas', builder: (context, state) => NotasListView()),
     GoRoute(
       path: '/notas-view',
       builder: (context, state) => NotasView(routeArguments: state.extra),
@@ -117,35 +112,25 @@ final GoRouter appRouter = GoRouter(
       path: '/alarmas',
       builder: (context, state) => AlarmasView(routeArguments: state.extra),
     ),
-    GoRoute(
-      path: '/about',
-      builder: (context, state) => const AboutPage(),
-    ),
+    GoRoute(path: '/about', builder: (context, state) => const AboutPage()),
     GoRoute(
       path: '/privacy-policy',
       builder: (context, state) => PrivacyPolicyPage(),
     ),
-    GoRoute(
-      path: '/dev',
-      builder: (context, state) => const DevPage(),
-    ),
+    GoRoute(path: '/dev', builder: (context, state) => const DevPage()),
     GoRoute(
       path: '/log-console',
       builder: (context, state) => LogConsole(dark: true),
     ),
-    GoRoute(
-      path: '/ayuda',
-      builder: (context, state) => const AyudaView(),
-    ),
+    GoRoute(path: '/ayuda', builder: (context, state) => const AyudaView()),
     GoRoute(
       path: '/videotutoriales',
       builder: (context, state) => const VideotutorialesView(),
     ),
     GoRoute(
       path: '/videotutoriales/:id',
-      builder: (context, state) => FullscreenVideoViewer(
-        id: state.pathParameters['id']!,
-      ),
+      builder: (context, state) =>
+          FullscreenVideoViewer(id: state.pathParameters['id']!),
     ),
   ],
 );

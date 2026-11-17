@@ -2,8 +2,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../data/local/calendarDatabase.dart';
 import '../../../data/local/my_shared_pref.dart';
-import '../../../data/model/cuadranteDay.dart';
 import '../../../data/model/turnoType.dart';
+import '../services/rotation_engine.dart';
 
 class CrearCuadranteState {
   const CrearCuadranteState({
@@ -16,6 +16,8 @@ class CrearCuadranteState {
     this.isSwitched = false,
     this.cuadranteLoading = true,
     this.firstTime = false,
+    this.daysPerTurno = 1,
+    this.offsetDays = 0,
   });
 
   final String cuadranteName;
@@ -27,9 +29,15 @@ class CrearCuadranteState {
   final bool isSwitched;
   final bool cuadranteLoading;
   final bool firstTime;
+  final int daysPerTurno;
+  final int offsetDays;
 
   bool get canSubmit =>
-      list.isNotEmpty && endDate.difference(inicialDate).inDays > 0;
+      list.isNotEmpty &&
+      !endDate.isBefore(inicialDate) &&
+      endDate.difference(inicialDate).inDays <=
+          RotationEngine.maxGeneratedDays - 1 &&
+      list.length * daysPerTurno <= 366;
 
   CrearCuadranteState copyWith({
     String? cuadranteName,
@@ -41,6 +49,8 @@ class CrearCuadranteState {
     bool? isSwitched,
     bool? cuadranteLoading,
     bool? firstTime,
+    int? daysPerTurno,
+    int? offsetDays,
   }) {
     return CrearCuadranteState(
       cuadranteName: cuadranteName ?? this.cuadranteName,
@@ -52,6 +62,8 @@ class CrearCuadranteState {
       isSwitched: isSwitched ?? this.isSwitched,
       cuadranteLoading: cuadranteLoading ?? this.cuadranteLoading,
       firstTime: firstTime ?? this.firstTime,
+      daysPerTurno: daysPerTurno ?? this.daysPerTurno,
+      offsetDays: offsetDays ?? this.offsetDays,
     );
   }
 }
@@ -95,6 +107,8 @@ class CrearCuadranteNotifier extends Notifier<CrearCuadranteState> {
       inicialDate: inicio,
       endDate: inicio.add(const Duration(days: 365)),
       list: <TurnoType>[],
+      daysPerTurno: 1,
+      offsetDays: 0,
       isSwitched: false,
       cuadranteLoading: false,
       firstTime: false,
@@ -117,6 +131,16 @@ class CrearCuadranteNotifier extends Notifier<CrearCuadranteState> {
     state = state.copyWith(firstTime: value);
   }
 
+  void setDaysPerTurno(int value) {
+    if (value < 1 || value > 31) return;
+    state = state.copyWith(daysPerTurno: value);
+  }
+
+  void setOffsetDays(int value) {
+    if (value < 0 || value > 365) return;
+    state = state.copyWith(offsetDays: value);
+  }
+
   void addTurno(TurnoType turno) {
     state = state.copyWith(list: [...state.list, turno]);
   }
@@ -133,9 +157,7 @@ class CrearCuadranteNotifier extends Notifier<CrearCuadranteState> {
 
   Future<bool> prepareEdit(String name) async {
     final registros = await CalendarioDB.db.getCuadranteList();
-    final dias = registros
-        .where((item) => item.cuadranteName == name)
-        .toList();
+    final dias = registros.where((item) => item.cuadranteName == name).toList();
 
     if (dias.isEmpty || dias.any((item) => item.dateTime == null)) {
       return false;
@@ -148,64 +170,69 @@ class CrearCuadranteNotifier extends Notifier<CrearCuadranteState> {
     final fechaInicio = DateTime(inicio.year, inicio.month, inicio.day);
     final fechaFin = DateTime(fin.year, fin.month, fin.day);
 
-    bool mismoTurno(dynamic a, dynamic b) {
-      return a.title == b.title &&
-          a.description == b.description &&
-          a.startHour == b.startHour &&
-          a.endHour == b.endHour &&
-          a.color == b.color;
-    }
+    bool mismoTurno(dynamic a, dynamic b) =>
+        a.title == b.title &&
+        a.description == b.description &&
+        a.startHour == b.startHour &&
+        a.endHour == b.endHour &&
+        a.color == b.color;
 
     bool fechasConsecutivas() {
       for (var i = 1; i < dias.length; i++) {
         final anterior = dias[i - 1].dateTime!;
         final actual = dias[i].dateTime!;
-        if (DateTime(actual.year, actual.month, actual.day)
-                .difference(DateTime(anterior.year, anterior.month, anterior.day))
-                .inDays !=
-            1) {
-          return false;
-        }
+        final diferencia = DateTime(actual.year, actual.month, actual.day)
+            .difference(DateTime(anterior.year, anterior.month, anterior.day))
+            .inDays;
+        if (diferencia != 1) return false;
       }
       return true;
     }
 
-    var longitudPatron = dias.length;
-
+    // La base guarda los días ya expandidos, no la longitud original del ciclo.
+    // Al editar, reconstruimos el ciclo periódico más corto para no convertir
+    // una rotación de 4/5/7 días en una secuencia anual de 365 días.
+    var cycleLength = dias.length;
     if (fechasConsecutivas()) {
-      for (var periodo = 1; periodo <= dias.length; periodo++) {
-        var coincide = true;
-        for (var i = periodo; i < dias.length; i++) {
-          if (!mismoTurno(dias[i], dias[i % periodo])) {
-            coincide = false;
+      final maxCandidate = dias.length < 366 ? dias.length : 366;
+      for (var candidate = 1; candidate <= maxCandidate; candidate++) {
+        var repeats = true;
+        for (var i = candidate; i < dias.length; i++) {
+          if (!mismoTurno(dias[i], dias[i % candidate])) {
+            repeats = false;
             break;
           }
         }
-        if (coincide) {
-          longitudPatron = periodo;
+        if (repeats) {
+          cycleLength = candidate;
           break;
         }
       }
     }
 
-    final turnos = dias.take(longitudPatron).map((dia) {
-      return TurnoType(
-        title: dia.title,
-        description: dia.description,
-        startHour: dia.startHour,
-        endHour: dia.endHour,
-        color: dia.color,
-      );
-    }).toList(growable: false);
+    final turnos = dias
+        .take(cycleLength)
+        .map(
+          (dia) => TurnoType(
+            title: dia.title,
+            description: dia.description,
+            startHour: dia.startHour,
+            endHour: dia.endHour,
+            color: dia.color,
+          ),
+        )
+        .toList(growable: false);
 
     state = state.copyWith(
       cuadranteName: name,
       inicialDate: fechaInicio,
       endDate: fechaFin,
       list: List<TurnoType>.unmodifiable(turnos),
+      daysPerTurno: 1,
+      offsetDays: 0,
       cuadranteLoading: false,
     );
-      return true;
+    return true;
   }
 
   Future<void> deleteCuadrante(String name) async {
@@ -238,11 +265,7 @@ class CrearCuadranteNotifier extends Notifier<CrearCuadranteState> {
           state.inicialDate.month,
           state.inicialDate.day,
         ),
-        DateTime(
-          state.endDate.year,
-          state.endDate.month,
-          state.endDate.day,
-        ),
+        DateTime(state.endDate.year, state.endDate.month, state.endDate.day),
       );
     } finally {
       state = state.copyWith(cuadranteLoading: false);
@@ -254,38 +277,21 @@ class CrearCuadranteNotifier extends Notifier<CrearCuadranteState> {
 
     final nombre = state.cuadranteName;
     final actualizar = state.cuadrantesNameList.contains(nombre);
-    final diferencia = end.difference(start).inDays;
+    final pattern = RotationPattern(
+      name: nombre,
+      offsetDays: 0,
+      steps: state.list
+          .map((turno) => RotationStep(shift: turno, days: 1))
+          .toList(growable: false),
+    );
+    final items = RotationEngine.generate(
+      pattern: pattern,
+      start: start,
+      end: end,
+      calendarName: nombre,
+    );
 
-    for (var i = 0; i <= diferencia; i++) {
-      final fecha = start.add(Duration(days: i)).add(
-            const Duration(hours: 6),
-          );
-      final turno = state.list[i % state.list.length];
-
-      final item = CuadranteDay(
-        dateTime: fecha,
-        color: turno.color,
-        description: turno.description,
-        endHour: turno.endHour,
-        startHour: turno.startHour,
-        title: turno.title,
-        cuadranteName: nombre,
-      );
-
-      if (actualizar) {
-        await CalendarioDB.db.updateItem(item);
-      } else {
-        await CalendarioDB.db.addCuadranteItem(item);
-      }
-    }
-
-    if (actualizar) {
-      await CalendarioDB.db.deleteCuadranteOutsideRange(
-        nombre,
-        start,
-        end,
-      );
-    }
+    await CalendarioDB.db.replaceCuadranteItems(nombre, items);
 
     if (!actualizar) {
       final nombres = <String>[...state.cuadrantesNameList, nombre];
@@ -299,5 +305,5 @@ class CrearCuadranteNotifier extends Notifier<CrearCuadranteState> {
 
 final crearCuadranteProvider =
     NotifierProvider<CrearCuadranteNotifier, CrearCuadranteState>(
-  CrearCuadranteNotifier.new,
-);
+      CrearCuadranteNotifier.new,
+    );

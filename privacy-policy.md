@@ -1,44 +1,77 @@
-# Política de privacidad
+# Política de privacidad de Calendario
 
-Bienvenido a "Calendario de turnos" (en adelante, el servicio), para permitirle utilizar los servicios y la información del servicio con tranquilidad, le explicamos la política de protección de la privacidad del servicio para proteger sus derechos e intereses. , por favor lea lo siguiente:
+**Versión de trabajo para revisión antes de publicar.** Antes de distribuir la aplicación, el responsable debe completar su nombre o razón social y domicilio legal.
 
-## 1. Ámbito de aplicación de la política de protección de la privacidad
+## 1. Responsable y contacto
 
-El contenido de la política de protección de la privacidad, incluida la forma en que este servicio maneja la información de identificación personal recopilada cuando utiliza los servicios del sitio web. La política de protección de la privacidad no se aplica a los sitios web vinculados relacionados distintos de este servicio, ni se aplica a las personas que no están encargadas ni participan en la gestión de este servicio.
+- Aplicación: Calendario de turnos.
+- Desarrollador/marca: AJATSoft.
+- Contacto de privacidad: ajatsoft@gmail.com.
+- Responsable legal: **pendiente de completar con la identidad y domicilio del titular de la aplicación**.
 
-## 2. Recopilación, procesamiento y uso de datos personales
+## 2. Uso local sin cuenta
 
-* Cuando visite este servicio o utilice los servicios funcionales proporcionados por este servicio, dependiendo de la naturaleza de la función del servicio, le pediremos que proporcione los datos personales necesarios, y procesaremos y usaremos sus datos personales dentro del alcance de la función específica. propósito; Usted acepta por escrito que el servicio no utilizará datos personales para otros fines.
-* Este servicio conservará el nombre, la dirección de correo electrónico, la información de contacto y el tiempo de uso que proporcione cuando utilice funciones interactivas como buzones de servicio y cuestionarios.
-* Durante la navegación general, el servidor registrará comportamientos relevantes por sí mismo, incluida la dirección IP del dispositivo conectado que usa, el tiempo de uso, el navegador utilizado, los registros de datos de navegación y clics, etc., como referencia para que podamos mejorar los servicios del sitio web. este registro es para uso interno y nunca se dará a conocer al público.
-* Con el fin de brindar servicios precisos, realizaremos estadísticas y análisis sobre el contenido de los cuestionarios recopilados y presentaremos los datos estadísticos o el texto explicativo de los resultados del análisis. Salvo en el caso de investigaciones internas, publicaremos datos estadísticos y texto explicativo según sea necesario. , pero no involucran Información sobre individuos específicos.
+Calendario puede utilizarse sin crear una cuenta. En ese modo, los turnos, cuadrantes, notas, recordatorios y preferencias se guardan en el almacenamiento local del dispositivo o navegador. La aplicación no envía las notas personales a la función de calendarios compartidos.
 
-## 3. Protección de datos
+Las copias de seguridad que el usuario exporta se guardan en el destino que elija y quedan bajo su control.
 
-* Este servicio les exigirá estrictamente que cumplan con sus obligaciones de confidencialidad y tomen los procedimientos de inspección necesarios para garantizar que efectivamente cumplan.
+## 3. Cuenta y calendarios compartidos (opcional)
 
-## 4. Enlaces externos del sitio web
+Si el usuario decide crear una cuenta y compartir un cuadrante, la aplicación utiliza Firebase Authentication y Cloud Firestore, servicios de Google.
 
-Este servicio proporciona enlaces de red a otros sitios web, y también puede hacer clic para ingresar a otros sitios web a través de los enlaces proporcionados por este servicio. Sin embargo, el sitio web vinculado no se aplica a la política de protección de privacidad de este servicio, y debe consultar la política de protección de privacidad del sitio web vinculado.
+Se procesan:
+- Correo electrónico y datos técnicos de la cuenta para autenticarla.
+- Identificador interno de usuario y pertenencia al grupo compartido.
+- Nombre del cuadrante compartido.
+- Turnos del cuadrante: fecha, título, descripción, hora de inicio, hora de fin y color.
+- Código de invitación en forma de hash; el código original se muestra al propietario para compartirlo.
 
-## 5. Política sobre el intercambio de datos personales con terceros
+**No se sincronizan las notas, alarmas personales, preferencias de apariencia ni otros cuadrantes que no se hayan seleccionado para compartir.** La sincronización se inicia desde la pantalla correspondiente; no se debe considerar activa hasta que el usuario la configure y complete correctamente.
 
-Este servicio nunca proporcionará, intercambiará, alquilará o venderá ninguno de sus datos personales a otras personas, grupos, empresas privadas u organismos públicos, excepto aquellos con base legal u obligaciones contractuales.
+## 4. Publicidad
 
-Las circunstancias de la condición en el párrafo anterior incluyen pero no se limitan a:
+La aplicación integra Google Mobile Ads. El proveedor puede procesar identificadores del dispositivo, información técnica y datos de interacción para prestar el servicio publicitario y, cuando corresponda y exista consentimiento válido, personalizar anuncios. Antes de distribuir en el Espacio Económico Europeo deben configurarse y probarse los avisos de consentimiento y las opciones de publicidad exigibles.
 
-* Con su consentimiento por escrito.
-* Lo dispuesto expresamente por la ley.
-* Para evitar peligro a su vida, cuerpo, libertad o propiedad.
-* La cooperación con agencias públicas o instituciones de investigación académica es necesaria para la investigación académica o estadística basada en intereses públicos, y los datos son procesados ​​por el proveedor o el recopilador no puede identificar a una parte específica en función de la forma en que se divulga.
-* Cuando su comportamiento en el sitio web viola los términos del servicio o puede dañar u obstaculizar los derechos e intereses del sitio web y otros usuarios o causar daños a alguien, la unidad de administración del sitio web investiga y divulga su información personal con el fin de identificar, ponerse en contacto o emprender las acciones legales necesarias.
-* A favor de sus intereses.
-* Cuando este servicio encomiende al proveedor para asistir en la recolección, procesamiento o uso de sus datos personales, será responsable de la supervisión y gestión del proveedor o individuo subcontratado.
+## 5. Finalidades y bases jurídicas
 
-## Seis, el uso de cookies
+- Guardar y mostrar datos locales: prestación de las funciones solicitadas por el usuario.
+- Cuenta y sincronización opcional: ejecución de la función de cuenta y calendario compartido solicitada.
+- Seguridad y prevención de abuso: interés legítimo y obligaciones aplicables.
+- Publicidad: consentimiento cuando sea legalmente necesario y las demás bases aplicables al servicio publicitario.
 
-Para brindarle el mejor servicio, este servicio colocará y utilizará nuestras cookies en su dispositivo.
+## 6. Proveedores y destinatarios
 
-## VII Modificaciones a la Política de Protección de Privacidad
+Los datos de cuenta y los cuadrantes compartidos se alojan mediante Firebase Authentication y Cloud Firestore de Google. La publicidad se presta mediante Google Mobile Ads. Estos proveedores procesan datos conforme a sus condiciones y documentación de privacidad.
 
-Esta política de protección de la privacidad del servicio se modificará en cualquier momento en respuesta a la demanda, y los términos modificados se publicarán en el sitio web.
+No se venden datos personales. Los datos compartidos solo son accesibles a los miembros autorizados del grupo conforme a las reglas de seguridad del backend.
+
+## 7. Conservación y eliminación
+
+- Datos locales: permanecen en el dispositivo hasta que el usuario los borre, elimine los datos de la aplicación o desinstale la aplicación. Desinstalar puede eliminar los datos locales que no se hayan respaldado.
+- Datos compartidos: permanecen mientras exista el grupo y sus registros. El propietario puede eliminar el grupo compartido; un miembro puede salir del grupo.
+- Cuenta: se puede solicitar su eliminación desde la pantalla de sincronización. La eliminación puede requerir volver a autenticarse. La eliminación de la cuenta no borra automáticamente los datos locales del dispositivo.
+- Copias exportadas: el usuario debe borrar las copias que haya guardado fuera de la aplicación.
+
+## 8. Seguridad
+
+Se aplican controles de acceso por usuario y pertenencia al grupo para los documentos de calendarios compartidos. Ningún sistema conectado a Internet puede garantizar seguridad absoluta; el usuario debe proteger sus credenciales y códigos de invitación.
+
+## 9. Derechos de protección de datos
+
+Las personas usuarias pueden solicitar acceso, rectificación, supresión, limitación, oposición y portabilidad cuando proceda, escribiendo a ajatsoft@gmail.com. También pueden presentar una reclamación ante la Agencia Española de Protección de Datos (AEPD).
+
+## 10. Menores
+
+La aplicación no está diseñada para que menores creen cuentas o compartan datos sin la autorización y supervisión que exija la legislación aplicable.
+
+## 11. Almacenamiento web y cookies
+
+La versión web utiliza almacenamiento del navegador para conservar los datos locales y preferencias necesarias para el funcionamiento. Los proveedores externos de publicidad o autenticación pueden utilizar tecnologías propias sujetas a sus políticas.
+
+## 12. Cambios
+
+Esta política podrá actualizarse si cambian las funciones, proveedores o requisitos legales. La versión vigente se publicará junto a la aplicación.
+
+---
+
+**Pendiente antes de publicación:** completar identidad legal y domicilio del responsable; revisar contratos y regiones de Firebase; configurar consentimiento de anuncios para usuarios del EEE; validar esta política con asesoría especializada.

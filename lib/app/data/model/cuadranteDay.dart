@@ -7,16 +7,21 @@ class CuadranteDay {
   String? description;
   String? color;
   DateTime? dateTime;
+  String? syncKey;
+  int? syncRevision;
 
-  CuadranteDay(
-      {this.id,
-      this.cuadranteName,
-      this.title,
-      this.description,
-      this.startHour,
-      this.endHour,
-      this.color,
-      this.dateTime});
+  CuadranteDay({
+    this.id,
+    this.cuadranteName,
+    this.title,
+    this.description,
+    this.startHour,
+    this.endHour,
+    this.color,
+    this.dateTime,
+    this.syncKey,
+    this.syncRevision,
+  });
 
   Map<String, dynamic> toMap() {
     return {
@@ -28,6 +33,8 @@ class CuadranteDay {
       'endHour': endHour,
       'color': color,
       'datetime': dateTime!.toIso8601String().substring(0, 10),
+      'syncKey': syncKey,
+      'syncRevision': syncRevision ?? 0,
     };
   }
 
@@ -41,6 +48,8 @@ class CuadranteDay {
       endHour: map['endHour'] as String?,
       color: map['color'] as String?,
       dateTime: DateTime.parse(map['datetime'].substring(0, 10)),
+      syncKey: map['syncKey'] as String?,
+      syncRevision: (map['syncRevision'] as num?)?.toInt(),
     );
   }
 }

@@ -1,0 +1,90 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function householdPath(householdId) {
+      return /databases/$(database)/documents/households/$(householdId);
+    }
+
+    function isMember(householdId) {
+      return signedIn()
+        && request.auth.uid in get(householdPath(householdId)).data.memberUids;
+    }
+
+    match /households/{householdId} {
+      allow create: if signedIn()
+        && request.resource.data.ownerUid == request.auth.uid
+        && request.resource.data.memberUids == [request.auth.uid]
+        && request.resource.data.calendarName is string
+        && request.resource.data.inviteCodeHash is string;
+
+      allow get: if isMember(householdId);
+      allow list: if false;
+
+      allow update: if signedIn() && (
+        (
+          isMember(householdId)
+          && request.auth.uid == resource.data.ownerUid
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['updatedAt'])
+        )
+        ||
+        (
+          isMember(householdId)
+          && request.auth.uid == resource.data.ownerUid
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['inviteCodeHash', 'updatedAt'])
+          && request.resource.data.inviteCodeHash is string
+          && existsAfter(/databases/$(database)/documents/inviteCodes/$(request.resource.data.inviteCodeHash))
+          && getAfter(/databases/$(database)/documents/inviteCodes/$(request.resource.data.inviteCodeHash)).data.householdId == householdId
+        )
+        ||
+        (
+          request.resource.data.diff(resource.data).affectedKeys().hasOnly(['memberUids', 'joinCodeHash', 'updatedAt'])
+          && request.resource.data.memberUids.size() == resource.data.memberUids.size() + 1
+          && request.resource.data.memberUids.size() <= 10
+          && request.resource.data.memberUids.hasAll(resource.data.memberUids)
+          && !(request.auth.uid in resource.data.memberUids)
+          && request.auth.uid in request.resource.data.memberUids
+          && request.resource.data.joinCodeHash is string
+          && exists(/databases/$(database)/documents/inviteCodes/$(request.resource.data.joinCodeHash))
+          && get(/databases/$(database)/documents/inviteCodes/$(request.resource.data.joinCodeHash)).data.householdId == householdId
+        )
+        ||
+        (
+          isMember(householdId)
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['memberUids', 'updatedAt'])
+          && request.resource.data.memberUids.size() == resource.data.memberUids.size() - 1
+          && resource.data.memberUids.hasAll(request.resource.data.memberUids)
+          && request.auth.uid in resource.data.memberUids
+          && !(request.auth.uid in request.resource.data.memberUids)
+        )
+      );
+
+      allow delete: if signedIn() && request.auth.uid == resource.data.ownerUid;
+
+      match /shifts/{shiftId} {
+        allow read: if isMember(householdId);
+        allow create, update: if isMember(householdId)
+          && request.resource.data.calendarName == get(householdPath(householdId)).data.calendarName
+          && request.resource.data.syncKey is string
+          && request.resource.data.date is string;
+        allow delete: if isMember(householdId);
+      }
+    }
+
+    match /inviteCodes/{codeHash} {
+      allow get: if signedIn();
+      allow list: if false;
+      allow create: if signedIn()
+        && request.resource.data.createdByUid == request.auth.uid
+        && getAfter(householdPath(request.resource.data.householdId)).data.ownerUid == request.auth.uid
+        && getAfter(householdPath(request.resource.data.householdId)).data.inviteCodeHash == codeHash
+        && request.resource.data.calendarName == getAfter(householdPath(request.resource.data.householdId)).data.calendarName;
+      allow delete: if signedIn()
+        && get(householdPath(resource.data.householdId)).data.ownerUid == request.auth.uid;
+      allow update: if false;
+    }
+  }
+}
